@@ -1477,6 +1477,17 @@ $@"new Hotspot
         // Number keys 1-4 pick dialogue choices.
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+#if DEBUG
+            // F1 opens/closes the debug menu from any screen.
+            if (e.Key == Key.F1 ||
+                (e.Key == Key.Escape && DebugMenu.Visibility == Visibility.Visible))
+            {
+                ToggleDebugMenu();
+                e.Handled = true;
+                return;
+            }
+#endif
+
             if (!IsInDialogue)
             {
                 return;
@@ -1496,6 +1507,122 @@ $@"new Hotspot
                 ChooseDialogueOption(index);
                 e.Handled = true;
             }
+        }
+
+        // =========================================================
+        // DEBUG MENU (F1) - only compiled into Debug builds
+        // =========================================================
+
+        private void ToggleDebugMenu()
+        {
+            if (DebugMenu.Visibility == Visibility.Visible)
+            {
+                DebugMenu.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            BuildDebugSceneList();
+            DebugHotspotsCheckBox.IsChecked = _showHotspotDebug;
+            DebugMenu.Visibility = Visibility.Visible;
+        }
+
+        private void BuildDebugSceneList()
+        {
+            DebugSceneList.Children.Clear();
+
+            foreach (Scene scene in Scenes.All)
+            {
+                bool isCurrent = scene == _currentScene &&
+                                 GameScreen.Visibility == Visibility.Visible;
+
+                var button = new Button
+                {
+                    Content =
+                        $"{scene.Name}   ({System.IO.Path.GetFileName(scene.BackgroundImage)}, " +
+                        $"{scene.Hotspots.Count} hotspots)" +
+                        (isCurrent ? "   <- current" : ""),
+                    Tag = scene,
+                    Height = 38,
+                    Margin = new Thickness(0, 0, 0, 6),
+                    Padding = new Thickness(10, 0, 10, 0),
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    FontFamily = new FontFamily("Consolas"),
+                    FontSize = 16,
+                    Foreground = isCurrent ? Brushes.Lime : Brushes.White,
+                    Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22)),
+                    BorderBrush = new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44)),
+                    Cursor = Cursors.Hand
+                };
+
+                button.Click += DebugSceneButton_Click;
+                DebugSceneList.Children.Add(button);
+            }
+        }
+
+        private void DebugSceneButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button { Tag: Scene scene })
+            {
+                DebugJumpToScene(scene);
+            }
+        }
+
+        /*
+         * Jumps straight into a scene from anywhere (title screen,
+         * backstory, character roll or another scene).
+         */
+        private void DebugJumpToScene(Scene scene)
+        {
+            _backstoryTimer?.Stop();
+
+            if (IsInDialogue)
+            {
+                EndDialogue();
+            }
+
+            // Skipped character creation? Give the player test stats
+            // so the stats panel and stat checks have something to use.
+            if (_player.MaxHealth <= 0)
+            {
+                _player.Name = "Tester";
+                _player.MaxHealth = 100;
+                _player.Health = 100;
+                _player.Strength = 12;
+                _player.Luck = 12;
+                _player.Wits = 12;
+            }
+
+            TitleScreen.Visibility = Visibility.Collapsed;
+            BackstoryScreen.Visibility = Visibility.Collapsed;
+            PlayerRollScreen.Visibility = Visibility.Collapsed;
+            GameScreen.Visibility = Visibility.Visible;
+
+            UpdatePlayerStats();
+            ShowScene(scene);
+
+            _interactionMode = InteractionMode.Look;
+            UpdateMenuButtonImages();
+            SceneCanvas.Cursor = _lookCursor;
+
+            DebugMenu.Visibility = Visibility.Collapsed;
+        }
+
+        private void DebugHotspotsCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            _showHotspotDebug = DebugHotspotsCheckBox.IsChecked == true;
+
+            UpdateDebugVisibility();
+
+            // Redraw hotspots with/without outlines.
+            if (_currentScene != null)
+            {
+                CreateSceneElements(_currentScene);
+            }
+        }
+
+        private void DebugMenuClose_Click(object sender, RoutedEventArgs e)
+        {
+            DebugMenu.Visibility = Visibility.Collapsed;
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)
