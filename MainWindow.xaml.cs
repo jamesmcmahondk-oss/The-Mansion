@@ -53,7 +53,7 @@ namespace The_Mansion
         private Point _dragStartPoint;
 
         private Rectangle? _selectionRectangle;
-        private Cursor _normalCursor;
+// private Cursor _normalCursor;
         private Cursor _actCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_act.cur");
         private Cursor _lookCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_look.cur");
         private Cursor _talkCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_talk.cur");
