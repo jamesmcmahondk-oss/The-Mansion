@@ -643,6 +643,16 @@ namespace The_Mansion
 
             e.Handled = true;
 
+            /*
+             * TALK on something that can talk starts a conversation.
+             */
+            if (_interactionMode == InteractionMode.Talk &&
+                !string.IsNullOrWhiteSpace(hotspot.DialogueId))
+            {
+                StartDialogue(hotspot.DialogueId);
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(hotspot.Description))
             {
                 DescriptionText.Text = hotspot.Description;
@@ -1274,6 +1284,217 @@ $@"new Hotspot
             if (_currentScene != null)
             {
                 ShowDescription(_currentScene.Description);
+            }
+        }
+
+        // =========================================================
+        // TALK DIALOG
+        // =========================================================
+
+        private Dialogue? _activeDialogue;
+
+        // Choices currently on screen, in the order they are numbered.
+        private readonly List<DialogueChoice> _visibleChoices = new();
+
+        private static readonly Brush ChoiceBrush =
+            new SolidColorBrush(Color.FromRgb(0xB9, 0xA9, 0x8D));
+
+        private static readonly Brush ChoiceHoverBrush =
+            new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+
+        private bool IsInDialogue => _activeDialogue != null;
+
+        private void StartDialogue(string dialogueId)
+        {
+            Dialogue? dialogue = Dialogues.GetDialogue(dialogueId);
+
+            if (dialogue == null)
+            {
+                MessageBox.Show(
+                    $"The dialogue '{dialogueId}' was not found in Data/Dialogues.cs.",
+                    "Missing dialogue",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            _activeDialogue = dialogue;
+
+            // Portrait (optional).
+            DialoguePortrait.Source = null;
+
+            if (!string.IsNullOrWhiteSpace(dialogue.Portrait))
+            {
+                try
+                {
+                    DialoguePortrait.Source = new BitmapImage(new Uri(
+                        $"pack://application:,,,/{dialogue.Portrait}",
+                        UriKind.Absolute));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Could not load portrait:\n\n{dialogue.Portrait}\n\n{ex.Message}",
+                        "Portrait error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+
+            DialoguePortrait.Visibility =
+                DialoguePortrait.Source != null ? Visibility.Visible : Visibility.Collapsed;
+
+            DialogueDim.Visibility = Visibility.Visible;
+            DescriptionText.Visibility = Visibility.Collapsed;
+            DialoguePanel.Visibility = Visibility.Visible;
+
+            // No switching verbs mid-conversation.
+            MenuButtons.IsHitTestVisible = false;
+            MenuButtons.Opacity = 0.45;
+
+            ShowDialogueNode(dialogue.StartNode);
+        }
+
+        private void ShowDialogueNode(string nodeId)
+        {
+            if (_activeDialogue == null)
+            {
+                return;
+            }
+
+            if (!_activeDialogue.Nodes.TryGetValue(nodeId, out DialogueNode? node))
+            {
+                MessageBox.Show(
+                    $"Dialogue node '{nodeId}' was not found.",
+                    "Missing dialogue node",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                EndDialogue();
+                return;
+            }
+
+            DialogueSpeakerText.Text = _activeDialogue.Speaker.ToUpperInvariant();
+            DialogueLineText.Text = node.Text;
+
+            _visibleChoices.Clear();
+
+            foreach (DialogueChoice choice in node.Choices)
+            {
+                if (choice.Condition == null || choice.Condition(_player))
+                {
+                    _visibleChoices.Add(choice);
+                }
+
+                if (_visibleChoices.Count == 4)
+                {
+                    break; // only 4 fit in the panel
+                }
+            }
+
+            if (_visibleChoices.Count == 0)
+            {
+                _visibleChoices.Add(new DialogueChoice { Text = "(Leave)", Next = null });
+            }
+
+            DialogueChoicesPanel.Children.Clear();
+
+            for (int i = 0; i < _visibleChoices.Count; i++)
+            {
+                int index = i;
+
+                var choiceText = new TextBlock
+                {
+                    Text = $"{i + 1}.  {_visibleChoices[i].Text}",
+                    Foreground = ChoiceBrush,
+                    FontFamily = new FontFamily("Georgia"),
+                    FontSize = 20,
+                    Margin = new Thickness(12, 0, 0, 4),
+                    TextTrimming = TextTrimming.CharacterEllipsis,
+                    Cursor = Cursors.Hand,
+                    Background = Brushes.Transparent
+                };
+
+                choiceText.MouseEnter += (_, _) => choiceText.Foreground = ChoiceHoverBrush;
+                choiceText.MouseLeave += (_, _) => choiceText.Foreground = ChoiceBrush;
+                choiceText.MouseLeftButtonDown += (_, args) =>
+                {
+                    args.Handled = true;
+                    ChooseDialogueOption(index);
+                };
+
+                DialogueChoicesPanel.Children.Add(choiceText);
+            }
+        }
+
+        private void ChooseDialogueOption(int index)
+        {
+            if (_activeDialogue == null ||
+                index < 0 ||
+                index >= _visibleChoices.Count)
+            {
+                return;
+            }
+
+            DialogueChoice choice = _visibleChoices[index];
+
+            if (choice.Effect != null)
+            {
+                choice.Effect(_player);
+                UpdatePlayerStats();
+            }
+
+            if (string.IsNullOrWhiteSpace(choice.Next))
+            {
+                EndDialogue();
+            }
+            else
+            {
+                ShowDialogueNode(choice.Next);
+            }
+        }
+
+        private void EndDialogue()
+        {
+            _activeDialogue = null;
+            _visibleChoices.Clear();
+
+            DialogueChoicesPanel.Children.Clear();
+            DialoguePanel.Visibility = Visibility.Collapsed;
+            DialoguePortrait.Visibility = Visibility.Collapsed;
+            DialogueDim.Visibility = Visibility.Collapsed;
+
+            DescriptionText.Visibility = Visibility.Visible;
+
+            MenuButtons.IsHitTestVisible = true;
+            MenuButtons.Opacity = 1;
+
+            if (_currentScene != null)
+            {
+                ShowDescription(_currentScene.Description);
+            }
+        }
+
+        // Number keys 1-4 pick dialogue choices.
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!IsInDialogue)
+            {
+                return;
+            }
+
+            int index = e.Key switch
+            {
+                Key.D1 or Key.NumPad1 => 0,
+                Key.D2 or Key.NumPad2 => 1,
+                Key.D3 or Key.NumPad3 => 2,
+                Key.D4 or Key.NumPad4 => 3,
+                _ => -1
+            };
+
+            if (index >= 0)
+            {
+                ChooseDialogueOption(index);
+                e.Handled = true;
             }
         }
 

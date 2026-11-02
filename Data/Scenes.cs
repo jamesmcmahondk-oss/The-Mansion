@@ -138,6 +138,22 @@ namespace The_Mansion.Data
                         "You leave the sad gargoyle to its sad and boring fate.",
 
                     TargetScene = "FrontGate"
+                },
+
+                new Hotspot
+                {
+                    Name = "Gargoyle",
+
+                    X = 780,
+                    Y = 200,
+                    Width = 400,
+                    Height = 440,
+
+                    Description =
+                        "Its stone eyes seem to follow you. Perhaps it wants to talk.",
+
+                    // Use TALK on it to start this conversation (Data/Dialogues.cs).
+                    DialogueId = "SadGargoyle"
                 }
         }
         };

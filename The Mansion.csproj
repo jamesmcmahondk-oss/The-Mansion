@@ -20,6 +20,7 @@
     <None Remove="Assets\Backgrounds\Mansion\right.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_open.png" />
+    <None Remove="Assets\Characters\*.png" />
     <None Remove="Assets\Characters\Chef.png" />
     <None Remove="Assets\Characters\Death.png" />
     <None Remove="Assets\Characters\FrogPrince.png" />
@@ -77,7 +78,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
-    <Resource Include="Assets\Characters\Quazimodo.png" />
+    <Resource Include="Assets\Characters\*.png" />
     <Resource Include="Assets\Cursors\cursor_act.cur" />
     <Resource Include="Assets\Cursors\cursor_arrow.cur" />
     <Resource Include="Assets\Cursors\cursor_item.cur" />
