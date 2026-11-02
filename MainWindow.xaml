@@ -320,6 +320,106 @@
 
         </Grid>
         <!-- ========================================= -->
+        <!-- CAR TRUNK SCREEN (pick one starting item) -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="TrunkScreen"
+              Visibility="Collapsed"
+              Background="Black">
+
+            <!--
+                trunk.png (1536x1024) scaled x1.25 to 1920x1280 and shifted up
+                100px so the middle shows. Item positions in Data/Trunk.cs are
+                trunk.png pixels; TrunkToScreen() converts them.
+            -->
+            <Canvas ClipToBounds="True">
+                <Image Source="Assets/UI/trunk.png"
+                       Width="1920"
+                       Height="1280"
+                       Canvas.Left="0"
+                       Canvas.Top="-100"
+                       Stretch="Fill"/>
+            </Canvas>
+
+            <!-- Clickable item outlines, added by ShowTrunkScreen() -->
+            <Canvas x:Name="TrunkCanvas"/>
+
+            <!-- Title -->
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,36,0,0"
+                    Padding="40,16"
+                    Background="#D0100C0C"
+                    BorderBrush="#806B4A"
+                    BorderThickness="2"
+                    IsHitTestVisible="False">
+                <StackPanel>
+                    <TextBlock Text="THE TRUNK OF YOUR CAR"
+                               HorizontalAlignment="Center"
+                               Foreground="#D5B77A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="34"/>
+                    <TextBlock x:Name="TrunkSubtitleText"
+                               Text="You may take ONE item into the Mansion. Choose wisely."
+                               HorizontalAlignment="Center"
+                               Margin="0,6,0,0"
+                               Foreground="#A89A84"
+                               FontFamily="Georgia"
+                               FontStyle="Italic"
+                               FontSize="20"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Item info + take button -->
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Width="1150"
+                    Height="170"
+                    Margin="0,0,0,28"
+                    Padding="30,18"
+                    Background="#E6100C0C"
+                    BorderBrush="#806B4A"
+                    BorderThickness="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,30,0">
+                        <TextBlock x:Name="TrunkItemNameText"
+                                   Text="Hover over an item"
+                                   Foreground="#D5B77A"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="28"/>
+                        <TextBlock x:Name="TrunkItemDescriptionText"
+                                   Text="Click one to choose it."
+                                   Margin="0,8,0,0"
+                                   Foreground="#DDD4C3"
+                                   FontFamily="Georgia"
+                                   FontSize="20"
+                                   LineHeight="28"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <Button x:Name="TrunkTakeButton"
+                            Grid.Column="1"
+                            Content="CHOOSE AN ITEM"
+                            IsEnabled="False"
+                            Width="300"
+                            Height="64"
+                            VerticalAlignment="Center"
+                            FontFamily="Georgia"
+                            FontWeight="Bold"
+                            FontSize="20"
+                            Click="TrunkTakeButton_Click"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ========================================= -->
         <!-- GAME SCREEN                               -->
         <!-- ========================================= -->
 

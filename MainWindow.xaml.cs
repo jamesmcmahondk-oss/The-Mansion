@@ -54,10 +54,37 @@ namespace The_Mansion
 
         private Rectangle? _selectionRectangle;
 // private Cursor _normalCursor;
-        private Cursor _actCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_act.cur");
-        private Cursor _lookCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_look.cur");
-        private Cursor _talkCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_talk.cur");
-        private Cursor _itemCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_item.cur");
+        // Cursors are built into the game (Resource files in Assets/Cursors),
+        // so they work wherever the game is installed.
+        private Cursor _actCursor = LoadCursor("cursor_act.cur");
+        private Cursor _lookCursor = LoadCursor("cursor_look.cur");
+        private Cursor _talkCursor = LoadCursor("cursor_talk.cur");
+        private Cursor _itemCursor = LoadCursor("cursor_item.cur");
+
+        /*
+         * Loads a cursor from Assets/Cursors inside the game.
+         * If it can't be found, the normal arrow is used instead of crashing.
+         */
+        private static Cursor LoadCursor(string fileName)
+        {
+            try
+            {
+                var resource = Application.GetResourceStream(new Uri(
+                    $"pack://application:,,,/Assets/Cursors/{fileName}",
+                    UriKind.Absolute));
+
+                if (resource != null)
+                {
+                    return new Cursor(resource.Stream);
+                }
+            }
+            catch (Exception)
+            {
+                // Fall through to the default cursor.
+            }
+
+            return Cursors.Arrow;
+        }
         private Cursor _CurrentInteractionCursor;
         /*
          * Small movement threshold so a normal click on an existing
@@ -81,7 +108,7 @@ namespace The_Mansion
             Loaded += (_, _) => PositionWindow();
 
             UpdateDebugVisibility();
-            this.Cursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_arrow.cur");
+            this.Cursor = LoadCursor("cursor_arrow.cur");
             ShowScene(Scenes.FrontGate);
 
 
@@ -284,7 +311,8 @@ namespace The_Mansion
             PlayerRollScreen.Visibility =
                 Visibility.Collapsed;
 
-            EnterGame();
+            // Pick a starting item from the car trunk, then the game begins.
+            ShowTrunkScreen();
         }
         private void RollPlayer()
         {
@@ -1782,6 +1810,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             TitleScreen.Visibility = Visibility.Collapsed;
             BackstoryScreen.Visibility = Visibility.Collapsed;
             PlayerRollScreen.Visibility = Visibility.Collapsed;
+            TrunkScreen.Visibility = Visibility.Collapsed;
             GameScreen.Visibility = Visibility.Visible;
 
             UpdatePlayerStats();
@@ -2180,6 +2209,154 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     new DialogueChoice { Text = "(Back)", Next = _currentLineId }
                 }
             });
+        }
+
+        // =========================================================
+        // CAR TRUNK SCREEN (pick one starting item - Data/Trunk.cs)
+        // =========================================================
+
+        private TrunkItem? _selectedTrunkItem;
+        private Border? _selectedTrunkOutline;
+
+        private static readonly Brush TrunkHoverBorder =
+            new SolidColorBrush(Color.FromArgb(0xAA, 0xFF, 0xD9, 0x8A));
+
+        private static readonly Brush TrunkHoverFill =
+            new SolidColorBrush(Color.FromArgb(0x1A, 0xFF, 0xD9, 0x8A));
+
+        private static readonly Brush TrunkSelectedBorder =
+            new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+
+        private static readonly Brush TrunkSelectedFill =
+            new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xD9, 0x8A));
+
+        // trunk.png pixels -> screen (must match the trunk Image in MainWindow.xaml).
+        private static Rect TrunkToScreen(double x, double y, double width, double height)
+        {
+            return new Rect(x * 1.25, y * 1.25 - 100, width * 1.25, height * 1.25);
+        }
+
+        private void ShowTrunkScreen()
+        {
+            _selectedTrunkItem = null;
+            _selectedTrunkOutline = null;
+
+            TrunkCanvas.Children.Clear();
+
+            foreach (TrunkItem trunkItem in Trunk.Items)
+            {
+                TrunkCanvas.Children.Add(CreateTrunkOutline(trunkItem));
+            }
+
+            TrunkItemNameText.Text = "Hover over an item";
+            TrunkItemDescriptionText.Text = "Click one to choose it.";
+            TrunkTakeButton.Content = "CHOOSE AN ITEM";
+            TrunkTakeButton.IsEnabled = false;
+
+            TrunkScreen.Visibility = Visibility.Visible;
+        }
+
+        private Border CreateTrunkOutline(TrunkItem trunkItem)
+        {
+            Rect screen = TrunkToScreen(trunkItem.X, trunkItem.Y, trunkItem.Width, trunkItem.Height);
+
+            var outline = new Border
+            {
+                Width = screen.Width,
+                Height = screen.Height,
+                CornerRadius = new CornerRadius(14),
+                BorderThickness = new Thickness(3),
+                BorderBrush = Brushes.Transparent,
+                Background = Brushes.Transparent,   // keeps the whole area clickable
+                Cursor = Cursors.Hand,
+                Tag = trunkItem
+            };
+
+            Canvas.SetLeft(outline, screen.X);
+            Canvas.SetTop(outline, screen.Y);
+
+            outline.MouseEnter += (_, _) =>
+            {
+                if (outline != _selectedTrunkOutline)
+                {
+                    outline.BorderBrush = TrunkHoverBorder;
+                    outline.Background = TrunkHoverFill;
+                }
+
+                ShowTrunkItemInfo(trunkItem);
+            };
+
+            outline.MouseLeave += (_, _) =>
+            {
+                if (outline != _selectedTrunkOutline)
+                {
+                    outline.BorderBrush = Brushes.Transparent;
+                    outline.Background = Brushes.Transparent;
+                }
+
+                // Back to the chosen item's info (if any).
+                if (_selectedTrunkItem != null)
+                {
+                    ShowTrunkItemInfo(_selectedTrunkItem);
+                }
+                else
+                {
+                    TrunkItemNameText.Text = "Hover over an item";
+                    TrunkItemDescriptionText.Text = "Click one to choose it.";
+                }
+            };
+
+            outline.MouseLeftButtonDown += (_, args) =>
+            {
+                args.Handled = true;
+                SelectTrunkItem(trunkItem, outline);
+            };
+
+            return outline;
+        }
+
+        private void ShowTrunkItemInfo(TrunkItem trunkItem)
+        {
+            Item item = Items.GetItem(trunkItem.ItemName);
+
+            TrunkItemNameText.Text = item.Name;
+            TrunkItemDescriptionText.Text = item.Description;
+        }
+
+        private void SelectTrunkItem(TrunkItem trunkItem, Border outline)
+        {
+            // Un-highlight the previous choice.
+            if (_selectedTrunkOutline != null)
+            {
+                _selectedTrunkOutline.BorderBrush = Brushes.Transparent;
+                _selectedTrunkOutline.Background = Brushes.Transparent;
+            }
+
+            _selectedTrunkItem = trunkItem;
+            _selectedTrunkOutline = outline;
+
+            outline.BorderBrush = TrunkSelectedBorder;
+            outline.Background = TrunkSelectedFill;
+
+            ShowTrunkItemInfo(trunkItem);
+
+            TrunkTakeButton.Content = $"TAKE THE {trunkItem.ItemName.ToUpperInvariant()}";
+            TrunkTakeButton.IsEnabled = true;
+        }
+
+        private void TrunkTakeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedTrunkItem == null)
+            {
+                return;
+            }
+
+            _player.Give(_selectedTrunkItem.ItemName);
+            _selectedTrunkItem.OnTake?.Invoke(_player);
+
+            TrunkScreen.Visibility = Visibility.Collapsed;
+
+            EnterGame();
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)
