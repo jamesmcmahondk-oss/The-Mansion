@@ -69,6 +69,12 @@ namespace The_Mansion
         {
             InitializeComponent();
 
+            // Load all game data now, so a mistake in Data/Scenes.cs,
+            // Dialogues.cs or Items.cs shows up straight away at start-up.
+            _ = Scenes.All.Count();
+            _ = Dialogues.Count;
+            _ = Items.All.Count();
+
             // Game area is exactly 1920x1080 screen pixels; the window
             // (with its title bar) is then centred on screen.
             SourceInitialized += (_, _) => LockWindowSize();
@@ -545,6 +551,13 @@ namespace The_Mansion
 
             foreach (Hotspot hotspot in scene.Hotspots)
             {
+                // .OnlyWhen(...) hotspots vanish while their condition is false.
+                if (hotspot.VisibleWhen != null &&
+                    !hotspot.VisibleWhen(_player))
+                {
+                    continue;
+                }
+
                 Rectangle hotspotRectangle =
                     CreateHotspotRectangle(hotspot);
 
@@ -654,6 +667,16 @@ namespace The_Mansion
             }
 
             /*
+             * TALK on something with a plain reply (.OnTalk).
+             */
+            if (_interactionMode == InteractionMode.Talk &&
+                !string.IsNullOrWhiteSpace(hotspot.TalkText))
+            {
+                ShowDescription(hotspot.TalkText);
+                return;
+            }
+
+            /*
              * ACT on something with an ACT conversation (e.g. a character
              * who appears when you touch something).
              */
@@ -661,6 +684,22 @@ namespace The_Mansion
                 !string.IsNullOrWhiteSpace(hotspot.ActDialogueId))
             {
                 StartDialogue(hotspot.ActDialogueId);
+                return;
+            }
+
+            /*
+             * ACT on something with a plain reply and/or effect (.OnAct).
+             */
+            if (_interactionMode == InteractionMode.Act &&
+                (!string.IsNullOrWhiteSpace(hotspot.ActText) || hotspot.ActEffect != null))
+            {
+                if (!string.IsNullOrWhiteSpace(hotspot.ActText))
+                {
+                    ShowDescription(hotspot.ActText);
+                }
+
+                hotspot.ActEffect?.Invoke(_player);
+                AfterStoryChange();
                 return;
             }
 
@@ -1038,21 +1077,10 @@ namespace The_Mansion
                     CultureInfo.InvariantCulture
                 );
 
+            // Paste into a scene in Data/Scenes.cs (see SCENE_GUIDE.md).
             return
-$@"new Hotspot
-{{
-    Name = ""New Hotspot"",
-
-    X = {xText},
-    Y = {yText},
-
-    Width = {widthText},
-    Height = {heightText},
-
-    Description = ""Describe the hotspot here."",
-
-    TargetScene = """"
-}}";
+$@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightText})
+                .Describe(""Describe the hotspot here."")";
         }
 
         private void RemoveSelectionRectangle()
@@ -1576,6 +1604,9 @@ $@"new Hotspot
             MenuButtons.IsHitTestVisible = true;
             MenuButtons.Opacity = 1;
 
+            // Choices may have changed flags/items, so hotspots may change.
+            RefreshSceneHotspots();
+
             if (_currentScene != null)
             {
                 ShowDescription(_currentScene.Description);
@@ -1934,7 +1965,7 @@ $@"new Hotspot
                 _selectedItem = null;
             }
 
-            UpdatePlayerStats();
+            AfterStoryChange();
 
             if (!string.IsNullOrWhiteSpace(use.DialogueId))
             {
@@ -1954,6 +1985,25 @@ $@"new Hotspot
 
             UpdatePlayerStats();
             DebugMenu.Visibility = Visibility.Collapsed;
+        }
+
+        /*
+         * Call after anything that can change the player's stats, items or
+         * story flags: refreshes the stats panel and re-checks which
+         * hotspots should exist (.OnlyWhen).
+         */
+        private void AfterStoryChange()
+        {
+            UpdatePlayerStats();
+            RefreshSceneHotspots();
+        }
+
+        private void RefreshSceneHotspots()
+        {
+            if (_currentScene != null)
+            {
+                CreateSceneElements(_currentScene);
+            }
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)
