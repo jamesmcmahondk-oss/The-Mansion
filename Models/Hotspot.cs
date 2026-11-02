@@ -38,5 +38,9 @@ namespace The_Mansion.Models
         // Conversation started when the player uses TALK on this hotspot.
         // Must match a key in Data/Dialogues.cs. Leave empty if it can't talk.
         public string DialogueId { get; set; } = "";
+
+        // Conversation started when the player uses ACT on this hotspot,
+        // e.g. a character who appears when you touch something.
+        public string ActDialogueId { get; set; } = "";
     }
 }

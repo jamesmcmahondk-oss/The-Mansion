@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
@@ -98,10 +98,125 @@ namespace The_Mansion.Data
             }
         };
 
+        // =========================================================
+        // KING HAUTAIN - appears on the lily pad when you ACT on the
+        // gold coins in the fountain close-up.
+        // =========================================================
+
+        private const string GoldCoins = "Gold Coins";
+        private const string GoldCoin = "Royal Gold Coin";
+
+        private static List<DialogueChoice> HautainChoices() => new()
+        {
+            new DialogueChoice
+            {
+                Text = "King? You're a frog on a lily pad.",
+                Next = "insult"
+            },
+            new DialogueChoice
+            {
+                Text = "Forgive me, Your Majesty. I'll leave your gold alone.",
+                Next = "apology"
+            },
+            new DialogueChoice
+            {
+                // Clever heroes can talk their way into a coin.
+                Text = "Surely the Crown can spare a coin for a loyal subject?",
+                Next = "flattered",
+                Condition = p => p.Wits >= 12,
+                Effect = p => p.Inventory.Add(GoldCoin)
+            },
+            new DialogueChoice
+            {
+                Text = "Finders keepers! (Grab the coins)",
+                Next = "grab",
+                Effect = p =>
+                {
+                    p.Inventory.Add(GoldCoins);
+                    p.StatusEffect = "Royal Grudge";
+                }
+            }
+        };
+
+        public static Dialogue HautainCoins { get; } = new Dialogue
+        {
+            Speaker = "King Hautain",
+            Portrait = "Assets/Characters/Hautain.png",
+
+            // Standing on the big lily pad (background image pixels).
+            PortraitX = 495,
+            PortraitY = 205,
+            PortraitHeight = 285,
+            DimScene = false,
+
+            // Already took the coins (or was given one)? He remembers.
+            ChooseStartNode = p =>
+                p.Inventory.Contains(GoldCoins) || p.Inventory.Contains(GoldCoin)
+                    ? "again"
+                    : "start",
+
+            Nodes =
+            {
+                ["start"] = new DialogueNode
+                {
+                    Text = "...HALT, THIEF! Those coins belong to the Crown! I am Hautain, rightful king of this fountain, and you are trespassing!",
+                    Choices = HautainChoices()
+                },
+                ["menu"] = new DialogueNode
+                {
+                    Text = "Well? What have you to say for yourself, thief?",
+                    Choices = HautainChoices()
+                },
+                ["insult"] = new DialogueNode
+                {
+                    Text = "A FROG?! My ancestors have ruled this pond for three hundred years! Guards! GUARDS! ...Oh. I have no guards.",
+                    Portrait = "Assets/Characters/Hautain_Attack.png",
+                    Choices =
+                    {
+                        new DialogueChoice { Text = "Awkward.", Next = "menu" }
+                    }
+                },
+                ["apology"] = new DialogueNode
+                {
+                    Text = "Hmph. At least SOMEONE in this wretched mansion has manners. You may withdraw from the royal presence.",
+                    Choices =
+                    {
+                        new DialogueChoice { Text = "(Bow and back away)", Next = null }
+                    }
+                },
+                ["flattered"] = new DialogueNode
+                {
+                    Text = "A loyal... subject? Nobody has called me that in years. Very well - ONE coin. Spend it wisely, and speak well of your king.",
+                    Choices =
+                    {
+                        new DialogueChoice { Text = "Long live the King!", Next = null }
+                    }
+                },
+                ["grab"] = new DialogueNode
+                {
+                    Text = "You DARE?! Mark my words, thief - the Crown never forgets! NEVER!",
+                    Portrait = "Assets/Characters/Hautain_Attack.png",
+                    Choices =
+                    {
+                        new DialogueChoice { Text = "(Run!)", Next = null }
+                    }
+                },
+                ["again"] = new DialogueNode
+                {
+                    Text = "YOU again! Haven't you robbed the Crown enough for one day?",
+                    Choices =
+                    {
+                        new DialogueChoice { Text = "Just admiring the view, Your Majesty.", Next = null }
+                    }
+                }
+            }
+        };
+
         private static readonly Dictionary<string, Dialogue> DialogueLookup =
             new(StringComparer.OrdinalIgnoreCase)
             {
-                { "SadGargoyle", SadGargoyle }
+                { "SadGargoyle", SadGargoyle },
+                { "HautainCoins", HautainCoins }
             };
 
         public static Dialogue? GetDialogue(string dialogueId)

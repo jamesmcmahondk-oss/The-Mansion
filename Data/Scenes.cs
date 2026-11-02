@@ -90,7 +90,10 @@ namespace The_Mansion.Data
                     Description =
                         "Several old gold coins rest at the bottom of the fountain.",
 
-                    TargetScene = ""
+                    TargetScene = "",
+
+                    // ACT on the coins: King Hautain appears (Data/Dialogues.cs).
+                    ActDialogueId = "HautainCoins"
                 },
 
                 new Hotspot
