@@ -69,14 +69,10 @@ namespace The_Mansion
         {
             InitializeComponent();
 
-            // Lock the window to exactly 1920x1080 screen pixels.
+            // Game area is exactly 1920x1080 screen pixels; the window
+            // (with its title bar) is then centred on screen.
             SourceInitialized += (_, _) => LockWindowSize();
-            StateChanged += (_, _) =>
-            {
-                // Block maximize (Win+Up, snapping) and keep it pinned.
-                if (WindowState == WindowState.Maximized)
-                    WindowState = WindowState.Normal;
-            };
+            Loaded += (_, _) => PositionWindow();
 
             UpdateDebugVisibility();
             this.Cursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_arrow.cur");
@@ -85,36 +81,77 @@ namespace The_Mansion
 
         }
         /*
-         * The game is hardcoded to 1920x1080 *physical* pixels.
+         * The game area is hardcoded to 1920x1080 *physical* pixels.
          *
          * WPF measures in device-independent units, so with Windows display
-         * scaling above 100% (e.g. 125% on laptops) a 1920-unit window would
-         * really be 2400 pixels wide and run off the screen. This undoes that
-         * scaling: the window is sized so it is exactly 1920x1080 pixels, and
-         * the 1920x1080 layout is shrunk by the same factor to fill it.
+         * scaling above 100% (e.g. 125% on laptops) a 1920-unit area would
+         * really be 2400 pixels wide. This shrinks the 1920x1080 layout by the
+         * same factor so it is exactly 1920x1080 pixels on screen. The window
+         * uses SizeToContent, so it wraps itself (plus title bar) around it.
          * All hotspot / canvas coordinates stay in 1920x1080 space.
          */
         private void LockWindowSize()
         {
             DpiScale dpi = VisualTreeHelper.GetDpi(this);
 
-            double width = 1920 / dpi.DpiScaleX;
-            double height = 1080 / dpi.DpiScaleY;
-
-            MinWidth = MaxWidth = Width = width;
-            MinHeight = MaxHeight = Height = height;
-            Left = 0;
-            Top = 0;
-
             RootGrid.LayoutTransform = new ScaleTransform(
                 1 / dpi.DpiScaleX,
                 1 / dpi.DpiScaleY);
+        }
+
+        /*
+         * Centre the window on the screen's work area (the area not covered
+         * by the taskbar). If the window is taller than the work area, as it
+         * is on a 1920x1080 monitor once the title bar is added, it is pinned
+         * to the top instead so the title bar with the close (X) button is
+         * always visible.
+         */
+        private void PositionWindow()
+        {
+            Rect workArea = SystemParameters.WorkArea;
+
+            Left = workArea.Left + (workArea.Width - ActualWidth) / 2;
+
+            Top = ActualHeight <= workArea.Height
+                ? workArea.Top + (workArea.Height - ActualHeight) / 2
+                : workArea.Top;
         }
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
             base.OnDpiChanged(oldDpi, newDpi);
             LockWindowSize();
+        }
+
+        /*
+         * Scene background placement - must match RoomBackground in
+         * MainWindow.xaml. Backgrounds are 1536x1024 source images scaled
+         * by 1.25 (to 1920x1280) and shifted up 240px so the middle 1920x800
+         * is visible above the HUD.
+         *
+         * Hotspots in Data/Scenes.cs use source-image pixel coordinates
+         * (0-1536, 0-1024), so they always sit on the right part of the
+         * picture even if this placement changes.
+         */
+        private const double SceneImageScale = 1.25;
+        private const double SceneImageCropTop = 240;
+
+        private static Rect ImageToScreen(Rect imageRect)
+        {
+            return new Rect(
+                imageRect.X * SceneImageScale,
+                imageRect.Y * SceneImageScale - SceneImageCropTop,
+                imageRect.Width * SceneImageScale,
+                imageRect.Height * SceneImageScale);
+        }
+
+        private static Rect ScreenToImage(Rect screenRect)
+        {
+            return new Rect(
+                screenRect.X / SceneImageScale,
+                (screenRect.Y + SceneImageCropTop) / SceneImageScale,
+                screenRect.Width / SceneImageScale,
+                screenRect.Height / SceneImageScale);
         }
 
         private void ShowScreen(UIElement screen)
@@ -491,10 +528,17 @@ namespace The_Mansion
         private Rectangle CreateHotspotRectangle(Hotspot hotspot)
         {
 
+            var hotspotRect = new Rect(
+                hotspot.X, hotspot.Y, hotspot.Width, hotspot.Height);
+
+            Rect screenRect = hotspot.ScreenSpace
+                ? hotspotRect
+                : ImageToScreen(hotspotRect);
+
             var rectangle = new Rectangle
             {
-                Width = hotspot.Width,
-                Height = hotspot.Height,
+                Width = screenRect.Width,
+                Height = screenRect.Height,
 
                 Tag = hotspot,
                 Cursor = _CurrentInteractionCursor
@@ -527,8 +571,8 @@ namespace The_Mansion
                 rectangle.ToolTip = null;
             }
 
-            Canvas.SetLeft(rectangle, hotspot.X);
-            Canvas.SetTop(rectangle, hotspot.Y);
+            Canvas.SetLeft(rectangle, screenRect.X);
+            Canvas.SetTop(rectangle, screenRect.Y);
 
             Panel.SetZIndex(rectangle, 10);
 
@@ -607,9 +651,13 @@ namespace The_Mansion
 
             if (_showHotspotDebug)
             {
+                Point imagePosition = ScreenToImage(
+                    new Rect(currentPosition, new Size(0, 0))).Location;
+
                 DebugCoordinates.Text =
-                    $"Mouse: X={currentPosition.X:0} " +
-                    $"Y={currentPosition.Y:0}";
+                    $"Image: X={imagePosition.X:0} " +
+                    $"Y={imagePosition.Y:0}  " +
+                    $"(screen {currentPosition.X:0},{currentPosition.Y:0})";
             }
 
             if (!_showHotspotDebug ||
@@ -757,6 +805,18 @@ namespace The_Mansion
 
             double height =
                 _selectionRectangle.Height;
+
+            /*
+             * Scenes.cs stores hotspots in source-image pixels,
+             * so convert the on-screen selection first.
+             */
+            Rect imageRect = ScreenToImage(
+                new Rect(x, y, width, height));
+
+            x = imageRect.X;
+            y = imageRect.Y;
+            width = imageRect.Width;
+            height = imageRect.Height;
 
             /*
              * Round the coordinates because whole-number positions

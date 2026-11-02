@@ -4,6 +4,11 @@ using The_Mansion.Models;
 
 namespace The_Mansion.Data
 {
+    /*
+     * Hotspot X/Y/Width/Height are in pixels of the scene's background
+     * image (0-1536 across, 0-1024 down). Only Y 192-832 of the image is
+     * visible above the HUD. Return hotspots use ScreenSpace = true.
+     */
     public static class Scenes
     {
         public static Scene FrontGate { get; } = new Scene
@@ -21,10 +26,10 @@ namespace The_Mansion.Data
                 new Hotspot
                 {
                     Name = "Fountain",
-                    X = 720,
-                    Y = 588,
-                    Width = 303,
-                    Height = 241,
+                    X = 615,
+                    Y = 545,
+                    Width = 270,
+                    Height = 205,
 
                     Description =
                         "An ancient stone fountain. Something glitters beneath the water.",
@@ -35,10 +40,10 @@ namespace The_Mansion.Data
                 new Hotspot
                 {
                     Name = "Front Door",
-                    X = 1053,
-                    Y = 579,
-                    Width = 127,
-                    Height = 183,
+                    X = 905,
+                    Y = 505,
+                    Width = 95,
+                    Height = 140,
 
                     Description =
                         "The enormous wooden door looks like it has not opened in years.",
@@ -49,13 +54,10 @@ namespace The_Mansion.Data
                 {
                     Name = "Gargoyle",
 
-           
-
-                      X = 154,
-                      Y = 233,
-                     
-                      Width = 265,
-                      Height = 231,
+                    X = 135,
+                    Y = 205,
+                    Width = 205,
+                    Height = 165,
 
                     Description = "A sulky and rather sad looking gargoyle sits here.",
                 
@@ -80,10 +82,10 @@ namespace The_Mansion.Data
                 {
                     Name = "Gold Coins",
 
-                    X = 641,
-                    Y = 797,
-                    Width = 413,
-                    Height = 164,
+                    X = 595,
+                    Y = 655,
+                    Width = 295,
+                    Height = 175,
 
                     Description =
                         "Several old gold coins rest at the bottom of the fountain.",
@@ -95,9 +97,10 @@ namespace The_Mansion.Data
                 {
                     Name = "Return",
 
+                    // Matches the Return arrow image (screen pixels).
+                    ScreenSpace = true,
                     X = 10,
-                    Y = 10,
-
+                    Y = 0,
                     Width = 220,
                     Height = 110,
 
@@ -124,11 +127,12 @@ namespace The_Mansion.Data
                 {
                     Name = "Return",
 
+                    // Matches the Return arrow image (screen pixels).
+                    ScreenSpace = true,
                     X = 10,
-                    Y = 10,
-
-                    Width = 217,
-                    Height = 109,
+                    Y = 0,
+                    Width = 220,
+                    Height = 110,
 
                     Description =
                         "You leave the sad gargoyle to its sad and boring fate.",
@@ -154,10 +158,10 @@ namespace The_Mansion.Data
                 {
                     Name = "Front Doors",
 
-                    X = 658,
-                    Y = 387,
-                    Width = 457,
-                    Height = 554,
+                    X = 590,
+                    Y = 300,
+                    Width = 375,
+                    Height = 500,
 
                     Description =
                         "Heavy woodden front doors. They are locked.",
@@ -169,10 +173,10 @@ namespace The_Mansion.Data
                 {
                     Name = "Door Knocker",
 
-                   X = 781,
-                   Y = 599,
-                   Width = 215,
-                   Height = 125,
+                   X = 685,
+                    Y = 515,
+                    Width = 175,
+                    Height = 90,
 
                     Description =
                         "The iron door knocker is freezing cold.",
@@ -184,11 +188,12 @@ namespace The_Mansion.Data
                 {
                     Name = "Return",
 
+                    // Matches the Return arrow image (screen pixels).
+                    ScreenSpace = true,
                     X = 10,
-                    Y = 10,
-
-                    Width = 217,
-                    Height = 109,
+                    Y = 0,
+                    Width = 220,
+                    Height = 110,
 
                     Description =
                         "You step away from the front door.",
