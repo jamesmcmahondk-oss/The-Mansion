@@ -42,6 +42,31 @@ namespace The_Mansion.Models
         public Func<Player, string>? ChooseStartNode { get; set; }
 
         public Dictionary<string, DialogueNode> Nodes { get; set; } = new();
+
+        // What happens when the player offers an item (ITEM button during
+        // the conversation), keyed by item name.
+        public Dictionary<string, DialogueItemUse> ItemUses { get; set; }
+            = new(StringComparer.OrdinalIgnoreCase);
+
+        // Reply to any other item. "{item}" is replaced by the item's name.
+        // Empty = "<Speaker> shows no interest in the <item>."
+        public string OtherItemText { get; set; } = "";
+    }
+
+    public class DialogueItemUse
+    {
+        // Line to jump to. null ends the conversation.
+        public string? GoesTo { get; set; }
+
+        // Optional: runs when the item is offered.
+        public Action<Player>? Effect { get; set; }
+
+        // Take the item away (the character keeps it).
+        public bool RemoveItem { get; set; }
+
+        // Optional: only react like this when true; otherwise it counts
+        // as "any other item".
+        public Func<Player, bool>? Condition { get; set; }
     }
 
     public class DialogueNode
