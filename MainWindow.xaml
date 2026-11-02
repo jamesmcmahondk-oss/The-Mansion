@@ -52,9 +52,17 @@
         1920x1080; SizeToContent wraps the window around it. All screens,
         canvases and hotspot coordinates are laid out in this 1920x1080 space.
     -->
+    <!--
+        RootGrid is the game's fixed 1920x1080 canvas. ApplyDisplaySettings()
+        scales it to the chosen resolution (Settings), so all coordinates stay
+        1920x1080. Centred so fullscreen gets black bars if needed.
+    -->
     <Grid x:Name="RootGrid"
           Width="1920"
           Height="1080"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          RenderOptions.BitmapScalingMode="HighQuality"
           ClipToBounds="True">
         <!-- ========================================= -->
         <!-- TITLE SCREEN                              -->
@@ -78,6 +86,15 @@
                 <Rectangle x:Name="LoadGameBtn"
              Canvas.Left="239"
              Canvas.Top="546"
+             Width="360"
+             Height="74"
+             Fill="Transparent"
+             Cursor="Hand"
+             MouseLeftButtonDown="TitleButton_MouseDown"/>
+
+                <Rectangle x:Name="SettingsBtn"
+             Canvas.Left="239"
+             Canvas.Top="656"
              Width="360"
              Height="74"
              Fill="Transparent"
@@ -1071,6 +1088,8 @@
                             Style="{StaticResource GothicButton}" Click="GameMenuSave_Click"/>
                     <Button Content="LOAD GAME" Height="54" Margin="0,0,0,12"
                             Style="{StaticResource GothicButton}" Click="GameMenuLoad_Click"/>
+                    <Button Content="SETTINGS" Height="54" Margin="0,0,0,12"
+                            Style="{StaticResource GothicButton}" Click="GameMenuSettings_Click"/>
                     <Button Content="QUIT TO TITLE" Height="54"
                             Style="{StaticResource GothicButton}" Click="GameMenuQuit_Click"/>
 
@@ -1130,6 +1149,74 @@
                             HorizontalAlignment="Center"
                             Style="{StaticResource GothicButton}"
                             Click="SaveLoadBack_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ========================================= -->
+        <!-- SETTINGS                                  -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="SettingsScreen"
+              Visibility="Collapsed"
+              Background="#C8000000"
+              Panel.ZIndex="3750">
+
+            <Border Width="640"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="40,30"
+                    Background="#F0100C0C"
+                    BorderBrush="#806B4A"
+                    BorderThickness="2">
+                <StackPanel>
+                    <TextBlock Text="SETTINGS"
+                               HorizontalAlignment="Center"
+                               Foreground="#D5B77A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="34"
+                               Margin="0,0,0,24"/>
+
+                    <TextBlock Text="SCREEN"
+                               Foreground="#B9A98D"
+                               FontFamily="Georgia"
+                               FontSize="18"
+                               Margin="0,0,0,10"/>
+
+                    <Button x:Name="FullscreenButton"
+                            Content="FULLSCREEN: OFF"
+                            Height="50"
+                            Margin="0,0,0,18"
+                            Style="{StaticResource GothicButton}"
+                            Click="FullscreenButton_Click"/>
+
+                    <TextBlock Text="WINDOW SIZE"
+                               Foreground="#B9A98D"
+                               FontFamily="Georgia"
+                               FontSize="18"
+                               Margin="0,0,0,10"/>
+
+                    <!-- One button per resolution, built by ShowSettings() -->
+                    <StackPanel x:Name="ResolutionList"/>
+
+                    <TextBlock x:Name="SettingsNoteText"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0"
+                               Foreground="#887966"
+                               FontFamily="Georgia"
+                               FontStyle="Italic"
+                               FontSize="15"/>
+
+                    <Button Content="BACK"
+                            Width="200"
+                            Height="50"
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource GothicButton}"
+                            Click="SettingsBack_Click"/>
                 </StackPanel>
             </Border>
         </Grid>

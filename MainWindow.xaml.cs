@@ -105,32 +105,21 @@ namespace The_Mansion
 
             // Game area is exactly 1920x1080 screen pixels; the window
             // (with its title bar) is then centred on screen.
-            SourceInitialized += (_, _) => LockWindowSize();
-            Loaded += (_, _) => PositionWindow();
+            // Window size comes from Settings (resolution / fullscreen).
+            SourceInitialized += (_, _) => ApplyDisplaySettings();
+            Loaded += (_, _) =>
+            {
+                if (!_settings.Fullscreen)
+                {
+                    PositionWindow();
+                }
+            };
 
             UpdateDebugVisibility();
             this.Cursor = LoadCursor("cursor_arrow.cur");
             ShowScene(Scenes.FrontGate);
 
 
-        }
-        /*
-         * The game area is hardcoded to 1920x1080 *physical* pixels.
-         *
-         * WPF measures in device-independent units, so with Windows display
-         * scaling above 100% (e.g. 125% on laptops) a 1920-unit area would
-         * really be 2400 pixels wide. This shrinks the 1920x1080 layout by the
-         * same factor so it is exactly 1920x1080 pixels on screen. The window
-         * uses SizeToContent, so it wraps itself (plus title bar) around it.
-         * All hotspot / canvas coordinates stay in 1920x1080 space.
-         */
-        private void LockWindowSize()
-        {
-            DpiScale dpi = VisualTreeHelper.GetDpi(this);
-
-            RootGrid.LayoutTransform = new ScaleTransform(
-                1 / dpi.DpiScaleX,
-                1 / dpi.DpiScaleY);
         }
 
         /*
@@ -154,7 +143,7 @@ namespace The_Mansion
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
             base.OnDpiChanged(oldDpi, newDpi);
-            LockWindowSize();
+            ApplyDisplaySettings();
         }
 
         /*
@@ -513,7 +502,7 @@ namespace The_Mansion
 
                 case "SettingsBtn":
                     {
-                        //ShowSettings();
+                        ShowSettings(back: () => { });   // title stays behind
                         break;
                     }
 
@@ -1707,9 +1696,16 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
-            // Esc: back out of the save/load screen, or open/close the game menu.
+            // Esc: back out of settings or the save/load screen, or open/close the game menu.
             if (e.Key == Key.Escape)
             {
+                if (IsSettingsOpen)
+                {
+                    CloseSettings();
+                    e.Handled = true;
+                    return;
+                }
+
                 if (IsSaveLoadOpen)
                 {
                     SaveLoadScreen.Visibility = Visibility.Collapsed;
@@ -1734,7 +1730,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 
             // No dialogue keys while a menu is open.
-            if (IsGameMenuOpen || IsSaveLoadOpen)
+            if (IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen)
             {
                 return;
             }
@@ -3338,6 +3334,168 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             PlayerRollScreen.Visibility = Visibility.Collapsed;
             BackstoryScreen.Visibility = Visibility.Collapsed;
             TitleScreen.Visibility = Visibility.Visible;
+        }
+
+        // =========================================================
+        // SETTINGS: resolution and fullscreen (Data/GameSettings.cs)
+        // =========================================================
+
+        private GameSettings _settings = GameSettings.Load();
+
+        private Action? _settingsBack;
+
+        private bool IsSettingsOpen => SettingsScreen.Visibility == Visibility.Visible;
+
+        // The monitor's size in real pixels.
+        private (double Width, double Height) ScreenPixels()
+        {
+            DpiScale dpi = VisualTreeHelper.GetDpi(this);
+            return (SystemParameters.PrimaryScreenWidth * dpi.DpiScaleX,
+                    SystemParameters.PrimaryScreenHeight * dpi.DpiScaleY);
+        }
+
+        // Resolutions that fit on this monitor (always at least the smallest).
+        private List<(int Width, int Height)> AvailableResolutions()
+        {
+            var (screenWidth, screenHeight) = ScreenPixels();
+            var list = new List<(int Width, int Height)>();
+
+            foreach (var resolution in GameSettings.Resolutions)
+            {
+                if (resolution.Width <= screenWidth && resolution.Height <= screenHeight)
+                {
+                    list.Add(resolution);
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                list.Add(GameSettings.Resolutions[0]);
+            }
+
+            return list;
+        }
+
+        /*
+         * Sizes the window and scales the 1920x1080 game canvas to match.
+         * Because only the canvas is scaled, every hotspot, button and
+         * picture keeps lining up.
+         */
+        private void ApplyDisplaySettings()
+        {
+            DpiScale dpi = VisualTreeHelper.GetDpi(this);
+
+            if (_settings.Fullscreen)
+            {
+                // Fit the canvas to the whole monitor (16:9 fits exactly).
+                double screenWidth = SystemParameters.PrimaryScreenWidth;    // in WPF units
+                double screenHeight = SystemParameters.PrimaryScreenHeight;
+                double scale = Math.Min(screenWidth / 1920, screenHeight / 1080);
+
+                RootGrid.LayoutTransform = new ScaleTransform(scale, scale);
+
+                SizeToContent = SizeToContent.Manual;
+                WindowState = WindowState.Normal;     // must be normal before restyling
+                WindowStyle = WindowStyle.None;
+                ResizeMode = ResizeMode.NoResize;
+                WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                // Make sure the chosen size still fits (e.g. a smaller monitor).
+                var available = AvailableResolutions();
+                if (!available.Contains((_settings.Width, _settings.Height)))
+                {
+                    (_settings.Width, _settings.Height) = available[^1];
+                }
+
+                // Scale in real pixels: undo Windows display scaling too.
+                double scaleX = _settings.Width / 1920.0 / dpi.DpiScaleX;
+                double scaleY = _settings.Height / 1080.0 / dpi.DpiScaleY;
+
+                RootGrid.LayoutTransform = new ScaleTransform(scaleX, scaleY);
+
+                WindowState = WindowState.Normal;
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                ResizeMode = ResizeMode.CanMinimize;
+                SizeToContent = SizeToContent.WidthAndHeight;
+
+                // Re-centre once the window has its new size.
+                Dispatcher.BeginInvoke(new Action(PositionWindow), DispatcherPriority.Loaded);
+            }
+        }
+
+        private void ShowSettings(Action back)
+        {
+            _settingsBack = back;
+            BuildSettingsScreen();
+            SettingsScreen.Visibility = Visibility.Visible;
+        }
+
+        private void BuildSettingsScreen()
+        {
+            FullscreenButton.Content = _settings.Fullscreen ? "FULLSCREEN: ON" : "FULLSCREEN: OFF";
+
+            ResolutionList.Children.Clear();
+
+            foreach (var (width, height) in AvailableResolutions())
+            {
+                bool current = !_settings.Fullscreen &&
+                               width == _settings.Width &&
+                               height == _settings.Height;
+
+                var button = new Button
+                {
+                    Content = current ? $"{width} x {height}   (current)" : $"{width} x {height}",
+                    Height = 46,
+                    Margin = new Thickness(0, 0, 0, 8),
+                    Style = (Style)FindResource("GothicButton"),
+                    IsEnabled = !_settings.Fullscreen
+                };
+
+                if (current)
+                {
+                    button.BorderBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+                    button.Background = new SolidColorBrush(Color.FromRgb(0x4A, 0x24, 0x18));
+                }
+
+                button.Click += (_, _) =>
+                {
+                    _settings.Width = width;
+                    _settings.Height = height;
+                    _settings.Save();
+                    ApplyDisplaySettings();
+                    BuildSettingsScreen();
+                };
+
+                ResolutionList.Children.Add(button);
+            }
+
+            SettingsNoteText.Text = _settings.Fullscreen
+                ? "Fullscreen fits the game to your screen. Turn it off to pick a window size."
+                : "Sizes bigger than your screen are not shown.";
+        }
+
+        private void FullscreenButton_Click(object sender, RoutedEventArgs e)
+        {
+            _settings.Fullscreen = !_settings.Fullscreen;
+            _settings.Save();
+            ApplyDisplaySettings();
+            BuildSettingsScreen();
+        }
+
+        private void SettingsBack_Click(object sender, RoutedEventArgs e) => CloseSettings();
+
+        private void CloseSettings()
+        {
+            SettingsScreen.Visibility = Visibility.Collapsed;
+            _settingsBack?.Invoke();
+        }
+
+        private void GameMenuSettings_Click(object sender, RoutedEventArgs e)
+        {
+            HideGameMenu();
+            ShowSettings(back: ShowGameMenu);
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)
