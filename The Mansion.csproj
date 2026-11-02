@@ -1,0 +1,107 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>The_Mansion</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Backgrounds\Mansion\Fountain.png" />
+    <None Remove="Assets\Backgrounds\Mansion\fountain_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
+    <None Remove="Assets\Backgrounds\Mansion\frontgate.png" />
+    <None Remove="Assets\Backgrounds\Mansion\Front_door.png" />
+    <None Remove="Assets\Backgrounds\Mansion\Front_door_open.png" />
+    <None Remove="Assets\Backgrounds\Mansion\left.png" />
+    <None Remove="Assets\Backgrounds\Mansion\right.png" />
+    <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\right_open.png" />
+    <None Remove="Assets\Characters\Chef.png" />
+    <None Remove="Assets\Characters\Death.png" />
+    <None Remove="Assets\Characters\FrogPrince.png" />
+    <None Remove="Assets\Characters\FrogPrince_fight.png" />
+    <None Remove="Assets\Characters\Gnome.png" />
+    <None Remove="Assets\Characters\Quazimodo.png" />
+    <None Remove="Assets\Characters\Quazimodo_fight.png" />
+    <None Remove="Assets\Characters\vampira.png" />
+    <None Remove="Assets\Cursors\cursor_act.cur" />
+    <None Remove="Assets\Cursors\cursor_arrow.cur" />
+    <None Remove="Assets\Cursors\cursor_item.cur" />
+    <None Remove="Assets\Cursors\cursor_look.cur" />
+    <None Remove="Assets\Cursors\cursor_talk.cur" />
+    <None Remove="Assets\HauntAOE.ttf" />
+    <None Remove="Assets\UI\act.png" />
+    <None Remove="Assets\UI\act_glow.png" />
+    <None Remove="Assets\UI\btn_act %281%29.png" />
+    <None Remove="Assets\UI\btn_item %281%29.png" />
+    <None Remove="Assets\UI\btn_item_glow %281%29.png" />
+    <None Remove="Assets\UI\btn_talk %281%29.png" />
+    <None Remove="Assets\UI\btn_talk_glow %281%29.png" />
+    <None Remove="Assets\UI\button_act.png" />
+    <None Remove="Assets\UI\button_act_pressed.png" />
+    <None Remove="Assets\UI\button_item.png" />
+    <None Remove="Assets\UI\button_item_pressed.png" />
+    <None Remove="Assets\UI\button_look.png" />
+    <None Remove="Assets\UI\button_talk.png" />
+    <None Remove="Assets\UI\button_talk_pressed.png" />
+    <None Remove="Assets\UI\cursor_act_128.png" />
+    <None Remove="Assets\UI\hud_overlay_cropped.png" />
+    <None Remove="Assets\UI\item.png" />
+    <None Remove="Assets\UI\item_glow.png" />
+    <None Remove="Assets\UI\Look.png" />
+    <None Remove="Assets\UI\look_glow.png" />
+    <None Remove="Assets\UI\MainMenu.png" />
+    <None Remove="Assets\UI\menu_frame.png" />
+    <None Remove="Assets\UI\newMenu.png" />
+    <None Remove="Assets\UI\return_arrow.png" />
+    <None Remove="Assets\UI\talk.png" />
+    <None Remove="Assets\UI\talk_glow.png" />
+    <None Remove="Assets\UI\title_screen.png" />
+    <None Remove="Assets\UI\trunk.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Backgrounds\Mansion\Fountain.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\fountain_closeup.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\frontgate.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\Front_door.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\Front_door_open.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\left.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\right.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
+    <Resource Include="Assets\Characters\Quazimodo.png" />
+    <Resource Include="Assets\Cursors\cursor_act.cur" />
+    <Resource Include="Assets\Cursors\cursor_arrow.cur" />
+    <Resource Include="Assets\Cursors\cursor_item.cur" />
+    <Resource Include="Assets\Cursors\cursor_look.cur" />
+    <Resource Include="Assets\Cursors\cursor_talk.cur" />
+    <Resource Include="Assets\UI\act.png" />
+    <Resource Include="Assets\UI\act_glow.png" />
+    <Resource Include="Assets\UI\item.png" />
+    <Resource Include="Assets\UI\item_glow.png" />
+    <Resource Include="Assets\UI\Look.png" />
+    <Resource Include="Assets\UI\look_glow.png" />
+    <Resource Include="Assets\UI\menu_frame.png" />
+    <Resource Include="Assets\UI\return_arrow.png" />
+    <Resource Include="Assets\UI\talk.png" />
+    <Resource Include="Assets\UI\talk_glow.png" />
+    <Resource Include="Assets\UI\title_background.png" />
+    <Resource Include="Assets\UI\title_screen.png" />
+    <Resource Include="Assets\UI\trunk.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Models\Hotspot.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>
