@@ -337,7 +337,7 @@
                 <RowDefinition Height="400"/>
             </Grid.RowDefinitions>
 
-            <!-- Scene spans both rows so the 796px-tall background and its hotspots
+            <!-- Scene spans both rows so the 800px-tall background and its hotspots
                  extend underneath the (partly transparent) HUD frame without being clipped. -->
             <Grid Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1">
                 <!-- GAME SCENE -->
@@ -346,14 +346,14 @@
                 <Image x:Name="RoomBackground"
                       Source="Assets/Backgrounds/Mansion/frontgate.png"
                       Stretch="UniformToFill"
-                      VerticalAlignment="Top" Height="796" />
+                      VerticalAlignment="Top" Height="800" />
 
                 <Canvas x:Name="SceneCanvas"
             Background="Transparent"
             MouseMove="SceneCanvas_MouseMove"
             MouseLeftButtonDown="SceneCanvas_MouseLeftButtonDown"
             MouseLeftButtonUp="SceneCanvas_MouseLeftButtonUp"
-            Height="796"
+            Height="800"
             Panel.ZIndex="10" VerticalAlignment="Top"/>
 
             </Grid>
@@ -399,6 +399,15 @@
             </Border>
             <Grid Grid.Row="1"
               x:Name="HUDGrid" Panel.ZIndex="1">
+                <Grid.Resources>
+                    <!-- Menu buttons keep their 182x62 proportions and are centred in their row. -->
+                    <Style TargetType="Image" x:Key="MenuButtonStyle">
+                        <Setter Property="Stretch" Value="Uniform"/>
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Resources>
 
 
                 <TextBlock x:Name="DescriptionText"
@@ -415,7 +424,13 @@
                 <Image x:Name="HUDDiveders"
   Source="/Assets/UI/menu_frame.png"
   IsHitTestVisible="False" Panel.ZIndex="20" Stretch="Fill"/>
-                <Grid x:Name="MenuButtons" Margin="92,0,0,39" HorizontalAlignment="Left" Width="242" Height="361" VerticalAlignment="Bottom" Panel.ZIndex="10">
+                <!--
+                    Fits inside the left "menu" pocket of menu_frame.png.
+                    menu_frame.png (1536x596) is stretched to 1920x400, so its
+                    pocket (x 84-276, y 194-557 in the image) lands at
+                    x 105-345, y 130-374 in this HUD row. 6px padding inside that.
+                -->
+                <Grid x:Name="MenuButtons" Margin="111,136,0,0" HorizontalAlignment="Left" Width="228" Height="232" VerticalAlignment="Top" Panel.ZIndex="10">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -433,34 +448,32 @@
 
                     <!-- LOOK -->
 
-                    <Image x:Name="LookBtn"
+                    <Image x:Name="LookBtn" Style="{StaticResource MenuButtonStyle}"
            Grid.Row="1"
            Grid.Column="0"
            Source="/Assets/UI/Look.png"
            MouseEnter="MenuButton_MouseEnter"
            MouseLeftButtonDown="MenuButton_MouseDown"
-           MouseLeave="MenuButton_MouseLeave" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Top" />
+           MouseLeave="MenuButton_MouseLeave"/>
 
 
                     <!-- ACT -->
 
-                    <Image x:Name="ActBtn"
+                    <Image x:Name="ActBtn" Style="{StaticResource MenuButtonStyle}"
            Grid.Row="0"
            Grid.Column="0"
            Source="/Assets/UI/act.png"
-           Stretch="Fill"
            MouseEnter="MenuButton_MouseEnter"
            MouseLeftButtonDown="MenuButton_MouseDown"
-           MouseLeave="MenuButton_MouseLeave" VerticalAlignment="Center" />
+           MouseLeave="MenuButton_MouseLeave"/>
 
 
                     <!-- TALK -->
 
-                    <Image x:Name="TalkBtn"
+                    <Image x:Name="TalkBtn" Style="{StaticResource MenuButtonStyle}"
            Grid.Row="2"
            Grid.Column="0"
            Source="/Assets/UI/talk.png"
-           Stretch="Fill"
            MouseEnter="MenuButton_MouseEnter"
            MouseLeftButtonDown="MenuButton_MouseDown"
            MouseLeave="MenuButton_MouseLeave"/>
@@ -468,11 +481,10 @@
 
                     <!-- ITEM -->
 
-                    <Image x:Name="ItemBtn"
+                    <Image x:Name="ItemBtn" Style="{StaticResource MenuButtonStyle}"
            Grid.Row="3"
            Grid.Column="0"
            Source="/Assets/UI/item.png"
-           Stretch="Fill"
            MouseEnter="MenuButton_MouseEnter"
            MouseLeftButtonDown="MenuButton_MouseDown"
            MouseLeave="MenuButton_MouseLeave"/>
