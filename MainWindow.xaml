@@ -720,6 +720,39 @@
                               FontSize="16"
                               Click="DebugHotspotsCheckBox_Click"/>
 
+                    <!-- Story flags: set/clear one to test what it changes -->
+                    <TextBlock Text="STORY FLAGS"
+                               Foreground="Cyan"
+                               FontFamily="Consolas"
+                               FontSize="16"
+                               Margin="0,16,0,6"/>
+
+                    <TextBlock x:Name="DebugFlagsText"
+                               Foreground="White"
+                               FontFamily="Consolas"
+                               FontSize="14"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,6"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="DebugFlagTextBox"
+                                 Width="250"
+                                 Height="30"
+                                 FontFamily="Consolas"
+                                 FontSize="15"
+                                 VerticalContentAlignment="Center"/>
+                        <Button Content="Set"
+                                Width="70"
+                                Height="30"
+                                Margin="8,0,0,0"
+                                Click="DebugSetFlag_Click"/>
+                        <Button Content="Clear"
+                                Width="70"
+                                Height="30"
+                                Margin="8,0,0,0"
+                                Click="DebugClearFlag_Click"/>
+                    </StackPanel>
+
                     <Button Content="Give me every item"
                             Height="36"
                             Margin="0,12,0,0"

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
@@ -54,6 +54,23 @@ namespace The_Mansion.Data
 
             _scene.Hotspots.Add(hotspot);
             return new HotspotBuilder(this, hotspot);
+        }
+
+        /// <summary>
+        /// Show a different background once something has happened, e.g.
+        /// .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"), "Assets/Backgrounds/Mansion/Front_door_open.png")
+        /// The new picture should be framed like the normal one so hotspots
+        /// still line up. Several can be added; the first true one wins.
+        /// </summary>
+        public SceneBuilder BackgroundWhen(Func<Player, bool> condition, string backgroundImage)
+        {
+            _scene.AlternateBackgrounds.Add(new SceneBackground
+            {
+                Condition = condition,
+                Image = backgroundImage
+            });
+
+            return this;
         }
 
         /// <summary>
@@ -185,6 +202,9 @@ namespace The_Mansion.Data
 
         public SceneBuilder ReturnTo(string sceneName, string text = "")
             => _scene.ReturnTo(sceneName, text);
+
+        public SceneBuilder BackgroundWhen(Func<Player, bool> condition, string backgroundImage)
+            => _scene.BackgroundWhen(condition, backgroundImage);
 
         public static implicit operator Scene(HotspotBuilder builder) => builder._scene.Build();
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
@@ -84,6 +84,10 @@ namespace The_Mansion.Data
     NewScene("FrontDoor",
              "Assets/Backgrounds/Mansion/Front_door.png",
              "The heavy front door towers over you. A grotesque metal knocker hangs at its centre.")
+
+        // Once Quazimodo has let the player in, show the doors open.
+        .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"),
+                        "Assets/Backgrounds/Mansion/Front_door_open.png")
 
         // Before Quazimodo has answered the door.
         .Hotspot("Front Doors", 590, 300, 375, 500)

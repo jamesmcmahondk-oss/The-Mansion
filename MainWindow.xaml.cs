@@ -506,7 +506,9 @@ namespace The_Mansion
         {
             _currentScene = scene;
 
-            LoadSceneBackground(scene.BackgroundImage);
+            // .BackgroundWhen(...) can swap the picture after story events.
+            _currentBackground = scene.GetBackground(_player);
+            LoadSceneBackground(_currentBackground);
 
             DescriptionText.Text = scene.Description;
 
@@ -1668,6 +1670,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 
             BuildDebugSceneList();
+            UpdateDebugFlagsText();
             DebugHotspotsCheckBox.IsChecked = _showHotspotDebug;
             DebugMenu.Visibility = Visibility.Visible;
         }
@@ -1766,6 +1769,37 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             if (_currentScene != null)
             {
                 CreateSceneElements(_currentScene);
+            }
+        }
+
+        private void UpdateDebugFlagsText()
+        {
+            DebugFlagsText.Text = _player.Flags.Count == 0
+                ? "(none set)"
+                : string.Join(", ", _player.Flags);
+        }
+
+        private void DebugSetFlag_Click(object sender, RoutedEventArgs e)
+        {
+            string flag = DebugFlagTextBox.Text.Trim();
+
+            if (flag.Length > 0)
+            {
+                _player.SetFlag(flag);
+                AfterStoryChange();      // updates background/hotspots now
+                UpdateDebugFlagsText();
+            }
+        }
+
+        private void DebugClearFlag_Click(object sender, RoutedEventArgs e)
+        {
+            string flag = DebugFlagTextBox.Text.Trim();
+
+            if (flag.Length > 0)
+            {
+                _player.ClearFlag(flag);
+                AfterStoryChange();
+                UpdateDebugFlagsText();
             }
         }
 
@@ -1998,12 +2032,26 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             RefreshSceneHotspots();
         }
 
+        // Background currently on screen (so it's only reloaded when it changes).
+        private string _currentBackground = "";
+
         private void RefreshSceneHotspots()
         {
-            if (_currentScene != null)
+            if (_currentScene == null)
             {
-                CreateSceneElements(_currentScene);
+                return;
             }
+
+            // Something happened that changes the picture? (.BackgroundWhen)
+            string background = _currentScene.GetBackground(_player);
+
+            if (background != _currentBackground)
+            {
+                _currentBackground = background;
+                LoadSceneBackground(background);
+            }
+
+            CreateSceneElements(_currentScene);
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)

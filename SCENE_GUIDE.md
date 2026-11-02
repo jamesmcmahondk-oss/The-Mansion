@@ -36,6 +36,8 @@ public static Scene FountainCloseup { get; } =
   box over the object. A ready-made `.Hotspot(...)` line is copied to the
   clipboard; paste it into the scene.
 * `.ReturnTo(...)` makes the Return arrow (top left) go back somewhere.
+* `.BackgroundWhen(p => …, "image.png")` shows a different background once
+  something has happened (see the recipe below). Put it right under `NewScene(...)`.
 
 ## 2. What a hotspot does
 
@@ -139,6 +141,25 @@ Icons: add a crop to `Tools/build_item_icons.py` and run it, or draw your own
 ---
 
 ## Recipes
+
+### Change the background after something happens
+Quazimodo's conversation sets the `FrontDoorOpen` flag, so the Front Door scene
+switches to the open-door picture – straight away, and every visit after:
+```csharp
+NewScene("FrontDoor", "Assets/Backgrounds/Mansion/Front_door.png", "...")
+    .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"),
+                    "Assets/Backgrounds/Mansion/Front_door_open.png")
+```
+* The alternate picture must be **framed the same** as the normal one, so
+  hotspots still line up.
+* Pair it with `.OnlyWhen(...)` hotspots so the clickable areas change too
+  (closed doors → open doors).
+* Several `.BackgroundWhen` lines are allowed; the **first** true one wins.
+* Add new pictures to the project as a *Resource* (like the other backgrounds
+  in `The Mansion.csproj`), or they won't load.
+
+**Testing:** F1 → *Story flags* → type `FrontDoorOpen` → **Set** / **Clear**.
+The scene updates immediately.
 
 ### Pick something up
 ```csharp
