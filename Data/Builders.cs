@@ -312,6 +312,42 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// How the character reacts when the player offers this item
+        /// (ITEM button during the conversation). Works on any line.
+        ///   goesTo     - line to jump to (leave out to end the conversation)
+        ///   effect     - runs when offered, e.g. p => p.ClearFlag("StoleCoins")
+        ///   removeItem - the character keeps it
+        ///   onlyIf     - only react like this when true
+        /// </summary>
+        public DialogueBuilder OnItem(
+            string itemName,
+            string? goesTo = null,
+            Action<Player>? effect = null,
+            bool removeItem = false,
+            Func<Player, bool>? onlyIf = null)
+        {
+            _dialogue.ItemUses[itemName] = new DialogueItemUse
+            {
+                GoesTo = goesTo,
+                Effect = effect,
+                RemoveItem = removeItem,
+                Condition = onlyIf
+            };
+
+            return this;
+        }
+
+        /// <summary>
+        /// Reply to any item without its own OnItem. "{item}" is replaced
+        /// by the item's name. The player then goes back to where they were.
+        /// </summary>
+        public DialogueBuilder OnOtherItems(string text)
+        {
+            _dialogue.OtherItemText = text;
+            return this;
+        }
+
         /// <summary>Give the line above the same replies as an earlier line.</summary>
         public DialogueBuilder SameChoicesAs(string lineId)
         {
@@ -346,6 +382,18 @@ namespace The_Mansion.Data
         // Catch typos in goesTo straight away instead of mid-game.
         private void CheckLinks()
         {
+            foreach (var pair in _dialogue.ItemUses)
+            {
+                string? next = pair.Value.GoesTo;
+
+                if (next != null && !_dialogue.Nodes.ContainsKey(next))
+                {
+                    throw new InvalidOperationException(
+                        $"Dialogue '{_id}': OnItem(\"{pair.Key}\") goes to '{next}', " +
+                        $"but there is no line with that name.");
+                }
+            }
+
             foreach (var pair in _dialogue.Nodes)
             {
                 foreach (DialogueChoice choice in pair.Value.Choices)

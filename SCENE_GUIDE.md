@@ -121,10 +121,33 @@ public static Dialogue HautainCoins { get; } =
 * `onlyIf:` hides a reply unless true. `effect:` runs when it's picked.
 * `.SameChoicesAs("start")` – reuse an earlier line's replies (handy for
   "Anything else?" lines).
+* `.OnItem("Item Name", "lineId")` – what happens when the player **offers an
+  item** during the conversation (see below).
 * Keep each line to about **two lines of text** so the replies fit.
 * Without `.StandAt`, the portrait stands on the right and the scene darkens.
 * A typo in a `goesTo` stops the game at start-up with a message naming the
   line, so mistakes are caught straight away.
+
+### Offering items during a conversation
+
+While talking, the **ITEM** button stays lit. Clicking it swaps the
+conversation for the inventory; picking an item offers it to the character.
+Put these near the top of a dialogue (after `.StartAt`):
+
+```csharp
+.OnItem("Gold Coins", "returned",                 // jump to the "returned" line
+        removeItem: true,                         // the character keeps it
+        effect: p => p.ClearFlag("StoleCoins"))   // optional
+.OnItem("Royal Gold Coin", "keepit")              // react, but the player keeps it
+.OnItem("Cake", "eats", onlyIf: p => p.HasFlag("PipIsHungry"))   // only sometimes
+.OnOtherItems("\"What would I want with a {item}?\"")         // anything else
+```
+
+* Leave out the line name (e.g. `.OnItem("Rose")`) to end the conversation.
+* Items with no `OnItem` get the `OnOtherItems` reply (or
+  "*Speaker* shows no interest in the *item*."), then a **(Back)** choice
+  returns to the line the player was on.
+* Esc (or ITEM again) closes the inventory and returns to the conversation.
 
 ## 5. Items
 

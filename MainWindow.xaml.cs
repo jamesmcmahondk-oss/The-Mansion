@@ -1304,6 +1304,20 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
                 case "ItemBtn":
                     {
+                        // During a conversation ITEM offers something to the character.
+                        if (IsInDialogue)
+                        {
+                            if (_inventoryOpen)
+                            {
+                                CloseInventory();
+                            }
+                            else
+                            {
+                                OpenInventory();
+                            }
+                            break;
+                        }
+
                         _interactionMode = InteractionMode.Item;
                         SceneCanvas.Cursor = _itemCursor;
 
@@ -1413,9 +1427,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             DescriptionText.Visibility = Visibility.Collapsed;
             DialoguePanel.Visibility = Visibility.Visible;
 
-            // No switching verbs mid-conversation.
-            MenuButtons.IsHitTestVisible = false;
-            MenuButtons.Opacity = 0.45;
+            // No switching verbs mid-conversation - except ITEM, to offer things.
+            SetMenuForDialogue(true);
 
             string startNode = dialogue.ChooseStartNode != null
                 ? dialogue.ChooseStartNode(_player)
@@ -1504,6 +1517,23 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
+            _currentLineId = nodeId;
+            DisplayDialogueNode(node);
+        }
+
+        // Shows a line and its choices. Also used for one-off replies that
+        // aren't part of the script (e.g. refusing an offered item).
+        private void DisplayDialogueNode(DialogueNode node)
+        {
+            if (_activeDialogue == null)
+            {
+                return;
+            }
+
+            DialogueItemHint.Visibility = _player.Inventory.Count > 0
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
             // A line can swap the picture (e.g. an angry pose).
             SetDialoguePortrait(string.IsNullOrWhiteSpace(node.Portrait)
                 ? _activeDialogue.Portrait
@@ -1591,6 +1621,12 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void EndDialogue()
         {
+            if (_inventoryOpen)
+            {
+                InventoryPanel.Visibility = Visibility.Collapsed;
+                _inventoryOpen = false;
+            }
+
             _activeDialogue = null;
             _visibleChoices.Clear();
 
@@ -1603,8 +1639,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             DescriptionText.Visibility = Visibility.Visible;
 
-            MenuButtons.IsHitTestVisible = true;
-            MenuButtons.Opacity = 1;
+            SetMenuForDialogue(false);
 
             // Choices may have changed flags/items, so hotspots may change.
             RefreshSceneHotspots();
@@ -1636,7 +1671,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
-            if (!IsInDialogue)
+            if (!IsInDialogue || _inventoryOpen)
             {
                 return;
             }
@@ -1851,6 +1886,18 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 ? "Your pockets are empty."
                 : "Hover over an item to examine it.";
 
+            if (IsInDialogue && _activeDialogue != null)
+            {
+                // Offering something to the character: inventory replaces the conversation.
+                DialoguePanel.Visibility = Visibility.Collapsed;
+                InventoryHintText.Text =
+                    $"Click an item to offer it to {_activeDialogue.Speaker}  ·  Esc to go back";
+            }
+            else
+            {
+                InventoryHintText.Text = "Click an item to use it  ·  Esc to close";
+            }
+
             DescriptionText.Visibility = Visibility.Collapsed;
             InventoryPanel.Visibility = Visibility.Visible;
             _inventoryOpen = true;
@@ -1864,8 +1911,16 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 
             InventoryPanel.Visibility = Visibility.Collapsed;
-            DescriptionText.Visibility = Visibility.Visible;
             _inventoryOpen = false;
+
+            // Back to the conversation.
+            if (IsInDialogue)
+            {
+                DialoguePanel.Visibility = Visibility.Visible;
+                return;
+            }
+
+            DescriptionText.Visibility = Visibility.Visible;
 
             if (_selectedItem == null && _currentScene != null)
             {
@@ -1963,6 +2018,13 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void SelectItem(string itemName)
         {
+            if (IsInDialogue)
+            {
+                CloseInventory();
+                OfferItemInDialogue(itemName);
+                return;
+            }
+
             _selectedItem = itemName;
             _interactionMode = InteractionMode.Item;
             SceneCanvas.Cursor = _itemCursor;
@@ -2052,6 +2114,72 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 
             CreateSceneElements(_currentScene);
+        }
+
+        // =========================================================
+        // ITEMS DURING CONVERSATIONS
+        // =========================================================
+
+        // Id of the line currently showing (so "(Back)" can return to it).
+        private string _currentLineId = "";
+
+        private void SetMenuForDialogue(bool inDialogue)
+        {
+            foreach (Image button in new[] { ActBtn, LookBtn, TalkBtn })
+            {
+                button.IsHitTestVisible = !inDialogue;
+                button.Opacity = inDialogue ? 0.45 : 1;
+            }
+
+            // ITEM stays usable so the player can offer things.
+            ItemBtn.IsHitTestVisible = true;
+            ItemBtn.Opacity = 1;
+        }
+
+        private void OfferItemInDialogue(string itemName)
+        {
+            if (_activeDialogue == null)
+            {
+                return;
+            }
+
+            if (_activeDialogue.ItemUses.TryGetValue(itemName, out DialogueItemUse? use) &&
+                (use.Condition == null || use.Condition(_player)))
+            {
+                use.Effect?.Invoke(_player);
+
+                if (use.RemoveItem)
+                {
+                    _player.Take(itemName);
+                }
+
+                UpdatePlayerStats();
+
+                if (string.IsNullOrWhiteSpace(use.GoesTo))
+                {
+                    EndDialogue();
+                }
+                else
+                {
+                    ShowDialogueNode(use.GoesTo);
+                }
+
+                return;
+            }
+
+            // Not interested: say so, then go back to the same line.
+            string reply = string.IsNullOrWhiteSpace(_activeDialogue.OtherItemText)
+                ? $"{_activeDialogue.Speaker} shows no interest in the {itemName}."
+                : _activeDialogue.OtherItemText.Replace("{item}", itemName);
+
+            DisplayDialogueNode(new DialogueNode
+            {
+                Text = reply,
+                Choices =
+                {
+                    new DialogueChoice { Text = "(Back)", Next = _currentLineId }
+                }
+            });
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)

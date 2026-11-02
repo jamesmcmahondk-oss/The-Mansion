@@ -473,11 +473,23 @@
                             Visibility="Collapsed"
                             Panel.ZIndex="110">
 
-                    <TextBlock x:Name="DialogueSpeakerText"
-                               Foreground="#C8A96A"
-                               FontFamily="Georgia"
-                               FontWeight="Bold"
-                               FontSize="20"/>
+                    <Grid>
+                        <TextBlock x:Name="DialogueSpeakerText"
+                                   Foreground="#C8A96A"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="20"/>
+
+                        <!-- Shown when the player has items to offer -->
+                        <TextBlock x:Name="DialogueItemHint"
+                                   Text="ITEM: offer something"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="#756A59"
+                                   FontFamily="Georgia"
+                                   FontStyle="Italic"
+                                   FontSize="15"/>
+                    </Grid>
 
                     <TextBlock x:Name="DialogueLineText"
                                Foreground="#DDD4C3"
@@ -513,7 +525,8 @@
                                FontWeight="Bold"
                                FontSize="20"/>
 
-                    <TextBlock Text="Click an item to use it  ·  Esc to close"
+                    <TextBlock x:Name="InventoryHintText"
+                               Text="Click an item to use it  ·  Esc to close"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Foreground="#756A59"
