@@ -109,6 +109,101 @@ namespace The_Mansion.Data
             .Line("again", "YOU again! Haven't you robbed the Crown enough for one day?")
                 .Choice("Just admiring the view, Your Majesty.");
 
+        public static Dialogue QuazimodoFrontDoor { get; } =
+    NewDialogue("QuazimodoFrontDoor", "Quazimodo")
+        .Portrait("Assets/Characters/Quazimodo.png")                     
+        .StandAt(589, 300, 700)
+        .StartAt(p => p.HasFlag("MetQuazimodo")
+            ? "again"
+            : "start")
+
+        .Line(
+            "start",
+            "The door opens a fraction. A pale, crooked figure peers through the gap.")
+            .Choice(
+                "Hello. May I come inside?",
+                "polite",
+                effect: p => p.SetFlag("MetQuazimodo"))
+            .Choice(
+                "Are you the butler?",
+                "butler",
+                effect: p => p.SetFlag("MetQuazimodo"))
+            .Choice(
+                "What happened to you?",
+                "rude",
+                effect: p => p.SetFlag("MetQuazimodo"))
+            .Choice(
+                "Sorry. Wrong mansion.",
+                "leave",
+                effect: p => p.SetFlag("MetQuazimodo"))
+
+        .Line(
+            "polite",
+            "Quazimodo blinks. \"You said please. That places you above most of our visitors.\"")
+            .Choice(
+                "Is that a yes?",
+                "admit")
+
+        .Line(
+            "butler",
+            "\"Butler, porter, doorman, occasional exterminator. Titles multiply when staff do not.\"")
+            .Choice(
+                "Then may I come inside?",
+                "admit")
+            .Choice(
+                "Exterminator?",
+                "exterminator")
+
+        .Line(
+            "exterminator",
+            "\"A regrettable duty. Some things enter the Mansion without being invited.\"")
+            .Choice(
+                "Was I invited?",
+                "admit")
+            .Choice(
+                "I think I'll remain outside.",
+                "leave")
+
+        .Line(
+            "rude",
+            "Quazimodo studies you in silence. \"One might ask precisely the same of you.\"")
+            .Choice(
+                "Fair point. May I come inside?",
+                "admit")
+            .Choice(
+                "I deserved that.",
+                "admit")
+            .Choice(
+                "Never mind.",
+                "leave")
+
+        .Line(
+            "admit",
+            "\"The door was not locked. It was considering you.\" Quazimodo pulls it open.")
+            .Choice(
+                "That's not reassuring.",
+                effect: p => p.SetFlag("FrontDoorOpen"))
+            .Choice(
+                "Thank you.",
+                effect: p => p.SetFlag("FrontDoorOpen"))
+            .Choice(
+                "Doors don't think.",
+                effect: p => p.SetFlag("FrontDoorOpen"))
+
+        .Line(
+            "leave",
+            "\"A sensible decision. Those rarely survive prolonged contact with this house.\"")
+            .Choice("Goodbye.")
+
+        .Line(
+            "again",
+            "Quazimodo opens the door a fraction. \"Have you finished standing outside?\"")
+            .Choice(
+                "Yes. Let me in.",
+                "admit")
+            .Choice(
+                "Not quite.",
+                "leave");
 
         // =========================================================
         // LOOKUP (used by the game - no need to edit)
