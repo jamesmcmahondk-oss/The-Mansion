@@ -507,7 +507,7 @@ namespace The_Mansion
 
                 case "LoadGameBtn":
                     {
-                        //ShowLoadGame();
+                        ShowSaveLoad(saving: false, back: () => { });   // title stays behind
                         break;
                     }
 
@@ -1704,6 +1704,38 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             {
                 CloseInventory();
                 e.Handled = true;
+                return;
+            }
+
+            // Esc: back out of the save/load screen, or open/close the game menu.
+            if (e.Key == Key.Escape)
+            {
+                if (IsSaveLoadOpen)
+                {
+                    SaveLoadScreen.Visibility = Visibility.Collapsed;
+                    _saveLoadBack?.Invoke();
+                    e.Handled = true;
+                    return;
+                }
+
+                if (IsGameMenuOpen)
+                {
+                    HideGameMenu();
+                    e.Handled = true;
+                    return;
+                }
+
+                if (GameScreen.Visibility == Visibility.Visible && !_gameOverShown)
+                {
+                    ShowGameMenu();
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            // No dialogue keys while a menu is open.
+            if (IsGameMenuOpen || IsSaveLoadOpen)
+            {
                 return;
             }
 
@@ -3010,28 +3042,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void GameOverRestart_Click(object sender, RoutedEventArgs e)
         {
-            _gameOverShown = false;
-            GameOverScreen.Visibility = Visibility.Collapsed;
-
-            if (IsInDialogue)
-            {
-                EndDialogue();
-            }
-
-            EndFight();
-
-            // A brand new hero.
-            _player = new Player();
-            _rerollsRemaining = 3;
-            _selectedItem = null;
-            _fightSnapshot = null;
-            _currentScene = null;
-
-            GameScreen.Visibility = Visibility.Collapsed;
-            TrunkScreen.Visibility = Visibility.Collapsed;
-            PlayerRollScreen.Visibility = Visibility.Collapsed;
-            BackstoryScreen.Visibility = Visibility.Collapsed;
-            TitleScreen.Visibility = Visibility.Visible;
+            ResetToTitle();
         }
 
         /*
@@ -3054,6 +3065,279 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 DialoguePortrait.Margin = new Thickness(0, 100, 140, 0);
                 DialoguePortrait.Height = 700;
             }
+        }
+
+        // =========================================================
+        // SAVE / LOAD (Data/SaveSystem.cs) and the Esc game menu
+        // =========================================================
+
+        // Where BACK on the save/load screen returns to.
+        private Action? _saveLoadBack;
+
+        private bool IsGameMenuOpen => GameMenuScreen.Visibility == Visibility.Visible;
+        private bool IsSaveLoadOpen => SaveLoadScreen.Visibility == Visibility.Visible;
+
+        // Saving is only allowed while exploring.
+        private bool CanSaveNow =>
+            GameScreen.Visibility == Visibility.Visible &&
+            _currentScene != null &&
+            !IsInDialogue &&
+            !IsInFight &&
+            !_gameOverShown;
+
+        private void ShowGameMenu()
+        {
+            CloseInventory();
+
+            GameMenuSaveButton.IsEnabled = CanSaveNow;
+            GameMenuNoteText.Text = CanSaveNow
+                ? ""
+                : "You can't save during a conversation or a fight.";
+
+            GameMenuScreen.Visibility = Visibility.Visible;
+        }
+
+        private void HideGameMenu() => GameMenuScreen.Visibility = Visibility.Collapsed;
+
+        private void GameMenuResume_Click(object sender, RoutedEventArgs e) => HideGameMenu();
+
+        private void GameMenuSave_Click(object sender, RoutedEventArgs e)
+        {
+            HideGameMenu();
+            ShowSaveLoad(saving: true, back: ShowGameMenu);
+        }
+
+        private void GameMenuLoad_Click(object sender, RoutedEventArgs e)
+        {
+            HideGameMenu();
+            ShowSaveLoad(saving: false, back: ShowGameMenu);
+        }
+
+        private void GameMenuQuit_Click(object sender, RoutedEventArgs e)
+        {
+            var answer = MessageBox.Show(
+                "Return to the title screen? Anything you haven't saved will be lost.",
+                "Quit to title",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (answer == MessageBoxResult.Yes)
+            {
+                HideGameMenu();
+                ResetToTitle();
+            }
+        }
+
+        private void GameOverLoad_Click(object sender, RoutedEventArgs e)
+        {
+            ShowSaveLoad(saving: false, back: () => { });   // game over screen stays behind
+        }
+
+        private void SaveLoadBack_Click(object sender, RoutedEventArgs e)
+        {
+            SaveLoadScreen.Visibility = Visibility.Collapsed;
+            _saveLoadBack?.Invoke();
+        }
+
+        /*
+         * Shows the three slots. Saving: click any slot (asks before
+         * overwriting). Loading: click a slot that has a save.
+         */
+        private void ShowSaveLoad(bool saving, Action back)
+        {
+            _saveLoadBack = back;
+
+            SaveLoadTitleText.Text = saving ? "SAVE GAME" : "LOAD GAME";
+            SaveLoadSubtitleText.Text = saving
+                ? "Choose a slot to save your progress."
+                : "Choose a saved game to continue.";
+
+            SaveSlotsPanel.Children.Clear();
+
+            for (int slot = 1; slot <= SaveSystem.SlotCount; slot++)
+            {
+                SaveSlotsPanel.Children.Add(CreateSaveSlotButton(slot, saving));
+            }
+
+            SaveLoadScreen.Visibility = Visibility.Visible;
+        }
+
+        private Button CreateSaveSlotButton(int slot, bool saving)
+        {
+            SaveGame? save = SaveSystem.Load(slot);
+
+            var title = new TextBlock
+            {
+                Text = save == null
+                    ? $"SLOT {slot}  -  Empty"
+                    : $"SLOT {slot}  -  {save.PlayerName}",
+                FontSize = 22
+            };
+
+            var details = new TextBlock
+            {
+                Text = save == null
+                    ? (saving ? "Click to save here." : "Nothing saved here yet.")
+                    : $"{PrettySceneName(save.SceneName)}   ·   Health {save.Health}/{save.MaxHealth}   ·   " +
+                      $"{save.SavedAt:d MMM yyyy, HH:mm}",
+                FontSize = 16,
+                FontWeight = FontWeights.Normal,
+                Foreground = new SolidColorBrush(Color.FromRgb(0xA8, 0x9A, 0x84)),
+                Margin = new Thickness(0, 4, 0, 0)
+            };
+
+            var button = new Button
+            {
+                Content = new StackPanel { Children = { title, details } },
+                Height = 84,
+                Margin = new Thickness(0, 0, 0, 12),
+                Padding = new Thickness(20, 0, 20, 0),
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                Style = (Style)FindResource("GothicButton"),
+                IsEnabled = saving || save != null
+            };
+
+            button.Click += (_, _) =>
+            {
+                if (saving)
+                {
+                    SaveToSlot(slot, overwriting: save != null);
+                }
+                else if (save != null)
+                {
+                    LoadSave(save);
+                }
+            };
+
+            return button;
+        }
+
+        // "FountainCloseup" -> "Fountain Closeup"
+        private static string PrettySceneName(string sceneName)
+        {
+            var text = new System.Text.StringBuilder();
+
+            foreach (char c in sceneName)
+            {
+                if (char.IsUpper(c) && text.Length > 0)
+                {
+                    text.Append(' ');
+                }
+                text.Append(c);
+            }
+
+            return text.ToString();
+        }
+
+        private void SaveToSlot(int slot, bool overwriting)
+        {
+            if (!CanSaveNow || _currentScene == null)
+            {
+                return;
+            }
+
+            if (overwriting)
+            {
+                var answer = MessageBox.Show(
+                    $"Overwrite the game saved in slot {slot}?",
+                    "Save game",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (answer != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            string? error = SaveSystem.Save(slot, SaveGame.From(_player, _currentScene.Name));
+
+            if (error != null)
+            {
+                MessageBox.Show(
+                    $"The game could not be saved.\n\n{error}",
+                    "Save failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            SaveLoadScreen.Visibility = Visibility.Collapsed;
+            ShowDescription($"Game saved in slot {slot}.");
+        }
+
+        private void LoadSave(SaveGame save)
+        {
+            Scene? scene = Scenes.GetScene(save.SceneName);
+
+            if (scene == null)
+            {
+                MessageBox.Show(
+                    $"This save is in a scene called '{save.SceneName}', which no longer exists.",
+                    "Load failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            // Close whatever was going on.
+            SaveLoadScreen.Visibility = Visibility.Collapsed;
+            HideGameMenu();
+            GameOverScreen.Visibility = Visibility.Collapsed;
+            _gameOverShown = false;
+
+            if (IsInDialogue)
+            {
+                EndDialogue();
+            }
+
+            EndFight();
+            _backstoryTimer?.Stop();
+
+            _player = save.ToPlayer();
+            _selectedItem = null;
+            _fightSnapshot = null;
+
+            TitleScreen.Visibility = Visibility.Collapsed;
+            BackstoryScreen.Visibility = Visibility.Collapsed;
+            PlayerRollScreen.Visibility = Visibility.Collapsed;
+            TrunkScreen.Visibility = Visibility.Collapsed;
+            GameScreen.Visibility = Visibility.Visible;
+
+            ShowScene(scene);
+            UpdatePlayerStats();
+
+            _interactionMode = InteractionMode.Look;
+            UpdateMenuButtonImages();
+            SceneCanvas.Cursor = _lookCursor;
+        }
+
+        // Back to the title screen with a brand new hero.
+        private void ResetToTitle()
+        {
+            _gameOverShown = false;
+            GameOverScreen.Visibility = Visibility.Collapsed;
+            SaveLoadScreen.Visibility = Visibility.Collapsed;
+            HideGameMenu();
+
+            if (IsInDialogue)
+            {
+                EndDialogue();
+            }
+
+            EndFight();
+
+            _player = new Player();
+            _rerollsRemaining = 3;
+            _selectedItem = null;
+            _fightSnapshot = null;
+            _currentScene = null;
+
+            GameScreen.Visibility = Visibility.Collapsed;
+            TrunkScreen.Visibility = Visibility.Collapsed;
+            PlayerRollScreen.Visibility = Visibility.Collapsed;
+            BackstoryScreen.Visibility = Visibility.Collapsed;
+            TitleScreen.Visibility = Visibility.Visible;
         }
 
         private void Return_MouseDown(object sender, MouseButtonEventArgs e)
