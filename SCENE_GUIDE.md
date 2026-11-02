@@ -161,6 +161,21 @@ public static Item RustyKey { get; } =
 Icons: add a crop to `Tools/build_item_icons.py` and run it, or draw your own
 128×128 PNG. Items without an icon show their initials.
 
+## 6. The car trunk (starting item)
+
+After the character roll, the player picks **one** item from their car trunk
+(`Assets/UI/trunk.png`). The choices are in `Data/Trunk.cs`:
+
+```csharp
+Add("Party Hat", 850, 325, 245, 205),                    // item, X, Y, width, height in trunk.png
+Add("Fork", 1050, 505, 210, 240, onTake: p => p.Weapon = "Fork"),   // optional effect
+```
+
+* Each name must also exist in `Data/Items.cs` (that's where the description
+  and icon come from).
+* Positions are pixels of `trunk.png`; only Y 80–944 is visible on screen.
+* Where boxes overlap, the one listed **last** is on top.
+
 ---
 
 ## Recipes

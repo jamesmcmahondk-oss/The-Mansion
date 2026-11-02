@@ -18,6 +18,15 @@ ICONS = {
     "gold_coins.png":        ("Assets/Backgrounds/Mansion/fountain_closeup.png", (600, 640, 880, 840)),
     "royal_gold_coin.png":   ("Assets/Backgrounds/Mansion/fountain_closeup.png", (670, 750, 726, 802)),
     "gargoyle_blessing.png": ("Assets/Backgrounds/Mansion/FrontGargoyle.png",    (800, 260, 1140, 600)),
+
+    # Car trunk (pre-game choice)
+    "corkscrew.png":         ("Assets/UI/trunk.png", (380, 440, 585, 600)),
+    "lighter.png":           ("Assets/UI/trunk.png", (270, 565, 445, 705)),
+    "ball_of_string.png":    ("Assets/UI/trunk.png", (630, 505, 790, 670)),
+    "party_hat.png":         ("Assets/UI/trunk.png", (850, 325, 1095, 530)),
+    "loose_change.png":      ("Assets/UI/trunk.png", (850, 575, 1025, 670)),
+    "fork.png":              ("Assets/UI/trunk.png", (1050, 505, 1260, 745)),
+    "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1465, 705)),
 }
 
 
