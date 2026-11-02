@@ -43,6 +43,9 @@ namespace The_Mansion.Models
         // e.g. a character who appears when you touch something.
         public string ActDialogueId { get; set; } = "";
 
+        // Fight started when the player uses ACT on this hotspot (Data/Enemies.cs).
+        public string ActFightId { get; set; } = "";
+
         // What happens when the player uses an item on this hotspot,
         // keyed by item name. Items not listed get a "nothing happens" reply.
         public Dictionary<string, ItemUse> ItemUses { get; set; } = new();

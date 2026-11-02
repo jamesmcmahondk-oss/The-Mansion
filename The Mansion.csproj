@@ -22,6 +22,11 @@
     <None Remove="Assets\Backgrounds\Mansion\right_open.png" />
     <None Remove="Assets\Characters\*.png" />
     <None Remove="Assets\Items\*.png" />
+    <None Remove="Assets\UI\Dice\*.png" />
+    <None Remove="Assets\UI\attack.png" />
+    <None Remove="Assets\UI\attack_glow.png" />
+    <None Remove="Assets\UI\flee.png" />
+    <None Remove="Assets\UI\flee_glow.png" />
     <None Remove="Assets\Characters\Chef.png" />
     <None Remove="Assets\Characters\Death.png" />
     <None Remove="Assets\Characters\FrogPrince.png" />
@@ -100,6 +105,11 @@
     <Resource Include="Assets\UI\title_background.png" />
     <Resource Include="Assets\UI\title_screen.png" />
     <Resource Include="Assets\UI\trunk.png" />
+    <Resource Include="Assets\UI\attack.png" />
+    <Resource Include="Assets\UI\attack_glow.png" />
+    <Resource Include="Assets\UI\flee.png" />
+    <Resource Include="Assets\UI\flee_glow.png" />
+    <Resource Include="Assets\UI\Dice\*.png" />
   </ItemGroup>
 
   <ItemGroup>

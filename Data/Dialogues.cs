@@ -67,9 +67,9 @@ namespace The_Mansion.Data
             NewDialogue("HautainCoins", "King Hautain")
                 .Portrait("Assets/Characters/Hautain.png")
                 .StandAt(495, 205, 285)        // on the big lily pad
-                .StartAt(p => p.HasFlag("StoleCoins") || p.HasFlag("GivenRoyalCoin")
-                                ? "again"
-                                : "start")
+                .StartAt(p => p.HasFlag("DefeatedHautain") ? "beaten"
+                            : p.HasFlag("StoleCoins") || p.HasFlag("GivenRoyalCoin") ? "again"
+                            : "start")
 
                 // Offering items (ITEM button during the conversation).
                 .OnItem("Gold Coins", "returned",
@@ -116,9 +116,13 @@ namespace The_Mansion.Data
             .Line("grab", "You DARE?! Mark my words, thief - the Crown never forgets! NEVER!",
                   portrait: "Assets/Characters/Hautain_Attack.png")
                 .Choice("(Run!)")
+                .Choice("(Stand your ground and fight!)", startsFight: "AngryHautain")
 
             .Line("again", "YOU again! Haven't you robbed the Crown enough for one day?")
                 .Choice("Just admiring the view, Your Majesty.")
+
+            .Line("beaten", "King Hautain peers at you from behind a lily, clutching his bent sceptre. \"Keep your distance, brute!\"")
+                .Choice("(Leave the poor frog alone)")
 
             .Line("returned", "My coins! Every last one! ...Hmph. Perhaps you are not ENTIRELY a thief. The Crown is... appeased. (Royal Grudge lifted)")
                 .Choice("Long live the King!")

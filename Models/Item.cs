@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace The_Mansion.Models
 {
@@ -17,6 +17,19 @@ namespace The_Mansion.Models
         // 128x128 picture, e.g. "Assets/Items/gold_coins.png".
         // Leave empty to show the item's initials instead.
         public string Icon { get; set; } = "";
+
+        // Added to the player's attack when this is their Weapon
+        // (Player.Weapon = "Fork"). Having no weapon counts as -1.
+        public int WeaponBonus { get; set; }
+
+        // Optional: what happens when used with ITEM during a fight.
+        // Return the text to show, e.g.
+        //   (p, fight) => { fight.HurtEnemy(10); return "You throw it! (-10)"; }
+        // Items without this "won't help in a fight".
+        public Func<Player, Fight, string>? UseInFight { get; set; }
+
+        // The item is gone after being used in a fight (e.g. thrown).
+        public bool UsedUpInFight { get; set; }
     }
 
     /*

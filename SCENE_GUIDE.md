@@ -176,6 +176,71 @@ Add("Fork", 1050, 505, 210, 240, onTake: p => p.Weapon = "Fork"),   // optional 
 * Positions are pixels of `trunk.png`; only Y 80–944 is visible on screen.
 * Where boxes overlap, the one listed **last** is on top.
 
+## 7. Fights
+
+Fighting Fantasy style. Each round both sides roll two bone dice:
+
+| | Attack Strength |
+|---|---|
+| Player | 2d6 + Strength ÷ 2 + weapon bonus (no weapon = −1) |
+| Enemy | 2d6 + Skill |
+
+* Higher total hits for **10**. A tie: both miss.
+* **Double six** = critical hit for **20**. **Double one** = fumble, the round is lost.
+* **ATTACK** rolls a round. **ITEM** uses an item (the enemy gets a free attack;
+  items that can't help don't use up your turn). **FLEE** always works but
+  costs a parting blow (10), unless the enemy has `.NoFleeing()`.
+* Lose all Health → *You have died*, with **Try the fight again** (back to how
+  you were when the fight began) or **Start again**.
+
+Enemies live in `Data/Enemies.cs`:
+
+```csharp
+public static Enemy AngryHautain { get; } =
+    NewEnemy("AngryHautain", "King Hautain", skill: 4, health: 30)
+        .Portrait("Assets/Characters/Hautain_Attack.png")
+        .StandAt(495, 205, 285)                     // optional, like dialogues
+        .Intro("King Hautain leaps from his lily pad!")
+        .NoFleeing()                                // optional
+        .OnWin("He paddles away into the reeds.",
+               p => p.SetFlag("DefeatedHautain"));
+```
+
+**Skill:** 3 feeble · 5 fair · 7 tough · 9 deadly. **Health:** 10 per hit.
+A typical hero (Strength 12, no weapon) has +5, so Skill 5 is an even fight.
+
+Start a fight from a conversation answer or by ACT on a hotspot:
+```csharp
+.Choice("(Stand your ground and fight!)", startsFight: "AngryHautain")
+.Hotspot("Rat", 100, 600, 80, 50).ActStartsFight("GiantRat")
+```
+
+**Weapons and fight items** are set on items in `Data/Items.cs`:
+```csharp
+NewItem("Fork", "...", "Assets/Items/fork.png", weaponBonus: 1)   // when p.Weapon = "Fork"
+
+NewItem("Empty Bottle", "...", "Assets/Items/empty_bottle.png",
+        inFight: (p, fight) => { fight.HurtEnemy(10); return "You hurl the bottle! (-10)"; },
+        usedUpInFight: true)
+```
+
+**Testing:** F1 → *Start a fight* lists every enemy.
+
+## 8. Luck and Wits tests
+
+For traps, chance events and puzzles (not fights). Roll 3d6 – equal to or
+under the stat succeeds (10 = 50%, 12 = 74%, 7 = 16%):
+
+```csharp
+.OnAct("You reach into the dark hole...", p =>
+{
+    if (p.TestLuck()) p.Give("Silver Key");
+    else p.Health -= 10;          // something bites! (0 Health = game over)
+})
+
+effect: p => { if (p.TestWits()) p.SetFlag("SolvedRiddle"); }
+```
+
 ---
 
 ## Recipes
