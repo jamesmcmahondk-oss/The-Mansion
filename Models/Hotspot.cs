@@ -34,5 +34,9 @@ namespace The_Mansion.Models
         // than on the background picture: X/Y/Width/Height are then plain
         // 1920x1080 screen pixels.
         public bool ScreenSpace { get; set; }
+
+        // Conversation started when the player uses TALK on this hotspot.
+        // Must match a key in Data/Dialogues.cs. Leave empty if it can't talk.
+        public string DialogueId { get; set; } = "";
     }
 }

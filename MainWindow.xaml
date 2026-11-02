@@ -5,6 +5,7 @@
     SizeToContent="WidthAndHeight"
     ResizeMode="CanMinimize"
     WindowStartupLocation="Manual"
+    PreviewKeyDown="Window_PreviewKeyDown"
     Background="Black">
 
     <!--
@@ -361,6 +362,29 @@
             Height="800"
             Panel.ZIndex="10" VerticalAlignment="Top"/>
 
+                <!--
+                    TALK DIALOG (scene part): dims the scene and blocks hotspot
+                    clicks while talking, and shows the character's portrait on
+                    the right. Portraits are 1024x1536; at 700px tall the feet
+                    tuck behind the HUD frame's top bar (y 790-810).
+                -->
+                <Rectangle x:Name="DialogueDim"
+                           Fill="#8C000000"
+                           Height="800"
+                           VerticalAlignment="Top"
+                           Visibility="Collapsed"
+                           Panel.ZIndex="20"/>
+
+                <Image x:Name="DialoguePortrait"
+                       Height="700"
+                       Margin="0,100,140,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       Stretch="Uniform"
+                       Visibility="Collapsed"
+                       IsHitTestVisible="False"
+                       Panel.ZIndex="21"/>
+
             </Grid>
 
 
@@ -437,6 +461,34 @@
            TextWrapping="Wrap"
            TextTrimming="CharacterEllipsis"
            Panel.ZIndex="110" />
+
+                <!--
+                    TALK DIALOG (text part): replaces the description text in
+                    the middle panel. Speaker name, their line, then up to 4
+                    numbered choices (click, or press 1-4).
+                -->
+                <StackPanel x:Name="DialoguePanel"
+                            Margin="300,150,300,0"
+                            VerticalAlignment="Top"
+                            Visibility="Collapsed"
+                            Panel.ZIndex="110">
+
+                    <TextBlock x:Name="DialogueSpeakerText"
+                               Foreground="#C8A96A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+
+                    <TextBlock x:Name="DialogueLineText"
+                               Foreground="#DDD4C3"
+                               FontFamily="Georgia"
+                               FontSize="22"
+                               LineHeight="30"
+                               TextWrapping="Wrap"
+                               Margin="0,2,0,10"/>
+
+                    <StackPanel x:Name="DialogueChoicesPanel"/>
+                </StackPanel>
 
                 <Image x:Name="HUDDiveders"
   Source="/Assets/UI/hud_frame.png"
