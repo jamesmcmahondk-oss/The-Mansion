@@ -2,22 +2,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="The Mansion"
-    Width="1920"
-    Height="1080"
-    MinWidth="1920"
-    MaxWidth="1920"
-    MinHeight="1080"
-    MaxHeight="1080"
-    Left="0"
-    Top="0"
-    WindowStyle="None"
-    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    ResizeMode="CanMinimize"
     WindowStartupLocation="Manual"
     Background="Black">
 
     <!--
-        Hardcoded 1920x1080 borderless window. All screens, canvases and
-        hotspot coordinates are laid out in this fixed 1920x1080 space.
+        Fixed-size window with a normal title bar (minimize + close, no
+        resize/maximize). The game area inside it is hardcoded to
+        1920x1080; SizeToContent wraps the window around it. All screens,
+        canvases and hotspot coordinates are laid out in this 1920x1080 space.
     -->
     <Grid x:Name="RootGrid"
           Width="1920"
@@ -342,10 +336,22 @@
                 <!-- GAME SCENE -->
                 <Image x:Name="Return" Height="110" VerticalAlignment="Top" Source="/Assets/UI/return_arrow.png" Canvas.Left="10" Canvas.Top="10" Margin="10,0,0,0" Stretch="Fill" Panel.ZIndex="1" Width="220" HorizontalAlignment="Left" />
 
-                <Image x:Name="RoomBackground"
-                      Source="Assets/Backgrounds/Mansion/frontgate.png"
-                      Stretch="UniformToFill"
-                      VerticalAlignment="Top" Height="800" />
+                <!--
+                    Scene backgrounds (1536x1024) are scaled x1.25 to 1920x1280 and
+                    cropped to the 1920x800 area above the HUD, centred vertically
+                    (Canvas.Top = -240). Hotspots in Data/Scenes.cs are in source-image
+                    pixels and are converted with the same numbers - see
+                    SceneImageScale / SceneImageCropTop in MainWindow.xaml.cs.
+                -->
+                <Canvas Height="800" VerticalAlignment="Top" ClipToBounds="True">
+                    <Image x:Name="RoomBackground"
+                          Source="Assets/Backgrounds/Mansion/frontgate.png"
+                          Width="1920"
+                          Height="1280"
+                          Canvas.Left="0"
+                          Canvas.Top="-240"
+                          Stretch="Fill" />
+                </Canvas>
 
                 <Canvas x:Name="SceneCanvas"
             Background="Transparent"

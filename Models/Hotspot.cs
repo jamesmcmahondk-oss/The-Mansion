@@ -11,12 +11,14 @@ namespace The_Mansion.Models
         // Name used to identify the hotspot
         public string Name { get; set; } = "";
 
-        // Position on the SceneCanvas
+        // Position and size of the clickable area, in pixels of the scene's
+        // background image (0-1536 across, 0-1024 down), NOT screen pixels.
+        // Only the middle band (Y 192-832) of the image is visible in game.
+        // Use hotspot debug mode to measure these - it reports image pixels.
         public double X { get; set; }
 
         public double Y { get; set; }
 
-        // Size of the clickable area
         public double Width { get; set; }
 
         public double Height { get; set; }
@@ -27,5 +29,10 @@ namespace The_Mansion.Models
         // Scene to load when this hotspot is activated.
         // Leave empty if clicking it should not change scene.
         public string TargetScene { get; set; } = "";
+
+        // True for hotspots on fixed screen UI (like the Return arrow) rather
+        // than on the background picture: X/Y/Width/Height are then plain
+        // 1920x1080 screen pixels.
+        public bool ScreenSpace { get; set; }
     }
 }
