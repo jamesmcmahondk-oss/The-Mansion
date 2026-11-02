@@ -90,6 +90,7 @@
     <Resource Include="Assets\UI\Look.png" />
     <Resource Include="Assets\UI\look_glow.png" />
     <Resource Include="Assets\UI\menu_frame.png" />
+    <Resource Include="Assets\UI\hud_frame.png" />
     <Resource Include="Assets\UI\return_arrow.png" />
     <Resource Include="Assets\UI\talk.png" />
     <Resource Include="Assets\UI\talk_glow.png" />
