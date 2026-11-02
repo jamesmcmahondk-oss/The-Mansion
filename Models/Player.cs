@@ -23,5 +23,30 @@ namespace The_Mansion.Models
         public string StatusEffect { get; set; } = "None";
         public List<string> Inventory { get; set; } = new();
 
+        // Story flags: things that have happened, e.g. "StoleCoins".
+        // Use them to change what scenes, hotspots and characters do.
+        public HashSet<string> Flags { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        // ---- Helpers for scene/dialogue code -------------------------
+
+        public bool Has(string itemName) => Inventory.Contains(itemName);
+
+        // Adds the item (once - giving it again does nothing).
+        public void Give(string itemName)
+        {
+            if (!Has(itemName))
+            {
+                Inventory.Add(itemName);
+            }
+        }
+
+        public void Take(string itemName) => Inventory.Remove(itemName);
+
+        public bool HasFlag(string flag) => Flags.Contains(flag);
+
+        public void SetFlag(string flag) => Flags.Add(flag);
+
+        public void ClearFlag(string flag) => Flags.Remove(flag);
+
     }
 }

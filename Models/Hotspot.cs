@@ -46,5 +46,17 @@ namespace The_Mansion.Models
         // What happens when the player uses an item on this hotspot,
         // keyed by item name. Items not listed get a "nothing happens" reply.
         public Dictionary<string, ItemUse> ItemUses { get; set; } = new();
+
+        // Reply when the player uses TALK on it (when there's no conversation).
+        public string TalkText { get; set; } = "";
+
+        // Reply and optional effect when the player uses ACT on it
+        // (when there's no ACT conversation).
+        public string ActText { get; set; } = "";
+        public Action<Player>? ActEffect { get; set; }
+
+        // Optional: the hotspot only exists while this returns true,
+        // e.g. p => !p.HasFlag("TookKey"). Checked whenever the scene refreshes.
+        public Func<Player, bool>? VisibleWhen { get; set; }
     }
 }

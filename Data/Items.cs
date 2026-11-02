@@ -5,40 +5,50 @@ using The_Mansion.Models;
 namespace The_Mansion.Data
 {
     /*
-     * Every item in the game. Add new items here, then give them to the
-     * player with  p.Inventory.Add("Item Name")  (e.g. in a dialogue Effect).
-     * Icons are built by Tools/build_item_icons.py.
+     * Every item in the game: name, description (shown when hovered in the
+     * inventory) and a 128x128 icon (built by Tools/build_item_icons.py).
+     *
+     * Give an item to the player with  p.Give("Item Name")  - for example in
+     * a dialogue choice's effect or a hotspot's OnAct.
      */
     public static class Items
     {
-        public static Item GoldCoins { get; } = new Item
-        {
-            Name = "Gold Coins",
-            Description = "A dripping handful of gold coins from the fountain. They belong to the Crown, apparently.",
-            Icon = "Assets/Items/gold_coins.png"
-        };
-
-        public static Item RoyalGoldCoin { get; } = new Item
-        {
-            Name = "Royal Gold Coin",
-            Description = "A single gold coin, graciously granted by King Hautain to a loyal subject.",
-            Icon = "Assets/Items/royal_gold_coin.png"
-        };
-
-        public static Item GargoyleBlessing { get; } = new Item
-        {
-            Name = "Gargoyle's Blessing",
-            Description = "Not something you can hold, exactly. You just feel a little luckier. (Luck +1)",
-            Icon = "Assets/Items/gargoyle_blessing.png"
-        };
-
+        // Must stay at the top: items below add themselves to it.
         private static readonly Dictionary<string, Item> ItemLookup =
-            new(StringComparer.OrdinalIgnoreCase)
+            new(StringComparer.OrdinalIgnoreCase);
+
+        private static Item NewItem(string name, string description, string icon = "")
+        {
+            var item = new Item
             {
-                { GoldCoins.Name, GoldCoins },
-                { RoyalGoldCoin.Name, RoyalGoldCoin },
-                { GargoyleBlessing.Name, GargoyleBlessing }
+                Name = name,
+                Description = description,
+                Icon = icon
             };
+
+            ItemLookup[name] = item;
+            return item;
+        }
+
+        public static Item GoldCoins { get; } =
+            NewItem("Gold Coins",
+                    "A dripping handful of gold coins from the fountain. They belong to the Crown, apparently.",
+                    "Assets/Items/gold_coins.png");
+
+        public static Item RoyalGoldCoin { get; } =
+            NewItem("Royal Gold Coin",
+                    "A single gold coin, graciously granted by King Hautain to a loyal subject.",
+                    "Assets/Items/royal_gold_coin.png");
+
+        public static Item GargoyleBlessing { get; } =
+            NewItem("Gargoyle's Blessing",
+                    "Not something you can hold, exactly. You just feel a little luckier. (Luck +1)",
+                    "Assets/Items/gargoyle_blessing.png");
+
+
+        // =========================================================
+        // LOOKUP (used by the game - no need to edit)
+        // =========================================================
 
         public static IEnumerable<Item> All => ItemLookup.Values;
 

@@ -1,268 +1,110 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
 namespace The_Mansion.Data
 {
     /*
-     * Hotspot X/Y/Width/Height are in pixels of the scene's background
-     * image (0-1536 across, 0-1024 down). Only Y 192-832 of the image is
-     * visible above the HUD. Return hotspots use ScreenSpace = true.
+     * All scenes in the game. See SCENE_GUIDE.md for how to write them.
+     *
+     * Hotspot positions are in pixels of the scene's background image
+     * (0-1536 across, 0-1024 down; only Y 192-832 is visible in game).
+     * Measure them with the F1 debug menu's hotspot editor.
+     *
+     * Scenes register themselves - just add a new one below.
      */
     public static class Scenes
     {
-        public static Scene FrontGate { get; } = new Scene
-        {
-            Name = "FrontGate",
-
-            BackgroundImage =
-                "Assets/Backgrounds/Mansion/frontgate.png",
-
-            Description =
-                "You are standing before an old and creepy mansion.",
-
-            Hotspots =
-            {
-                new Hotspot
-                {
-                    Name = "Fountain",
-                    X = 615,
-                    Y = 545,
-                    Width = 270,
-                    Height = 205,
-
-                    Description =
-                        "An ancient stone fountain. Something glitters beneath the water.",
-
-                    TargetScene = "FountainCloseup"
-                },
-
-                new Hotspot
-                {
-                    Name = "Front Door",
-                    X = 905,
-                    Y = 505,
-                    Width = 95,
-                    Height = 140,
-
-                    Description =
-                        "The enormous wooden door looks like it has not opened in years.",
-
-                    TargetScene = "FrontDoor"
-                },
-                new Hotspot
-                {
-                    Name = "Gargoyle",
-
-                    X = 135,
-                    Y = 205,
-                    Width = 205,
-                    Height = 165,
-
-                    Description = "A sulky and rather sad looking gargoyle sits here.",
-                
-                    TargetScene = "FrontGargoyle"
-                },
-                            }
-        };
-
-        public static Scene FountainCloseup { get; } = new Scene
-        {
-            Name = "FountainCloseup",
-
-            BackgroundImage =
-                "Assets/Backgrounds/Mansion/fountain_closeup.png",
-
-            Description =
-                "Lily pads float on the dark water. Beneath the surface, a small pile of gold coins glitters.",
-
-            Hotspots =
-            {
-                new Hotspot
-                {
-                    Name = "Gold Coins",
-
-                    X = 595,
-                    Y = 655,
-                    Width = 295,
-                    Height = 175,
-
-                    Description =
-                        "Several old gold coins rest at the bottom of the fountain.",
-
-                    TargetScene = "",
-
-                    // ACT on the coins: King Hautain appears (Data/Dialogues.cs).
-                    ActDialogueId = "HautainCoins",
-
-                    // ITEM: put the stolen coins back to make peace with the King.
-                    ItemUses =
-                    {
-                        ["Gold Coins"] = new ItemUse
-                        {
-                            Text = "You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging \"Hmph.\" (Royal Grudge lifted)",
-                            RemoveItem = true,
-                            Effect = p =>
-                            {
-                                if (p.StatusEffect == "Royal Grudge")
-                                {
-                                    p.StatusEffect = "None";
-                                }
-                            }
-                        }
-                    }
-                },
-
-                new Hotspot
-                {
-                    Name = "Return",
-
-                    // Matches the Return arrow image (screen pixels).
-                    ScreenSpace = true,
-                    X = 10,
-                    Y = 0,
-                    Width = 220,
-                    Height = 110,
-
-                    Description =
-                        "You step away from the fountain.",
-
-                    TargetScene = "FrontGate"
-                }
-            }
-        };
-        public static Scene FrontGargoyle { get; } = new Scene
-        {
-            Name = "FrontGargoyle",
-
-            BackgroundImage =
-               "Assets/Backgrounds/Mansion/FrontGargoyle.png",
-
-            Description =
-               "The sad garogyle watches you carefully with its stoneface.",
-
-             Hotspots =
-            {
-                new Hotspot
-                {
-                    Name = "Return",
-
-                    // Matches the Return arrow image (screen pixels).
-                    ScreenSpace = true,
-                    X = 10,
-                    Y = 0,
-                    Width = 220,
-                    Height = 110,
-
-                    Description =
-                        "You leave the sad gargoyle to its sad and boring fate.",
-
-                    TargetScene = "FrontGate"
-                },
-
-                new Hotspot
-                {
-                    Name = "Gargoyle",
-
-                    X = 780,
-                    Y = 200,
-                    Width = 400,
-                    Height = 440,
-
-                    Description =
-                        "Its stone eyes seem to follow you. Perhaps it wants to talk.",
-
-                    // Use TALK on it to start this conversation (Data/Dialogues.cs).
-                    DialogueId = "SadGargoyle"
-                }
-        }
-        };
-
-        public static Scene FrontDoor { get; } = new Scene
-        {
-            Name = "FrontDoor",
-
-            BackgroundImage =
-                "Assets/Backgrounds/Mansion/Front_door.png",
-
-            Description =
-                "The heavy front door towers over you. A grotesque metal knocker hangs at its center.",
-
-            Hotspots =
-            {
-                new Hotspot
-                {
-                    Name = "Front Doors",
-
-                    X = 590,
-                    Y = 300,
-                    Width = 375,
-                    Height = 500,
-
-                    Description =
-                        "Heavy woodden front doors. They are locked.",
-
-                    TargetScene = ""
-                },
-
-                new Hotspot
-                {
-                    Name = "Door Knocker",
-
-                   X = 685,
-                    Y = 515,
-                    Width = 175,
-                    Height = 90,
-
-                    Description =
-                        "The iron door knocker is freezing cold.",
-
-                    TargetScene = "",
-
-                    ItemUses =
-                    {
-                        ["Gold Coins"] = new ItemUse
-                        {
-                            Text = "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said."
-                        },
-                        ["Royal Gold Coin"] = new ItemUse
-                        {
-                            Text = "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said."
-                        }
-                    }
-                },
-
-                new Hotspot
-                {
-                    Name = "Return",
-
-                    // Matches the Return arrow image (screen pixels).
-                    ScreenSpace = true,
-                    X = 10,
-                    Y = 0,
-                    Width = 220,
-                    Height = 110,
-
-                    Description =
-                        "You step away from the front door.",
-
-                    TargetScene = "FrontGate"
-                }
-            }
-        };
-
+        // Must stay at the top: scenes below add themselves to it.
         private static readonly Dictionary<string, Scene> SceneLookup =
-            new Dictionary<string, Scene>(
-                StringComparer.OrdinalIgnoreCase)
-            {
-                { FrontGate.Name, FrontGate },
-                { FountainCloseup.Name, FountainCloseup },
-                { FrontDoor.Name, FrontDoor },
-                {FrontGargoyle.Name, FrontGargoyle }
-            };
+            new(StringComparer.OrdinalIgnoreCase);
+
+        private static SceneBuilder NewScene(string name, string backgroundImage, string description)
+            => new SceneBuilder(name, backgroundImage, description);
+
+        // =========================================================
+        // OUTSIDE THE MANSION
+        // =========================================================
+
+        public static Scene FrontGate { get; } =
+            NewScene("FrontGate",
+                     "Assets/Backgrounds/Mansion/frontgate.png",
+                     "You are standing before an old and creepy mansion.")
+
+            .Hotspot("Fountain", 615, 545, 270, 205)
+                .Describe("An ancient stone fountain. Something glitters beneath the water.")
+                .GoesTo("FountainCloseup")
+
+            .Hotspot("Front Door", 905, 505, 95, 140)
+                .Describe("The enormous wooden door looks like it has not opened in years.")
+                .GoesTo("FrontDoor")
+
+            .Hotspot("Gargoyle", 135, 205, 205, 165)
+                .Describe("A sulky and rather sad looking gargoyle sits here.")
+                .GoesTo("FrontGargoyle");
+
+
+        public static Scene FountainCloseup { get; } =
+            NewScene("FountainCloseup",
+                     "Assets/Backgrounds/Mansion/fountain_closeup.png",
+                     "Lily pads float on the dark water. Beneath the surface, a small pile of gold coins glitters.")
+
+            .Hotspot("Gold Coins", 595, 655, 295, 175)
+                .Describe("Several old gold coins rest at the bottom of the fountain.")
+
+                // ACT on the coins: King Hautain appears on the lily pad.
+                .ActStarts("HautainCoins")
+
+                // Put the stolen coins back to make peace with the King.
+                .OnItem("Gold Coins",
+                        "You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging \"Hmph.\" (Royal Grudge lifted)",
+                        removeItem: true,
+                        effect: p =>
+                        {
+                            p.ClearFlag("StoleCoins");
+                            p.StatusEffect = "None";
+                        })
+
+            .ReturnTo("FrontGate", "You step away from the fountain.");
+
+
+        public static Scene FrontGargoyle { get; } =
+            NewScene("FrontGargoyle",
+                     "Assets/Backgrounds/Mansion/FrontGargoyle.png",
+                     "The sad garogyle watches you carefully with its stoneface.")
+
+            .Hotspot("Gargoyle", 780, 200, 400, 440)
+                .Describe("Its stone eyes seem to follow you. Perhaps it wants to talk.")
+                .TalkStarts("SadGargoyle")
+
+            .ReturnTo("FrontGate", "You leave the sad gargoyle to its sad and boring fate.");
+
+
+        public static Scene FrontDoor { get; } =
+            NewScene("FrontDoor",
+                     "Assets/Backgrounds/Mansion/Front_door.png",
+                     "The heavy front door towers over you. A grotesque metal knocker hangs at its center.")
+
+            .Hotspot("Front Doors", 590, 300, 375, 500)
+                .Describe("Heavy woodden front doors. They are locked.")
+
+            .Hotspot("Door Knocker", 685, 515, 175, 90)
+                .Describe("The iron door knocker is freezing cold.")
+                .OnItem("Gold Coins",
+                        "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.")
+                .OnItem("Royal Gold Coin",
+                        "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said.")
+
+            .ReturnTo("FrontGate", "You step away from the front door.");
+
+
+        // =========================================================
+        // LOOKUP (used by the game - no need to edit)
+        // =========================================================
+
+        internal static void Register(Scene scene) => SceneLookup[scene.Name] = scene;
 
         // Every scene in the game (used by the debug menu).
-        // Remember to add new scenes to SceneLookup above.
         public static IEnumerable<Scene> All => SceneLookup.Values;
 
         public static Scene? GetScene(string sceneName)
@@ -273,7 +115,6 @@ namespace The_Mansion.Data
             }
 
             SceneLookup.TryGetValue(sceneName, out Scene? scene);
-
             return scene;
         }
     }
