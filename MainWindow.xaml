@@ -506,6 +506,76 @@
 
                 </Grid>
 
+                <!--
+                    Player stats, inside the right pocket (x 1683-1862, y 130-374)
+                    with 8px padding. Filled in by UpdatePlayerStats().
+                -->
+                <StackPanel x:Name="PlayerStatsPanel"
+                            Margin="1691,140,0,0"
+                            Width="163"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Panel.ZIndex="30"
+                            IsHitTestVisible="False">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock" x:Key="StatLabel">
+                            <Setter Property="FontFamily" Value="Georgia"/>
+                            <Setter Property="FontSize" Value="15"/>
+                            <Setter Property="Foreground" Value="#B9A98D"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                        <Style TargetType="TextBlock" x:Key="StatValue">
+                            <Setter Property="FontFamily" Value="Consolas"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                        <Style TargetType="TextBlock" x:Key="StatText">
+                            <Setter Property="FontFamily" Value="Georgia"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Foreground" Value="#DDD4C3"/>
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <!-- HEALTH + bar -->
+                    <Grid Margin="0,0,0,3">
+                        <TextBlock Text="HEALTH" Style="{StaticResource StatLabel}"/>
+                        <TextBlock x:Name="StatHealthText" Text="--" Style="{StaticResource StatValue}" Foreground="#D95C52"/>
+                    </Grid>
+                    <Border Height="7" Margin="0,0,0,8"
+                            Background="#401010" BorderBrush="#806B4A" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="HealthBarFill" Width="1*"/>
+                                <ColumnDefinition x:Name="HealthBarEmpty" Width="0*"/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Fill="#C0392B"/>
+                        </Grid>
+                    </Border>
+
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="STRENGTH" Style="{StaticResource StatLabel}"/>
+                        <TextBlock x:Name="StatStrengthText" Text="--" Style="{StaticResource StatValue}" Foreground="#DDD4C3"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="LUCK" Style="{StaticResource StatLabel}"/>
+                        <TextBlock x:Name="StatLuckText" Text="--" Style="{StaticResource StatValue}" Foreground="#DDD4C3"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="WITS" Style="{StaticResource StatLabel}"/>
+                        <TextBlock x:Name="StatWitsText" Text="--" Style="{StaticResource StatValue}" Foreground="#DDD4C3"/>
+                    </Grid>
+
+                    <Rectangle Height="1" Fill="#806B4A" Margin="0,4,0,7"/>
+
+                    <TextBlock Text="WEAPON" Style="{StaticResource StatLabel}" FontSize="12"/>
+                    <TextBlock x:Name="StatWeaponText" Text="None" Style="{StaticResource StatText}" Margin="0,0,0,6"/>
+
+                    <TextBlock Text="STATUS" Style="{StaticResource StatLabel}" FontSize="12"/>
+                    <TextBlock x:Name="StatStatusText" Text="None" Style="{StaticResource StatText}"/>
+                </StackPanel>
+
 
             </Grid>
 
