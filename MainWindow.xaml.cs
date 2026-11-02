@@ -69,12 +69,54 @@ namespace The_Mansion
         {
             InitializeComponent();
 
+            // Lock the window to exactly 1920x1080 screen pixels.
+            SourceInitialized += (_, _) => LockWindowSize();
+            StateChanged += (_, _) =>
+            {
+                // Block maximize (Win+Up, snapping) and keep it pinned.
+                if (WindowState == WindowState.Maximized)
+                    WindowState = WindowState.Normal;
+            };
+
             UpdateDebugVisibility();
             this.Cursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_arrow.cur");
             ShowScene(Scenes.FrontGate);
 
 
         }
+        /*
+         * The game is hardcoded to 1920x1080 *physical* pixels.
+         *
+         * WPF measures in device-independent units, so with Windows display
+         * scaling above 100% (e.g. 125% on laptops) a 1920-unit window would
+         * really be 2400 pixels wide and run off the screen. This undoes that
+         * scaling: the window is sized so it is exactly 1920x1080 pixels, and
+         * the 1920x1080 layout is shrunk by the same factor to fill it.
+         * All hotspot / canvas coordinates stay in 1920x1080 space.
+         */
+        private void LockWindowSize()
+        {
+            DpiScale dpi = VisualTreeHelper.GetDpi(this);
+
+            double width = 1920 / dpi.DpiScaleX;
+            double height = 1080 / dpi.DpiScaleY;
+
+            MinWidth = MaxWidth = Width = width;
+            MinHeight = MaxHeight = Height = height;
+            Left = 0;
+            Top = 0;
+
+            RootGrid.LayoutTransform = new ScaleTransform(
+                1 / dpi.DpiScaleX,
+                1 / dpi.DpiScaleY);
+        }
+
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            base.OnDpiChanged(oldDpi, newDpi);
+            LockWindowSize();
+        }
+
         private void ShowScreen(UIElement screen)
         {
             TitleScreen.Visibility = Visibility.Collapsed;
