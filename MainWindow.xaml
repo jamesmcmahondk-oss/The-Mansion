@@ -633,5 +633,66 @@
 
         </Grid>
 
+        <!-- ========================================= -->
+        <!-- DEBUG MENU (F1, Debug builds only)        -->
+        <!-- ========================================= -->
+
+        <Border x:Name="DebugMenu"
+                Visibility="Collapsed"
+                Width="560"
+                MaxHeight="900"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Padding="24"
+                Background="#F0100C0C"
+                BorderBrush="Lime"
+                BorderThickness="2"
+                Panel.ZIndex="5000">
+
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top"
+                           Text="DEBUG MENU"
+                           Foreground="Lime"
+                           FontFamily="Consolas"
+                           FontWeight="Bold"
+                           FontSize="26"/>
+
+                <TextBlock DockPanel.Dock="Top"
+                           Text="F1 or Esc to close"
+                           Foreground="#888"
+                           FontFamily="Consolas"
+                           FontSize="14"
+                           Margin="0,2,0,18"/>
+
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,18,0,0">
+                    <CheckBox x:Name="DebugHotspotsCheckBox"
+                              Content="Show hotspot outlines / hotspot editor"
+                              Foreground="White"
+                              FontFamily="Consolas"
+                              FontSize="16"
+                              Click="DebugHotspotsCheckBox_Click"/>
+
+                    <Button Content="Close"
+                            Width="140"
+                            Height="36"
+                            Margin="0,18,0,0"
+                            HorizontalAlignment="Right"
+                            Click="DebugMenuClose_Click"/>
+                </StackPanel>
+
+                <TextBlock DockPanel.Dock="Top"
+                           Text="JUMP TO SCENE"
+                           Foreground="Cyan"
+                           FontFamily="Consolas"
+                           FontSize="16"
+                           Margin="0,0,0,8"/>
+
+                <!-- Filled from Scenes.All by BuildDebugSceneList() -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="DebugSceneList"/>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
     </Grid>
 </Window>

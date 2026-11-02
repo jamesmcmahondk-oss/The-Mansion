@@ -229,6 +229,10 @@ namespace The_Mansion.Data
                 {FrontGargoyle.Name, FrontGargoyle }
             };
 
+        // Every scene in the game (used by the debug menu).
+        // Remember to add new scenes to SceneLookup above.
+        public static IEnumerable<Scene> All => SceneLookup.Values;
+
         public static Scene? GetScene(string sceneName)
         {
             if (string.IsNullOrWhiteSpace(sceneName))
