@@ -93,7 +93,24 @@ namespace The_Mansion.Data
                     TargetScene = "",
 
                     // ACT on the coins: King Hautain appears (Data/Dialogues.cs).
-                    ActDialogueId = "HautainCoins"
+                    ActDialogueId = "HautainCoins",
+
+                    // ITEM: put the stolen coins back to make peace with the King.
+                    ItemUses =
+                    {
+                        ["Gold Coins"] = new ItemUse
+                        {
+                            Text = "You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging \"Hmph.\" (Royal Grudge lifted)",
+                            RemoveItem = true,
+                            Effect = p =>
+                            {
+                                if (p.StatusEffect == "Royal Grudge")
+                                {
+                                    p.StatusEffect = "None";
+                                }
+                            }
+                        }
+                    }
                 },
 
                 new Hotspot
@@ -200,7 +217,19 @@ namespace The_Mansion.Data
                     Description =
                         "The iron door knocker is freezing cold.",
 
-                    TargetScene = ""
+                    TargetScene = "",
+
+                    ItemUses =
+                    {
+                        ["Gold Coins"] = new ItemUse
+                        {
+                            Text = "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said."
+                        },
+                        ["Royal Gold Coin"] = new ItemUse
+                        {
+                            Text = "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said."
+                        }
+                    }
                 },
 
                 new Hotspot

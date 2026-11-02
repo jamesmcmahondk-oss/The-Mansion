@@ -490,6 +490,54 @@
                     <StackPanel x:Name="DialogueChoicesPanel"/>
                 </StackPanel>
 
+                <!--
+                    INVENTORY (opened with the ITEM button): replaces the
+                    description text in the middle panel. Up to 10 item slots
+                    in a row; hover to examine, click to pick an item, then
+                    click something in the scene to use it on. Esc closes.
+                -->
+                <Grid x:Name="InventoryPanel"
+                      Margin="300,148,300,0"
+                      VerticalAlignment="Top"
+                      Visibility="Collapsed"
+                      Panel.ZIndex="110">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="INVENTORY"
+                               Foreground="#C8A96A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="20"/>
+
+                    <TextBlock Text="Click an item to use it  ·  Esc to close"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Foreground="#756A59"
+                               FontFamily="Georgia"
+                               FontStyle="Italic"
+                               FontSize="15"/>
+
+                    <!-- Filled by OpenInventory() -->
+                    <StackPanel x:Name="InventorySlots"
+                                Grid.Row="1"
+                                Orientation="Horizontal"
+                                Height="120"
+                                Margin="0,8,0,8"/>
+
+                    <TextBlock x:Name="InventoryDescriptionText"
+                               Grid.Row="2"
+                               Foreground="#DDD4C3"
+                               FontFamily="Georgia"
+                               FontSize="19"
+                               TextWrapping="Wrap"
+                               MaxHeight="52"
+                               TextTrimming="CharacterEllipsis"/>
+                </Grid>
+
                 <Image x:Name="HUDDiveders"
   Source="/Assets/UI/hud_frame.png"
   Width="1920"
@@ -671,6 +719,13 @@
                               FontFamily="Consolas"
                               FontSize="16"
                               Click="DebugHotspotsCheckBox_Click"/>
+
+                    <Button Content="Give me every item"
+                            Height="36"
+                            Margin="0,12,0,0"
+                            HorizontalAlignment="Left"
+                            Padding="12,0"
+                            Click="DebugGiveAllItems_Click"/>
 
                     <Button Content="Close"
                             Width="140"

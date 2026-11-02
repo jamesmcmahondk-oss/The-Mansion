@@ -664,6 +664,25 @@ namespace The_Mansion
                 return;
             }
 
+            /*
+             * ITEM: use the selected item on the hotspot. (Screen UI such as
+             * the Return arrow still works normally.)
+             */
+            if (_interactionMode == InteractionMode.Item &&
+                !hotspot.ScreenSpace)
+            {
+                if (_selectedItem == null)
+                {
+                    OpenInventory();
+                }
+                else
+                {
+                    UseSelectedItemOn(hotspot);
+                }
+
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(hotspot.Description))
             {
                 DescriptionText.Text = hotspot.Description;
@@ -1217,6 +1236,13 @@ $@"new Hotspot
             }
             string buttonName = buttonImage.Name;
 
+            // Picking another verb closes the inventory and drops the item.
+            if (buttonName != "ItemBtn")
+            {
+                CloseInventory();
+                _selectedItem = null;
+            }
+
             switch (buttonName)
             {
                 case "LookBtn":
@@ -1251,7 +1277,15 @@ $@"new Hotspot
                         _interactionMode = InteractionMode.Item;
                         SceneCanvas.Cursor = _itemCursor;
 
-                        ShowDescription("Choose an item...");
+                        // ITEM again while the inventory is open closes it.
+                        if (_inventoryOpen)
+                        {
+                            CloseInventory();
+                        }
+                        else
+                        {
+                            OpenInventory();
+                        }
                         break;
                     }
             }
@@ -1285,14 +1319,20 @@ $@"new Hotspot
                     break;
 
                 case InteractionMode.Item:
-                    ShowDescription($"Use item on {hotspot.Name}");
+                    ShowDescription(_selectedItem != null
+                        ? $"Use {_selectedItem} on {hotspot.Name}"
+                        : $"Use item on {hotspot.Name}");
                     break;
             }
         }
 
         private void Hotspot_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (_currentScene != null)
+            if (_interactionMode == InteractionMode.Item && _selectedItem != null)
+            {
+                ShowDescription($"Use {_selectedItem} on...");
+            }
+            else if (_currentScene != null)
             {
                 ShowDescription(_currentScene.Description);
             }
@@ -1556,6 +1596,13 @@ $@"new Hotspot
             }
 #endif
 
+            if (e.Key == Key.Escape && _inventoryOpen)
+            {
+                CloseInventory();
+                e.Handled = true;
+                return;
+            }
+
             if (!IsInDialogue)
             {
                 return;
@@ -1648,6 +1695,9 @@ $@"new Hotspot
                 EndDialogue();
             }
 
+            CloseInventory();
+            _selectedItem = null;
+
             // Skipped character creation? Give the player test stats
             // so the stats panel and stat checks have something to use.
             if (_player.MaxHealth <= 0)
@@ -1690,6 +1740,219 @@ $@"new Hotspot
 
         private void DebugMenuClose_Click(object sender, RoutedEventArgs e)
         {
+            DebugMenu.Visibility = Visibility.Collapsed;
+        }
+
+        // =========================================================
+        // INVENTORY
+        // =========================================================
+
+        private bool _inventoryOpen;
+
+        // Item picked from the inventory, waiting to be used on something.
+        private string? _selectedItem;
+
+        private static readonly Brush SlotBorderBrush =
+            new SolidColorBrush(Color.FromRgb(0x80, 0x6B, 0x4A));
+
+        private static readonly Brush SlotHoverBrush =
+            new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+
+        private void OpenInventory()
+        {
+            InventorySlots.Children.Clear();
+
+            // Same item twice? Show it once.
+            var itemNames = new List<string>();
+            foreach (string name in _player.Inventory)
+            {
+                if (!itemNames.Contains(name))
+                {
+                    itemNames.Add(name);
+                }
+            }
+
+            foreach (string name in itemNames)
+            {
+                InventorySlots.Children.Add(CreateInventorySlot(Items.GetItem(name)));
+
+                if (InventorySlots.Children.Count == 10)
+                {
+                    break; // 10 slots fit in the panel
+                }
+            }
+
+            InventoryDescriptionText.Text = itemNames.Count == 0
+                ? "Your pockets are empty."
+                : "Hover over an item to examine it.";
+
+            DescriptionText.Visibility = Visibility.Collapsed;
+            InventoryPanel.Visibility = Visibility.Visible;
+            _inventoryOpen = true;
+        }
+
+        private void CloseInventory()
+        {
+            if (!_inventoryOpen)
+            {
+                return;
+            }
+
+            InventoryPanel.Visibility = Visibility.Collapsed;
+            DescriptionText.Visibility = Visibility.Visible;
+            _inventoryOpen = false;
+
+            if (_selectedItem == null && _currentScene != null)
+            {
+                ShowDescription(_currentScene.Description);
+            }
+        }
+
+        private Border CreateInventorySlot(Item item)
+        {
+            UIElement content;
+
+            BitmapImage? icon = null;
+            if (!string.IsNullOrWhiteSpace(item.Icon))
+            {
+                try
+                {
+                    icon = new BitmapImage(new Uri(
+                        $"pack://application:,,,/{item.Icon}",
+                        UriKind.Absolute));
+                }
+                catch
+                {
+                    icon = null; // fall back to initials
+                }
+            }
+
+            if (icon != null)
+            {
+                content = new Image
+                {
+                    Source = icon,
+                    Stretch = Stretch.Uniform,
+                    Margin = new Thickness(4)
+                };
+            }
+            else
+            {
+                content = new TextBlock
+                {
+                    Text = GetInitials(item.Name),
+                    Foreground = SlotHoverBrush,
+                    FontFamily = new FontFamily("Georgia"),
+                    FontSize = 34,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+            }
+
+            var slot = new Border
+            {
+                Width = 116,
+                Height = 116,
+                Margin = new Thickness(0, 0, 12, 0),
+                Background = new SolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)),
+                BorderBrush = SlotBorderBrush,
+                BorderThickness = new Thickness(2),
+                CornerRadius = new CornerRadius(6),
+                Cursor = Cursors.Hand,
+                ToolTip = item.Name,
+                Child = content
+            };
+
+            slot.MouseEnter += (_, _) =>
+            {
+                slot.BorderBrush = SlotHoverBrush;
+                InventoryDescriptionText.Text = string.IsNullOrWhiteSpace(item.Description)
+                    ? item.Name
+                    : $"{item.Name}: {item.Description}";
+            };
+
+            slot.MouseLeave += (_, _) => slot.BorderBrush = SlotBorderBrush;
+
+            slot.MouseLeftButtonDown += (_, args) =>
+            {
+                args.Handled = true;
+                SelectItem(item.Name);
+            };
+
+            return slot;
+        }
+
+        private static string GetInitials(string name)
+        {
+            string initials = "";
+            foreach (string word in name.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            {
+                initials += char.ToUpperInvariant(word[0]);
+                if (initials.Length == 2)
+                {
+                    break;
+                }
+            }
+            return initials;
+        }
+
+        private void SelectItem(string itemName)
+        {
+            _selectedItem = itemName;
+            _interactionMode = InteractionMode.Item;
+            SceneCanvas.Cursor = _itemCursor;
+
+            CloseInventory();
+            ShowDescription($"Use {itemName} on...");
+        }
+
+        private void UseSelectedItemOn(Hotspot hotspot)
+        {
+            if (_selectedItem == null)
+            {
+                return;
+            }
+
+            string itemName = _selectedItem;
+
+            if (!hotspot.ItemUses.TryGetValue(itemName, out ItemUse? use))
+            {
+                ShowDescription($"You try the {itemName} on the {hotspot.Name}. Nothing happens.");
+                return;
+            }
+
+            ShowDescription(use.Text);
+
+            if (use.Effect != null)
+            {
+                use.Effect(_player);
+            }
+
+            if (use.RemoveItem)
+            {
+                _player.Inventory.Remove(itemName);
+                _selectedItem = null;
+            }
+
+            UpdatePlayerStats();
+
+            if (!string.IsNullOrWhiteSpace(use.DialogueId))
+            {
+                StartDialogue(use.DialogueId);
+            }
+        }
+
+        private void DebugGiveAllItems_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Item item in Items.All)
+            {
+                if (!_player.Inventory.Contains(item.Name))
+                {
+                    _player.Inventory.Add(item.Name);
+                }
+            }
+
+            UpdatePlayerStats();
             DebugMenu.Visibility = Visibility.Collapsed;
         }
 
