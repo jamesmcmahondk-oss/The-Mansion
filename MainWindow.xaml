@@ -8,6 +8,44 @@
     PreviewKeyDown="Window_PreviewKeyDown"
     Background="Black">
 
+    <Window.Resources>
+        <!-- Dark red/gold button used by the menus, save slots, trunk and game over. -->
+        <Style x:Key="GothicButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#D5B77A"/>
+            <Setter Property="FontFamily" Value="Georgia"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#2A1612"/>
+            <Setter Property="BorderBrush" Value="#806B4A"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Frame"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Frame" Property="Background" Value="#4A2418"/>
+                                <Setter TargetName="Frame" Property="BorderBrush" Value="#FFD98A"/>
+                                <Setter Property="Foreground" Value="#FFE7B0"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Frame" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <!--
         Fixed-size window with a normal title bar (minimize + close, no
         resize/maximize). The game area inside it is hardcoded to
@@ -35,6 +73,25 @@
              Fill="Transparent"
              Cursor="Hand"
              MouseLeftButtonDown="TitleButton_MouseDown" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+                <!-- The other buttons painted on title_screen.png (same column). -->
+                <Rectangle x:Name="LoadGameBtn"
+             Canvas.Left="239"
+             Canvas.Top="546"
+             Width="360"
+             Height="74"
+             Fill="Transparent"
+             Cursor="Hand"
+             MouseLeftButtonDown="TitleButton_MouseDown"/>
+
+                <Rectangle x:Name="QuitBtn"
+             Canvas.Left="239"
+             Canvas.Top="877"
+             Width="360"
+             Height="74"
+             Fill="Transparent"
+             Cursor="Hand"
+             MouseLeftButtonDown="TitleButton_MouseDown"/>
 
 
             </Canvas>
@@ -411,9 +468,7 @@
                             Width="300"
                             Height="64"
                             VerticalAlignment="Center"
-                            FontFamily="Georgia"
-                            FontWeight="Bold"
-                            FontSize="20"
+                            Style="{StaticResource GothicButton}"
                             Click="TrunkTakeButton_Click"/>
                 </Grid>
             </Border>
@@ -939,7 +994,7 @@
               Background="#E6080404"
               Panel.ZIndex="4000">
 
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="900">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="1000">
                 <TextBlock Text="YOU HAVE DIED"
                            HorizontalAlignment="Center"
                            Foreground="#B0302A"
@@ -963,20 +1018,120 @@
                             Width="300"
                             Height="56"
                             Margin="12,0"
-                            FontFamily="Georgia"
-                            FontWeight="Bold"
                             FontSize="18"
+                            Style="{StaticResource GothicButton}"
                             Click="GameOverRetry_Click"/>
+                    <Button x:Name="GameOverLoadButton"
+                            Content="LOAD A SAVED GAME"
+                            Width="300"
+                            Height="56"
+                            Margin="12,0"
+                            FontSize="18"
+                            Style="{StaticResource GothicButton}"
+                            Click="GameOverLoad_Click"/>
                     <Button Content="START AGAIN"
                             Width="300"
                             Height="56"
                             Margin="12,0"
-                            FontFamily="Georgia"
-                            FontWeight="Bold"
                             FontSize="18"
+                            Style="{StaticResource GothicButton}"
                             Click="GameOverRestart_Click"/>
                 </StackPanel>
             </StackPanel>
+        </Grid>
+
+        <!-- ========================================= -->
+        <!-- GAME MENU (Esc in game)                   -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="GameMenuScreen"
+              Visibility="Collapsed"
+              Background="#B0000000"
+              Panel.ZIndex="3600">
+
+            <Border Width="460"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="40,30"
+                    Background="#F0100C0C"
+                    BorderBrush="#806B4A"
+                    BorderThickness="2">
+                <StackPanel>
+                    <TextBlock Text="THE MANSION"
+                               HorizontalAlignment="Center"
+                               Foreground="#D5B77A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="34"
+                               Margin="0,0,0,24"/>
+
+                    <Button Content="RESUME" Height="54" Margin="0,0,0,12"
+                            Style="{StaticResource GothicButton}" Click="GameMenuResume_Click"/>
+                    <Button x:Name="GameMenuSaveButton" Content="SAVE GAME" Height="54" Margin="0,0,0,12"
+                            Style="{StaticResource GothicButton}" Click="GameMenuSave_Click"/>
+                    <Button Content="LOAD GAME" Height="54" Margin="0,0,0,12"
+                            Style="{StaticResource GothicButton}" Click="GameMenuLoad_Click"/>
+                    <Button Content="QUIT TO TITLE" Height="54"
+                            Style="{StaticResource GothicButton}" Click="GameMenuQuit_Click"/>
+
+                    <TextBlock x:Name="GameMenuNoteText"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Margin="0,16,0,0"
+                               Foreground="#887966"
+                               FontFamily="Georgia"
+                               FontStyle="Italic"
+                               FontSize="15"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ========================================= -->
+        <!-- SAVE / LOAD SLOTS                         -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="SaveLoadScreen"
+              Visibility="Collapsed"
+              Background="#C8000000"
+              Panel.ZIndex="3700">
+
+            <Border Width="780"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="40,30"
+                    Background="#F0100C0C"
+                    BorderBrush="#806B4A"
+                    BorderThickness="2">
+                <StackPanel>
+                    <TextBlock x:Name="SaveLoadTitleText"
+                               Text="SAVE GAME"
+                               HorizontalAlignment="Center"
+                               Foreground="#D5B77A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="34"/>
+
+                    <TextBlock x:Name="SaveLoadSubtitleText"
+                               HorizontalAlignment="Center"
+                               Margin="0,6,0,24"
+                               Foreground="#A89A84"
+                               FontFamily="Georgia"
+                               FontStyle="Italic"
+                               FontSize="18"/>
+
+                    <!-- One button per slot, built by ShowSaveLoad() -->
+                    <StackPanel x:Name="SaveSlotsPanel"/>
+
+                    <Button Content="BACK"
+                            Width="200"
+                            Height="50"
+                            Margin="0,12,0,0"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource GothicButton}"
+                            Click="SaveLoadBack_Click"/>
+                </StackPanel>
+            </Border>
         </Grid>
 
         <!-- ========================================= -->

@@ -241,6 +241,22 @@ under the stat succeeds (10 = 50%, 12 = 74%, 7 = 16%):
 effect: p => { if (p.TestWits()) p.SetFlag("SolvedRiddle"); }
 ```
 
+## 9. Saving
+
+Players save and load from the **Esc** menu (3 slots), and load from the title
+screen or the *You have died* screen. Saves are small files in
+`%AppData%\The Mansion\Saves`.
+
+A save stores the player – stats, weapon, status, **inventory and story
+flags** – plus the current scene. So:
+
+* Keep story progress in **flags and items** (`p.SetFlag(...)`, `p.Give(...)`)
+  and it is saved automatically. Hotspots (`.OnlyWhen`), backgrounds
+  (`.BackgroundWhen`) and conversations (`.StartAt`) rebuild themselves from
+  them after loading.
+* **Renaming a scene** breaks saves made in it (the game will say so).
+* Saving isn't allowed during conversations or fights.
+
 ---
 
 ## Recipes
