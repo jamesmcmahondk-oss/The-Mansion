@@ -653,6 +653,17 @@ namespace The_Mansion
                 return;
             }
 
+            /*
+             * ACT on something with an ACT conversation (e.g. a character
+             * who appears when you touch something).
+             */
+            if (_interactionMode == InteractionMode.Act &&
+                !string.IsNullOrWhiteSpace(hotspot.ActDialogueId))
+            {
+                StartDialogue(hotspot.ActDialogueId);
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(hotspot.Description))
             {
                 DescriptionText.Text = hotspot.Description;
@@ -1320,30 +1331,14 @@ $@"new Hotspot
 
             _activeDialogue = dialogue;
 
-            // Portrait (optional).
-            DialoguePortrait.Source = null;
+            PlaceDialoguePortrait(dialogue);
+            SetDialoguePortrait(dialogue.Portrait);
 
-            if (!string.IsNullOrWhiteSpace(dialogue.Portrait))
-            {
-                try
-                {
-                    DialoguePortrait.Source = new BitmapImage(new Uri(
-                        $"pack://application:,,,/{dialogue.Portrait}",
-                        UriKind.Absolute));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        $"Could not load portrait:\n\n{dialogue.Portrait}\n\n{ex.Message}",
-                        "Portrait error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            }
-
-            DialoguePortrait.Visibility =
-                DialoguePortrait.Source != null ? Visibility.Visible : Visibility.Collapsed;
-
+            // The dim layer also blocks clicks on hotspots while talking,
+            // so it is always shown - just see-through when not dimming.
+            DialogueDim.Fill = dialogue.DimScene
+                ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
+                : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
             DescriptionText.Visibility = Visibility.Collapsed;
             DialoguePanel.Visibility = Visibility.Visible;
@@ -1352,7 +1347,73 @@ $@"new Hotspot
             MenuButtons.IsHitTestVisible = false;
             MenuButtons.Opacity = 0.45;
 
-            ShowDialogueNode(dialogue.StartNode);
+            string startNode = dialogue.ChooseStartNode != null
+                ? dialogue.ChooseStartNode(_player)
+                : dialogue.StartNode;
+
+            ShowDialogueNode(startNode);
+        }
+
+        /*
+         * Default: standing on the right of the scene, 700px tall.
+         * If the dialogue gives PortraitHeight, the character is placed
+         * in the scene at PortraitX/Y (background image pixels).
+         */
+        private void PlaceDialoguePortrait(Dialogue dialogue)
+        {
+            if (dialogue.PortraitHeight > 0)
+            {
+                Rect screen = ImageToScreen(new Rect(
+                    dialogue.PortraitX,
+                    dialogue.PortraitY,
+                    0,
+                    dialogue.PortraitHeight));
+
+                DialoguePortrait.HorizontalAlignment = HorizontalAlignment.Left;
+                DialoguePortrait.Margin = new Thickness(screen.X, screen.Y, 0, 0);
+                DialoguePortrait.Height = screen.Height;
+            }
+            else
+            {
+                DialoguePortrait.HorizontalAlignment = HorizontalAlignment.Right;
+                DialoguePortrait.Margin = new Thickness(0, 100, 140, 0);
+                DialoguePortrait.Height = 700;
+            }
+        }
+
+        private string _shownPortrait = "";
+
+        private void SetDialoguePortrait(string imagePath)
+        {
+            if (imagePath == _shownPortrait &&
+                DialoguePortrait.Source != null)
+            {
+                return; // already showing it
+            }
+
+            _shownPortrait = imagePath;
+            DialoguePortrait.Source = null;
+
+            if (!string.IsNullOrWhiteSpace(imagePath))
+            {
+                try
+                {
+                    DialoguePortrait.Source = new BitmapImage(new Uri(
+                        $"pack://application:,,,/{imagePath}",
+                        UriKind.Absolute));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Could not load portrait:\n\n{imagePath}\n\n{ex.Message}",
+                        "Portrait error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+
+            DialoguePortrait.Visibility =
+                DialoguePortrait.Source != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void ShowDialogueNode(string nodeId)
@@ -1372,6 +1433,11 @@ $@"new Hotspot
                 EndDialogue();
                 return;
             }
+
+            // A line can swap the picture (e.g. an angry pose).
+            SetDialoguePortrait(string.IsNullOrWhiteSpace(node.Portrait)
+                ? _activeDialogue.Portrait
+                : node.Portrait);
 
             DialogueSpeakerText.Text = _activeDialogue.Speaker.ToUpperInvariant();
             DialogueLineText.Text = node.Text;
@@ -1461,6 +1527,8 @@ $@"new Hotspot
             DialogueChoicesPanel.Children.Clear();
             DialoguePanel.Visibility = Visibility.Collapsed;
             DialoguePortrait.Visibility = Visibility.Collapsed;
+            DialoguePortrait.Source = null;
+            _shownPortrait = "";
             DialogueDim.Visibility = Visibility.Collapsed;
 
             DescriptionText.Visibility = Visibility.Visible;

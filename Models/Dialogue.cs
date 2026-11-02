@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace The_Mansion.Models
@@ -21,8 +21,25 @@ namespace The_Mansion.Models
         // (for example when the scene itself is a close-up of the character).
         public string Portrait { get; set; } = "";
 
+        // Where the portrait appears. Leave PortraitHeight at 0 for the
+        // default spot (standing on the right of the scene). Set all three
+        // to put the character *in* the scene instead, e.g. on a lily pad.
+        // Same units as hotspots: pixels of the scene's background image
+        // (0-1536 across, 0-1024 down; only Y 192-832 is visible).
+        public double PortraitX { get; set; }
+        public double PortraitY { get; set; }
+        public double PortraitHeight { get; set; }
+
+        // Darken the scene behind the conversation. Turn off for characters
+        // standing in the scene so they still look part of it.
+        public bool DimScene { get; set; } = true;
+
         // Id of the node the conversation starts at.
         public string StartNode { get; set; } = "start";
+
+        // Optional: pick the start node from the player's state instead,
+        // e.g. a different greeting the second time you meet.
+        public Func<Player, string>? ChooseStartNode { get; set; }
 
         public Dictionary<string, DialogueNode> Nodes { get; set; } = new();
     }
@@ -32,6 +49,10 @@ namespace The_Mansion.Models
         // What the character says. Keep it to about two lines so the
         // choices still fit in the panel.
         public string Text { get; set; } = "";
+
+        // Optional: swap the character's picture for this line only,
+        // e.g. "Assets/Characters/Hautain_Attack.png" when they get angry.
+        public string Portrait { get; set; } = "";
 
         // Up to 4 choices are shown. A node with no choices gets an
         // automatic "(Leave)" choice.
