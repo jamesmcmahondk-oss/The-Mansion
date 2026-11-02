@@ -405,37 +405,47 @@
             <Grid Grid.Row="1"
               x:Name="HUDGrid" Panel.ZIndex="1">
                 <Grid.Resources>
-                    <!-- Menu buttons fill the full width of the menu pocket. -->
+                    <!-- Menu buttons fill the pocket's width at their natural 182x62 shape. -->
                     <Style TargetType="Image" x:Key="MenuButtonStyle">
-                        <Setter Property="Stretch" Value="Fill"/>
-                        <Setter Property="Margin" Value="0,2"/>
+                        <Setter Property="Stretch" Value="Uniform"/>
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                 </Grid.Resources>
 
 
+                <!--
+                    HUD layout (this row is 1920x400; numbers are pixels in it).
+                    hud_frame.png is built at exactly 1920x400 by
+                    Tools/build_hud_frame.py, so nothing is stretched:
+                      left button pocket   x 59-236,    y 130-374
+                      middle text panel    x 272-1647,  y 138-366
+                      right pocket (free)  x 1683-1862, y 130-374
+                -->
+
+                <!-- Description text, inside the middle panel with padding. -->
                 <TextBlock x:Name="DescriptionText"
-           Width="1075"
-           Height="240"
-           HorizontalAlignment="Center"
+           Margin="300,158,300,0"
+           Height="190"
+           HorizontalAlignment="Stretch"
            VerticalAlignment="Top"
            Text=""
-           Foreground="White"
-           FontSize="20"
+           Foreground="#DDD4C3"
+           FontFamily="Georgia"
+           FontSize="24"
+           LineHeight="34"
            TextWrapping="Wrap"
-           Panel.ZIndex="110" Margin="0,132,0,0"  />
-                <Image Height="100" Width="100"/>
+           TextTrimming="CharacterEllipsis"
+           Panel.ZIndex="110" />
+
                 <Image x:Name="HUDDiveders"
-  Source="/Assets/UI/menu_frame.png"
+  Source="/Assets/UI/hud_frame.png"
+  Width="1920"
+  Height="400"
   IsHitTestVisible="False" Panel.ZIndex="20" Stretch="Fill"/>
-                <!--
-                    Fits inside the left "menu" pocket of menu_frame.png.
-                    menu_frame.png (1536x596) is stretched to 1920x400, so its
-                    pocket (x 84-276, y 194-557 in the image) lands at
-                    x 105-345, y 130-374 in this HUD row; the buttons fill that width.
-                -->
-                <Grid x:Name="MenuButtons" Margin="105,132,0,0" HorizontalAlignment="Left" Width="240" Height="240" VerticalAlignment="Top" Panel.ZIndex="10">
+
+                <!-- Menu buttons, inside the left pocket with 4px padding. -->
+                <Grid x:Name="MenuButtons" Margin="63,134,0,0" HorizontalAlignment="Left" Width="169" Height="236" VerticalAlignment="Top" Panel.ZIndex="10">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
