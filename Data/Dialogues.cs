@@ -27,37 +27,42 @@ namespace The_Mansion.Data
         // =========================================================
 
         public static Dialogue SadGargoyle { get; } =
-            NewDialogue("SadGargoyle", "Sad Gargoyle")
-                // No portrait: the scene is already a close-up of it.
+     NewDialogue("SadGargoyle", "Sad Gargoyle")
+         // No portrait: the scene is already a close-up of it.
 
-            .Line("start", "*Sigh.* Three hundred years on this pillar, and not one visitor has ever said hello.")
-                .Choice("Hello! Why so glum?", "sad")
-                .Choice("Do you know how to get into the mansion?", "door")
-                .Choice("You're not entirely stone, are you?", "secret",
-                        onlyIf: p => p.Wits >= 12 && !p.Has("Gargoyle's Blessing"),
-                        effect: p =>
-                        {
-                            p.Luck += 1;
-                            p.Give("Gargoyle's Blessing");
-                        })
-                .Choice("Goodbye.")
+         // Offering items (ITEM button during the conversation).
+         .OnItem("Party Hat", "Hat")
 
-            .Line("menu", "Was there something else, visitor? I have nowhere to be. Ever.")
-                .SameChoicesAs("start")
+     .Line("start", "*Sigh.* Three hundred years on this pillar, and not one visitor has ever said hello.")
+         .Choice("Hello! Why so glum?", "sad")
+         .Choice("Do you know how to get into the mansion?", "door")
+         .Choice("You're not entirely stone, are you?", "secret",
+                 onlyIf: p => p.Wits >= 12 && !p.Has("Gargoyle's Blessing"),
+                 effect: p =>
+                 {
+                     p.Luck += 1;
+                     p.Give("Gargoyle's Blessing");
+                 })
+         .Choice("Goodbye.")
 
-            .Line("sad", "Pigeons. Rain. More pigeons. And the gargoyle on the other pillar hasn't spoken to me since the Incident.")
-                .Choice("What incident?", "incident")
-                .Choice("That sounds dreadful.", "menu")
+     .Line("menu", "Was there something else, visitor? I have nowhere to be. Ever.")
+         .SameChoicesAs("start")
 
-            .Line("incident", "We do not speak of the Incident. There was a bird. That is all I will say.")
-                .Choice("Fair enough.", "menu")
+     .Line("sad", "Pigeons. Rain. More pigeons. And the gargoyle on the other pillar hasn't spoken to me since the Incident.")
+         .Choice("What incident?", "incident")
+         .Choice("That sounds dreadful.", "menu")
 
-            .Line("door", "Locked, of course. They say the old door knocker only answers to someone with manners.")
-                .Choice("Thanks for the tip.", "menu")
+     .Line("incident", "We do not speak of the Incident. There was a bird. That is all I will say.")
+         .Choice("Fair enough.", "menu")
 
-            .Line("secret", "Shh! Not so loud! ...Here, take my blessing. You will need all the luck you can get in there. (Luck +1)")
-                .Choice("Your secret is safe with me.", "menu");
+     .Line("door", "Locked, of course. They say the old door knocker only answers to someone with manners.")
+         .Choice("Thanks for the tip.", "menu")
 
+     .Line("secret", "Shh! Not so loud! ...Here, take my blessing. You will need all the luck you can get in there. (Luck +1)")
+         .Choice("Your secret is safe with me.", "menu")
+
+     .Line("Hat", "Great! Awesome, a dirty old party hat! Now please take it off me, before the rough paper scratches my scalp!")
+         .Choice("(Take the hat back)", "menu");
 
         // =========================================================
         // KING HAUTAIN (FountainCloseup scene, ACT on the gold coins)
