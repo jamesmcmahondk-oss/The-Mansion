@@ -212,6 +212,8 @@ namespace The_Mansion
             GameScreen.Visibility =
                 Visibility.Visible;
 
+            UpdatePlayerStats();
+
             ShowScene(Scenes.FrontGate);
 
             _interactionMode =
@@ -225,6 +227,35 @@ namespace The_Mansion
                     _lookCursor;
             }
         }
+        /*
+         * Refreshes the stats panel in the HUD's right pocket.
+         * Call this whenever the player's health, stats, weapon
+         * or status effect change.
+         */
+        private void UpdatePlayerStats()
+        {
+            int health = Math.Max(0, _player.Health);
+            int maxHealth = Math.Max(1, _player.MaxHealth);
+
+            StatHealthText.Text = $"{health}/{maxHealth}";
+            StatStrengthText.Text = _player.Strength.ToString();
+            StatLuckText.Text = _player.Luck.ToString();
+            StatWitsText.Text = _player.Wits.ToString();
+
+            HealthBarFill.Width = new GridLength(health, GridUnitType.Star);
+            HealthBarEmpty.Width = new GridLength(maxHealth - Math.Min(health, maxHealth), GridUnitType.Star);
+
+            StatWeaponText.Text = string.IsNullOrWhiteSpace(_player.Weapon) ? "None" : _player.Weapon;
+
+            bool hasStatus = !string.IsNullOrWhiteSpace(_player.StatusEffect) &&
+                             _player.StatusEffect != "None";
+
+            StatStatusText.Text = hasStatus ? _player.StatusEffect : "None";
+            StatStatusText.Foreground = hasStatus
+                ? new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A))
+                : new SolidColorBrush(Color.FromRgb(0x88, 0x79, 0x66));
+        }
+
         private void AcceptRollButton_Click(
       object sender,
       RoutedEventArgs e)
