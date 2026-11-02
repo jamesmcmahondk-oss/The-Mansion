@@ -54,10 +54,37 @@ namespace The_Mansion
 
         private Rectangle? _selectionRectangle;
 // private Cursor _normalCursor;
-        private Cursor _actCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_act.cur");
-        private Cursor _lookCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_look.cur");
-        private Cursor _talkCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_talk.cur");
-        private Cursor _itemCursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_item.cur");
+        // Cursors are built into the game (Resource files in Assets/Cursors),
+        // so they work wherever the game is installed.
+        private Cursor _actCursor = LoadCursor("cursor_act.cur");
+        private Cursor _lookCursor = LoadCursor("cursor_look.cur");
+        private Cursor _talkCursor = LoadCursor("cursor_talk.cur");
+        private Cursor _itemCursor = LoadCursor("cursor_item.cur");
+
+        /*
+         * Loads a cursor from Assets/Cursors inside the game.
+         * If it can't be found, the normal arrow is used instead of crashing.
+         */
+        private static Cursor LoadCursor(string fileName)
+        {
+            try
+            {
+                var resource = Application.GetResourceStream(new Uri(
+                    $"pack://application:,,,/Assets/Cursors/{fileName}",
+                    UriKind.Absolute));
+
+                if (resource != null)
+                {
+                    return new Cursor(resource.Stream);
+                }
+            }
+            catch (Exception)
+            {
+                // Fall through to the default cursor.
+            }
+
+            return Cursors.Arrow;
+        }
         private Cursor _CurrentInteractionCursor;
         /*
          * Small movement threshold so a normal click on an existing
@@ -81,7 +108,7 @@ namespace The_Mansion
             Loaded += (_, _) => PositionWindow();
 
             UpdateDebugVisibility();
-            this.Cursor = new Cursor("C:\\The Mansion\\The Mansion\\Assets\\Cursors\\cursor_arrow.cur");
+            this.Cursor = LoadCursor("cursor_arrow.cur");
             ShowScene(Scenes.FrontGate);
 
 
