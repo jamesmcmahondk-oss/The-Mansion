@@ -17,13 +17,28 @@ namespace The_Mansion.Data
         private static readonly Dictionary<string, Item> ItemLookup =
             new(StringComparer.OrdinalIgnoreCase);
 
-        private static Item NewItem(string name, string description, string icon = "")
+        /*
+         * Optional extras:
+         *   weaponBonus  - added to attacks when this is the player's Weapon
+         *   inFight      - what using it in a fight does; return the text to show
+         *   usedUpInFight - it's gone after being used in a fight
+         */
+        private static Item NewItem(
+            string name,
+            string description,
+            string icon = "",
+            int weaponBonus = 0,
+            Func<Player, Fight, string>? inFight = null,
+            bool usedUpInFight = false)
         {
             var item = new Item
             {
                 Name = name,
                 Description = description,
-                Icon = icon
+                Icon = icon,
+                WeaponBonus = weaponBonus,
+                UseInFight = inFight,
+                UsedUpInFight = usedUpInFight
             };
 
             ItemLookup[name] = item;
@@ -77,13 +92,20 @@ namespace The_Mansion.Data
 
         public static Item Fork { get; } =
             NewItem("Fork",
-                    "A silver fork. Technically a weapon. (Taking it makes it your weapon.)",
-                    "Assets/Items/fork.png");
+                    "A silver fork. Technically a weapon. (Taking it makes it your weapon: +1 in fights.)",
+                    "Assets/Items/fork.png",
+                    weaponBonus: 1);
 
         public static Item EmptyBottle { get; } =
             NewItem("Empty Bottle",
                     "An empty glass bottle. It could hold something. Or be thrown at something.",
-                    "Assets/Items/empty_bottle.png");
+                    "Assets/Items/empty_bottle.png",
+                    inFight: (p, fight) =>
+                    {
+                        fight.HurtEnemy(10);
+                        return $"You hurl the bottle! It shatters over {fight.Enemy.Name}. (-10)";
+                    },
+                    usedUpInFight: true);
 
 
         // =========================================================

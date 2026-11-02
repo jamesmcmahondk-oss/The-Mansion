@@ -164,6 +164,13 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>ACT on it starts a fight from Data/Enemies.cs.</summary>
+        public HotspotBuilder ActStartsFight(string enemyId)
+        {
+            _hotspot.ActFightId = enemyId;
+            return this;
+        }
+
         /// <summary>
         /// What happens when the player uses a particular item on it.
         /// Add one line per item. Other items get "Nothing happens".
@@ -294,19 +301,22 @@ namespace The_Mansion.Data
         ///   goesTo  - line to jump to (leave out to end the conversation)
         ///   onlyIf  - only show it when true, e.g. p => p.Wits >= 12
         ///   effect  - runs when picked, e.g. p => p.Give("Gold Coins")
+        ///   startsFight - end the conversation and start this fight (Data/Enemies.cs)
         /// </summary>
         public DialogueBuilder Choice(
             string text,
             string? goesTo = null,
             Func<Player, bool>? onlyIf = null,
-            Action<Player>? effect = null)
+            Action<Player>? effect = null,
+            string startsFight = "")
         {
             CurrentLine(nameof(Choice)).Choices.Add(new DialogueChoice
             {
                 Text = text,
                 Next = goesTo,
                 Condition = onlyIf,
-                Effect = effect
+                Effect = effect,
+                StartsFight = startsFight
             });
 
             return this;
@@ -409,5 +419,87 @@ namespace The_Mansion.Data
         }
 
         public static implicit operator Dialogue(DialogueBuilder builder) => builder.Build();
+    }
+
+    // =============================================================
+    // ENEMIES
+    // =============================================================
+    public class EnemyBuilder
+    {
+        private readonly Enemy _enemy;
+        private bool _registered;
+
+        internal EnemyBuilder(string id, string name, int skill, int health)
+        {
+            _enemy = new Enemy
+            {
+                Id = id,
+                Name = name,
+                Skill = skill,
+                Health = health
+            };
+        }
+
+        /// <summary>Picture shown during the fight, e.g. "Assets/Characters/Hautain_Attack.png".</summary>
+        public EnemyBuilder Portrait(string imagePath)
+        {
+            _enemy.Portrait = imagePath;
+            return this;
+        }
+
+        /// <summary>
+        /// Put the enemy inside the scene (background image pixels: top-left
+        /// corner and height). Also stops the scene dimming.
+        /// </summary>
+        public EnemyBuilder StandAt(double x, double y, double height)
+        {
+            _enemy.PortraitX = x;
+            _enemy.PortraitY = y;
+            _enemy.PortraitHeight = height;
+            _enemy.DimScene = false;
+            return this;
+        }
+
+        /// <summary>Text shown when the fight starts.</summary>
+        public EnemyBuilder Intro(string text)
+        {
+            _enemy.IntroText = text;
+            return this;
+        }
+
+        /// <summary>The player can't run away from this fight.</summary>
+        public EnemyBuilder NoFleeing()
+        {
+            _enemy.CanFlee = false;
+            return this;
+        }
+
+        /// <summary>Text shown, and optional effect, when the player wins.</summary>
+        public EnemyBuilder OnWin(string text, Action<Player>? effect = null)
+        {
+            _enemy.WinText = text;
+            _enemy.OnWin = effect;
+            return this;
+        }
+
+        /// <summary>Optional effect when the player runs away.</summary>
+        public EnemyBuilder OnFlee(Action<Player> effect)
+        {
+            _enemy.OnFlee = effect;
+            return this;
+        }
+
+        public Enemy Build()
+        {
+            if (!_registered)
+            {
+                Enemies.Register(_enemy);
+                _registered = true;
+            }
+
+            return _enemy;
+        }
+
+        public static implicit operator Enemy(EnemyBuilder builder) => builder.Build();
     }
 }

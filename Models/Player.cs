@@ -48,5 +48,22 @@ namespace The_Mansion.Models
 
         public void ClearFlag(string flag) => Flags.Remove(flag);
 
+        // ---- Luck and Wits tests (for scenes and puzzles) -------------
+        // Roll 3d6: equal to or under the stat succeeds.
+        // Luck/Wits 10 = 50%, 12 = 74%, 7 = 16%.
+
+        // The dice total of the last test (if you want to show it).
+        public int LastTestRoll { get; private set; }
+
+        public bool TestLuck() => Test(Luck);
+
+        public bool TestWits() => Test(Wits);
+
+        private bool Test(int stat)
+        {
+            LastTestRoll = Dice.Roll(3);
+            return LastTestRoll <= stat;
+        }
+
     }
 }

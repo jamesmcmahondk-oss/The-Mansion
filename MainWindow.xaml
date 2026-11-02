@@ -603,6 +603,113 @@
                 </StackPanel>
 
                 <!--
+                    FIGHT PANEL: replaces the description text during a fight.
+                    Your two bone dice and total on the left, the enemy's on
+                    the right, the result underneath. Click it when the fight
+                    is over to continue.
+                -->
+                <Grid x:Name="FightPanel"
+                      Margin="300,146,300,0"
+                      Height="214"
+                      VerticalAlignment="Top"
+                      Background="Transparent"
+                      Visibility="Collapsed"
+                      MouseLeftButtonDown="FightPanel_MouseLeftButtonDown"
+                      Panel.ZIndex="110">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header: enemy name + health bar -->
+                    <Grid>
+                        <TextBlock x:Name="FightTitleText"
+                                   Text="FIGHT!"
+                                   Foreground="#C8A96A"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="20"/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock x:Name="EnemyHealthText"
+                                       Text="30/30"
+                                       Foreground="#D95C52"
+                                       FontFamily="Consolas"
+                                       FontSize="18"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <Border Width="260" Height="10" VerticalAlignment="Center"
+                                    Background="#401010" BorderBrush="#806B4A" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition x:Name="EnemyHealthFill" Width="1*"/>
+                                        <ColumnDefinition x:Name="EnemyHealthEmpty" Width="0*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Rectangle Fill="#C0392B"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Dice -->
+                    <Grid Grid.Row="1" Margin="0,8,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="PlayerDie1" Width="72" Height="72" Source="/Assets/UI/Dice/die_6.png" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform><RotateTransform/></Image.RenderTransform>
+                                </Image>
+                            <Image x:Name="PlayerDie2" Width="72" Height="72" Source="/Assets/UI/Dice/die_6.png" RenderTransformOrigin="0.5,0.5" Margin="6,0,0,0">
+                                    <Image.RenderTransform><RotateTransform/></Image.RenderTransform>
+                                </Image>
+                            <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="YOU" Foreground="#B9A98D" FontFamily="Georgia" FontSize="15"/>
+                                <TextBlock x:Name="PlayerAttackText" Text="-" Foreground="#DDD4C3" FontFamily="Consolas" FontSize="30"/>
+                                <TextBlock x:Name="PlayerAttackDetail" Text="" Foreground="#887966" FontFamily="Consolas" FontSize="13"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="VS"
+                                   Foreground="#806B4A"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="26"
+                                   VerticalAlignment="Center"
+                                   Margin="20,0"/>
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Margin="0,0,16,0" VerticalAlignment="Center">
+                                <TextBlock x:Name="EnemyLabelText" Text="ENEMY" HorizontalAlignment="Right" Foreground="#B9A98D" FontFamily="Georgia" FontSize="15"/>
+                                <TextBlock x:Name="EnemyAttackText" Text="-" HorizontalAlignment="Right" Foreground="#DDD4C3" FontFamily="Consolas" FontSize="30"/>
+                                <TextBlock x:Name="EnemyAttackDetail" Text="" HorizontalAlignment="Right" Foreground="#887966" FontFamily="Consolas" FontSize="13"/>
+                            </StackPanel>
+                            <Image x:Name="EnemyDie1" Width="72" Height="72" Source="/Assets/UI/Dice/die_6.png" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform><RotateTransform/></Image.RenderTransform>
+                                </Image>
+                            <Image x:Name="EnemyDie2" Width="72" Height="72" Source="/Assets/UI/Dice/die_6.png" RenderTransformOrigin="0.5,0.5" Margin="6,0,0,0">
+                                    <Image.RenderTransform><RotateTransform/></Image.RenderTransform>
+                                </Image>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- What happened -->
+                    <TextBlock x:Name="FightResultText"
+                               Grid.Row="2"
+                               Foreground="#DDD4C3"
+                               FontFamily="Georgia"
+                               FontSize="20"
+                               LineHeight="27"
+                               TextWrapping="Wrap"
+                               TextTrimming="CharacterEllipsis"/>
+                </Grid>
+
+                <!--
                     INVENTORY (opened with the ITEM button): replaces the
                     description text in the middle panel. Up to 10 item slots
                     in a row; hover to examine, click to pick an item, then
@@ -720,6 +827,35 @@
                 </Grid>
 
                 <!--
+                    FIGHT BUTTONS: replace the four verbs during a fight
+                    (same pocket as MenuButtons). Built by
+                    Tools/build_fight_buttons.py.
+                -->
+                <Grid x:Name="FightButtons" Margin="63,134,0,0" HorizontalAlignment="Left" Width="169" Height="236" VerticalAlignment="Top" Panel.ZIndex="10"
+                      Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Image x:Name="AttackBtn" Grid.Row="0" Source="/Assets/UI/attack.png"
+                           Style="{StaticResource MenuButtonStyle}" Cursor="Hand"
+                           MouseEnter="FightButton_MouseEnter" MouseLeave="FightButton_MouseLeave"
+                           MouseLeftButtonDown="FightButton_MouseDown"/>
+
+                    <Image x:Name="FightItemBtn" Grid.Row="1" Source="/Assets/UI/item.png"
+                           Style="{StaticResource MenuButtonStyle}" Cursor="Hand"
+                           MouseEnter="FightButton_MouseEnter" MouseLeave="FightButton_MouseLeave"
+                           MouseLeftButtonDown="FightButton_MouseDown"/>
+
+                    <Image x:Name="FleeBtn" Grid.Row="2" Source="/Assets/UI/flee.png"
+                           Style="{StaticResource MenuButtonStyle}" Cursor="Hand"
+                           MouseEnter="FightButton_MouseEnter" MouseLeave="FightButton_MouseLeave"
+                           MouseLeftButtonDown="FightButton_MouseDown"/>
+                </Grid>
+
+                <!--
                     Player stats, inside the right pocket (x 1683-1862, y 130-374)
                     with 8px padding. Filled in by UpdatePlayerStats().
                 -->
@@ -792,6 +928,55 @@
 
             </Grid>
 
+        </Grid>
+
+        <!-- ========================================= -->
+        <!-- GAME OVER                                 -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="GameOverScreen"
+              Visibility="Collapsed"
+              Background="#E6080404"
+              Panel.ZIndex="4000">
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="900">
+                <TextBlock Text="YOU HAVE DIED"
+                           HorizontalAlignment="Center"
+                           Foreground="#B0302A"
+                           FontFamily="Georgia"
+                           FontWeight="Bold"
+                           FontSize="64"/>
+
+                <TextBlock x:Name="GameOverText"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="0,24,0,48"
+                           Foreground="#A89A84"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="24"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="GameOverRetryButton"
+                            Content="TRY THE FIGHT AGAIN"
+                            Width="300"
+                            Height="56"
+                            Margin="12,0"
+                            FontFamily="Georgia"
+                            FontWeight="Bold"
+                            FontSize="18"
+                            Click="GameOverRetry_Click"/>
+                    <Button Content="START AGAIN"
+                            Width="300"
+                            Height="56"
+                            Margin="12,0"
+                            FontFamily="Georgia"
+                            FontWeight="Bold"
+                            FontSize="18"
+                            Click="GameOverRestart_Click"/>
+                </StackPanel>
+            </StackPanel>
         </Grid>
 
         <!-- ========================================= -->
@@ -888,9 +1073,18 @@
                            FontSize="16"
                            Margin="0,0,0,8"/>
 
-                <!-- Filled from Scenes.All by BuildDebugSceneList() -->
+                <!-- Filled from Scenes.All / Enemies.All by BuildDebugSceneList() -->
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="DebugSceneList"/>
+                    <StackPanel>
+                        <StackPanel x:Name="DebugSceneList"/>
+
+                        <TextBlock Text="START A FIGHT (in the current scene)"
+                                   Foreground="Cyan"
+                                   FontFamily="Consolas"
+                                   FontSize="16"
+                                   Margin="0,12,0,8"/>
+                        <StackPanel x:Name="DebugFightList"/>
+                    </StackPanel>
                 </ScrollViewer>
             </DockPanel>
         </Border>

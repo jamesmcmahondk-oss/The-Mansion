@@ -99,5 +99,8 @@ namespace The_Mansion.Models
         // Optional: runs when the choice is picked, e.g. to change stats
         // or give an item: p => p.Luck += 1
         public Action<Player>? Effect { get; set; }
+
+        // Optional: end the conversation and start this fight (Data/Enemies.cs).
+        public string StartsFight { get; set; } = "";
     }
 }
