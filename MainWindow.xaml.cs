@@ -556,6 +556,39 @@ namespace The_Mansion
             ShowScene(targetScene);
         }
 
+        /*
+         * F11 toggles borderless fullscreen; Escape leaves it.
+         * The Viewbox in MainWindow.xaml rescales the 1920x1080
+         * layout to whatever size the window ends up.
+         */
+        private bool _isFullscreen;
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F11)
+            {
+                SetFullscreen(!_isFullscreen);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Escape && _isFullscreen)
+            {
+                SetFullscreen(false);
+                e.Handled = true;
+            }
+        }
+
+        private void SetFullscreen(bool fullscreen)
+        {
+            _isFullscreen = fullscreen;
+
+            // WindowState must be reset first, otherwise Windows keeps
+            // the taskbar visible when switching an already-maximized window.
+            WindowState = WindowState.Normal;
+            WindowStyle = fullscreen ? WindowStyle.None : WindowStyle.SingleBorderWindow;
+            ResizeMode = fullscreen ? ResizeMode.NoResize : ResizeMode.CanResize;
+            WindowState = WindowState.Maximized;
+        }
+
         private void SceneCanvas_MouseMove(
             object sender,
             MouseEventArgs e)
