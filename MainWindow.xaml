@@ -2,11 +2,28 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="The Mansion"
-    Width="1920"
-    Height="1080"
-    Background="Black" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    Width="1280"
+    Height="720"
+    MinWidth="640"
+    MinHeight="360"
+    Background="Black"
+    ResizeMode="CanResize"
+    WindowState="Maximized"
+    WindowStartupLocation="CenterScreen"
+    PreviewKeyDown="Window_PreviewKeyDown">
 
-    <Grid x:Name="RootGrid">
+    <!--
+        Everything is laid out on a fixed 1920x1080 "design" surface.
+        The Viewbox scales that surface uniformly to fit whatever size
+        the window is (letterboxing with black bars if the aspect ratio
+        differs), so all Canvas / hotspot coordinates stay in 1920x1080
+        space regardless of the monitor resolution or Windows DPI scaling.
+    -->
+    <Viewbox Stretch="Uniform">
+    <Grid x:Name="RootGrid"
+          Width="1920"
+          Height="1080"
+          ClipToBounds="True">
         <!-- ========================================= -->
         <!-- TITLE SCREEN                              -->
         <!-- ========================================= -->
@@ -320,7 +337,9 @@
                 <RowDefinition Height="400"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Panel.ZIndex="1">
+            <!-- Scene spans both rows so the 796px-tall background and its hotspots
+                 extend underneath the (partly transparent) HUD frame without being clipped. -->
+            <Grid Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1">
                 <!-- GAME SCENE -->
                 <Image x:Name="Return" Height="110" VerticalAlignment="Top" Source="/Assets/UI/return_arrow.png" Canvas.Left="10" Canvas.Top="10" Margin="10,0,0,0" Stretch="Fill" Panel.ZIndex="1" Width="220" HorizontalAlignment="Left" />
 
@@ -334,6 +353,7 @@
             MouseMove="SceneCanvas_MouseMove"
             MouseLeftButtonDown="SceneCanvas_MouseLeftButtonDown"
             MouseLeftButtonUp="SceneCanvas_MouseLeftButtonUp"
+            Height="796"
             Panel.ZIndex="10" VerticalAlignment="Top"/>
 
             </Grid>
@@ -465,4 +485,5 @@
         </Grid>
 
     </Grid>
+    </Viewbox>
 </Window>
