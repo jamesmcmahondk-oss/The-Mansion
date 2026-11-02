@@ -71,6 +71,17 @@ namespace The_Mansion.Data
                                 ? "again"
                                 : "start")
 
+                // Offering items (ITEM button during the conversation).
+                .OnItem("Gold Coins", "returned",
+                        removeItem: true,
+                        effect: p =>
+                        {
+                            p.ClearFlag("StoleCoins");
+                            p.StatusEffect = "None";
+                        })
+                .OnItem("Royal Gold Coin", "keepit")
+                .OnOtherItems("\"What is THIS? The Crown does not accept bribes.\" He eyes the {item}. \"...Unless they are made of gold.\"")
+
             .Line("start", "...HALT, THIEF! Those coins belong to the Crown! I am Hautain, rightful king of this fountain, and you are trespassing!")
                 .Choice("King? You're a frog on a lily pad.", "insult")
                 .Choice("Forgive me, Your Majesty. I'll leave your gold alone.", "apology")
@@ -107,7 +118,13 @@ namespace The_Mansion.Data
                 .Choice("(Run!)")
 
             .Line("again", "YOU again! Haven't you robbed the Crown enough for one day?")
-                .Choice("Just admiring the view, Your Majesty.");
+                .Choice("Just admiring the view, Your Majesty.")
+
+            .Line("returned", "My coins! Every last one! ...Hmph. Perhaps you are not ENTIRELY a thief. The Crown is... appeased. (Royal Grudge lifted)")
+                .Choice("Long live the King!")
+
+            .Line("keepit", "Return a ROYAL GIFT? Do you wish to insult me? Keep it, you oaf, and spend it in my honour.")
+                .Choice("As you wish, Your Majesty.");
 
         public static Dialogue QuazimodoFrontDoor { get; } =
     NewDialogue("QuazimodoFrontDoor", "Quazimodo")
