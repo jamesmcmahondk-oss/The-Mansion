@@ -21,14 +21,14 @@
         <!-- TITLE SCREEN                              -->
         <!-- ========================================= -->
 
-        <Grid x:Name="TitleScreen" Visibility="Collapsed" >
+        <Grid x:Name="TitleScreen" Visibility="Visible" >
 
             <Image Source="Assets/UI/title_screen.png"
                Stretch="Fill"/>
             <Canvas>
                 <Rectangle x:Name="NewGameBtn"
              Canvas.Left="239"
-             Canvas.Top="430"
+             Canvas.Top="435"
              Width="360"
              Height="74"
              Fill="Transparent"
@@ -323,7 +323,7 @@
         <!-- ========================================= -->
 
         <Grid x:Name="GameScreen"
-          Visibility="Visible">
+          Visibility="Collapsed">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -416,15 +416,15 @@
 
 
                 <TextBlock x:Name="DescriptionText"
-           Width="930"
-           Height="290"
+           Width="1075"
+           Height="240"
            HorizontalAlignment="Center"
            VerticalAlignment="Top"
            Text=""
            Foreground="White"
            FontSize="20"
            TextWrapping="Wrap"
-           Panel.ZIndex="110" Margin="0,49,0,0"  />
+           Panel.ZIndex="110" Margin="0,132,0,0"  />
                 <Image Height="100" Width="100"/>
                 <Image x:Name="HUDDiveders"
   Source="/Assets/UI/menu_frame.png"
