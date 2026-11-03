@@ -44,6 +44,49 @@ namespace The_Mansion.Data
                            p.StatusEffect = "None";
                        });
 
+        // =========================================================
+        // QUAZIMODO
+        // Front door, if the player attempts to force entry
+        // =========================================================
+
+        public static Enemy QuazimodoDoorFight { get; } =
+            NewEnemy(
+                "QuazimodoDoorFight",
+                "Quazimodo",
+                skill: 6,
+                health: 40)
+
+                .Portrait(
+                    "Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
+
+                // Same approximate position Quazimodo uses during
+                // the front-door conversation.
+                .StandAt(60, 350, 400)
+
+                .Intro(
+                    "Quazimodo slowly steps through the doorway and closes "
+                    + "the heavy door behind him. "
+                    + "He rolls one crooked shoulder. "
+                    + "Several joints click in quick succession.\n\n"
+                    + "\"Very well.\"\n\n"
+                    + "He removes his gloves one finger at a time.\n\n"
+                    + "\"Please avoid bleeding on the threshold. "
+                    + "It encourages the wood.\"")
+
+              .OnWin(
+    "Quazimodo staggers backward against the front door. "
+    + "For several seconds he remains there, breathing heavily. "
+    + "Then he straightens his bow tie.\n\n"
+    + "\"Very good. You have established that you can enter "
+    + "the Mansion.\"\n\n"
+    + "He pulls the enormous door open and steps aside.\n\n"
+    + "\"Whether you should is now somebody else's problem.\"",
+    p =>
+    {
+        p.SetFlag("DefeatedQuazimodo");
+        p.SetFlag("FrontDoorOpen");
+        p.SetFlag("ForcedEntry");
+    });
 
         // =========================================================
         // LOOKUP (used by the game - no need to edit)

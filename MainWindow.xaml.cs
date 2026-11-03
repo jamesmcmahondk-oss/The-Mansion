@@ -1569,9 +1569,9 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     _visibleChoices.Add(choice);
                 }
 
-                if (_visibleChoices.Count == 4)
+                if (_visibleChoices.Count == 5)
                 {
-                    break; // only 4 fit in the panel
+                    break; // only 5 fit in the panel
                 }
             }
 
@@ -1591,7 +1591,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     Text = $"{i + 1}.  {_visibleChoices[i].Text}",
                     Foreground = ChoiceBrush,
                     FontFamily = new FontFamily("Georgia"),
-                    FontSize = 20,
+                    FontSize = 16,
                     Margin = new Thickness(12, 0, 0, 4),
                     TextTrimming = TextTrimming.CharacterEllipsis,
                     Cursor = Cursors.Hand,

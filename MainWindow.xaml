@@ -650,7 +650,7 @@
                                    Foreground="#C8A96A"
                                    FontFamily="Georgia"
                                    FontWeight="Bold"
-                                   FontSize="20"/>
+                                   FontSize="18"/>
 
                         <!-- Shown when the player has items to offer -->
                         <TextBlock x:Name="DialogueItemHint"
@@ -666,7 +666,7 @@
                     <TextBlock x:Name="DialogueLineText"
                                Foreground="#DDD4C3"
                                FontFamily="Georgia"
-                               FontSize="22"
+                               FontSize="16"
                                LineHeight="30"
                                TextWrapping="Wrap"
                                Margin="0,2,0,10"/>

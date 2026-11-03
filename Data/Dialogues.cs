@@ -67,12 +67,15 @@ namespace The_Mansion.Data
         // =========================================================
         // KING HAUTAIN
         // FountainCloseup scene, ACT on the gold coins
+        //
+        // IMPORTANT:
+        // Maximum of 5 player replies/choices on any dialogue node.
         // =========================================================
 
         public static Dialogue HautainCoins { get; } =
             NewDialogue("HautainCoins", "King Hautain")
                 .Portrait("Assets/Characters/Hautain.png")
-                .StandAt(495, 205, 285) // On the big lily pad.
+                .StandAt(495, 205, 285)
 
                 .StartAt(p =>
                     p.HasFlag("DefeatedHautain")
@@ -102,19 +105,20 @@ namespace The_Mansion.Data
                     "keepit")
 
                 .OnOtherItems(
-                    "\"What is THIS?\" Hautain peers suspiciously at the {item}. "
+                    "\"What is THIS?\" Hautain inspects the {item}. "
                     + "\"The Crown does not accept bribes.\" "
                     + "He pauses. "
                     + "\"...Is it valuable?\"")
 
                 // =====================================================
-                // FIRST MEETING
+                // FIRST ENCOUNTER
+                // 5 choices exactly.
                 // =====================================================
 
                 .Line(
                     "start",
                     "\"HALT!\" "
-                    + "A tiny crowned figure rises between the lily pads and points a sceptre at your hand. "
+                    + "A tiny crowned figure rises between the lily pads and levels a sceptre at your hand. "
                     + "\"Remove your grasping extremity from the Royal Treasury! "
                     + "You stand before Hautain the First, Keeper of the Deep Basin, "
                     + "Lord of the Seven Lily Pads, Defender of the Western Drain, "
@@ -126,7 +130,7 @@ namespace The_Mansion.Data
                         "frogInsult")
 
                     .Choice(
-                        "Forgive me, Your Majesty. I didn't realise the fountain was occupied.",
+                        "Forgive me, Your Majesty. I didn't realise.",
                         "apology")
 
                     .Choice(
@@ -134,7 +138,7 @@ namespace The_Mansion.Data
                         "treasury")
 
                     .Choice(
-                        "Surely the Crown can spare a coin for a loyal subject.",
+                        "Surely the Crown can spare one coin for a loyal subject.",
                         "loyalSubject",
                         onlyIf: p => p.Wits >= 12)
 
@@ -149,12 +153,13 @@ namespace The_Mansion.Data
                         })
 
                 // =====================================================
-                // MAIN MENU
+                // MAIN AUDIENCE MENU
+                // Maximum 5.
                 // =====================================================
 
                 .Line(
                     "menu",
-                    "\"Well?\" Hautain draws himself up to his full and admittedly limited height. "
+                    "\"Well?\" Hautain draws himself up. "
                     + "\"You remain within the Royal Presence. "
                     + "Try to make better use of it.\"")
 
@@ -163,7 +168,7 @@ namespace The_Mansion.Data
                         "kingdom")
 
                     .Choice(
-                        "Why are the coins yours?",
+                        "Why are those coins yours?",
                         "treasury")
 
                     .Choice(
@@ -175,26 +180,22 @@ namespace The_Mansion.Data
                         "frontDoor")
 
                     .Choice(
-                        "You're still just a frog.",
-                        "frogInsult")
-
-                    .Choice(
                         "I'll be going.",
                         "leave")
 
                 // =====================================================
-                // THE ROYAL TREASURY
+                // THE TREASURY
                 // =====================================================
 
                 .Line(
                     "treasury",
                     "\"Tribute.\" "
-                    + "Hautain gestures proudly toward the coins beneath the water. "
+                    + "Hautain gestures toward the coins beneath the water. "
                     + "\"Deposited by travellers, pilgrims, petitioners, "
                     + "and one extremely careless chimney sweep.\"")
 
                     .Choice(
-                        "People throw coins into fountains to make wishes.",
+                        "They're wishing coins.",
                         "wishes")
 
                     .Choice(
@@ -202,14 +203,21 @@ namespace The_Mansion.Data
                         "foundThem")
 
                     .Choice(
-                        "Then the coins belong to the Crown.",
+                        "Then they belong to the Crown.",
                         "recognise")
+
+                    .Choice(
+                        "Tell me about your kingdom.",
+                        "kingdom")
+
+                    .Choice(
+                        "Never mind.",
+                        "menu")
 
                 .Line(
                     "wishes",
-                    "Hautain pauses. "
-                    + "\"Yes. Their petitions were received.\" "
-                    + "He glances toward the water. "
+                    "\"Yes. Their petitions were received.\" "
+                    + "Hautain glances at the water. "
                     + "\"The Crown regrets that fulfilment remains subject to staffing limitations.\"")
 
                     .Choice(
@@ -217,40 +225,52 @@ namespace The_Mansion.Data
                         "staffing")
 
                     .Choice(
-                        "At least somebody heard the wishes.",
+                        "At least somebody heard them.",
                         "heardWishes")
 
                     .Choice(
-                        "Convenient.",
+                        "That's convenient.",
                         "menu")
 
                 .Line(
                     "staffing",
-                    "\"The King presently occupies every major office of state.\"")
+                    "\"The King currently occupies every major office of state.\"")
 
                     .Choice(
                         "Every office?",
                         "offices")
 
+                    .Choice(
+                        "Sounds efficient.",
+                        "efficient")
+
+                    .Choice(
+                        "Sounds lonely.",
+                        "lonely")
+
                 .Line(
                     "offices",
                     "\"Monarch. Treasurer. Magistrate. Ambassador. "
                     + "Minister of Drainage. Commander of the Royal Guard.\" "
-                    + "Hautain clears his throat. "
+                    + "He clears his throat. "
                     + "\"And, owing to recent budgetary constraints, Royal Guard.\"")
 
                     .Choice(
-                        "So you don't have any guards.",
+                        "So you have no guards.",
                         "noGuards")
 
                     .Choice(
                         "Very efficient.",
                         "efficient")
 
+                    .Choice(
+                        "Long live the bureaucracy.",
+                        "efficient")
+
                 .Line(
                     "noGuards",
                     "\"The Crown has never required guards against anyone possessing manners.\" "
-                    + "He narrows his eyes. "
+                    + "Hautain narrows his eyes. "
                     + "\"Do not force a constitutional review.\"")
 
                     .Choice(
@@ -261,11 +281,13 @@ namespace The_Mansion.Data
                         "I'd like to see you try.",
                         "challenge")
 
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
                 .Line(
                     "efficient",
-                    "\"Precisely!\" "
-                    + "Hautain sits straighter. "
-                    + "\"At last, someone with an elementary understanding of government.\"")
+                    "\"Precisely! At last, someone with an elementary understanding of government.\"")
 
                     .Choice(
                         "Long live the King.",
@@ -275,11 +297,14 @@ namespace The_Mansion.Data
                         "Does the government provide refreshments?",
                         "refreshments")
 
+                    .Choice(
+                        "Let's talk about something else.",
+                        "menu")
+
                 .Line(
                     "refreshments",
                     "\"The banquet department is undergoing restructuring.\" "
-                    + "A fly passes overhead. "
-                    + "Hautain watches it until it disappears. "
+                    + "A fly passes overhead. Hautain watches it disappear. "
                     + "\"Extensive restructuring.\"")
 
                     .Choice(
@@ -288,8 +313,7 @@ namespace The_Mansion.Data
 
                 .Line(
                     "heardWishes",
-                    "For a moment Hautain's royal performance softens. "
-                    + "\"A king who does not hear his subjects is merely a hat occupying a chair.\" "
+                    "\"A king who does not hear his subjects is merely a hat occupying a chair.\" "
                     + "He taps his crown. "
                     + "\"This is a very good hat.\"")
 
@@ -298,23 +322,43 @@ namespace The_Mansion.Data
                         "recognise")
 
                     .Choice(
-                        "I'll leave you to your duties.",
+                        "That's surprisingly wise.",
+                        "wise")
+
+                    .Choice(
+                        "I'll leave you to it.",
                         "leave")
 
                 .Line(
+                    "wise",
+                    "\"Surprisingly?\" "
+                    + "Hautain squints at you. "
+                    + "\"The compliment arrives carrying an insult under its coat.\"")
+
+                    .Choice(
+                        "Fair.",
+                        "menu")
+
+                    .Choice(
+                        "My apologies, Your Majesty.",
+                        "apology")
+
+                .Line(
                     "foundThem",
-                    "\"FOUND them?\" "
-                    + "Hautain recoils. "
-                    + "\"You unlicensed turnip, possession is a vulgar concept! "
-                    + "The currency is held in trust by the sovereign authority of the fountain.\"")
+                    "\"FOUND them? You unlicensed turnip! "
+                    + "The coins are held in trust by the sovereign authority of the fountain!\"")
 
                     .Choice(
                         "Which is you.",
                         "authority")
 
                     .Choice(
-                        "That sounds exactly like finding them.",
+                        "Still sounds like finding them.",
                         "frogInsult")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
 
                 .Line(
                     "authority",
@@ -323,6 +367,10 @@ namespace The_Mansion.Data
                     .Choice(
                         "How many members voted?",
                         "vote")
+
+                    .Choice(
+                        "Long live the King.",
+                        "recognise")
 
                 .Line(
                     "vote",
@@ -333,7 +381,7 @@ namespace The_Mansion.Data
                         "efficient")
 
                 // =====================================================
-                // HAUTAIN'S KINGDOM
+                // KINGDOM
                 // =====================================================
 
                 .Line(
@@ -351,14 +399,20 @@ namespace The_Mansion.Data
                         "kingdomInsult")
 
                     .Choice(
-                        "What happened to your subjects?",
+                        "Where are your subjects?",
                         "subjects")
+
+                    .Choice(
+                        "What's the Western Drain?",
+                        "westernDrain")
+
+                    .Choice(
+                        "Let's discuss something else.",
+                        "menu")
 
                 .Line(
                     "kingdomPraise",
-                    "\"Finally!\" "
-                    + "Hautain points his sceptre toward you. "
-                    + "\"The Crown recognises this rare outbreak of judgement.\"")
+                    "\"Finally! The Crown recognises this rare outbreak of judgement.\"")
 
                     .Choice(
                         "You're welcome.",
@@ -377,42 +431,74 @@ namespace The_Mansion.Data
                         "frogInsult")
 
                 .Line(
-                    "subjects",
-                    "Hautain looks across the quiet water. "
-                    + "\"Elsewhere.\" "
-                    + "A pause. "
-                    + "\"The affairs of private citizens are not discussed by the Crown.\"")
+                    "westernDrain",
+                    "\"Site of the Crown's greatest military campaign.\"")
 
                     .Choice(
-                        "Are you alone here?",
-                        "alone")
+                        "Against whom?",
+                        "drainEnemy")
 
                     .Choice(
-                        "Of course.",
+                        "Sounds important.",
                         "menu")
 
                 .Line(
-                    "alone",
-                    "\"A sovereign is never alone.\" "
-                    + "Hautain adjusts his crown. "
-                    + "\"A sovereign is... temporarily without court.\"")
+                    "drainEnemy",
+                    "\"An invading force possessing six legs and no respect for sovereign borders.\"")
 
                     .Choice(
-                        "That sounds rather lonely.",
+                        "Ants?",
+                        "ants")
+
+                .Line(
+                    "ants",
+                    "\"The Crown does not dignify insurgents by naming them.\"")
+
+                    .Choice(
+                        "Definitely ants.",
+                        "menu")
+
+                .Line(
+                    "subjects",
+                    "Hautain gazes across the still fountain. "
+                    + "\"Elsewhere.\" "
+                    + "He straightens his crown. "
+                    + "\"The private affairs of citizens are not discussed by the Crown.\"")
+
+                    .Choice(
+                        "Are you alone here?",
                         "lonely")
 
                     .Choice(
-                        "I see.",
+                        "Understood.",
                         "menu")
 
                 .Line(
                     "lonely",
+                    "\"A sovereign is never alone.\" "
+                    + "A pause. "
+                    + "\"A sovereign is temporarily without court.\"")
+
+                    .Choice(
+                        "That sounds lonely.",
+                        "lonelyTruth")
+
+                    .Choice(
+                        "Then consider yourself witnessed.",
+                        "recognise")
+
+                    .Choice(
+                        "I should leave you to your duties.",
+                        "leave")
+
+                .Line(
+                    "lonelyTruth",
                     "\"Kingship is not intended to be comfortable.\" "
-                    + "He taps the sceptre against the lily pad. "
+                    + "Hautain taps his sceptre against the lily pad. "
                     + "\"It is intended to be witnessed.\"")
 
                     .Choice(
-                        "Then consider yourself witnessed, Your Majesty.",
+                        "Then I witness King Hautain.",
                         "recognise")
 
                     .Choice(
@@ -420,24 +506,23 @@ namespace The_Mansion.Data
                         "leave")
 
                 // =====================================================
-                // RESPECT / APOLOGY
+                // APOLOGY / RECOGNITION
                 // =====================================================
 
                 .Line(
                     "apology",
                     "Hautain lowers his sceptre by approximately half an inch. "
-                    + "\"An apology offered before punishment. "
-                    + "An uncommon luxury.\" "
+                    + "\"An apology offered before punishment. An uncommon luxury.\" "
                     + "He studies you. "
                     + "\"You may retain both hands, provided they remain outside the Treasury.\"")
 
                     .Choice(
-                        "Very generous.",
-                        "mercy")
-
-                    .Choice(
                         "Thank you, Your Majesty.",
                         "recognise")
+
+                    .Choice(
+                        "Very generous.",
+                        "mercy")
 
                     .Choice(
                         "I'll leave the coins alone.",
@@ -453,12 +538,15 @@ namespace The_Mansion.Data
                         "I'll remember.",
                         "recognise")
 
+                    .Choice(
+                        "I'll leave you to it.",
+                        "leave")
+
                 .Line(
                     "recognise",
-                    "Hautain's posture becomes noticeably grander. "
-                    + "\"Good. The sovereignty of the fountain is formally recognised.\" "
-                    + "He gestures to the stone edge. "
-                    + "\"You may remain within the Royal Presence.\"")
+                    "Hautain grows visibly taller. "
+                    + "Perhaps by a millimetre. "
+                    + "\"Good. The sovereignty of the fountain is formally recognised.\"")
 
                     .Choice(
                         "Long live King Hautain.",
@@ -469,8 +557,12 @@ namespace The_Mansion.Data
                         "kingdom")
 
                     .Choice(
-                        "What do you know about the Mansion?",
+                        "What about the Mansion?",
                         "mansion")
+
+                    .Choice(
+                        "Advice about the front door?",
+                        "frontDoor")
 
                     .Choice(
                         "I'll take my leave.",
@@ -478,28 +570,26 @@ namespace The_Mansion.Data
 
                 .Line(
                     "royalApproval",
-                    "\"Acceptable.\" "
-                    + "Hautain nods. "
-                    + "\"The Crown's opinion of you has improved from "
+                    "\"The Crown's opinion of you has improved from "
                     + "'probable thief' to 'adequately civilised visitor.'\"")
 
                     .Choice(
-                        "I'll take it.",
+                        "High praise indeed.",
                         "menu")
 
                 // =====================================================
-                // WITS / ROYAL COIN
+                // WITS PATH / ROYAL GOLD COIN
                 // =====================================================
 
                 .Line(
                     "loyalSubject",
                     "Hautain freezes. "
                     + "\"A loyal... subject?\" "
-                    + "He looks over one shoulder, then the other. "
+                    + "He looks behind himself. "
                     + "\"You refer to yourself?\"")
 
                     .Choice(
-                        "I recognise the sovereignty of King Hautain.",
+                        "I recognise King Hautain's sovereignty.",
                         "royalCoin",
                         effect: p =>
                         {
@@ -508,8 +598,12 @@ namespace The_Mansion.Data
                         })
 
                     .Choice(
-                        "It seemed like the easiest way to get a coin.",
+                        "It sounded like an easy way to get a coin.",
                         "badFlattery")
+
+                    .Choice(
+                        "Never mind.",
+                        "menu")
 
                 .Line(
                     "badFlattery",
@@ -525,17 +619,14 @@ namespace The_Mansion.Data
                         })
 
                     .Choice(
-                        "Never mind.",
-                        "leave")
+                        "Forget it.",
+                        "menu")
 
                 .Line(
                     "royalCoin",
-                    "Hautain reaches beneath the water and retrieves a single gold coin. "
-                    + "He presents it atop both webbed hands. "
-                    + "\"Then let it be recorded that the Crown acknowledges "
-                    + "its first new subject in a great many seasons.\" "
-                    + "He clears his throat. "
-                    + "\"This is not payment. It is a Royal Gold Coin, "
+                    "Hautain retrieves one coin and presents it solemnly. "
+                    + "\"The Crown acknowledges its first new subject in a great many seasons. "
+                    + "This is not payment. It is a Royal Gold Coin, "
                     + "bestowed as a mark of sovereign confidence.\"")
 
                     .Choice(
@@ -561,38 +652,40 @@ namespace The_Mansion.Data
                 .Line(
                     "acceptCoin",
                     "\"Speak well of your king when circumstances permit.\" "
-                    + "Hautain lowers his voice. "
+                    + "He lowers his voice. "
                     + "\"And occasionally when they do not.\"")
 
                     .Choice(
-                        "Long live King Hautain.")
+                        "Long live the King!")
 
                 // =====================================================
-                // FROG INSULT ROUTE
+                // FROG / SIZE INSULTS
                 // =====================================================
 
                 .Line(
                     "frogInsult",
-                    "\"FROG?!\" "
-                    + "Hautain's crown nearly slips as he rises. "
-                    + "\"Frog is a BIOLOGICAL DESCRIPTION, not a form of address, "
+                    "\"FROG?! Frog is a BIOLOGICAL DESCRIPTION, not a form of address, "
                     + "you uncultivated drainpipe!\"",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "Fine. Your Majesty the Frog.",
-                        "frogInsultAgain")
+                        "frogAgain")
 
                     .Choice(
-                        "My mistake, Your Majesty.",
+                        "My apologies, Your Majesty.",
                         "apology")
 
                     .Choice(
                         "You're very sensitive about this.",
                         "sensitive")
 
+                    .Choice(
+                        "I'll leave.",
+                        "leave")
+
                 .Line(
-                    "frogInsultAgain",
+                    "frogAgain",
                     "\"Yes, I am a frog! "
                     + "You are apparently a primate. "
                     + "Only one of us has managed to make something of it!\"",
@@ -607,17 +700,21 @@ namespace The_Mansion.Data
                         "menu")
 
                     .Choice(
-                        "I apologise.",
-                        "apology")
+                        "Let's fight.",
+                        "challenge")
 
                 .Line(
                     "sensitive",
-                    "\"I am not sensitive! "
-                    + "The Crown merely maintains standards of diplomatic address!\"")
+                    "\"I am NOT sensitive! "
+                    + "The Crown maintains standards of diplomatic address!\"")
 
                     .Choice(
                         "Of course, Your Majesty.",
                         "menu")
+
+                    .Choice(
+                        "Whatever you say, frog.",
+                        "frogAgain")
 
                 .Line(
                     "sizeInsult",
@@ -631,10 +728,14 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "Still six inches.",
-                        "sizeInsultAgain")
+                        "sixInches")
+
+                    .Choice(
+                        "Let's settle this.",
+                        "challenge")
 
                 .Line(
-                    "sizeInsultAgain",
+                    "sixInches",
                     "\"I require six inches to govern a kingdom! "
                     + "You require nearly six feet to steal from a fountain!\"",
                     portrait: "Assets/Characters/Hautain_Attack.png")
@@ -644,33 +745,34 @@ namespace The_Mansion.Data
                         "menu")
 
                     .Choice(
-                        "Let's see what six inches can do.",
+                        "Prove you're a king, then.",
                         "challenge")
 
                 // =====================================================
-                // CHALLENGE / FIGHT
+                // CHALLENGE / COMBAT
                 // =====================================================
 
                 .Line(
                     "challenge",
                     "\"You threaten a sovereign on sovereign territory? "
-                    + "Even GEESE understand jurisdiction!\" "
-                    + "Hautain lowers himself into a fighting stance.",
+                    + "Even GEESE understand jurisdiction!\"",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
-                        "I don't want to fight you.",
+                        "I don't want to fight.",
                         "apology")
 
                     .Choice(
                         "Do your worst.",
                         "duck")
 
+                    .Choice(
+                        "Actually, I'll leave.",
+                        "leave")
+
                 .Line(
                     "duck",
-                    "\"Do my worst?\" "
-                    + "Hautain levels his sceptre. "
-                    + "\"I once negotiated with a duck!\"",
+                    "\"Do my worst? I once negotiated with a DUCK!\"",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
@@ -683,12 +785,12 @@ namespace The_Mansion.Data
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
-                        "All right. Let's fight.",
+                        "Let's fight.",
                         "fight",
                         startsFight: "AngryHautain")
 
                     .Choice(
-                        "Actually, I think I'll apologise.",
+                        "Fair enough. I apologise.",
                         "apology")
 
                 .Line(
@@ -698,14 +800,14 @@ namespace The_Mansion.Data
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                 // =====================================================
-                // STEALING THE COINS
+                // COIN THEFT
                 // =====================================================
 
                 .Line(
                     "grab",
-                    "You plunge your hand into the fountain and scoop up the gold. "
-                    + "Hautain stares at you in absolute disbelief. "
-                    + "Then the tiny sceptre rises.",
+                    "You scoop the gold from the fountain. "
+                    + "Hautain stares at your hand in stunned silence. "
+                    + "Then the sceptre rises.",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
@@ -713,23 +815,26 @@ namespace The_Mansion.Data
                         "onlyCoins")
 
                     .Choice(
-                        "I need them more than you do.",
+                        "I need them more than you.",
                         "needCoins")
+
+                    .Choice(
+                        "I'll put them back.",
+                        "returnInstruction")
 
                     .Choice(
                         "(Run!)",
                         "grudge")
 
                     .Choice(
-                        "(Stand your ground and fight!)",
+                        "(Fight!)",
                         "fight",
                         startsFight: "AngryHautain")
 
                 .Line(
                     "onlyCoins",
-                    "\"ONLY COINS?!\" "
-                    + "Hautain points furiously toward your pocket. "
-                    + "\"You steal from a fountain? "
+                    "\"ONLY COINS?! "
+                    + "You steal from a fountain? "
                     + "Even MAGPIES possess the decency to have feathers!\"",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
@@ -741,12 +846,15 @@ namespace The_Mansion.Data
                         "They're mine now.",
                         "grudge")
 
+                    .Choice(
+                        "I'll return them.",
+                        "returnInstruction")
+
                 .Line(
                     "coinMeaning",
                     "\"They are petitions! Wishes! Promises! "
-                    + "Proof that travellers once stopped here and believed "
-                    + "something might answer them!\" "
-                    + "His voice drops. "
+                    + "Proof that travellers once stopped here and believed something might answer them!\" "
+                    + "His voice becomes quieter. "
                     + "\"You have stolen from more than a king.\"")
 
                     .Choice(
@@ -755,7 +863,7 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "I still need them.",
-                        "grudge")
+                        "needCoins")
 
                 .Line(
                     "needCoins",
@@ -772,10 +880,8 @@ namespace The_Mansion.Data
 
                 .Line(
                     "returnInstruction",
-                    "\"Then restore the Royal Treasury through the proper diplomatic channel!\" "
-                    + "Hautain points at your belongings. "
-                    + "\"The ITEM button, you long-legged architectural mistake! "
-                    + "The Crown will wait.\"")
+                    "\"Then restore the Treasury through the proper diplomatic channel! "
+                    + "Present the coins to the Crown.\"")
 
                     .Choice(
                         "Understood.")
@@ -784,24 +890,22 @@ namespace The_Mansion.Data
                     "grudge",
                     "\"GO, THEN! "
                     + "May every chair you sit upon be VERY SLIGHTLY DAMP! "
-                    + "The Crown remembers every debt, every insult, "
-                    + "and every muddy footprint!\" "
+                    + "The Crown remembers!\" "
                     + "(Royal Grudge gained)",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
-                        "(Retreat from the fountain)")
+                        "(Retreat)")
 
                 // =====================================================
-                // RETURN WHILE HOLDING STOLEN COINS
+                // THIEF RETURNS
                 // =====================================================
 
                 .Line(
                     "thiefReturns",
-                    "Hautain rises slowly from behind a lily pad. "
-                    + "\"The pocket-fingered gutter heron returns.\" "
-                    + "He raises his sceptre. "
-                    + "\"Have you brought the Royal Treasury?\"",
+                    "Hautain rises from behind a lily pad. "
+                    + "\"The pocket-fingered gutter heron returns. "
+                    + "Have you brought the Royal Treasury?\"",
                     portrait: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
@@ -821,11 +925,14 @@ namespace The_Mansion.Data
                         "fight",
                         startsFight: "AngryHautain")
 
+                    .Choice(
+                        "Never mind.",
+                        "leave")
+
                 .Line(
                     "apologyNoCoins",
-                    "\"The Crown acknowledges your apology.\" "
-                    + "Hautain glances toward your pockets. "
-                    + "\"The Crown also observes that apologies are considerably lighter than gold.\"")
+                    "\"The Crown acknowledges the apology. "
+                    + "The Crown also observes that apologies are considerably lighter than gold.\"")
 
                     .Choice(
                         "I'll return them.",
@@ -837,25 +944,22 @@ namespace The_Mansion.Data
 
                 .Line(
                     "stillThief",
-                    "\"Keep them, then! "
+                    "\"Then keep them! "
                     + "Perhaps holding something of value will constitute a new experience!\"")
 
                     .Choice(
                         "Goodbye, Your Majesty.")
 
                 // =====================================================
-                // RETURN THE STOLEN COINS
+                // RETURNING STOLEN GOLD
                 // =====================================================
 
                 .Line(
                     "returned",
-                    "Hautain watches each coin sink back beneath the dark water. "
-                    + "He counts them once. "
-                    + "Then again. "
-                    + "The sceptre finally lowers. "
-                    + "\"The Royal Treasury is restored.\" "
-                    + "A long silence follows. "
-                    + "\"Returning what was stolen requires more character than taking it.\" "
+                    "Hautain watches the coins sink beneath the water. "
+                    + "He counts them twice before lowering his sceptre. "
+                    + "\"The Royal Treasury is restored. "
+                    + "Returning what was stolen requires more character than taking it.\" "
                     + "(Royal Grudge lifted)")
 
                     .Choice(
@@ -872,10 +976,9 @@ namespace The_Mansion.Data
 
                 .Line(
                     "forgive",
-                    "\"Forgiveness is not an eraser.\" "
-                    + "Hautain considers you. "
-                    + "\"But it may serve as a bridge.\" "
-                    + "He extends the tiny sceptre. "
+                    "\"Forgiveness is not an eraser. "
+                    + "But it may serve as a bridge.\" "
+                    + "He extends his sceptre. "
                     + "\"The Crown is prepared to cross halfway.\"")
 
                     .Choice(
@@ -883,30 +986,28 @@ namespace The_Mansion.Data
 
                 .Line(
                     "even",
-                    "\"The Treasury is even.\" "
-                    + "Hautain taps the lily pad with his sceptre. "
-                    + "\"Trust is a separate account.\"")
+                    "\"The Treasury is even. "
+                    + "Trust is a separate account.\"")
 
                     .Choice(
                         "Fair enough.")
 
                 .Line(
                     "restored",
-                    "Hautain inclines his crowned head. "
-                    + "\"You are restored to the good opinion of the fountain.\"")
+                    "\"You are restored to the good opinion of the fountain.\"")
 
                     .Choice(
                         "(Bow and withdraw)")
 
                 // =====================================================
-                // RETURN OF A RECOGNISED SUBJECT
+                // RECOGNISED SUBJECT RETURNS
+                // Maximum 5.
                 // =====================================================
 
                 .Line(
                     "subjectReturns",
-                    "Hautain rises to his full height upon the lily pad. "
-                    + "\"The recognised subject returns!\" "
-                    + "He looks toward the empty path behind you. "
+                    "\"The recognised subject returns!\" "
+                    + "Hautain looks at the empty path behind you. "
                     + "\"Your ceremonial escort is regrettably delayed.\"")
 
                     .Choice(
@@ -918,11 +1019,11 @@ namespace The_Mansion.Data
                         "duties")
 
                     .Choice(
-                        "What do you know about the Mansion?",
+                        "Tell me about the Mansion.",
                         "mansion")
 
                     .Choice(
-                        "Any advice about the front door?",
+                        "Advice about the front door?",
                         "frontDoor")
 
                     .Choice(
@@ -931,32 +1032,37 @@ namespace The_Mansion.Data
 
                 .Line(
                     "subjectGreeting",
-                    "\"Acceptable.\" "
-                    + "Hautain settles back onto his lily pad. "
-                    + "\"The realm remains damp but sovereign.\"")
+                    "\"Acceptable. "
+                    + "The realm remains damp but sovereign.\"")
 
                     .Choice(
                         "Glad to hear it.")
 
                 .Line(
                     "duties",
-                    "\"For the present: do not steal from the Crown, "
-                    + "discourage herons, and speak favourably of the drainage.\"")
+                    "\"Do not steal from the Crown, discourage herons, "
+                    + "and speak favourably of the drainage.\"")
 
                     .Choice(
                         "I can manage two of those.",
                         "twoDuties")
 
+                    .Choice(
+                        "Consider it done.",
+                        "menu")
+
                 .Line(
                     "twoDuties",
-                    "Hautain studies you. "
-                    + "\"The Crown elects not to inquire.\"")
+                    "\"The Crown elects not to inquire.\"")
 
                     .Choice(
                         "(Bow and leave)")
 
                 // =====================================================
                 // THE MANSION
+                //
+                // Split residents into a submenu so this never exceeds
+                // five replies.
                 // =====================================================
 
                 .Line(
@@ -967,100 +1073,163 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "Is it dangerous?",
-                        "dangerousMansion")
+                        "mansionDanger")
 
                     .Choice(
-                        "Do you know Quazimod?",
+                        "What do you think of its residents?",
+                        "residentMenu")
+
+                    .Choice(
+                        "What about Quazimod?",
                         "quazimod")
 
                     .Choice(
-                        "Anyone else I should know about?",
-                        "residents")
+                        "That's all I needed.",
+                        "menu")
 
                 .Line(
-                    "dangerousMansion",
-                    "\"Naturally.\" "
-                    + "Hautain looks toward the house. "
-                    + "\"Enter if you must. "
-                    + "But do not allow the place to convince you that it owns you.\"")
+                    "mansionDanger",
+                    "\"Naturally. "
+                    + "Enter if you must, but do not allow the place "
+                    + "to convince you that it owns you.\"")
 
                     .Choice(
                         "What does that mean?",
                         "ominous")
 
+                    .Choice(
+                        "I'll remember that.",
+                        "menu")
+
                 .Line(
                     "ominous",
-                    "\"It means precisely what was said.\" "
-                    + "Hautain settles back onto his lily pad. "
-                    + "\"The Crown does not repeat ominous warnings. "
+                    "\"Exactly what was said. "
+                    + "The Crown does not repeat ominous warnings. "
                     + "It diminishes them.\"")
 
                     .Choice(
-                        "Understood.")
-
-                .Line(
-                    "quazimod",
-                    "\"The crooked coat-rack from the house?\" "
-                    + "Hautain considers the question. "
-                    + "\"Excellent manners. Disturbing posture.\"")
-
-                    .Choice(
-                        "That sounds like him.",
+                        "Understood.",
                         "menu")
 
                 .Line(
-                    "residents",
-                    "\"There is the enormous kitchen despot, "
-                    + "the thin one who looks personally offended by soup, "
-                    + "the airborne tavern incident, "
-                    + "and the eight-legged Department of Unnecessary Infrastructure.\"")
+                    "residentMenu",
+                    "\"The Crown maintains comprehensive diplomatic opinions.\"")
 
                     .Choice(
-                        "Magnus, Severin, Ebria and Velvet?",
-                        "correctResidents")
-
-                .Line(
-                    "correctResidents",
-                    "\"The Crown sees you have already begun the diplomatic briefings.\"")
+                        "Magnus and Severin?",
+                        "chefs")
 
                     .Choice(
-                        "What about Pip?",
+                        "Ebria?",
+                        "ebria")
+
+                    .Choice(
+                        "Pip?",
                         "pip")
 
                     .Choice(
-                        "And Sola?",
-                        "sola")
+                        "Velvet and Sola?",
+                        "velvetSola")
 
                     .Choice(
-                        "What about Gréll?",
+                        "Gréll?",
                         "grell")
 
                 .Line(
+                    "chefs",
+                    "\"The enormous kitchen despot and the thin one "
+                    + "who looks personally offended by soup.\"")
+
+                    .Choice(
+                        "Accurate.",
+                        "residentMenu")
+
+                    .Choice(
+                        "You don't like them?",
+                        "chefOpinion")
+
+                .Line(
+                    "chefOpinion",
+                    "\"The Crown neither likes nor dislikes foreign powers. "
+                    + "It merely notes that Magnus still owes the Treasury three snails.\"")
+
+                    .Choice(
+                        "I'll let him know.",
+                        "residentMenu")
+
+                .Line(
+                    "ebria",
+                    "\"The airborne tavern incident.\"")
+
+                    .Choice(
+                        "That's Ebria.",
+                        "residentMenu")
+
+                    .Choice(
+                        "Anything else?",
+                        "ebriaMore")
+
+                .Line(
+                    "ebriaMore",
+                    "\"She once attempted to annex the Eastern Lily while intoxicated.\"")
+
+                    .Choice(
+                        "Did she succeed?",
+                        "ebriaAnnex")
+
+                .Line(
+                    "ebriaAnnex",
+                    "\"She fell in.\"")
+
+                    .Choice(
+                        "Sounds like Ebria.",
+                        "residentMenu")
+
+                .Line(
                     "pip",
-                    "\"The deceased librarian? "
-                    + "Proper manners. "
+                    "\"The deceased librarian? Proper manners. "
                     + "Terrible military potential.\"")
 
                     .Choice(
-                        "Fair.",
-                        "menu")
+                        "That's Pip.",
+                        "residentMenu")
 
                 .Line(
-                    "sola",
-                    "\"The furry assassin.\"")
+                    "velvetSola",
+                    "\"Velvet is the eight-legged Department of Unnecessary Infrastructure.\" "
+                    + "Hautain lowers his voice. "
+                    + "\"The cat is the furry assassin.\"")
 
                     .Choice(
-                        "She's a cat.",
+                        "Sola is just a cat.",
                         "cat")
+
+                    .Choice(
+                        "Velvet means well.",
+                        "velvetMeansWell")
+
+                    .Choice(
+                        "Anything else?",
+                        "residentMenu")
 
                 .Line(
                     "cat",
                     "\"I am aware of her propaganda.\"")
 
                     .Choice(
-                        "Right.",
-                        "menu")
+                        "Of course.",
+                        "residentMenu")
 
+                .Line(
+                    "velvetMeansWell",
+                    "\"Most infrastructure does. "
+                    + "It remains infrastructure.\"")
+
+                    .Choice(
+                        "Fair enough.",
+                        "residentMenu")
+
+                // Gréll deliberately has no joke.
                 .Line(
                     "grell",
                     "\"That creature is forbidden from Crown territory.\"")
@@ -1069,12 +1238,25 @@ namespace The_Mansion.Data
                         "No ridiculous nickname?",
                         "grellSerious")
 
+                    .Choice(
+                        "Understood.",
+                        "residentMenu")
+
                 .Line(
                     "grellSerious",
                     "\"No.\"")
 
                     .Choice(
                         "Understood.",
+                        "residentMenu")
+
+                .Line(
+                    "quazimod",
+                    "\"The crooked coat-rack from the house? "
+                    + "Excellent manners. Disturbing posture.\"")
+
+                    .Choice(
+                        "That sounds like Quazimod.",
                         "menu")
 
                 // =====================================================
@@ -1085,37 +1267,59 @@ namespace The_Mansion.Data
                     "frontDoor",
                     "\"The door responds well to courtesy, "
                     + "poorly to force, and not at all to currency.\" "
-                    + "Hautain glances down at his treasury. "
+                    + "Hautain glances at his treasury. "
                     + "\"A respectable policy.\"")
 
                     .Choice(
                         "So I should knock politely?",
                         "doorAdvice")
 
+                    .Choice(
+                        "Can I bribe it?",
+                        "doorBribe")
+
+                    .Choice(
+                        "I'll work it out.",
+                        "menu")
+
                 .Line(
                     "doorAdvice",
-                    "\"You should ALWAYS knock politely.\" "
-                    + "He leans forward. "
-                    + "\"One never knows whether the door is listening.\"")
+                    "\"You should ALWAYS knock politely. "
+                    + "One never knows whether the door is listening.\"")
 
                     .Choice(
                         "That's not reassuring.",
                         "notReassuring")
+
+                    .Choice(
+                        "Good advice.",
+                        "menu")
+
+                .Line(
+                    "doorBribe",
+                    "\"No. "
+                    + "And if you attempt to use Crown currency for such vulgar purposes, "
+                    + "the Treasury will take a constitutional interest.\"")
+
+                    .Choice(
+                        "Noted.",
+                        "menu")
 
                 .Line(
                     "notReassuring",
                     "\"Reassurance is not a Crown service.\"")
 
                     .Choice(
-                        "Fair enough.")
+                        "Fair enough.",
+                        "menu")
 
                 // =====================================================
-                // RETURNING THE ROYAL GIFT
+                // PLAYER TRIES TO RETURN ROYAL GIFT
                 // =====================================================
 
                 .Line(
                     "keepit",
-                    "Hautain recoils from the offered Royal Gold Coin. "
+                    "Hautain recoils from the Royal Gold Coin. "
                     + "\"RETURN a royal gift?! "
                     + "Do you also return birthdays, you ill-bred puddle drinker?\"")
 
@@ -1129,10 +1333,9 @@ namespace The_Mansion.Data
 
                 .Line(
                     "giftMeaning",
-                    "\"The coin means the Crown judged you worthy of trust.\" "
-                    + "Hautain pushes it back toward you with his sceptre. "
-                    + "\"Spend it. Treasure it. Lose it foolishly if that is your custom. "
-                    + "But do not return it merely because you have forgotten what it means.\"")
+                    "\"It means the Crown judged you worthy of trust. "
+                    + "Spend it. Treasure it. Lose it foolishly if that is your custom. "
+                    + "But do not return it because you have forgotten what it means.\"")
 
                     .Choice(
                         "I'll keep it.",
@@ -1140,25 +1343,24 @@ namespace The_Mansion.Data
 
                 .Line(
                     "keepGift",
-                    "\"Good.\" "
-                    + "Hautain settles back onto the lily pad. "
-                    + "\"The matter is closed by Royal Decree.\"")
+                    "\"Good. "
+                    + "The matter is closed by Royal Decree.\"")
 
                     .Choice(
-                        "Long live King Hautain.")
+                        "Long live the King!")
 
                 // =====================================================
-                // AFTER DEFEATING HAUTAIN
+                // AFTER DEFEAT
+                // Maximum 4.
                 // =====================================================
 
                 .Line(
                     "beaten",
                     "King Hautain sits behind a torn lily leaf. "
-                    + "His sceptre is bent almost in half, "
+                    + "His sceptre is bent nearly in half, "
                     + "but his crown remains perfectly straight. "
-                    + "\"Congratulations. You have defeated a frog.\" "
-                    + "He glares at you. "
-                    + "\"I hope history gives you the statue you deserve.\"")
+                    + "\"Congratulations. You have defeated a frog. "
+                    + "I hope history gives you the statue you deserve.\"")
 
                     .Choice(
                         "Are you all right?",
@@ -1177,8 +1379,7 @@ namespace The_Mansion.Data
 
                 .Line(
                     "beatenConcern",
-                    "\"The Crown is bruised, humiliated, "
-                    + "and entirely operational.\" "
+                    "\"The Crown is bruised, humiliated, and entirely operational.\" "
                     + "Hautain tries to straighten the sceptre. "
                     + "It bends further. "
                     + "\"The sceptre has entered a period of reform.\"")
@@ -1202,7 +1403,7 @@ namespace The_Mansion.Data
                         "Can't argue with that.")
 
                 // =====================================================
-                // POLITE EXIT
+                // EXIT
                 // =====================================================
 
                 .Line(
@@ -1215,102 +1416,1249 @@ namespace The_Mansion.Data
                     .Choice(
                         "(Bow and step away)");
 
+        // =========================================================
+        // QUAZIMODO
+        // FrontDoor scene, ACT on the front doors
+        //
+        // ENTRY CONDITIONS:
+        // - Player follows the exceptionally polite dialogue route.
+        // - Player offers Royal Gold Coin.
+        // - Player offers Gold Coins.
+        // - Player offers Loose Change from the trunk.
+        // - Player defeats Quazimodo in combat.
+        //
+        // IMPORTANT:
+        // Maximum of 5 player replies/choices on any dialogue node.
+        // =========================================================
+
         public static Dialogue QuazimodoFrontDoor { get; } =
-    NewDialogue("QuazimodoFrontDoor", "Quazimodo")
-        .Portrait("Assets/Characters/Portraits/Quazimodo_portrait_framed.png")                     
-        .StandAt(60, 350, 400)                      
-        .StartAt(p => p.HasFlag("MetQuazimodo")
-            ? "again"
-            : "start")
+            NewDialogue("QuazimodoFrontDoor", "Quazimodo")
+                .Portrait("Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
+                .StandAt(60, 350, 400)
 
-        .Line(
-            "start",
-            "The door opens a fraction. A pale, crooked figure peers through the gap.")
-            .Choice(
-                "Hello. May I come inside?",
-                "polite",
-                effect: p => p.SetFlag("MetQuazimodo"))
-            .Choice(
-                "Are you the butler?",
-                "butler",
-                effect: p => p.SetFlag("MetQuazimodo"))
-            .Choice(
-                "What happened to you?",
-                "rude",
-                effect: p => p.SetFlag("MetQuazimodo"))
-            .Choice(
-                "Sorry. Wrong mansion.",
-                "leave",
-                effect: p => p.SetFlag("MetQuazimodo"))
+                .StartAt(p =>
+                    p.HasFlag("DefeatedQuazimodo")
+                        ? "defeated"
+                        : p.HasFlag("MetQuazimodo")
+                            ? "again"
+                            : "start")
 
-        .Line(
-            "polite",
-            "Quazimodo blinks. \"You said please. That places you above most of our visitors.\"")
-            .Choice(
-                "Is that a yes?",
-                "admit")
+                // =====================================================
+                // ITEMS OFFERED DURING THE CONVERSATION
+                // =====================================================
 
-        .Line(
-            "butler",
-            "\"Butler, porter, doorman, occasional exterminator. Titles multiply when staff do not.\"")
-            .Choice(
-                "Then may I come inside?",
-                "admit")
-            .Choice(
-                "Exterminator?",
-                "exterminator")
+                // Hautain's royal gift.
+                .OnItem(
+                    "Royal Gold Coin",
+                    "royalCoin",
+                    removeItem: true,
+                    effect: p =>
+                    {
+                        p.SetFlag("MetQuazimodo");
+                        p.SetFlag("PaidQuazimodo");
+                        p.SetFlag("FrontDoorOpen");
+                    })
 
-        .Line(
-            "exterminator",
-            "\"A regrettable duty. Some things enter the Mansion without being invited.\"")
-            .Choice(
-                "Was I invited?",
-                "admit")
-            .Choice(
-                "I think I'll remain outside.",
-                "leave")
+                // The fountain's ordinary gold coins.
+                .OnItem(
+                    "Gold Coins",
+                    "goldCoins",
+                    removeItem: true,
+                    effect: p =>
+                    {
+                        p.SetFlag("MetQuazimodo");
+                        p.SetFlag("PaidQuazimodo");
+                        p.SetFlag("FrontDoorOpen");
 
-        .Line(
-            "rude",
-            "Quazimodo studies you in silence. \"One might ask precisely the same of you.\"")
-            .Choice(
-                "Fair point. May I come inside?",
-                "admit")
-            .Choice(
-                "I deserved that.",
-                "admit")
-            .Choice(
-                "Never mind.",
-                "leave")
+                        // If these were stolen from Hautain, the Royal Grudge remains.
+                        // Paying Quazimodo does not repair the theft.
+                    })
 
-        .Line(
-            "admit",
-            "\"The door was not locked. It was considering you.\" Quazimodo pulls it open.")
-            .Choice(
-                "That's not reassuring.",
-                effect: p => p.SetFlag("FrontDoorOpen"))
-            .Choice(
-                "Thank you.",
-                effect: p => p.SetFlag("FrontDoorOpen"))
-            .Choice(
-                "Doors don't think.",
-                effect: p => p.SetFlag("FrontDoorOpen"))
+                // Loose change taken from the trunk.
+                .OnItem(
+                    "Loose Change",
+                    "looseChange",
+                    removeItem: true,
+                    effect: p =>
+                    {
+                        p.SetFlag("MetQuazimodo");
+                        p.SetFlag("PaidQuazimodo");
+                        p.SetFlag("FrontDoorOpen");
+                    })
 
-        .Line(
-            "leave",
-            "\"A sensible decision. Those rarely survive prolonged contact with this house.\"")
-            .Choice("Goodbye.")
+                .OnOtherItems(
+                    "Quazimodo examines the {item} without taking it. "
+                    + "\"No, thank you. The Mansion already contains one of those.\"")
 
-        .Line(
-            "again",
-            "Quazimodo opens the door a fraction. \"Have you finished standing outside?\"")
-            .Choice(
-                "Yes. Let me in.",
-                "admit")
-            .Choice(
-                "Not quite.",
-                "leave");
+                // =====================================================
+                // FIRST MEETING
+                // 5 choices exactly.
+                // =====================================================
 
+                .Line(
+                    "start",
+                    "The heavy door opens no wider than a handspan. "
+                    + "A pale, crooked figure peers through the gap. "
+                    + "One eye studies you. The other appears to be inspecting the weather.")
+
+                    .Choice(
+                        "Good evening. I apologise for disturbing you.",
+                        "politeOpening",
+                        effect: p => p.SetFlag("MetQuazimodo"))
+
+                    .Choice(
+                        "Hello. May I come inside?",
+                        "ordinaryRequest",
+                        effect: p => p.SetFlag("MetQuazimodo"))
+
+                    .Choice(
+                        "Are you the butler?",
+                        "butler",
+                        effect: p => p.SetFlag("MetQuazimodo"))
+
+                    .Choice(
+                        "What happened to you?",
+                        "rude",
+                        effect: p => p.SetFlag("MetQuazimodo"))
+
+                    .Choice(
+                        "Open the door or I'll open it myself.",
+                        "threat",
+                        effect: p => p.SetFlag("MetQuazimodo"))
+
+                // =====================================================
+                // EXCEPTIONALLY POLITE ROUTE
+                //
+                // Merely saying "please" is not enough.
+                // The player must remain patient, respectful, and
+                // willing to accept Quazimodo's authority at the door.
+                // =====================================================
+
+                .Line(
+                    "politeOpening",
+                    "Quazimodo blinks slowly. "
+                    + "\"An apology before a demand. How unconventional.\" "
+                    + "The door opens another inch. "
+                    + "\"State the nature of your disturbance.\"")
+
+                    .Choice(
+                        "I hoped to request shelter, if the household permits it.",
+                        "politePurpose")
+
+                    .Choice(
+                        "I would like to come inside, please.",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "I'm here to see whoever owns this place.",
+                        "ownerRequest")
+
+                    .Choice(
+                        "Never mind. I shouldn't have disturbed you.",
+                        "respectfulWithdrawal")
+
+                .Line(
+                    "politePurpose",
+                    "\"Shelter.\" "
+                    + "Quazimodo looks past you toward the grounds. "
+                    + "\"From the night, the weather, or something less accommodating?\"")
+
+                    .Choice(
+                        "I don't yet know. That is why I ask rather than presume.",
+                        "politeHonesty")
+
+                    .Choice(
+                        "From whatever is out here.",
+                        "outsideDanger")
+
+                    .Choice(
+                        "Does the reason matter?",
+                        "impatient")
+
+                    .Choice(
+                        "If the answer is no, I will leave peacefully.",
+                        "respectfulWithdrawal")
+
+                .Line(
+                    "politeHonesty",
+                    "Quazimodo studies you for several quiet seconds. "
+                    + "\"You admit ignorance, request permission, and have not once attempted "
+                    + "to place your foot in the doorway.\"")
+
+                    .Choice(
+                        "It is your doorway.",
+                        "finalCourtesy")
+
+                    .Choice(
+                        "I was raised to respect another person's home.",
+                        "finalCourtesy")
+
+                    .Choice(
+                        "Would putting my foot there help?",
+                        "footInDoor")
+
+                    .Choice(
+                        "I can wait while you decide.",
+                        "patientWait")
+
+                .Line(
+                    "patientWait",
+                    "\"Patience as well.\" "
+                    + "Quazimodo appears mildly troubled by this accumulation of manners. "
+                    + "\"You are making refusal administratively difficult.\"")
+
+                    .Choice(
+                        "Take whatever time you require.",
+                        "finalCourtesy")
+
+                    .Choice(
+                        "Then perhaps you should say yes.",
+                        "impatient")
+
+                    .Choice(
+                        "I can return another evening.",
+                        "respectfulWithdrawal")
+
+                .Line(
+                    "finalCourtesy",
+                    "Quazimodo looks over his shoulder into the darkness beyond the door. "
+                    + "\"The house has admitted far worse people for considerably poorer reasons.\"")
+
+                    .Choice(
+                        "Then may I enter?",
+                        "politeAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("QuazimodoAdmittedPlayer");
+                        })
+
+                    .Choice(
+                        "Only if you are certain.",
+                        "politeAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("QuazimodoAdmittedPlayer");
+                        })
+
+                    .Choice(
+                        "Thank you for considering it.",
+                        "politeAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("QuazimodoAdmittedPlayer");
+                        })
+
+                .Line(
+                    "politeAdmission",
+                    "Quazimodo releases the door. It groans slowly inward. "
+                    + "\"Very well. You may enter.\" "
+                    + "He steps aside. "
+                    + "\"Please wipe your feet. The floor dislikes being reminded of the outside.\"")
+
+                    .Choice(
+                        "Thank you, Quazimodo.")
+
+                    .Choice(
+                        "Of course.")
+
+                    .Choice(
+                        "The floor dislikes it?",
+                        "floorDislikes")
+
+                .Line(
+                    "floorDislikes",
+                    "\"It sulks.\" "
+                    + "Quazimodo glances down at the threshold. "
+                    + "\"You will recognise the sound.\"")
+
+                    .Choice(
+                        "I'll wipe my feet.")
+
+                // =====================================================
+                // ORDINARY REQUEST
+                //
+                // Polite, but not polite enough to be admitted.
+                // The player can move into the deeper courtesy route,
+                // offer payment through ITEM, leave, or become rude.
+                // =====================================================
+
+                .Line(
+                    "ordinaryRequest",
+                    "\"You may ask.\" "
+                    + "Quazimodo waits. "
+                    + "\"You have now done so.\"")
+
+                    .Choice(
+                        "Would the household kindly grant me shelter?",
+                        "politePurpose")
+
+                    .Choice(
+                        "Is that a no?",
+                        "doorPolicy")
+
+                    .Choice(
+                        "What would persuade you?",
+                        "paymentHint")
+
+                    .Choice(
+                        "Just open the door.",
+                        "impatient")
+
+                    .Choice(
+                        "Then I'll leave.",
+                        "leave")
+
+                .Line(
+                    "doorPolicy",
+                    "\"It is not yet an answer.\" "
+                    + "Quazimodo's fingers remain wrapped around the edge of the door. "
+                    + "\"The distinction matters to doors.\"")
+
+                    .Choice(
+                        "Then what is your answer?",
+                        "entryRefused")
+
+                    .Choice(
+                        "May I explain why I need shelter?",
+                        "politePurpose")
+
+                    .Choice(
+                        "What would change the answer?",
+                        "paymentHint")
+
+                    .Choice(
+                        "That makes no sense.",
+                        "impatient")
+
+                .Line(
+                    "entryRefused",
+                    "\"At present? No.\"")
+
+                    .Choice(
+                        "May I ask why?",
+                        "whyRefused")
+
+                    .Choice(
+                        "Would a small gratuity help?",
+                        "paymentHint")
+
+                    .Choice(
+                        "I accept your decision.",
+                        "respectfulWithdrawal")
+
+                    .Choice(
+                        "Then I'll force my way in.",
+                        "threat")
+
+                .Line(
+                    "whyRefused",
+                    "\"You are unknown, uninvited, and standing on the wrong side of a door "
+                    + "that has survived several determined visitors.\"")
+
+                    .Choice(
+                        "Then allow me to introduce myself properly.",
+                        "politeOpening")
+
+                    .Choice(
+                        "What happened to the other visitors?",
+                        "previousVisitors")
+
+                    .Choice(
+                        "Would payment establish my credentials?",
+                        "paymentHint")
+
+                    .Choice(
+                        "I'll take my chances.",
+                        "leave")
+
+                .Line(
+                    "previousVisitors",
+                    "\"Some entered.\" "
+                    + "Quazimodo pauses. "
+                    + "\"Some did not.\"")
+
+                    .Choice(
+                        "What happened to those who entered?",
+                        "insideWarning")
+
+                    .Choice(
+                        "I would still like to request entry.",
+                        "politePurpose")
+
+                    .Choice(
+                        "Perhaps I'll remain outside.",
+                        "leave")
+
+                .Line(
+                    "insideWarning",
+                    "\"They became residents.\"")
+
+                    .Choice(
+                        "That sounds ominous.",
+                        "ominousHouse")
+
+                    .Choice(
+                        "I only need shelter for the night.",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "I've changed my mind.",
+                        "leave")
+
+                .Line(
+                    "ominousHouse",
+                    "\"That was not the intention.\" "
+                    + "Quazimodo considers the Mansion behind him. "
+                    + "\"It is, however, accurate.\"")
+
+                    .Choice(
+                        "May I still come inside?",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "I'll remain outside.",
+                        "leave")
+
+                // =====================================================
+                // PAYMENT / ITEM HINT
+                //
+                // The actual payment is offered through the ITEM button.
+                // =====================================================
+
+                .Line(
+                    "paymentHint",
+                    "\"The household does not charge admission.\" "
+                    + "Quazimodo lowers his voice. "
+                    + "\"The household's doorman is less doctrinaire.\"")
+
+                    .Choice(
+                        "Are you asking for money?",
+                        "askingMoney")
+
+                    .Choice(
+                        "I may have something suitable.",
+                        "offerItemHint")
+
+                    .Choice(
+                        "I won't bribe you.",
+                        "noBribe")
+
+                    .Choice(
+                        "That's disgraceful.",
+                        "offendedByBribe")
+
+                    .Choice(
+                        "Never mind.",
+                        "leave")
+
+                .Line(
+                    "askingMoney",
+                    "\"Certainly not.\" "
+                    + "Quazimodo extends one long, pale hand through the gap. "
+                    + "\"I am allowing you the opportunity to express gratitude in advance.\"")
+
+                    .Choice(
+                        "I'll see what I have.",
+                        "offerItemHint")
+
+                    .Choice(
+                        "That sounds exactly like asking for money.",
+                        "bribeSemantics")
+
+                    .Choice(
+                        "I would rather earn entry through courtesy.",
+                        "politeOpening")
+
+                    .Choice(
+                        "No.",
+                        "noBribe")
+
+                .Line(
+                    "offerItemHint",
+                    "\"Use the ITEM button when you have decided how grateful you are.\" "
+                    + "Quazimodo keeps his hand extended. "
+                    + "\"Coins are traditional. Furniture is inconvenient.\"")
+
+                    .Choice(
+                        "Understood.")
+
+                    .Choice(
+                        "I'll consider it.",
+                        "again")
+
+                    .Choice(
+                        "I'd rather ask politely.",
+                        "politeOpening")
+
+                .Line(
+                    "bribeSemantics",
+                    "\"A bribe purchases corruption.\" "
+                    + "Quazimodo's hand remains patiently extended. "
+                    + "\"A gratuity acknowledges service. The distinction is largely grammatical.\"")
+
+                    .Choice(
+                        "I'll see what I have.",
+                        "offerItemHint")
+
+                    .Choice(
+                        "I don't find that convincing.",
+                        "noBribe")
+
+                    .Choice(
+                        "Let me try asking properly instead.",
+                        "politeOpening")
+
+                .Line(
+                    "noBribe",
+                    "\"An admirable principle.\" "
+                    + "Quazimodo begins closing the door. "
+                    + "\"Principles are particularly useful outdoors. They require very little shelter.\"")
+
+                    .Choice(
+                        "Wait. Let me ask properly.",
+                        "politeOpening")
+
+                    .Choice(
+                        "I may reconsider.",
+                        "paymentHint")
+
+                    .Choice(
+                        "Goodbye.",
+                        "leave")
+
+                .Line(
+                    "offendedByBribe",
+                    "\"Disgrace requires an audience.\" "
+                    + "Quazimodo looks at the empty grounds. "
+                    + "\"At present, this is merely a private arrangement.\"")
+
+                    .Choice(
+                        "I'll ask properly instead.",
+                        "politeOpening")
+
+                    .Choice(
+                        "You're unbelievable.",
+                        "impatient")
+
+                    .Choice(
+                        "Goodbye.",
+                        "leave")
+
+                // =====================================================
+                // ROYAL GOLD COIN
+                // =====================================================
+
+                .Line(
+                    "royalCoin",
+                    "Quazimodo takes the Royal Gold Coin between two long fingers. "
+                    + "He turns it toward the dim light and studies the tiny crowned frog upon it. "
+                    + "\"Royal currency.\"")
+
+                    .Choice(
+                        "King Hautain gave it to me.",
+                        "hautainGift")
+
+                    .Choice(
+                        "Will that cover admission?",
+                        "paidAdmission")
+
+                    .Choice(
+                        "On second thought, give it back.",
+                        "tooLateRoyal")
+
+                .Line(
+                    "hautainGift",
+                    "\"Then either you possess exceptional manners or His Majesty has suffered "
+                    + "a sudden decline in judgement.\" "
+                    + "Quazimodo slips the coin into his coat. "
+                    + "\"Both possibilities qualify you for entry.\"")
+
+                    .Choice(
+                        "Thank you.",
+                        "paidAdmission")
+
+                    .Choice(
+                        "Please treat it respectfully.",
+                        "paidAdmission")
+
+                .Line(
+                    "tooLateRoyal",
+                    "\"I am afraid it has already entered the household accounts.\" "
+                    + "Quazimodo waits. "
+                    + "\"The household accounts are my left pocket.\"")
+
+                    .Choice(
+                        "Fine. Open the door.",
+                        "paidAdmission")
+
+                .Line(
+                    "paidAdmission",
+                    "The coin disappears into Quazimodo's coat. "
+                    + "The door swings inward. "
+                    + "\"Your gratitude has been received. "
+                    + "The Mansion is prepared to tolerate your presence.\"")
+
+                    .Choice(
+                        "That's comforting.")
+
+                    .Choice(
+                        "Thank you.")
+
+                    .Choice(
+                        "I preferred the word 'welcome'.")
+
+                // =====================================================
+                // ORDINARY GOLD COINS
+                // =====================================================
+
+                .Line(
+                    "goldCoins",
+                    "Quazimodo weighs the old gold coins in his palm. "
+                    + "\"A generous expression of gratitude.\" "
+                    + "He studies the water dripping from them. "
+                    + "\"And a recently submerged one.\"")
+
+                    .Choice(
+                        "They came from the fountain.",
+                        "fountainCoins")
+
+                    .Choice(
+                        "Does it matter where they came from?",
+                        "coinOrigin")
+
+                    .Choice(
+                        "Will you let me in?",
+                        "goldAdmission")
+
+                .Line(
+                    "fountainCoins",
+                    "\"Then I assume King Hautain approved the transfer.\" "
+                    + "Quazimodo looks at you for a long moment. "
+                    + "\"No? I thought not.\"")
+
+                    .Choice(
+                        "Are you going to return them?",
+                        "returnToHautain")
+
+                    .Choice(
+                        "Are you going to let me in?",
+                        "goldAdmission")
+
+                    .Choice(
+                        "Give them back.",
+                        "tooLateGold")
+
+                .Line(
+                    "coinOrigin",
+                    "\"Only if the former owner is armed, royal, or amphibious.\"")
+
+                    .Choice(
+                        "Possibly all three.",
+                        "fountainCoins")
+
+                    .Choice(
+                        "Just open the door.",
+                        "goldAdmission")
+
+                .Line(
+                    "returnToHautain",
+                    "\"Probably not.\" "
+                    + "Quazimodo places the coins inside his coat. "
+                    + "\"Diplomatic relations between the Mansion and the fountain are already strained.\"")
+
+                    .Choice(
+                        "Then at least let me in.",
+                        "goldAdmission")
+
+                .Line(
+                    "tooLateGold",
+                    "\"They have already been entered into the accounts.\" "
+                    + "Quazimodo pats his left pocket. "
+                    + "\"Reversing the transaction would require paperwork.\"")
+
+                    .Choice(
+                        "Fine. Open the door.",
+                        "goldAdmission")
+
+                .Line(
+                    "goldAdmission",
+                    "Quazimodo steps back and pulls the door open. "
+                    + "\"You may enter.\" "
+                    + "He glances toward the fountain. "
+                    + "\"If a small monarch asks, we have never met.\"")
+
+                    .Choice(
+                        "Understood.")
+
+                    .Choice(
+                        "I make no promises.")
+
+                    .Choice(
+                        "Long live the King.")
+
+                // =====================================================
+                // LOOSE CHANGE FROM THE TRUNK
+                // =====================================================
+
+                .Line(
+                    "looseChange",
+                    "Quazimodo counts the loose change methodically. "
+                    + "Several coins appear to have spent years beneath a seat cushion. "
+                    + "\"An eclectic currency.\"")
+
+                    .Choice(
+                        "It's everything I had.",
+                        "allTheChange")
+
+                    .Choice(
+                        "Is it enough?",
+                        "changeAdmission")
+
+                    .Choice(
+                        "There may be crumbs mixed in.",
+                        "crumbs")
+
+                .Line(
+                    "allTheChange",
+                    "\"Then the gesture exceeds the amount.\" "
+                    + "Quazimodo pockets the coins. "
+                    + "\"An uncommon financial principle.\"")
+
+                    .Choice(
+                        "May I come inside now?",
+                        "changeAdmission")
+
+                .Line(
+                    "crumbs",
+                    "Quazimodo removes a small crumb from the pile and examines it. "
+                    + "\"The kitchen will assess its value separately.\"")
+
+                    .Choice(
+                        "Of course it will.",
+                        "changeAdmission")
+
+                .Line(
+                    "changeAdmission",
+                    "Quazimodo deposits the change somewhere deep within his coat. "
+                    + "The sound of coins continues for longer than seems physically reasonable. "
+                    + "He opens the door. "
+                    + "\"Payment is adequate. Barely.\"")
+
+                    .Choice(
+                        "Barely is enough.")
+
+                    .Choice(
+                        "Thank you.")
+
+                    .Choice(
+                        "How many pockets do you have?")
+
+                // =====================================================
+                // BUTLER BRANCH
+                // =====================================================
+
+                .Line(
+                    "butler",
+                    "\"Butler. Porter. Doorman. Undertaker of small administrative duties. "
+                    + "Titles multiply when staff do not.\"")
+
+                    .Choice(
+                        "Then may I request entry properly?",
+                        "politeOpening")
+
+                    .Choice(
+                        "Undertaker?",
+                        "undertaker")
+
+                    .Choice(
+                        "Doorman? Then open the door.",
+                        "impatient")
+
+                    .Choice(
+                        "What happened to the rest of the staff?",
+                        "missingStaff")
+
+                    .Choice(
+                        "Never mind.",
+                        "leave")
+
+                .Line(
+                    "undertaker",
+                    "\"Only administratively.\" "
+                    + "Quazimodo pauses. "
+                    + "\"Usually.\"")
+
+                    .Choice(
+                        "Usually?",
+                        "usuallyUndertaker")
+
+                    .Choice(
+                        "I would still like to come inside.",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "Perhaps not.",
+                        "leave")
+
+                .Line(
+                    "usuallyUndertaker",
+                    "\"You are asking a great many questions for someone standing outside.\"")
+
+                    .Choice(
+                        "Then let me ask from inside.",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "Fair point.",
+                        "butler")
+
+                .Line(
+                    "missingStaff",
+                    "\"Some left. Some died. Some did both, though not necessarily in that order.\"")
+
+                    .Choice(
+                        "That's not reassuring.",
+                        "ominousHouse")
+
+                    .Choice(
+                        "May I come inside?",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "I think I'll leave.",
+                        "leave")
+
+                // =====================================================
+                // RUDE BRANCH
+                // =====================================================
+
+                .Line(
+                    "rude",
+                    "Quazimodo studies you in silence. "
+                    + "\"One might ask precisely the same of you.\"")
+
+                    .Choice(
+                        "Fair point. I apologise.",
+                        "rudeApology")
+
+                    .Choice(
+                        "I didn't mean to offend you.",
+                        "rudeApology")
+
+                    .Choice(
+                        "No, seriously. What happened?",
+                        "rudeAgain")
+
+                    .Choice(
+                        "Just let me inside.",
+                        "impatient")
+
+                    .Choice(
+                        "Never mind.",
+                        "leave")
+
+                .Line(
+                    "rudeApology",
+                    "\"An apology is an admirable beginning.\" "
+                    + "Quazimodo's hand remains on the door. "
+                    + "\"It is not, by itself, an invitation.\"")
+
+                    .Choice(
+                        "May I begin again properly?",
+                        "politeOpening")
+
+                    .Choice(
+                        "What would earn an invitation?",
+                        "paymentHint")
+
+                    .Choice(
+                        "Then forget it.",
+                        "leave")
+
+                .Line(
+                    "rudeAgain",
+                    "\"Time, gravity, inheritance, and several occupational incidents.\"")
+
+                    .Choice(
+                        "Occupational incidents?",
+                        "occupationalIncidents")
+
+                    .Choice(
+                        "I deserved that answer.",
+                        "rudeApology")
+
+                    .Choice(
+                        "You're avoiding the question.",
+                        "impatient")
+
+                .Line(
+                    "occupationalIncidents",
+                    "\"The Mansion employs unusually heavy furniture.\"")
+
+                    .Choice(
+                        "I'll stop asking.",
+                        "rudeApology")
+
+                    .Choice(
+                        "That cannot be the whole story.",
+                        "impatient")
+
+                // =====================================================
+                // IMPATIENCE
+                // =====================================================
+
+                .Line(
+                    "impatient",
+                    "\"Impatience is not a key.\" "
+                    + "Quazimodo begins closing the door. "
+                    + "\"It does, however, resemble one when viewed by an impatient person.\"")
+
+                    .Choice(
+                        "Wait. I apologise.",
+                        "rudeApology")
+
+                    .Choice(
+                        "What would persuade you?",
+                        "paymentHint")
+
+                    .Choice(
+                        "Open it now.",
+                        "threat")
+
+                    .Choice(
+                        "Fine. Goodbye.",
+                        "leave")
+
+                .Line(
+                    "footInDoor",
+                    "\"It would help the door close upon your foot.\"")
+
+                    .Choice(
+                        "I won't do that.",
+                        "politeHonesty")
+
+                    .Choice(
+                        "Maybe I'll try it.",
+                        "threat")
+
+                .Line(
+                    "ownerRequest",
+                    "\"The Mansion's ownership is a matter of considerable disagreement.\"")
+
+                    .Choice(
+                        "Then may I speak to whoever is in charge?",
+                        "inCharge")
+
+                    .Choice(
+                        "May I request shelter instead?",
+                        "politePurpose")
+
+                    .Choice(
+                        "That sounds complicated.",
+                        "ordinaryRequest")
+
+                .Line(
+                    "inCharge",
+                    "\"Everyone believes someone else is in charge.\" "
+                    + "Quazimodo looks into the darkness behind him. "
+                    + "\"The arrangement has proved surprisingly durable.\"")
+
+                    .Choice(
+                        "Then may I come inside?",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "I'd rather remain outside.",
+                        "leave")
+
+                .Line(
+                    "outsideDanger",
+                    "\"A broad category.\" "
+                    + "Quazimodo surveys the dark grounds. "
+                    + "\"Unfortunately, the interior falls within it.\"")
+
+                    .Choice(
+                        "I would still like to request shelter.",
+                        "politeHonesty")
+
+                    .Choice(
+                        "That isn't encouraging.",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "I'll take my chances outside.",
+                        "leave")
+
+                // =====================================================
+                // THREAT / FIGHT ROUTE
+                // =====================================================
+
+                .Line(
+                    "threat",
+                    "The door opens slightly wider. "
+                    + "Quazimodo steps into the gap, revealing considerably more height "
+                    + "and considerably less concern than expected. "
+                    + "\"You may attempt it.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
+
+                    .Choice(
+                        "Move aside.",
+                        "fightWarning")
+
+                    .Choice(
+                        "I don't want trouble.",
+                        "backDown")
+
+                    .Choice(
+                        "Perhaps we can arrange payment.",
+                        "paymentHint")
+
+                    .Choice(
+                        "I apologise. Let me start again.",
+                        "rudeApology")
+
+                    .Choice(
+                        "(Attack Quazimodo)",
+                        "fight",
+                        startsFight: "QuazimodoDoorFight")
+
+                .Line(
+                    "fightWarning",
+                    "\"No.\" "
+                    + "Quazimodo rolls one shoulder. Something in it clicks several times. "
+                    + "\"You may now decide whether the conversation has ended "
+                    + "or merely become physical.\"")
+
+                    .Choice(
+                        "(Attack Quazimodo)",
+                        "fight",
+                        startsFight: "QuazimodoDoorFight")
+
+                    .Choice(
+                        "I was bluffing.",
+                        "backDown")
+
+                    .Choice(
+                        "Let's discuss payment.",
+                        "paymentHint")
+
+                    .Choice(
+                        "I apologise.",
+                        "rudeApology")
+
+                .Line(
+                    "backDown",
+                    "\"A wise revision.\" "
+                    + "Quazimodo returns one hand to the door. "
+                    + "\"Wisdom arriving late is still preferable to a physician arriving later.\"")
+
+                    .Choice(
+                        "May I begin again?",
+                        "politeOpening")
+
+                    .Choice(
+                        "What would persuade you?",
+                        "paymentHint")
+
+                    .Choice(
+                        "I'll leave.",
+                        "leave")
+
+                .Line(
+                    "fight",
+                    "\"Very well.\" "
+                    + "Quazimodo opens the door fully and steps out onto the landing. "
+                    + "\"Please avoid bleeding on the threshold. It encourages the wood.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
+
+                // =====================================================
+                // AFTER QUAZIMODO IS DEFEATED
+                //
+                // Assumption:
+                // The fight sets DefeatedQuazimodo.
+                // The admission choice then opens the doors.
+                // =====================================================
+
+                .Line(
+                    "defeated",
+                    "Quazimodo leans heavily against the partly opened door. "
+                    + "His coat is torn, but his professional disapproval remains immaculate. "
+                    + "\"You have established that you can enter the Mansion.\"")
+
+                    .Choice(
+                        "Then let me in.",
+                        "forcedAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("MetQuazimodo");
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("ForcedEntry");
+                        })
+
+                    .Choice(
+                        "I'm sorry.",
+                        "defeatedApology")
+
+                    .Choice(
+                        "You could have just opened the door.",
+                        "blameQuazimodo")
+
+                    .Choice(
+                        "Are you all right?",
+                        "defeatedConcern")
+
+                    .Choice(
+                        "I'll leave instead.",
+                        "leave")
+
+                .Line(
+                    "defeatedApology",
+                    "\"Your regret is noted.\" "
+                    + "Quazimodo straightens his bow tie. "
+                    + "\"It would have been more useful before the furniture became involved.\"")
+
+                    .Choice(
+                        "May I still enter?",
+                        "forcedAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("MetQuazimodo");
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("ForcedEntry");
+                        })
+
+                    .Choice(
+                        "I should leave.",
+                        "leave")
+
+                .Line(
+                    "blameQuazimodo",
+                    "\"You could have said please with greater conviction.\"")
+
+                    .Choice(
+                        "Fair point.",
+                        "forcedAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("MetQuazimodo");
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("ForcedEntry");
+                        })
+
+                    .Choice(
+                        "Still blaming you.",
+                        "forcedAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("MetQuazimodo");
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("ForcedEntry");
+                        })
+
+                .Line(
+                    "defeatedConcern",
+                    "\"I have endured worse visitors.\" "
+                    + "Quazimodo looks into the Mansion. "
+                    + "\"Most were already inside.\"")
+
+                    .Choice(
+                        "May I enter?",
+                        "forcedAdmission",
+                        effect: p =>
+                        {
+                            p.SetFlag("MetQuazimodo");
+                            p.SetFlag("FrontDoorOpen");
+                            p.SetFlag("ForcedEntry");
+                        })
+
+                    .Choice(
+                        "I'll give you a moment.",
+                        "leave")
+
+                .Line(
+                    "forcedAdmission",
+                    "Quazimodo steps away from the threshold. "
+                    + "\"Enter, then.\" "
+                    + "His gaze follows you toward the darkness. "
+                    + "\"You have opened the door. That does not mean the house has welcomed you.\"")
+
+                    .Choice(
+                        "I'll take my chances.")
+
+                    .Choice(
+                        "Understood.")
+
+                // =====================================================
+                // RESPECTFUL WITHDRAWAL
+                //
+                // This does not open the door, but Quazimodo remembers
+                // that the player behaved respectfully.
+                // =====================================================
+
+                .Line(
+                    "respectfulWithdrawal",
+                    "Quazimodo pauses before closing the door. "
+                    + "\"You asked, received no answer, and did not immediately resort to violence.\" "
+                    + "He inclines his head. "
+                    + "\"The standard is low. You have nevertheless exceeded it.\"")
+
+                    .Choice(
+                        "Thank you.",
+                        effect: p => p.SetFlag("QuazimodoRespectsPlayer"))
+
+                    .Choice(
+                        "Perhaps I'll return later.",
+                        effect: p => p.SetFlag("QuazimodoRespectsPlayer"))
+
+                // =====================================================
+                // RETURN VISIT
+                //
+                // Maximum 5 choices.
+                // Still no automatic admission.
+                // =====================================================
+
+                .Line(
+                    "again",
+                    "The door opens a fraction. "
+                    + "Quazimodo peers through the gap. "
+                    + "\"You have returned. "
+                    + "The outside has apparently failed to improve.\"")
+
+                    .Choice(
+                        "May I request entry properly?",
+                        "politeOpening")
+
+                    .Choice(
+                        "What would persuade you to let me in?",
+                        "paymentHint")
+
+                    .Choice(
+                        "I have something to offer.",
+                        "offerItemHint")
+
+                    .Choice(
+                        "Open the door.",
+                        "impatient")
+
+                    .Choice(
+                        "Not yet. Goodbye.",
+                        "leave")
+
+                // =====================================================
+                // LEAVE
+                // =====================================================
+
+                .Line(
+                    "leave",
+                    "\"A sensible decision.\" "
+                    + "Quazimodo begins closing the door. "
+                    + "\"Those rarely survive prolonged contact with this house.\"")
+
+                    .Choice(
+                        "Goodbye.");
         // =========================================================
         // LOOKUP (used by the game - no need to edit)
         // =========================================================

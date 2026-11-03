@@ -81,41 +81,104 @@ namespace The_Mansion.Data
 
 
         public static Scene FrontDoor { get; } =
-    NewScene("FrontDoor",
-             "Assets/Backgrounds/Mansion/Front_door.png",
-             "The heavy front door towers over you. A grotesque metal knocker hangs at its centre.")
+      NewScene(
+          "FrontDoor",
+          "Assets/Backgrounds/Mansion/Front_door.png",
+          "The heavy front door towers over you. "
+          + "A grotesque metal knocker hangs at its centre.")
 
-        // Once Quazimodo has let the player in, show the doors open.
-        .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"),
-                        "Assets/Backgrounds/Mansion/Front_door_open.png")
+          // =====================================================
+          // BACKGROUND STATE
+          // =====================================================
 
-        // Before Quazimodo has answered the door.
-        .Hotspot("Front Doors", 590, 300, 375, 500)
-            .Describe("Heavy wooden front doors. They appear to be locked.")
-            .OnTalk("The door does not answer. This is unsurprising.")
-            .ActStarts("QuazimodoFrontDoor")
-            .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
+          // Once Quazimodo has admitted the player, accepted payment,
+          // or been defeated, show the doors open.
+          .BackgroundWhen(
+              p => p.HasFlag("FrontDoorOpen"),
+              "Assets/Backgrounds/Mansion/Front_door_open.png")
 
-        // After Quazimodo has admitted the player.
-        .Hotspot("Open Front Doors", 590, 300, 375, 500)
-            .Describe("The enormous doors now stand slightly open. Darkness waits beyond them.")
-            .GoesTo("EntranceHall")
-            .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
+          // =====================================================
+          // CLOSED FRONT DOORS
+          // =====================================================
 
-        .Hotspot("Door Knocker", 685, 515, 175, 90)
-            .Describe("The grotesque iron door knocker is freezing cold.")
-            .OnAct(
-                "You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
-            .OnItem(
-                "Gold Coins",
-                "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.")
-            .OnItem(
-                "Royal Gold Coin",
-                "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said.")
-            .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
+          .Hotspot(
+              "Front Doors",
+              590,
+              300,
+              375,
+              500)
 
-        .ReturnTo("FrontGate", "You step away from the front door.");
+              .Describe(
+                  "Heavy wooden front doors. "
+                  + "They appear to be locked.")
 
+              .OnTalk(
+                  "The door does not answer. "
+                  + "This is unsurprising.")
+
+              .ActStarts("QuazimodoFrontDoor")
+
+              .OnlyWhen(
+                  p => !p.HasFlag("FrontDoorOpen"))
+
+          // =====================================================
+          // OPEN FRONT DOORS
+          // =====================================================
+
+          .Hotspot(
+              "Open Front Doors",
+              590,
+              300,
+              375,
+              500)
+
+              .Describe(
+                  "The enormous front doors stand open. "
+                  + "Beyond them waits the dark entrance hall.")
+
+              .GoesTo("EntranceHall")
+
+              .OnlyWhen(
+                  p => p.HasFlag("FrontDoorOpen"))
+
+          // =====================================================
+          // DOOR KNOCKER
+          // =====================================================
+
+          .Hotspot(
+              "Door Knocker",
+              685,
+              515,
+              175,
+              90)
+
+              .Describe(
+                  "The grotesque iron door knocker is freezing cold.")
+
+              .OnAct(
+                  "You rap the iron knocker against the door. "
+                  + "The sound echoes somewhere deep inside the Mansion.")
+
+              .OnItem(
+                  "Gold Coins",
+                  "You rap the knocker with a gold coin. "
+                  + "Nothing. Manners, not money, the gargoyle said.")
+
+              .OnItem(
+                  "Royal Gold Coin",
+                  "You rap the knocker with the King's coin. "
+                  + "Nothing. Manners, not money, the gargoyle said.")
+
+              .OnlyWhen(
+                  p => !p.HasFlag("FrontDoorOpen"))
+
+          // =====================================================
+          // RETURN
+          // =====================================================
+
+          .ReturnTo(
+              "FrontGate",
+              "You step away from the front door.");
 
         // =========================================================
         // LOOKUP (used by the game - no need to edit)
