@@ -19,6 +19,9 @@
     <None Remove="Assets\Backgrounds\Mansion\courtyard.png" />
     <None Remove="Assets\Backgrounds\Mansion\garden.png" />
     <None Remove="Assets\Backgrounds\Mansion\statue_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\mansion_right.png" />
+    <None Remove="Assets\Backgrounds\Mansion\well.png" />
+    <None Remove="Assets\Backgrounds\Mansion\graveyard_entrance.png" />
     <None Remove="Assets\Backgrounds\Mansion\left.png" />
     <None Remove="Assets\Backgrounds\Mansion\right.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
@@ -87,6 +90,9 @@
     <Resource Include="Assets\Backgrounds\Mansion\courtyard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\garden.png" />
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\mansion_right.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\well.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\graveyard_entrance.png" />
     <Resource Include="Assets\Backgrounds\Mansion\left.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
