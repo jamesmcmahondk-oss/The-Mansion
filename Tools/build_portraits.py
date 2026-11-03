@@ -45,6 +45,14 @@ PORTRAITS = {
         keep_look=True,
         title="HAUTAIN",
         subtitle="The Frog King"),
+    "Quazimodo_Bribed": dict(
+        source="Assets/Characters/Portraits/Sources/Quazimodo_bribed_source.png",
+        crop=(0, 0, 896, 1195),
+        glow=(0.45, 0.28),
+        opaque=True,
+        keep_look=True,
+        title="QUAZIMODO",
+        subtitle="The Butler"),
     "Hautain": dict(
         source="Assets/Characters/Hautain.png",
         crop=(20, 0, 860, 1120),

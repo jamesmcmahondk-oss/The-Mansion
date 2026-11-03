@@ -1956,7 +1956,8 @@ namespace The_Mansion.Data
                     "royalCoin",
                     "Quazimodo takes the Royal Gold Coin between two long fingers. "
                     + "He turns it toward the dim light and studies the tiny crowned frog upon it. "
-                    + "\"Royal currency.\"")
+                    + "\"Royal currency.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_Bribed_portrait_framed.png")
 
                     .Choice(
                         "King Hautain gave it to me.",
@@ -2020,7 +2021,8 @@ namespace The_Mansion.Data
                     "Quazimodo weighs the old gold coins in his palm. "
                     + "\"A generous expression of gratitude.\" "
                     + "He studies the water dripping from them. "
-                    + "\"And a recently submerged one.\"")
+                    + "\"And a recently submerged one.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_Bribed_portrait_framed.png")
 
                     .Choice(
                         "They came from the fountain.",
