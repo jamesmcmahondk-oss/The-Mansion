@@ -31,12 +31,12 @@ WIDE = [
     ("well_source.png",                    "well.png",                   60),
     ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
     ("well_closeup_source.png",            "well_closeup.png",          170),
+    ("gravestone_closeup_source.png",      "gravestone_closeup.png",     20),
 ]
 
 FITTED = [
     # source painting                    output background            BOX
     ("cross_closeup_source.png",           "cross_closeup.png",         (120, 25, 1420, 905)),
-    ("gravestone_closeup_source.png",      "gravestone_closeup.png",    (40, 40, 984, 1100)),
 ]
 
 
