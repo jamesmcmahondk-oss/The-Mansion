@@ -32,8 +32,8 @@ namespace The_Mansion.Data
                      "You are standing before an old and creepy mansion.")
 
             .Hotspot("Fountain", 615, 545, 270, 205)
-                .Describe("An ancient stone fountain. Something glitters beneath the water.")
-                .GoesTo("FountainCloseup")
+                .Describe("An ancient stone fountain stands in the courtyard beyond the gates.")
+                .GoesTo("Courtyard")
 
             .Hotspot("Front Door", 905, 505, 95, 140)
                 .Describe("The enormous wooden door looks like it has not opened in years.")
@@ -65,7 +65,31 @@ namespace The_Mansion.Data
                             p.StatusEffect = "None";
                         })
 
-            .ReturnTo("FrontGate", "You step away from the fountain.");
+            .ReturnTo("Courtyard", "You step away from the fountain.");
+
+
+        // Between the front gate and the fountain close-up / front door.
+        // Background made by Tools/build_courtyard.py.
+        public static Scene Courtyard { get; } =
+            NewScene("Courtyard",
+                     "Assets/Backgrounds/Mansion/courtyard.png",
+                     "Rain-slick cobblestones glitter in the lantern light. A tiered fountain splashes beside the steps up to the front door.")
+
+            .Hotspot("Fountain", 0, 300, 380, 470)
+                .Describe("Water spills over the fountain's mossy tiers. Something glitters beneath the surface.")
+                .GoesTo("FountainCloseup")
+
+            .Hotspot("Front Door", 770, 280, 300, 410)
+                .Describe("Wide stone steps lead up to the mansion's great carved doors.")
+                .GoesTo("FrontDoor")
+
+            .Hotspot("Garden Path", 400, 560, 220, 110)
+                .Describe("A path runs behind the fountain, along the balustrade, around the left wing of the mansion.")
+
+            .Hotspot("Side Path", 1300, 540, 200, 200)
+                .Describe("A cracked, winding path disappears into the overgrown dark beside the mansion.")
+
+            .ReturnTo("FrontGate", "You walk back to the gates.");
 
 
         public static Scene FrontGargoyle { get; } =
@@ -177,7 +201,7 @@ namespace The_Mansion.Data
           // =====================================================
 
           .ReturnTo(
-              "FrontGate",
+              "Courtyard",
               "You step away from the front door.");
 
         // =========================================================

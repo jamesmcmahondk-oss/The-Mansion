@@ -16,6 +16,7 @@
     <None Remove="Assets\Backgrounds\Mansion\frontgate.png" />
     <None Remove="Assets\Backgrounds\Mansion\Front_door.png" />
     <None Remove="Assets\Backgrounds\Mansion\Front_door_open.png" />
+    <None Remove="Assets\Backgrounds\Mansion\courtyard.png" />
     <None Remove="Assets\Backgrounds\Mansion\left.png" />
     <None Remove="Assets\Backgrounds\Mansion\right.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
@@ -81,6 +82,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\frontgate.png" />
     <Resource Include="Assets\Backgrounds\Mansion\Front_door.png" />
     <Resource Include="Assets\Backgrounds\Mansion\Front_door_open.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\courtyard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\left.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
