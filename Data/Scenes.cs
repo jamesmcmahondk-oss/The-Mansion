@@ -229,28 +229,24 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/bench_closeup.png",
                      "A carved stone bench stands against the wall, half swallowed by an enormous rose bush. Something tiny hiccups underneath it.")
 
-            .Sprite("Assets/Characters/Ebria_Drinking.png", 700, 622, 175)
+            // Background and sprite split from the painted-over picture by
+            // Tools/split_bench_fairy.py.
+            .Sprite("Assets/Characters/Ebria_UnderBench.png", 429, 421, 397)
 
-            .Hotspot("Stone Bench", 320, 260, 1030, 400)
-                .Describe("The bench is carved with quatrefoils and a fleur-de-lis. Rain has pooled in the seat.")
+            .Hotspot("Ferns", 0, 300, 140, 230)
+                .Describe("Ferns and lilies crowd the path, dripping with rain.")
+
+            .Hotspot("Stone Bench", 140, 200, 1396, 630)
+                .Describe("The bench is carved with quatrefoils and scrolls. Rain has pooled in the seat.")
                 .OnAct("You sit down. From underneath comes an indignant \"Oi! Some of us live here!\"")
 
-            .Hotspot("Roses", 420, 192, 1116, 75)
-                .Describe("Blood-red roses, heavy with rain. They smell of summer, which is unsettling in late autumn.")
-                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
+            .Hotspot("Rose Bush", 830, 630, 240, 200)
+                .Describe("The rose bush has grown right under the bench. Its thorns glint in the dark.")
+                .OnAct("You reach in under the bench and prick your finger on a thorn. Ow. (-2 Health)",
                        p => p.Health -= 2)
-
-            .Hotspot("Roses", 1350, 260, 186, 400)
-                .Describe("Blood-red roses, heavy with rain. They smell of summer, which is unsettling in late autumn.")
-                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
-                       p => p.Health -= 2)
-
-            .Hotspot("Garden Arch", 40, 280, 150, 70)
-                .Describe("Through the archway, lit steps climb towards the well.")
-                .GoesTo("Well")
 
             // Listed last so she wins over the bench.
-            .Hotspot("Ebria", 700, 622, 120, 175)
+            .Hotspot("Ebria", 440, 425, 280, 390)
                 .Describe("A tiny fairy with wild red hair sits under the bench, swigging from a bottle labelled ANOTHER BAD IDEA.")
                 .TalkStarts("Ebria")
 
