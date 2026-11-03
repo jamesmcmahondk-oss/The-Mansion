@@ -27,6 +27,12 @@ PORTRAITS = {
         glow=(0.38, 0.30),
         title="QUAZIMODO",
         subtitle="The Butler"),
+    "Hautain": dict(
+        source="Assets/Characters/Hautain.png",
+        crop=(20, 0, 860, 1120),
+        glow=(0.62, 0.24),
+        title="HAUTAIN",
+        subtitle="The Frog King"),
 }
 
 FONT_PATHS = ["C:/Windows/Fonts/georgiab.ttf", "C:/Windows/Fonts/georgia.ttf",
