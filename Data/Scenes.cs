@@ -197,7 +197,10 @@ namespace The_Mansion.Data
 
             .Hotspot("Servants' Entrance", 790, 300, 180, 370)
                 .Describe("A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side.")
-                .OnAct("You try the handle. Locked - and bolted, by the sound of it.")
+                .OnAct("You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked!")
+                // Later: add a second "Servants' Entrance" hotspot with
+                // .GoesTo("...") and .OnlyWhen(p => p.HasFlag("ServantsDoorOpen")),
+                // and .OnlyWhen(p => !p.HasFlag("ServantsDoorOpen")) on this one.
                 .OnItem("Old Key", "The little brass key is far too small for this lock.")
 
             .Hotspot("Garden Arch", 1140, 400, 160, 380)
