@@ -266,6 +266,18 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// Story flag set as soon as this conversation starts (after .StartAt
+        /// has picked the first line), e.g. .MetFlag("MetHautain"). Other
+        /// conversations can then use onlyIf: p => p.HasFlag("MetHautain")
+        /// so the player only asks about characters they have met.
+        /// </summary>
+        public DialogueBuilder MetFlag(string flag)
+        {
+            _dialogue.MetFlag = flag;
+            return this;
+        }
+
         /// <summary>Darken (or not) the scene during the conversation.</summary>
         public DialogueBuilder DimScene(bool dim = true)
         {

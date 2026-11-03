@@ -45,6 +45,11 @@ namespace The_Mansion.Models
                 ? string.IsNullOrWhiteSpace(Portrait)
                 : CharacterHeight <= 0);
 
+        // Optional: story flag set as soon as the conversation starts (after
+        // the start line has been chosen), e.g. "MetHautain". Use it to only
+        // offer questions about characters the player has actually met.
+        public string MetFlag { get; set; } = "";
+
         // Id of the node the conversation starts at.
         public string StartNode { get; set; } = "start";
 
