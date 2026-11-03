@@ -85,11 +85,59 @@ namespace The_Mansion.Data
 
             .Hotspot("Garden Path", 400, 560, 220, 110)
                 .Describe("A path runs behind the fountain, along the balustrade, around the left wing of the mansion.")
+                .GoesTo("Garden")
 
             .Hotspot("Side Path", 1300, 540, 200, 200)
                 .Describe("A cracked, winding path disappears into the overgrown dark beside the mansion.")
 
             .ReturnTo("FrontGate", "You walk back to the gates.");
+
+
+        // Left of the courtyard: the overgrown garden with the glasshouse.
+        // Background made by Tools/build_wide_backgrounds.py.
+        public static Scene Garden { get; } =
+            NewScene("Garden",
+                     "Assets/Backgrounds/Mansion/garden.png",
+                     "The path ends in an overgrown garden. Mist curls around a hooded statue, and beyond it a great glasshouse glows in the dark.")
+
+            .Hotspot("Glasshouse", 470, 250, 530, 270)
+                .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
+
+            .Hotspot("Mansion", 1120, 192, 416, 300)
+                .Describe("Ivy smothers the mansion's left wing. Warm light glows in the tall windows.")
+
+            // Listed after the glasshouse so it wins where they overlap.
+            .Hotspot("Statue", 770, 330, 120, 270)
+                .Describe("A hooded stone figure stands on a plinth in the long grass, watching the path.")
+                .GoesTo("StatueCloseup")
+
+            .ReturnTo("Courtyard", "You follow the path back to the courtyard.");
+
+
+        public static Scene StatueCloseup { get; } =
+            NewScene("StatueCloseup",
+                     "Assets/Backgrounds/Mansion/statue_closeup.png",
+                     "The statue towers over you: a hooded figure in a ragged stone robe, its hands resting on the hilt of a great sword.")
+
+            .Hotspot("Glasshouse", 264, 330, 384, 320)
+                .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
+
+            .Hotspot("Glasshouse", 992, 330, 352, 320)
+                .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
+
+            .Hotspot("Statue", 656, 200, 336, 624)
+                .Describe("Ivy creeps up the ragged stone robe. Under the hood there is only darkness.")
+                .OnTalk("The statue says nothing. Statues usually don't. Usually.")
+
+            // Listed after the statue so they win where they overlap.
+            .Hotspot("Hood", 808, 205, 72, 105)
+                .Describe("You peer into the hood. There is no face carved there at all - just shadow.")
+
+            .Hotspot("Stone Sword", 825, 350, 55, 425)
+                .Describe("A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it.")
+                .OnAct("You pull at the sword. It doesn't move. Not yet, anyway.")
+
+            .ReturnTo("Garden", "You step back from the statue.");
 
 
         public static Scene FrontGargoyle { get; } =
