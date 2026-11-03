@@ -1450,12 +1450,13 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             _activeDialogue = dialogue;
 
-            PlaceDialoguePortrait(dialogue);
-            SetDialoguePortrait(dialogue.Portrait);
+            PlaceDialogueCharacter(dialogue);
+            SetDialogueCharacter(dialogue.Character);
+            SetCloseUpPortrait(dialogue.Portrait);
 
             // The dim layer also blocks clicks on hotspots while talking,
             // so it is always shown - just see-through when not dimming.
-            DialogueDim.Fill = dialogue.DimScene
+            DialogueDim.Fill = dialogue.ShouldDimScene
                 ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
                 : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
@@ -1474,32 +1475,32 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         /*
          * Default: standing on the right of the scene, 700px tall.
-         * If the dialogue gives PortraitHeight, the character is placed
-         * in the scene at PortraitX/Y (background image pixels).
+         * If the dialogue gives CharacterHeight (.StandAt), the character is
+         * placed in the scene at CharacterX/Y (background image pixels).
          */
-        private void PlaceDialoguePortrait(Dialogue dialogue)
+        private void PlaceDialogueCharacter(Dialogue dialogue)
         {
-            PlacePortrait(dialogue.PortraitX, dialogue.PortraitY, dialogue.PortraitHeight);
+            PlaceCharacter(dialogue.CharacterX, dialogue.CharacterY, dialogue.CharacterHeight);
         }
 
-        private string _shownPortrait = "";
+        private string _shownCharacter = "";
 
-        private void SetDialoguePortrait(string imagePath)
+        private void SetDialogueCharacter(string imagePath)
         {
-            if (imagePath == _shownPortrait &&
-                DialoguePortrait.Source != null)
+            if (imagePath == _shownCharacter &&
+                DialogueCharacter.Source != null)
             {
                 return; // already showing it
             }
 
-            _shownPortrait = imagePath;
-            DialoguePortrait.Source = null;
+            _shownCharacter = imagePath;
+            DialogueCharacter.Source = null;
 
             if (!string.IsNullOrWhiteSpace(imagePath))
             {
                 try
                 {
-                    DialoguePortrait.Source = new BitmapImage(new Uri(
+                    DialogueCharacter.Source = new BitmapImage(new Uri(
                         $"pack://application:,,,/{imagePath}",
                         UriKind.Absolute));
                 }
@@ -1513,8 +1514,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 }
             }
 
-            DialoguePortrait.Visibility =
-                DialoguePortrait.Source != null ? Visibility.Visible : Visibility.Collapsed;
+            DialogueCharacter.Visibility =
+                DialogueCharacter.Source != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void ShowDialogueNode(string nodeId)
@@ -1553,7 +1554,11 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 : Visibility.Collapsed;
 
             // A line can swap the picture (e.g. an angry pose).
-            SetDialoguePortrait(string.IsNullOrWhiteSpace(node.Portrait)
+            SetDialogueCharacter(string.IsNullOrWhiteSpace(node.Character)
+                ? _activeDialogue.Character
+                : node.Character);
+
+            SetCloseUpPortrait(string.IsNullOrWhiteSpace(node.Portrait)
                 ? _activeDialogue.Portrait
                 : node.Portrait);
 
@@ -1657,9 +1662,10 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             DialogueChoicesPanel.Children.Clear();
             DialoguePanel.Visibility = Visibility.Collapsed;
-            DialoguePortrait.Visibility = Visibility.Collapsed;
-            DialoguePortrait.Source = null;
-            _shownPortrait = "";
+            DialogueCharacter.Visibility = Visibility.Collapsed;
+            DialogueCharacter.Source = null;
+            _shownCharacter = "";
+            HideCloseUpPortrait();
             DialogueDim.Visibility = Visibility.Collapsed;
 
             DescriptionText.Visibility = Visibility.Visible;
@@ -2557,10 +2563,11 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             _lastFightId = enemyId;
 
             // Enemy picture (same placement rules as dialogue portraits).
-            PlacePortrait(enemy.PortraitX, enemy.PortraitY, enemy.PortraitHeight);
-            SetDialoguePortrait(enemy.Portrait);
+            PlaceCharacter(enemy.CharacterX, enemy.CharacterY, enemy.CharacterHeight);
+            SetDialogueCharacter(enemy.Character);
+            SetCloseUpPortrait(enemy.Portrait);
 
-            DialogueDim.Fill = enemy.DimScene
+            DialogueDim.Fill = enemy.ShouldDimScene
                 ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
                 : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
@@ -2939,7 +2946,13 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             _fightOver = true;
             FightButtons.Visibility = Visibility.Collapsed;
-            DialoguePortrait.Visibility = Visibility.Collapsed;
+            DialogueCharacter.Visibility = Visibility.Collapsed;
+
+            // Show the beaten close-up, if there is one.
+            if (!string.IsNullOrWhiteSpace(_fight.Enemy.BeatenPortrait))
+            {
+                SetCloseUpPortrait(_fight.Enemy.BeatenPortrait);
+            }
 
             FightResultText.Text =
                 $"{FightResultText.Text}  You have defeated {_fight.Enemy.Name}!  (Click to continue)";
@@ -2991,9 +3004,10 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             MenuButtons.Visibility = Visibility.Visible;
             SetMenuForDialogue(false);
 
-            DialoguePortrait.Visibility = Visibility.Collapsed;
-            DialoguePortrait.Source = null;
-            _shownPortrait = "";
+            DialogueCharacter.Visibility = Visibility.Collapsed;
+            DialogueCharacter.Source = null;
+            _shownCharacter = "";
+            HideCloseUpPortrait();
             DialogueDim.Visibility = Visibility.Collapsed;
 
             DescriptionText.Visibility = Visibility.Visible;
@@ -3045,21 +3059,76 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
          * Places the portrait image: inside the scene at X/Y/height
          * (background image pixels), or on the right if height is 0.
          */
-        private void PlacePortrait(double x, double y, double height)
+        // ---- Close-up portrait (.Portrait) ------------------------------
+
+        // Where close-up portraits always appear, in background image pixels
+        // (X, Y, height) - the same units as .StandAt(...).
+        private const double PortraitSpotX = 60;
+        private const double PortraitSpotY = 350;
+        private const double PortraitSpotHeight = 400;
+
+        private string _shownCloseUp = "";
+
+        private void SetCloseUpPortrait(string imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+            {
+                HideCloseUpPortrait();
+                return;
+            }
+
+            if (imagePath == _shownCloseUp && DialoguePortrait.Source != null)
+            {
+                DialoguePortrait.Visibility = Visibility.Visible;
+                return;
+            }
+
+            try
+            {
+                DialoguePortrait.Source = new BitmapImage(new Uri(
+                    $"pack://application:,,,/{imagePath}",
+                    UriKind.Absolute));
+                _shownCloseUp = imagePath;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Could not load portrait:\n\n{imagePath}\n\n{ex.Message}",
+                    "Portrait error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                HideCloseUpPortrait();
+                return;
+            }
+
+            Rect spot = ImageToScreen(new Rect(PortraitSpotX, PortraitSpotY, 0, PortraitSpotHeight));
+            DialoguePortrait.Margin = new Thickness(spot.X, spot.Y, 0, 0);
+            DialoguePortrait.Height = spot.Height;
+            DialoguePortrait.Visibility = Visibility.Visible;
+        }
+
+        private void HideCloseUpPortrait()
+        {
+            DialoguePortrait.Visibility = Visibility.Collapsed;
+            DialoguePortrait.Source = null;
+            _shownCloseUp = "";
+        }
+
+        private void PlaceCharacter(double x, double y, double height)
         {
             if (height > 0)
             {
                 Rect screen = ImageToScreen(new Rect(x, y, 0, height));
 
-                DialoguePortrait.HorizontalAlignment = HorizontalAlignment.Left;
-                DialoguePortrait.Margin = new Thickness(screen.X, screen.Y, 0, 0);
-                DialoguePortrait.Height = screen.Height;
+                DialogueCharacter.HorizontalAlignment = HorizontalAlignment.Left;
+                DialogueCharacter.Margin = new Thickness(screen.X, screen.Y, 0, 0);
+                DialogueCharacter.Height = screen.Height;
             }
             else
             {
-                DialoguePortrait.HorizontalAlignment = HorizontalAlignment.Right;
-                DialoguePortrait.Margin = new Thickness(0, 100, 140, 0);
-                DialoguePortrait.Height = 700;
+                DialogueCharacter.HorizontalAlignment = HorizontalAlignment.Right;
+                DialogueCharacter.Margin = new Thickness(0, 100, 140, 0);
+                DialogueCharacter.Height = 700;
             }
         }
 

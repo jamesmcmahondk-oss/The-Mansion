@@ -74,7 +74,8 @@ namespace The_Mansion.Data
 
         public static Dialogue HautainCoins { get; } =
             NewDialogue("HautainCoins", "King Hautain")
-                .Portrait("Assets/Characters/Hautain.png")
+                .Portrait("Assets/Characters/Portraits/Hautain_portrait_framed.png")
+                .Character("Assets/Characters/Hautain.png")
                 .StandAt(495, 205, 285)
 
                 .StartAt(p =>
@@ -123,7 +124,7 @@ namespace The_Mansion.Data
                     + "You stand before Hautain the First, Keeper of the Deep Basin, "
                     + "Lord of the Seven Lily Pads, Defender of the Western Drain, "
                     + "and Sovereign of all waters contained within this fountain!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "King? You're a frog on a lily pad.",
@@ -666,7 +667,7 @@ namespace The_Mansion.Data
                     "frogInsult",
                     "\"FROG?! Frog is a BIOLOGICAL DESCRIPTION, not a form of address, "
                     + "you uncultivated drainpipe!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "Fine. Your Majesty the Frog.",
@@ -689,7 +690,7 @@ namespace The_Mansion.Data
                     "\"Yes, I am a frog! "
                     + "You are apparently a primate. "
                     + "Only one of us has managed to make something of it!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "You're six inches tall.",
@@ -720,7 +721,7 @@ namespace The_Mansion.Data
                     "sizeInsult",
                     "\"The Crown is not small! "
                     + "The rest of the world is unnecessarily large!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "That's one way of looking at it.",
@@ -738,7 +739,7 @@ namespace The_Mansion.Data
                     "sixInches",
                     "\"I require six inches to govern a kingdom! "
                     + "You require nearly six feet to steal from a fountain!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "Fair point.",
@@ -756,7 +757,7 @@ namespace The_Mansion.Data
                     "challenge",
                     "\"You threaten a sovereign on sovereign territory? "
                     + "Even GEESE understand jurisdiction!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "I don't want to fight.",
@@ -773,7 +774,7 @@ namespace The_Mansion.Data
                 .Line(
                     "duck",
                     "\"Do my worst? I once negotiated with a DUCK!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "A duck?",
@@ -782,7 +783,7 @@ namespace The_Mansion.Data
                 .Line(
                     "duckDiplomacy",
                     "\"You cannot comprehend diplomacy at that level.\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "Let's fight.",
@@ -797,7 +798,7 @@ namespace The_Mansion.Data
                     "fight",
                     "\"THEN APPROACH, YOU OVERGROWN TROUSER RACK! "
                     + "You face the full military strength of the fountain!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                 // =====================================================
                 // COIN THEFT
@@ -808,7 +809,7 @@ namespace The_Mansion.Data
                     "You scoop the gold from the fountain. "
                     + "Hautain stares at your hand in stunned silence. "
                     + "Then the sceptre rises.",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "They're only coins.",
@@ -836,7 +837,7 @@ namespace The_Mansion.Data
                     "\"ONLY COINS?! "
                     + "You steal from a fountain? "
                     + "Even MAGPIES possess the decency to have feathers!\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "I didn't know they mattered.",
@@ -892,7 +893,7 @@ namespace The_Mansion.Data
                     + "May every chair you sit upon be VERY SLIGHTLY DAMP! "
                     + "The Crown remembers!\" "
                     + "(Royal Grudge gained)",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "(Retreat)")
@@ -906,7 +907,7 @@ namespace The_Mansion.Data
                     "Hautain rises from behind a lily pad. "
                     + "\"The pocket-fingered gutter heron returns. "
                     + "Have you brought the Royal Treasury?\"",
-                    portrait: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Attack.png")
 
                     .Choice(
                         "I came to return it.",
@@ -1360,7 +1361,8 @@ namespace The_Mansion.Data
                     + "His sceptre is bent nearly in half, "
                     + "but his crown remains perfectly straight. "
                     + "\"Congratulations. You have defeated a frog. "
-                    + "I hope history gives you the statue you deserve.\"")
+                    + "I hope history gives you the statue you deserve.\"",
+                    portrait: "Assets/Characters/Portraits/Hautain_Beaten_portrait_framed.png")
 
                     .Choice(
                         "Are you all right?",
@@ -1434,7 +1436,6 @@ namespace The_Mansion.Data
         public static Dialogue QuazimodoFrontDoor { get; } =
             NewDialogue("QuazimodoFrontDoor", "Quazimodo")
                 .Portrait("Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
-                .StandAt(60, 350, 400)
 
                 .StartAt(p =>
                     p.HasFlag("DefeatedQuazimodo")
@@ -2486,7 +2487,8 @@ namespace The_Mansion.Data
                     "defeated",
                     "Quazimodo leans heavily against the partly opened door. "
                     + "His coat is torn, but his professional disapproval remains immaculate. "
-                    + "\"You have established that you can enter the Mansion.\"")
+                    + "\"You have established that you can enter the Mansion.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_Beaten_portrait_framed.png")
 
                     .Choice(
                         "Then let me in.",

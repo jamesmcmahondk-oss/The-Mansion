@@ -547,7 +547,25 @@
                            Visibility="Collapsed"
                            Panel.ZIndex="20"/>
 
+                <!--
+                    Close-up framed portrait (.Portrait in dialogues/enemies).
+                    Always in the same spot: background pixels X 60, Y 350,
+                    height 400 - placed by PlaceCloseUpPortrait().
+                -->
                 <Image x:Name="DialoguePortrait"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Stretch="Uniform"
+                       Visibility="Collapsed"
+                       IsHitTestVisible="False"
+                       Panel.ZIndex="22">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.75" Color="Black"/>
+                    </Image.Effect>
+                </Image>
+
+                <!-- Full-body character picture (.Character + .StandAt). -->
+                <Image x:Name="DialogueCharacter"
                        Height="700"
                        Margin="0,100,140,0"
                        HorizontalAlignment="Right"

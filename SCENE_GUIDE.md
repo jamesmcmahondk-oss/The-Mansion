@@ -94,8 +94,9 @@ effect: p =>
 ```csharp
 public static Dialogue HautainCoins { get; } =
     NewDialogue("HautainCoins", "King Hautain")       // id, name shown above lines
-        .Portrait("Assets/Characters/Hautain.png")    // optional picture
-        .StandAt(495, 205, 285)                       // optional: stand IN the scene (X, Y, height)
+        .Portrait("Assets/Characters/Portraits/Hautain_portrait_framed.png")   // close-up (optional)
+        .Character("Assets/Characters/Hautain.png")   // full-body picture in the scene (optional)
+        .StandAt(495, 205, 285)                       // where the Character stands (X, Y, height)
         .StartAt(p => p.HasFlag("StoleCoins") ? "again" : "start")   // optional
 
     .Line("start", "...HALT, THIEF! Those coins belong to the Crown!")
@@ -107,7 +108,7 @@ public static Dialogue HautainCoins { get; } =
                 effect: p => p.SetFlag("StoleCoins"))
         .Choice("Goodbye.")                        // no goesTo = conversation ends
 
-    .Line("insult", "A FROG?!", portrait: "Assets/Characters/Hautain_Attack.png")
+    .Line("insult", "A FROG?!", character: "Assets/Characters/Hautain_Attack.png")
         .Choice("Awkward.", "start")
 
     .Line("again", "YOU again!")
@@ -124,7 +125,17 @@ public static Dialogue HautainCoins { get; } =
 * `.OnItem("Item Name", "lineId")` – what happens when the player **offers an
   item** during the conversation (see below).
 * Keep each line to about **two lines of text** so the replies fit.
-* Without `.StandAt`, the portrait stands on the right and the scene darkens.
+* **Two pictures, both optional:**
+  * `.Portrait(...)` – the **close-up framed portrait**. Always shown in the same
+    spot on the left of the scene (background pixels X 60, Y 350, height 400).
+    Portraits live in `Assets/Characters/Portraits` (built by
+    `Tools/build_portraits.py`).
+  * `.Character(...)` – the **full-body picture** standing in the scene, placed
+    with `.StandAt(X, Y, height)`. Without `.StandAt` it stands on the right.
+* Swap either one for a single line: `portrait: "...Beaten_portrait_framed.png"`
+  (e.g. after a fight) or `character: "...Hautain_Attack.png"` (an angry pose).
+* The scene darkens only when nothing is standing in it (no `.StandAt`
+  character and no portrait). Force it with `.DimScene(true)` or `.DimScene(false)`.
 * A typo in a `goesTo` stops the game at start-up with a message naming the
   line, so mistakes are caught straight away.
 
@@ -198,8 +209,10 @@ Enemies live in `Data/Enemies.cs`:
 ```csharp
 public static Enemy AngryHautain { get; } =
     NewEnemy("AngryHautain", "King Hautain", skill: 4, health: 30)
-        .Portrait("Assets/Characters/Hautain_Attack.png")
-        .StandAt(495, 205, 285)                     // optional, like dialogues
+        .Portrait("Assets/Characters/Portraits/Hautain_portrait_framed.png")        // close-up
+        .BeatenPortrait("Assets/Characters/Portraits/Hautain_Beaten_portrait_framed.png") // shown when you win
+        .Character("Assets/Characters/Hautain_Attack.png")   // full-body, in the scene
+        .StandAt(495, 205, 285)
         .Intro("King Hautain leaps from his lily pad!")
         .NoFleeing()                                // optional
         .OnWin("He paddles away into the reeds.",
@@ -312,7 +325,7 @@ Two hotspots in the same place – only one exists at a time:
 .Hotspot("Gold Coins", 595, 655, 295, 175)
     .ActStarts("HautainCoins")
 
-// Dialogues.cs – .StandAt(...) puts him on the lily pad
+// Dialogues.cs – .Character(...) + .StandAt(...) puts him on the lily pad
 ```
 
 ### A character who remembers you

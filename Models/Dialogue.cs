@@ -19,20 +19,31 @@ namespace The_Mansion.Models
         // Optional character picture shown beside the conversation,
         // e.g. "Assets/Characters/Pip.png". Leave empty for none
         // (for example when the scene itself is a close-up of the character).
+        //
+        // Close-up framed portrait, e.g.
+        // "Assets/Characters/Portraits/Hautain_portrait_framed.png".
+        // Always shown in the same spot (see PortraitSpot in MainWindow).
         public string Portrait { get; set; } = "";
 
-        // Where the portrait appears. Leave PortraitHeight at 0 for the
-        // default spot (standing on the right of the scene). Set all three
-        // to put the character *in* the scene instead, e.g. on a lily pad.
-        // Same units as hotspots: pixels of the scene's background image
-        // (0-1536 across, 0-1024 down; only Y 192-832 is visible).
-        public double PortraitX { get; set; }
-        public double PortraitY { get; set; }
-        public double PortraitHeight { get; set; }
+        // Full-body character picture shown in the scene, e.g.
+        // "Assets/Characters/Hautain.png". Placed with CharacterX/Y/Height;
+        // leave CharacterHeight at 0 for the default spot (standing on the
+        // right of the scene). Same units as hotspots: pixels of the scene's
+        // background image (0-1536 across, 0-1024 down; Y 192-832 visible).
+        public string Character { get; set; } = "";
+        public double CharacterX { get; set; }
+        public double CharacterY { get; set; }
+        public double CharacterHeight { get; set; }
 
-        // Darken the scene behind the conversation. Turn off for characters
-        // standing in the scene so they still look part of it.
-        public bool DimScene { get; set; } = true;
+        // Darken the scene behind the conversation? null = automatic:
+        // dimmed only when nothing is standing in the scene (no character
+        // placed with StandAt, and no close-up portrait).
+        public bool? DimScene { get; set; }
+
+        public bool ShouldDimScene =>
+            DimScene ?? (string.IsNullOrWhiteSpace(Character)
+                ? string.IsNullOrWhiteSpace(Portrait)
+                : CharacterHeight <= 0);
 
         // Id of the node the conversation starts at.
         public string StartNode { get; set; } = "start";
@@ -75,11 +86,15 @@ namespace The_Mansion.Models
         // choices still fit in the panel.
         public string Text { get; set; } = "";
 
-        // Optional: swap the character's picture for this line only,
-        // e.g. "Assets/Characters/Hautain_Attack.png" when they get angry.
+        // Optional: swap the close-up portrait for this line only,
+        // e.g. a beaten portrait.
         public string Portrait { get; set; } = "";
 
-        // Up to 4 choices are shown. A node with no choices gets an
+        // Optional: swap the full-body character picture for this line only,
+        // e.g. "Assets/Characters/Hautain_Attack.png" when they get angry.
+        public string Character { get; set; } = "";
+
+        // Up to 5 choices are shown. A node with no choices gets an
         // automatic "(Leave)" choice.
         public List<DialogueChoice> Choices { get; set; } = new();
     }
