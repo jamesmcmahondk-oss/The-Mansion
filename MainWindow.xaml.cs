@@ -530,6 +530,7 @@ namespace The_Mansion
         private void ShowScene(Scene scene)
         {
             _currentScene = scene;
+            _replyHotspotName = null;
 
             // .BackgroundWhen(...) can swap the picture after story events.
             _currentBackground = scene.GetBackground(_player);
@@ -728,6 +729,9 @@ namespace The_Mansion
             }
 
             e.Handled = true;
+
+            // Keep this click's reply on screen (see _replyHotspotName).
+            _replyHotspotName = hotspot.Name;
 
             /*
              * Screen UI (the Return arrow) works with any verb.
@@ -1393,6 +1397,9 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
             string buttonName = buttonImage.Name;
 
+            // A new verb: hover text takes over from the last reply again.
+            _replyHotspotName = null;
+
             // Picking another verb closes the inventory and drops the item.
             if (buttonName != "ItemBtn")
             {
@@ -1463,6 +1470,14 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             e.Handled = true;
         }
+        /*
+         * The hotspot whose click reply is showing. Its reply stays on screen
+         * (instead of being replaced by the hover text) until the mouse moves
+         * onto a different hotspot or the scene changes. Matched by name, so
+         * it also survives hotspots being rebuilt after the click.
+         */
+        private string? _replyHotspotName;
+
         private void Hotspot_MouseEnter(object sender, MouseEventArgs e)
         {
             if (sender is not Rectangle rectangle)
@@ -1475,30 +1490,61 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
+            if (_replyHotspotName != null)
+            {
+                if (_replyHotspotName == hotspot.Name)
+                {
+                    return;     // keep the reply to the click on this hotspot
+                }
+
+                _replyHotspotName = null;
+            }
+
+            ShowDescription(HoverText(hotspot));
+        }
+
+        private string HoverText(Hotspot hotspot)
+        {
+            if (hotspot.ScreenSpace)
+            {
+                return "Go back";
+            }
+
             switch (_interactionMode)
             {
                 case InteractionMode.Look:
-                    ShowDescription($"Look at {hotspot.Name}");
-                    break;
+                    return $"Look at {hotspot.Name}";
 
                 case InteractionMode.Talk:
-                    ShowDescription($"Talk to {hotspot.Name}");
-                    break;
+                    return $"Talk to {hotspot.Name}";
 
                 case InteractionMode.Act:
-                    ShowDescription($"Use {hotspot.Name}");
-                    break;
+                    bool hasAction =
+                        !string.IsNullOrWhiteSpace(hotspot.ActDialogueId) ||
+                        !string.IsNullOrWhiteSpace(hotspot.ActFightId) ||
+                        !string.IsNullOrWhiteSpace(hotspot.ActText) ||
+                        hotspot.ActEffect != null ||
+                        hotspot.ActResult != null;
 
-                case InteractionMode.Item:
-                    ShowDescription(_selectedItem != null
+                    return !hasAction && !string.IsNullOrWhiteSpace(hotspot.TargetScene)
+                        ? $"Move to {hotspot.Name}"
+                        : $"Use {hotspot.Name}";
+
+                default:
+                    return _selectedItem != null
                         ? $"Use {_selectedItem} on {hotspot.Name}"
-                        : $"Use item on {hotspot.Name}");
-                    break;
+                        : $"Use item on {hotspot.Name}";
             }
         }
 
         private void Hotspot_MouseLeave(object sender, MouseEventArgs e)
         {
+            // A click reply is showing: leave it there.
+            if (_replyHotspotName != null)
+            {
+                return;
+            }
+
             if (_interactionMode == InteractionMode.Item && _selectedItem != null)
             {
                 ShowDescription($"Use {_selectedItem} on...");
@@ -1750,6 +1796,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void EndDialogue()
         {
+            _replyHotspotName = null;
+
             if (_inventoryOpen)
             {
                 InventoryPanel.Visibility = Visibility.Collapsed;
@@ -2252,6 +2300,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void SelectItem(string itemName)
         {
+            _replyHotspotName = null;
+
             if (IsInFight)
             {
                 CloseInventory();
