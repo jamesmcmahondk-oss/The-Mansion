@@ -6,6 +6,7 @@
     ResizeMode="CanMinimize"
     WindowStartupLocation="Manual"
     PreviewKeyDown="Window_PreviewKeyDown"
+    PreviewMouseLeftButtonDown="Window_PreviewMouseLeftButtonDown"
     Background="Black">
 
     <Window.Resources>
@@ -652,6 +653,20 @@
            TextWrapping="Wrap"
            TextTrimming="CharacterEllipsis"
            Panel.ZIndex="110" />
+
+                <!-- Shown while a reply is waiting to be clicked away (blinks). -->
+                <TextBlock x:Name="ContinueHint"
+           Text="▼  click to continue"
+           Margin="0,326,300,0"
+           HorizontalAlignment="Right"
+           VerticalAlignment="Top"
+           Foreground="#B9A98D"
+           FontFamily="Georgia"
+           FontStyle="Italic"
+           FontSize="16"
+           Visibility="Collapsed"
+           IsHitTestVisible="False"
+           Panel.ZIndex="111" />
 
                 <!--
                     TALK DIALOG (text part): replaces the description text in

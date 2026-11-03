@@ -530,7 +530,7 @@ namespace The_Mansion
         private void ShowScene(Scene scene)
         {
             _currentScene = scene;
-            _replyHotspotName = null;
+            _replyShowing = false;
 
             // .BackgroundWhen(...) can swap the picture after story events.
             _currentBackground = scene.GetBackground(_player);
@@ -730,9 +730,6 @@ namespace The_Mansion
 
             e.Handled = true;
 
-            // Keep this click's reply on screen (see _replyHotspotName).
-            _replyHotspotName = hotspot.Name;
-
             /*
              * Screen UI (the Return arrow) works with any verb.
              */
@@ -790,7 +787,7 @@ namespace The_Mansion
                 return;
             }
 
-            ShowDescription(string.IsNullOrWhiteSpace(hotspot.Description)
+            ShowReply(string.IsNullOrWhiteSpace(hotspot.Description)
                 ? NothingToSeeText
                 : hotspot.Description);
         }
@@ -807,7 +804,7 @@ namespace The_Mansion
                 return;
             }
 
-            ShowDescription(string.IsNullOrWhiteSpace(hotspot.TalkText)
+            ShowReply(string.IsNullOrWhiteSpace(hotspot.TalkText)
                 ? CantTalkText
                 : hotspot.TalkText);
         }
@@ -833,7 +830,7 @@ namespace The_Mansion
 
             if (hotspot.ActResult != null)
             {
-                ShowDescription(hotspot.ActResult(_player));
+                ShowReply(hotspot.ActResult(_player));
                 AfterStoryChange();
                 return;
             }
@@ -842,7 +839,7 @@ namespace The_Mansion
             {
                 if (!string.IsNullOrWhiteSpace(hotspot.ActText))
                 {
-                    ShowDescription(hotspot.ActText);
+                    ShowReply(hotspot.ActText);
                 }
 
                 hotspot.ActEffect?.Invoke(_player);
@@ -856,7 +853,7 @@ namespace The_Mansion
                 return;
             }
 
-            ShowDescription(CantActText);
+            ShowReply(CantActText);
         }
 
         private void GoToScene(string sceneName, string hotspotName)
@@ -1398,7 +1395,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             string buttonName = buttonImage.Name;
 
             // A new verb: hover text takes over from the last reply again.
-            _replyHotspotName = null;
+            _replyShowing = false;
 
             // Picking another verb closes the inventory and drops the item.
             if (buttonName != "ItemBtn")
@@ -1471,12 +1468,91 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             e.Handled = true;
         }
         /*
-         * The hotspot whose click reply is showing. Its reply stays on screen
-         * (instead of being replaced by the hover text) until the mouse moves
-         * onto a different hotspot or the scene changes. Matched by name, so
-         * it also survives hotspots being rebuilt after the click.
+         * A reply to a click (e.g. "You can't do that.") stays on screen until
+         * the player clicks again to dismiss it - hovering over hotspots
+         * doesn't replace it. See ShowReply / Window_PreviewMouseLeftButtonDown.
          */
-        private string? _replyHotspotName;
+        private bool _replyShowingValue;
+
+        // Setting this also shows/hides the blinking "click to continue" hint.
+        private bool _replyShowing
+        {
+            get => _replyShowingValue;
+            set
+            {
+                _replyShowingValue = value;
+
+                if (value)
+                {
+                    ContinueHint.Visibility = Visibility.Visible;
+                    ContinueHint.BeginAnimation(OpacityProperty, new System.Windows.Media.Animation.DoubleAnimation
+                    {
+                        From = 1.0,
+                        To = 0.2,
+                        Duration = TimeSpan.FromSeconds(0.7),
+                        AutoReverse = true,
+                        RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever
+                    });
+                }
+                else
+                {
+                    ContinueHint.BeginAnimation(OpacityProperty, null);
+                    ContinueHint.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void ShowReply(string text)
+        {
+            ShowDescription(text);
+            _replyShowing = true;
+        }
+
+        private void DismissReply()
+        {
+            _replyShowing = false;
+
+            // Back to the hover text for whatever is under the mouse.
+            if (Mouse.DirectlyOver is Rectangle { Tag: Hotspot hotspot })
+            {
+                ShowDescription(HoverText(hotspot));
+            }
+            else if (_interactionMode == InteractionMode.Item && _selectedItem != null)
+            {
+                ShowDescription($"Use {_selectedItem} on...");
+            }
+            else if (_currentScene != null)
+            {
+                ShowDescription(_currentScene.Description);
+            }
+        }
+
+        /*
+         * While a reply is showing, the next click anywhere in the game just
+         * dismisses it. (Clicks on the verb buttons dismiss it and still work.)
+         */
+        private void Window_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!_replyShowing ||
+                GameScreen.Visibility != Visibility.Visible ||
+                IsInDialogue || IsInFight || _inventoryOpen ||
+                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen ||
+                DebugMenu.Visibility == Visibility.Visible ||
+                GameOverScreen.Visibility == Visibility.Visible)
+            {
+                return;
+            }
+
+            bool onVerbButton = e.OriginalSource is DependencyObject source &&
+                                MenuButtons.IsAncestorOf(source);
+
+            DismissReply();
+
+            if (!onVerbButton)
+            {
+                e.Handled = true;
+            }
+        }
 
         private void Hotspot_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -1490,14 +1566,9 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
-            if (_replyHotspotName != null)
+            if (_replyShowing)
             {
-                if (_replyHotspotName == hotspot.Name)
-                {
-                    return;     // keep the reply to the click on this hotspot
-                }
-
-                _replyHotspotName = null;
+                return;     // keep the reply until it's clicked away
             }
 
             ShowDescription(HoverText(hotspot));
@@ -1540,7 +1611,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
         private void Hotspot_MouseLeave(object sender, MouseEventArgs e)
         {
             // A click reply is showing: leave it there.
-            if (_replyHotspotName != null)
+            if (_replyShowing)
             {
                 return;
             }
@@ -1574,6 +1645,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void StartDialogue(string dialogueId)
         {
+            _replyShowing = false;
+
             Dialogue? dialogue = Dialogues.GetDialogue(dialogueId);
 
             if (dialogue == null)
@@ -1796,7 +1869,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void EndDialogue()
         {
-            _replyHotspotName = null;
+            _replyShowing = false;
 
             if (_inventoryOpen)
             {
@@ -2129,6 +2202,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void OpenInventory()
         {
+            _replyShowing = false;
+
             InventorySlots.Children.Clear();
 
             // Same item twice? Show it once.
@@ -2300,7 +2375,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void SelectItem(string itemName)
         {
-            _replyHotspotName = null;
+            _replyShowing = false;
 
             if (IsInFight)
             {
@@ -2335,11 +2410,11 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             if (!hotspot.ItemUses.TryGetValue(itemName, out ItemUse? use))
             {
-                ShowDescription($"You can't use the {itemName} on the {hotspot.Name}.");
+                ShowReply($"You can't use the {itemName} on the {hotspot.Name}.");
                 return;
             }
 
-            ShowDescription(use.Text);
+            ShowReply(use.Text);
 
             if (use.Effect != null)
             {
@@ -2685,6 +2760,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void StartFight(string enemyId)
         {
+            _replyShowing = false;
+
             Enemy? enemy = Enemies.GetEnemy(enemyId);
 
             if (enemy == null)
@@ -3082,7 +3159,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             enemy.OnFlee?.Invoke(_player);
             EndFight();
-            ShowDescription($"You flee from {enemy.Name}, taking a parting blow as you go. (-{HitDamage} Health)");
+            ShowReply($"You flee from {enemy.Name}, taking a parting blow as you go. (-{HitDamage} Health)");
             AfterStoryChange();
         }
 
@@ -3122,7 +3199,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             EndFight();
 
-            ShowDescription(string.IsNullOrWhiteSpace(enemy.WinText)
+            ShowReply(string.IsNullOrWhiteSpace(enemy.WinText)
                 ? $"{enemy.Name} is defeated."
                 : enemy.WinText);
 
