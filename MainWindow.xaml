@@ -6,6 +6,7 @@
     ResizeMode="CanMinimize"
     WindowStartupLocation="Manual"
     PreviewKeyDown="Window_PreviewKeyDown"
+    PreviewMouseLeftButtonDown="Window_PreviewMouseLeftButtonDown"
     Background="Black">
 
     <Window.Resources>
