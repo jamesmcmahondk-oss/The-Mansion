@@ -23,48 +23,1443 @@ namespace The_Mansion.Data
             => new DialogueBuilder(id, speaker);
 
         // =========================================================
-        // THE SAD GARGOYLE (FrontGargoyle scene, TALK)
+        // THE SAD GARGOYLE
+        // FrontGargoyle scene, TALK
+        //
+        // This is the unnamed front gargoyle, NOT Dûnán.
+        //
+        // Dialogue rules:
+        // - Maximum 5 choices per node.
+        // - No manual line breaks.
+        // - Keep each dialogue panel to 1-3 compact sentences.
         // =========================================================
 
         public static Dialogue SadGargoyle { get; } =
-     NewDialogue("SadGargoyle", "Sad Gargoyle")
-         // No portrait: the scene is already a close-up of it.
+            NewDialogue("SadGargoyle", "Sad Gargoyle")
+                .Portrait(
+                    "Assets/Characters/Portraits/Gargoyle_portrait_framed.png")
 
-         // Offering items (ITEM button during the conversation).
-         .OnItem("Party Hat", "Hat")
+                // =====================================================
+                // ITEMS
+                // =====================================================
 
-     .Line("start", "*Sigh.* Three hundred years on this pillar, and not one visitor has ever said hello.")
-         .Choice("Hello! Why so glum?", "sad")
-         .Choice("Do you know how to get into the mansion?", "door")
-         .Choice("You're not entirely stone, are you?", "secret",
-                 onlyIf: p => p.Wits >= 12 && !p.Has("Gargoyle's Blessing"),
-                 effect: p =>
-                 {
-                     p.Luck += 1;
-                     p.Give("Gargoyle's Blessing");
-                 })
-         .Choice("Goodbye.")
+                .OnItem(
+                    "Party Hat",
+                    "Hat")
 
-     .Line("menu", "Was there something else, visitor? I have nowhere to be. Ever.")
-         .SameChoicesAs("start")
+                .OnOtherItems(
+                    "The gargoyle examines the {item}. "
+                    + "\"No, thank you. I already possess several things I never asked for. "
+                    + "Most of them are moss.\"")
 
-     .Line("sad", "Pigeons. Rain. More pigeons. And the gargoyle on the other pillar hasn't spoken to me since the Incident.")
-         .Choice("What incident?", "incident")
-         .Choice("That sounds dreadful.", "menu")
+                // =====================================================
+                // INTRODUCTION
+                // =====================================================
 
-     .Line("incident", "We do not speak of the Incident. There was a bird. That is all I will say.")
-         .Choice("Fair enough.", "menu")
+                .Line(
+                    "start",
+                    "The gargoyle watches you for several seconds. "
+                    + "\"Oh. You stopped.\"")
 
-     .Line("door", "Locked, of course. They say the old door knocker only answers to someone with manners.")
-         .Choice("Thanks for the tip.", "menu")
+                    .Choice(
+                        "Hello.",
+                        "hello")
 
-     .Line("secret", "Shh! Not so loud! ...Here, take my blessing. You will need all the luck you can get in there. (Luck +1)")
-         .Choice("Your secret is safe with me.", "menu")
+                    .Choice(
+                        "How do I get into the Mansion?",
+                        "door")
 
-     .Line("Hat", "Great! Awesome, a dirty old party hat! Now please take it off me, before the rough paper scratches my scalp!",
-           portrait: "Assets/Characters/Portraits/Gargoyle_PartyHat_portrait_framed.png")
-         .Choice("(Take the hat back)", "menu");
+                    .Choice(
+                        "Why do you look so miserable?",
+                        "sad")
 
+                    .Choice(
+                        "I noticed something about your feet.",
+                        "noticed",
+                        onlyIf: p =>
+                            p.Wits >= 12
+                            && !p.Has("Gargoyle's Blessing"))
+
+                    .Choice(
+                        "Goodbye.",
+                        "goodbye")
+
+                .Line(
+                    "hello",
+                    "\"Hello.\" The gargoyle considers the word. "
+                    + "\"That was pleasant.\"")
+
+                    .Choice(
+                        "Don't people usually say hello?",
+                        "visitors")
+
+                    .Choice(
+                        "What's your name?",
+                        "name")
+
+                    .Choice(
+                        "How long have you been here?",
+                        "years")
+
+                    .Choice(
+                        "Can you help me get inside?",
+                        "door")
+
+                    .Choice(
+                        "I'll leave you to it.",
+                        "goodbye")
+
+                // =====================================================
+                // MAIN MENU
+                // =====================================================
+
+                .Line(
+                    "menu",
+                    "\"Was there something else? I have nowhere to be. Ever.\"")
+
+                    .Choice(
+                        "Tell me about yourself.",
+                        "about")
+
+                    .Choice(
+                        "How do I get into the Mansion?",
+                        "door")
+
+                    .Choice(
+                        "What have you seen from up here?",
+                        "observations")
+
+                    .Choice(
+                        "You're not attached to that pillar.",
+                        "noticed",
+                        onlyIf: p =>
+                            p.Wits >= 12
+                            && !p.Has("Gargoyle's Blessing"))
+
+                    .Choice(
+                        "That's all for now.",
+                        "goodbye")
+
+                // =====================================================
+                // ABOUT THE GARGOYLE
+                // =====================================================
+
+                .Line(
+                    "about",
+                    "\"There is remarkably little to tell. "
+                    + "I sit, I watch, and rain occurs.\"")
+
+                    .Choice(
+                        "What's your name?",
+                        "name")
+
+                    .Choice(
+                        "How long have you been here?",
+                        "years")
+
+                    .Choice(
+                        "Why are you sad?",
+                        "sad")
+
+                    .Choice(
+                        "Can't you leave?",
+                        "leavePillar")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "name",
+                    "\"I had a name once.\"")
+
+                    .Choice(
+                        "What happened to it?",
+                        "forgotName")
+
+                    .Choice(
+                        "Can I call you Gargoyle?",
+                        "callGargoyle")
+
+                    .Choice(
+                        "Never mind.",
+                        "menu")
+
+                .Line(
+                    "forgotName",
+                    "\"People stopped using it. Eventually, so did I.\"")
+
+                    .Choice(
+                        "That's rather sad.",
+                        "nameSad")
+
+                    .Choice(
+                        "Perhaps you'll remember.",
+                        "nameRemember")
+
+                    .Choice(
+                        "Gargoyle will do for now.",
+                        "callGargoyle")
+
+                .Line(
+                    "nameSad",
+                    "\"Perhaps. On the other hand, it might have been dreadful.\"")
+
+                    .Choice(
+                        "A fair point.",
+                        "menu")
+
+                .Line(
+                    "nameRemember",
+                    "\"Possibly. I remembered a pigeon from 1846 yesterday. "
+                    + "There is clearly still some activity.\"")
+
+                    .Choice(
+                        "What was special about it?",
+                        "pigeon")
+
+                    .Choice(
+                        "That's encouraging.",
+                        "menu")
+
+                .Line(
+                    "callGargoyle",
+                    "\"Original.\"")
+
+                    .Choice(
+                        "You don't like it?",
+                        "sarcasm")
+
+                    .Choice(
+                        "I'll work on it.",
+                        "menu")
+
+                .Line(
+                    "sarcasm",
+                    "\"Three centuries to perfect sarcasm. "
+                    + "Please don't make me explain it.\"")
+
+                    .Choice(
+                        "Point taken.",
+                        "menu")
+
+                // =====================================================
+                // TIME AND VISITORS
+                // =====================================================
+
+                .Line(
+                    "years",
+                    "\"Three hundred and seventeen years. Possibly eighteen. "
+                    + "There was a winter when nobody remembered my birthday.\"")
+
+                    .Choice(
+                        "When is your birthday?",
+                        "birthday")
+
+                    .Choice(
+                        "How do you pass the time?",
+                        "routine")
+
+                    .Choice(
+                        "That sounds unbearable.",
+                        "unbearable")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "birthday",
+                    "\"We never established one. "
+                    + "That may have contributed to the problem.\"")
+
+                    .Choice(
+                        "We could choose today.",
+                        "birthdayToday")
+
+                    .Choice(
+                        "That would explain it.",
+                        "menu")
+
+                .Line(
+                    "birthdayToday",
+                    "\"Today?\" The gargoyle looks at the sky. "
+                    + "\"The weather is disappointing. Yes, that seems appropriate.\"")
+
+                    .Choice(
+                        "Happy birthday.",
+                        "birthdayThanks")
+
+                    .Choice(
+                        "We can reconsider.",
+                        "menu")
+
+                .Line(
+                    "birthdayThanks",
+                    "\"Thank you. I shall try not to look older.\"")
+
+                    .Choice(
+                        "You're doing very well.",
+                        "menu")
+
+                .Line(
+                    "unbearable",
+                    "\"Only if you think about it. Unfortunately, I have had time.\"")
+
+                    .Choice(
+                        "I'll change the subject.",
+                        "menu")
+
+                .Line(
+                    "routine",
+                    "\"Rain, pigeons, moss, and occasionally a visitor. "
+                    + "Sometimes Hautain declares war on one. Then rain again.\"")
+
+                    .Choice(
+                        "Tell me about Hautain.",
+                        "hautain")
+
+                    .Choice(
+                        "What's wrong with pigeons?",
+                        "pigeon")
+
+                    .Choice(
+                        "Don't you have anyone to talk to?",
+                        "otherGargoyle")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "visitors",
+                    "\"People look at the house, then the fountain. "
+                    + "Occasionally they look at me and say, 'That's an ugly one.'\"")
+
+                    .Choice(
+                        "That's rude.",
+                        "rudeVisitors")
+
+                    .Choice(
+                        "You are rather imposing.",
+                        "imposing")
+
+                    .Choice(
+                        "Well, hello again.",
+                        "helloAgain")
+
+                .Line(
+                    "rudeVisitors",
+                    "\"Yes. Especially when they are not referring to me. "
+                    + "It makes the exchange confusing.\"")
+
+                    .Choice(
+                        "I can imagine.",
+                        "menu")
+
+                .Line(
+                    "imposing",
+                    "\"Thank you. I was intended to discourage evil. "
+                    + "Results have been mixed.\"")
+
+                    .Choice(
+                        "At least you're still trying.",
+                        "menu")
+
+                .Line(
+                    "helloAgain",
+                    "\"Careful. I may begin expecting this.\"")
+
+                    .Choice(
+                        "I'll visit again.",
+                        "visitAgain")
+
+                .Line(
+                    "pigeon",
+                    "\"A pigeon can look directly into your eyes while ruining your afternoon. "
+                    + "There is something deliberate about that.\"")
+
+                    .Choice(
+                        "They probably don't mean it.",
+                        "pigeonIntent")
+
+                    .Choice(
+                        "I'll take your word for it.",
+                        "menu")
+
+                .Line(
+                    "pigeonIntent",
+                    "\"You have not spent three centuries gathering evidence.\"")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
+                // =====================================================
+                // SADNESS AND COMPANIONSHIP
+                // =====================================================
+
+                .Line(
+                    "sad",
+                    "\"Sad? Mostly bored. My face was carved this way.\"")
+
+                    .Choice(
+                        "Why carve you looking miserable?",
+                        "sculptor")
+
+                    .Choice(
+                        "So you're happy?",
+                        "happy")
+
+                    .Choice(
+                        "Can I cheer you up?",
+                        "cheer")
+
+                    .Choice(
+                        "What about the other gargoyle?",
+                        "otherGargoyle")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "sculptor",
+                    "\"The sculptor was going through a divorce. "
+                    + "I believe I represent his opinion of marriage.\"")
+
+                    .Choice(
+                        "That explains the expression.",
+                        "menu")
+
+                .Line(
+                    "happy",
+                    "\"I am a stone creature outside a haunted house in the rain. "
+                    + "Let us not demand extremes.\"")
+
+                    .Choice(
+                        "Fair.",
+                        "menu")
+
+                .Line(
+                    "cheer",
+                    "\"Conversation is sufficient.\"")
+
+                    .Choice(
+                        "Really?",
+                        "conversation")
+
+                    .Choice(
+                        "I could tell you a joke.",
+                        "joke")
+
+                    .Choice(
+                        "Then I'll come back.",
+                        "visitAgain")
+
+                .Line(
+                    "conversation",
+                    "\"You ask questions and wait for the answers. "
+                    + "That puts you ahead of the pigeons.\"")
+
+                    .Choice(
+                        "A high standard.",
+                        "menu")
+
+                    .Choice(
+                        "I'll visit again.",
+                        "visitAgain")
+
+                .Line(
+                    "joke",
+                    "\"Does it involve a stone creature walking into a tavern?\"")
+
+                    .Choice(
+                        "Possibly.",
+                        "jokeAnswer")
+
+                    .Choice(
+                        "No.",
+                        "jokeAnswer")
+
+                .Line(
+                    "jokeAnswer",
+                    "\"I envy its mobility.\"")
+
+                    .Choice(
+                        "I'll spare you the rest.",
+                        "menu")
+
+                .Line(
+                    "visitAgain",
+                    "\"I would like that. Within reason. "
+                    + "I do have a schedule.\"")
+
+                    .Choice(
+                        "Rain, pigeons, moss?",
+                        "schedule")
+
+                    .Choice(
+                        "Naturally.",
+                        "menu")
+
+                .Line(
+                    "schedule",
+                    "\"Precisely. I cannot let everything slide.\"")
+
+                    .Choice(
+                        "Of course not.",
+                        "menu")
+
+                // =====================================================
+                // THE OTHER GARGOYLE AND THE INCIDENT
+                // =====================================================
+
+                .Line(
+                    "otherGargoyle",
+                    "\"The gargoyle on the opposite pillar has not spoken to me "
+                    + "since the Incident.\"")
+
+                    .Choice(
+                        "What Incident?",
+                        "incident")
+
+                    .Choice(
+                        "How long ago?",
+                        "incidentYears")
+
+                    .Choice(
+                        "Have you tried apologising?",
+                        "incidentApology")
+
+                    .Choice(
+                        "Are you sure that one can talk?",
+                        "otherTalks")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "incident",
+                    "\"We do not speak of the Incident.\"")
+
+                    .Choice(
+                        "You just mentioned it.",
+                        "incidentMention")
+
+                    .Choice(
+                        "Was anyone hurt?",
+                        "incidentHurt")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
+                .Line(
+                    "incidentMention",
+                    "\"There was a bird. That is all I will say.\"")
+
+                    .Choice(
+                        "What kind of bird?",
+                        "incidentBird")
+
+                    .Choice(
+                        "Understood.",
+                        "menu")
+
+                .Line(
+                    "incidentBird",
+                    "\"A large one.\"")
+
+                    .Choice(
+                        "How large?",
+                        "incidentLarge")
+
+                .Line(
+                    "incidentLarge",
+                    "\"Large enough.\"")
+
+                    .Choice(
+                        "I'll stop asking.",
+                        "menu")
+
+                .Line(
+                    "incidentHurt",
+                    "\"Dignity suffered extensive casualties.\"")
+
+                    .Choice(
+                        "Whose dignity?",
+                        "incidentWhose")
+
+                .Line(
+                    "incidentWhose",
+                    "\"We do not speak of the Incident.\"")
+
+                    .Choice(
+                        "Right.",
+                        "menu")
+
+                .Line(
+                    "incidentYears",
+                    "\"Two hundred and twelve years, four months, "
+                    + "and approximately six days.\"")
+
+                    .Choice(
+                        "Still holding a grudge?",
+                        "stoneGrudge")
+
+                    .Choice(
+                        "Very approximate.",
+                        "incidentApproximate")
+
+                .Line(
+                    "stoneGrudge",
+                    "\"I am made of stone. We hold things.\"")
+
+                    .Choice(
+                        "Apparently.",
+                        "menu")
+
+                .Line(
+                    "incidentApproximate",
+                    "\"There was fog. I lost an afternoon.\"")
+
+                    .Choice(
+                        "Understandable.",
+                        "menu")
+
+                .Line(
+                    "incidentApology",
+                    "\"I am considering the wording.\"")
+
+                    .Choice(
+                        "For two hundred years?",
+                        "apologyWording")
+
+                .Line(
+                    "apologyWording",
+                    "\"I would hate to make it awkward.\"")
+
+                    .Choice(
+                        "Naturally.",
+                        "menu")
+
+                .Line(
+                    "otherTalks",
+                    "The gargoyle looks toward the opposite pillar. "
+                    + "\"That possibility has occurred to me.\"")
+
+                    .Choice(
+                        "Perhaps that's the explanation.",
+                        "otherExplanation")
+
+                .Line(
+                    "otherExplanation",
+                    "\"I prefer the Incident. It gives the relationship some substance.\"")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
+                // =====================================================
+                // FRONT DOOR AND ENTRY HINTS
+                // =====================================================
+
+                .Line(
+                    "door",
+                    "\"Knock, wait, and be polite. "
+                    + "Continue being polite after it becomes difficult.\"")
+
+                    .Choice(
+                        "Why would it become difficult?",
+                        "quazimodo")
+
+                    .Choice(
+                        "How polite?",
+                        "extraPolite")
+
+                    .Choice(
+                        "Would money help?",
+                        "payment")
+
+                    .Choice(
+                        "What if I force my way in?",
+                        "force")
+
+                    .Choice(
+                        "Thank you.",
+                        "menu")
+
+                .Line(
+                    "extraPolite",
+                    "\"More than saying 'please' while expecting obedience. "
+                    + "Ask permission and accept that the answer belongs to someone else.\"")
+
+                    .Choice(
+                        "And that works?",
+                        "mannersWork")
+
+                    .Choice(
+                        "I'll try.",
+                        "menu")
+
+                .Line(
+                    "mannersWork",
+                    "\"Occasionally. It is also less tiring than being thrown down the steps.\"")
+
+                    .Choice(
+                        "I'll start with manners.",
+                        "menu")
+
+                .Line(
+                    "payment",
+                    "\"Quazimodo has been known to accept a persuasive expression of gratitude.\"")
+
+                    .Choice(
+                        "Gold?",
+                        "paymentGold")
+
+                    .Choice(
+                        "Would ordinary change do?",
+                        "paymentChange")
+
+                    .Choice(
+                        "I thought the door wanted manners.",
+                        "knockerManners")
+
+                    .Choice(
+                        "Good to know.",
+                        "menu")
+
+                .Line(
+                    "paymentGold",
+                    "\"Gold is traditionally persuasive. "
+                    + "Even when it has a frog on it.\"")
+
+                    .Choice(
+                        "Hautain's coin?",
+                        "paymentRoyal")
+
+                    .Choice(
+                        "Noted.",
+                        "menu")
+
+                .Line(
+                    "paymentRoyal",
+                    "\"If His Majesty gives you one. "
+                    + "Do not confuse that with permission to empty the fountain.\"")
+
+                    .Choice(
+                        "Understood.",
+                        "menu")
+
+                .Line(
+                    "paymentChange",
+                    "\"Offer what you have to Quazimodo, not to the knocker. "
+                    + "The knocker has no pockets.\"")
+
+                    .Choice(
+                        "That distinction seems important.",
+                        "knockerManners")
+
+                    .Choice(
+                        "I'll see what I have.",
+                        "menu")
+
+                .Line(
+                    "knockerManners",
+                    "\"The knocker is iron and has no standards. "
+                    + "The gentleman who answers does. Some are negotiable.\"")
+
+                    .Choice(
+                        "Tell me about Quazimodo.",
+                        "quazimodo")
+
+                    .Choice(
+                        "Thanks.",
+                        "menu")
+
+                .Line(
+                    "force",
+                    "\"You could try.\"")
+
+                    .Choice(
+                        "Would it work?",
+                        "forceResult")
+
+                    .Choice(
+                        "I'll try asking first.",
+                        "menu")
+
+                .Line(
+                    "forceResult",
+                    "\"Something would give way. "
+                    + "Whether it would be the door or part of you is less certain.\"")
+
+                    .Choice(
+                        "Manners it is.",
+                        "menu")
+
+                .Line(
+                    "quazimodo",
+                    "\"Quazimodo. Butler, doorman, and cleaner of visitors "
+                    + "who mistake those jobs for weaknesses.\"")
+
+                    .Choice(
+                        "What's Quazimodo like?",
+                        "quazimodoLike")
+
+                    .Choice(
+                        "Can I trust Quazimodo?",
+                        "quazimodoTrust")
+
+                    .Choice(
+                        "Any advice?",
+                        "quazimodoAdvice")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "quazimodoLike",
+                    "\"Dry, patient, and rather stronger than his posture suggests.\"")
+
+                    .Choice(
+                        "Good to know.",
+                        "menu")
+
+                .Line(
+                    "quazimodoTrust",
+                    "\"To keep his word? Generally. "
+                    + "To tell you everything? Certainly not.\"")
+
+                    .Choice(
+                        "Fair distinction.",
+                        "menu")
+
+                .Line(
+                    "quazimodoAdvice",
+                    "\"Do not begin by asking what happened to his face. "
+                    + "He has heard the question and improved the answer.\"")
+
+                    .Choice(
+                        "I'll be careful.",
+                        "menu")
+
+                // =====================================================
+                // OBSERVATIONS AND THE MANSION
+                // =====================================================
+
+                .Line(
+                    "observations",
+                    "\"Three centuries facing a driveway. "
+                    + "I have developed a thorough understanding of arrivals.\"")
+
+                    .Choice(
+                        "Tell me about the Mansion.",
+                        "mansion")
+
+                    .Choice(
+                        "Tell me about Hautain.",
+                        "hautain")
+
+                    .Choice(
+                        "Who visits?",
+                        "arrivals")
+
+                    .Choice(
+                        "Do people leave?",
+                        "departures")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "mansion",
+                    "\"Lights appear in empty windows, and footsteps cross rooms with no floors. "
+                    + "Sometimes the roofline changes when the fog clears.\"")
+
+                    .Choice(
+                        "Does the building change?",
+                        "houseChanges")
+
+                    .Choice(
+                        "Is it dangerous?",
+                        "houseDanger")
+
+                    .Choice(
+                        "Have you been inside?",
+                        "inside")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "houseChanges",
+                    "\"I cannot prove it, but I have looked at that roof rather a lot.\"")
+
+                    .Choice(
+                        "I'll take your word for it.",
+                        "menu")
+
+                .Line(
+                    "houseDanger",
+                    "\"Yes, but so is a staircase in the rain. "
+                    + "Pay attention and do not assume everything frightening wants to hurt you.\"")
+
+                    .Choice(
+                        "Including you?",
+                        "frighteningGargoyle")
+
+                    .Choice(
+                        "Useful advice.",
+                        "menu")
+
+                .Line(
+                    "frighteningGargoyle",
+                    "\"Especially me. I would have to stand up. "
+                    + "It would become an occasion.\"")
+
+                    .Choice(
+                        "Let's avoid that.",
+                        "menu")
+
+                .Line(
+                    "inside",
+                    "\"I remember a workshop, a cart, and a disagreement "
+                    + "about which direction I should face.\"")
+
+                    .Choice(
+                        "And then?",
+                        "installed")
+
+                .Line(
+                    "installed",
+                    "\"This. For three centuries.\"")
+
+                    .Choice(
+                        "I'm sorry.",
+                        "menu")
+
+                    .Choice(
+                        "At least they chose a good view.",
+                        "view")
+
+                .Line(
+                    "view",
+                    "\"They chose the driveway. I believe the garden was extra.\"")
+
+                    .Choice(
+                        "Of course.",
+                        "menu")
+
+                .Line(
+                    "arrivals",
+                    "\"Travellers, tradesmen, people carrying invitations, "
+                    + "and people insisting they had invitations.\"")
+
+                    .Choice(
+                        "Who gets admitted?",
+                        "admitted")
+
+                    .Choice(
+                        "Any memorable visitors?",
+                        "memorable")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "admitted",
+                    "\"That is Quazimodo's department. "
+                    + "Mine is looking discouraging and carrying rainwater.\"")
+
+                    .Choice(
+                        "You're doing splendidly.",
+                        "menu")
+
+                .Line(
+                    "memorable",
+                    "\"A man once arrived with a ladder to repair a third-floor window.\"")
+
+                    .Choice(
+                        "What happened?",
+                        "ladder")
+
+                .Line(
+                    "ladder",
+                    "\"He spent an hour looking for it. "
+                    + "There had been a third floor when he set out.\"")
+
+                    .Choice(
+                        "Did he leave?",
+                        "ladderLeave")
+
+                .Line(
+                    "ladderLeave",
+                    "\"Eventually. He invoiced for the hour. I admired that.\"")
+
+                    .Choice(
+                        "Quite right.",
+                        "menu")
+
+                .Line(
+                    "departures",
+                    "\"Some leave, some return, and some stand at the gate "
+                    + "for a very long time first.\"")
+
+                    .Choice(
+                        "What are they waiting for?",
+                        "gateWaiting")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "gateWaiting",
+                    "\"I never ask. People standing at gates usually have enough questions.\"")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
+                // =====================================================
+                // KING HAUTAIN
+                // =====================================================
+
+                .Line(
+                    "hautain",
+                    "\"King Hautain the First. Do use the title. "
+                    + "It saves everyone time.\"")
+
+                    .Choice(
+                        "Is Hautain really a king?",
+                        "hautainKing")
+
+                    .Choice(
+                        "Anything I should avoid?",
+                        "hautainWarning")
+
+                    .Choice(
+                        "Hautain seems harmless.",
+                        "hautainHarmless")
+
+                    .Choice(
+                        "Do you get along?",
+                        "hautainFriend")
+
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "hautainKing",
+                    "\"He has a crown, territory, and strong opinions about borders. "
+                    + "I have met human kings with fewer qualifications.\"")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
+                .Line(
+                    "hautainWarning",
+                    "\"Do not take his coins, call him small, or mention herons "
+                    + "unless you have an afternoon to spare.\"")
+
+                    .Choice(
+                        "Noted.",
+                        "menu")
+
+                .Line(
+                    "hautainHarmless",
+                    "\"Hautain is small. So is a wasp. "
+                    + "Neither appreciates the comparison.\"")
+
+                    .Choice(
+                        "I'll be diplomatic.",
+                        "menu")
+
+                .Line(
+                    "hautainFriend",
+                    "\"He calls me the Northern Stone Dignitary. I call him Your Majesty. "
+                    + "Neither of us has anywhere else to be.\"")
+
+                    .Choice(
+                        "That sounds like friendship.",
+                        "hautainFriendship")
+
+                .Line(
+                    "hautainFriendship",
+                    "\"Do not tell Hautain. He would establish a ceremony.\"")
+
+                    .Choice(
+                        "Your secret is safe.",
+                        "menu")
+
+                // =====================================================
+                // DUTY AND THE PILLAR
+                // =====================================================
+
+                .Line(
+                    "leavePillar",
+                    "\"I was placed here to watch the entrance.\"")
+
+                    .Choice(
+                        "That wasn't my question.",
+                        "pillarQuestion")
+
+                    .Choice(
+                        "Are you attached to it?",
+                        "pillarQuestion")
+
+                    .Choice(
+                        "Fair enough.",
+                        "menu")
+
+                .Line(
+                    "pillarQuestion",
+                    "\"No. It was not.\"")
+
+                    .Choice(
+                        "There are no chains or mortar.",
+                        "noticed",
+                        onlyIf: p =>
+                            p.Wits >= 12
+                            && !p.Has("Gargoyle's Blessing"))
+
+                    .Choice(
+                        "I won't press.",
+                        "menu")
+
+                .Line(
+                    "noticed",
+                    "You examine the gargoyle's feet. Nothing physically joins them to the pillar. "
+                    + "\"Ah. You noticed.\"")
+
+                    .Choice(
+                        "You could leave.",
+                        "couldLeave")
+
+                    .Choice(
+                        "Duty keeps you here.",
+                        "duty")
+
+                    .Choice(
+                        "I won't tell anyone.",
+                        "secretSafe")
+
+                .Line(
+                    "couldLeave",
+                    "\"Perhaps. I was told to watch, warn, and remain. "
+                    + "Nobody told me when to stop.\"")
+
+                    .Choice(
+                        "You can decide that yourself.",
+                        "ownDecision")
+
+                    .Choice(
+                        "You've certainly warned me.",
+                        "warned")
+
+                    .Choice(
+                        "I'll leave it alone.",
+                        "menu")
+
+                .Line(
+                    "duty",
+                    "\"Duty is more effective than mortar. Mortar eventually cracks.\"")
+
+                    .Choice(
+                        "You've done your duty.",
+                        "warned")
+
+                    .Choice(
+                        "You could choose something else.",
+                        "ownDecision")
+
+                    .Choice(
+                        "I understand.",
+                        "menu")
+
+                .Line(
+                    "ownDecision",
+                    "The gargoyle looks toward the gate. "
+                    + "\"I shall consider it. Do not expect immediate movement. I have a reputation.\"")
+
+                    .Choice(
+                        "Take your time.",
+                        "blessingOffer")
+
+                .Line(
+                    "warned",
+                    "\"Yes, I suppose I have. A productive evening. "
+                    + "I shall need to sit down.\"")
+
+                    .Choice(
+                        "You're already sitting.",
+                        "alreadySitting")
+
+                .Line(
+                    "alreadySitting",
+                    "\"Then I am ahead of schedule.\"")
+
+                    .Choice(
+                        "Thank you for helping.",
+                        "blessingOffer")
+
+                .Line(
+                    "secretSafe",
+                    "\"Especially from the other pillar. "
+                    + "He would be insufferable if he discovered he could leave.\"")
+
+                    .Choice(
+                        "Assuming he can talk.",
+                        "secretOther")
+
+                    .Choice(
+                        "I won't say a word.",
+                        "blessingOffer")
+
+                .Line(
+                    "secretOther",
+                    "\"We are not reopening that question.\"")
+
+                    .Choice(
+                        "Understood.",
+                        "blessingOffer")
+
+                // =====================================================
+                // BLESSING
+                // =====================================================
+
+                .Line(
+                    "blessingOffer",
+                    "\"You noticed what most people overlook. "
+                    + "Allow me to return the courtesy. A little luck.\"")
+
+                    .Choice(
+                        "Thank you. I'll accept.",
+                        "blessing",
+                        onlyIf: p =>
+                            !p.Has("Gargoyle's Blessing"),
+                        effect: p =>
+                        {
+                            if (!p.Has("Gargoyle's Blessing"))
+                            {
+                                p.Luck += 1;
+                                p.Give("Gargoyle's Blessing");
+                            }
+                        })
+
+                    .Choice(
+                        "Keep it. You may need it.",
+                        "declineBlessing")
+
+                .Line(
+                    "blessing",
+                    "The gargoyle touches one stone finger to your forehead. "
+                    + "\"There. Try not to spend it all on something foolish.\" "
+                    + "(Gargoyle's Blessing received. Luck +1.)")
+
+                    .Choice(
+                        "I'll try.",
+                        "menu")
+
+                    .Choice(
+                        "No promises.",
+                        "blessingFoolish")
+
+                .Line(
+                    "blessingFoolish",
+                    "\"An honest answer. I shall lower my expectations accordingly.\"")
+
+                    .Choice(
+                        "Probably wise.",
+                        "menu")
+
+                .Line(
+                    "declineBlessing",
+                    "\"Perhaps I might need it. Ask again if you change your mind. "
+                    + "I am unlikely to have gone shopping.\"")
+
+                    .Choice(
+                        "I'll remember.",
+                        "menu")
+
+                // =====================================================
+                // PARTY HAT
+                // =====================================================
+
+                .Line(
+                    "Hat",
+                    "You place the party hat on the gargoyle's head. "
+                    + "\"I see we have reached the ceremonial portion of the visit.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "It suits you.",
+                        "hatSuits")
+
+                    .Choice(
+                        "Happy birthday.",
+                        "hatBirthday")
+
+                    .Choice(
+                        "You look happier already.",
+                        "hatHappy")
+
+                    .Choice(
+                        "I'll take it off.",
+                        "hatRemove")
+
+                .Line(
+                    "hatSuits",
+                    "\"I am an ancient guardian of stone and shadow. "
+                    + "I am wearing a paper hat.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "Both things can be true.",
+                        "hatBoth")
+
+                    .Choice(
+                        "I'll remove it.",
+                        "hatRemove")
+
+                .Line(
+                    "hatBoth",
+                    "\"I dislike how reasonable that is.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "Would you like to keep it on?",
+                        "hatKeep")
+
+                    .Choice(
+                        "I'll take it off.",
+                        "hatRemove")
+
+                .Line(
+                    "hatBirthday",
+                    "\"Nobody has dressed me for an occasion before. "
+                    + "The pigeons' intentions were less festive.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "You're welcome.",
+                        "hatThanks")
+
+                    .Choice(
+                        "Want to keep it on?",
+                        "hatKeep")
+
+                .Line(
+                    "hatThanks",
+                    "\"Thank you for the thought. The hat itself remains under review.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "I'll remove it.",
+                        "hatRemove")
+
+                    .Choice(
+                        "What's wrong with it?",
+                        "hatKeep")
+
+                .Line(
+                    "hatHappy",
+                    "\"My face is carved from stone. Please manage your expectations.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "Fair enough. I'll remove it.",
+                        "hatRemove")
+
+                    .Choice(
+                        "Want to keep wearing it?",
+                        "hatKeep")
+
+                .Line(
+                    "hatKeep",
+                    "\"No. The paper is scratching my scalp.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "You have a scalp?",
+                        "hatScalp")
+
+                    .Choice(
+                        "Right. Sorry.",
+                        "hatRemove")
+
+                .Line(
+                    "hatScalp",
+                    "\"Apparently. Today has been educational.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_PartyHat_portrait_framed.png")
+
+                    .Choice(
+                        "I'll take it off.",
+                        "hatRemove")
+
+                .Line(
+                    "hatRemove",
+                    "You remove the party hat. "
+                    + "\"A memorable celebration. Let us not repeat it annually.\"",
+                    portrait:
+                        "Assets/Characters/Portraits/"
+                        + "Gargoyle_portrait_framed.png")
+
+                    .Choice(
+                        "No promises.",
+                        "menu")
+
+                    .Choice(
+                        "I'll leave you in peace.",
+                        "goodbye")
+
+                // =====================================================
+                // GOODBYE
+                // =====================================================
+
+                .Line(
+                    "goodbye",
+                    "\"Goodbye. Do come back.\"")
+
+                    .Choice(
+                        "I will.")
+
+                    .Choice(
+                        "You just want someone to talk to.",
+                        "goodbyeTalk")
+
+                .Line(
+                    "goodbyeTalk",
+                    "\"Obviously. I thought I had been remarkably transparent about it.\"")
+
+                    .Choice(
+                        "See you later.");
         // =========================================================
         // KING HAUTAIN
         // FountainCloseup scene, ACT on the gold coins
