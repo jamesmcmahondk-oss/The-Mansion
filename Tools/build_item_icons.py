@@ -26,6 +26,7 @@ ICONS = {
     "party_hat.png":         ("Assets/UI/trunk.png", (850, 325, 1095, 530)),
     "loose_change.png":      ("Assets/UI/trunk.png", (850, 575, 1025, 670)),
     "fork.png":              ("Assets/UI/trunk.png", (1050, 505, 1260, 745)),
+    "old_key.png":           ("Assets/Backgrounds/Mansion/Sources/well_closeup_source.png", (835, 728, 925, 812)),
     "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1465, 705)),
 }
 

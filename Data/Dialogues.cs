@@ -2920,6 +2920,17 @@ namespace The_Mansion.Data
                         p.SetFlag("FrontDoorOpen");
                     })
 
+                // The party hat from the trunk.
+                .OnItem(
+                    "Party Hat",
+                    "partyHat",
+                    removeItem: true,
+                    effect: p =>
+                    {
+                        p.SetFlag("MetQuazimodo");
+                        p.SetFlag("QuazimodoPartyHat");
+                    })
+
                 .OnOtherItems(
                     "Quazimodo examines the {item} without taking it. "
                     + "\"No, thank you. The Mansion already contains one of those.\"")
@@ -3118,6 +3129,41 @@ namespace The_Mansion.Data
                 // The player can move into the deeper courtesy route,
                 // offer payment through ITEM, leave, or become rude.
                 // =====================================================
+
+                // =====================================================
+                // PARTY HAT
+                // =====================================================
+
+                .Line(
+                    "partyHat",
+                    "Quazimodo regards the party hat for a long moment. "
+                    + "Then, with enormous dignity, he puts it on and snaps the string under his chin. "
+                    + "\"It is not my birthday. It has not been my birthday since 1782.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_PartyHat_portrait_framed.png",
+                    character: "Assets/Characters/Quazimodo_PartyHat.png")
+
+                    .Choice(
+                        "It suits you.",
+                        "partyHatSuits")
+
+                    .Choice(
+                        "Happy un-birthday!",
+                        "partyHatSuits")
+
+                .Line(
+                    "partyHatSuits",
+                    "\"Nothing suits me. I merely tolerate things.\" "
+                    + "The tinsel trembles. "
+                    + "\"I shall keep it. For emergencies.\"",
+                    portrait: "Assets/Characters/Portraits/Quazimodo_PartyHat_portrait_framed.png",
+                    character: "Assets/Characters/Quazimodo_PartyHat.png")
+
+                    .Choice(
+                        "About getting inside...",
+                        "ordinaryRequest")
+
+                    .Choice(
+                        "Goodbye, Quazimodo.")
 
                 .Line(
                     "ordinaryRequest",

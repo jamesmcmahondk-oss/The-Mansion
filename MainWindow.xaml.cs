@@ -728,8 +728,15 @@ namespace The_Mansion
              * ACT on something with a plain reply and/or effect (.OnAct).
              */
             if (_interactionMode == InteractionMode.Act &&
-                (!string.IsNullOrWhiteSpace(hotspot.ActText) || hotspot.ActEffect != null))
+                (!string.IsNullOrWhiteSpace(hotspot.ActText) || hotspot.ActEffect != null || hotspot.ActResult != null))
             {
+                if (hotspot.ActResult != null)
+                {
+                    ShowDescription(hotspot.ActResult(_player));
+                    AfterStoryChange();
+                    return;
+                }
+
                 if (!string.IsNullOrWhiteSpace(hotspot.ActText))
                 {
                     ShowDescription(hotspot.ActText);

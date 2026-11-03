@@ -61,6 +61,11 @@ namespace The_Mansion.Data
                     "Assets/Items/gargoyle_blessing.png");
 
 
+        public static Item OldKey { get; } =
+            NewItem("Old Key",
+                    "A small brass key with a looped handle, fished from the bottom of the well. Someone wanted it hidden.",
+                    "Assets/Items/old_key.png");
+
         // =========================================================
         // THE CAR TRUNK (pick one before the game starts - Data/Trunk.cs)
         // =========================================================
