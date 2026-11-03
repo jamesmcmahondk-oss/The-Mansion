@@ -199,6 +199,11 @@ namespace The_Mansion.Data
                 .Describe("An ivy-covered archway in the garden wall. Steps beyond it climb towards the well.")
                 .GoesTo("Well")
 
+            // Listed after the arch so it wins where the two overlap.
+            .Hotspot("Path to the Back", 1060, 555, 125, 175)
+                .Describe("The cobbled path curves away along the garden wall, around to the back of the mansion.")
+                // .GoesTo("BackOfHouse")   <- add once the back of the house has a scene
+
             .Hotspot("Old Well", 1160, 250, 130, 120)
                 .Describe("A small roofed well stands at the top of the hill.")
                 .GoesTo("Well")
