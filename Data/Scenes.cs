@@ -299,13 +299,16 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/gravestone_closeup.png",
                      "An old headstone, smothered in ivy and lichen. Its inscription has almost worn away.")
 
-            .Hotspot("Gravestone", 520, 200, 500, 600)
+            .Hotspot("Moon", 1200, 192, 130, 110)
+                .Describe("The full moon hangs low over the graveyard.")
+
+            .Hotspot("Gravestone", 525, 200, 505, 630)
                 .Describe("Ivy has crept up both sides of the stone, as if trying to hold it upright.")
 
-            .Hotspot("Carved Cross", 745, 235, 125, 215)
+            .Hotspot("Carved Cross", 740, 250, 150, 220)
                 .Describe("A small Celtic cross is carved at the top, the same knotwork as the great cross on the hill.")
 
-            .Hotspot("Inscription", 630, 450, 330, 270)
+            .Hotspot("Inscription", 680, 480, 280, 240)
                 .Describe("Most of the letters are gone. Only a few marks remain.")
                 .OnAct(p => p.TestWits()
                     ? "You trace the worn letters with your finger: \"...HERE LIES ... FAITHFUL ... KEEPER OF THE KEYS ...\""
