@@ -61,7 +61,8 @@ namespace The_Mansion.Data
      .Line("secret", "Shh! Not so loud! ...Here, take my blessing. You will need all the luck you can get in there. (Luck +1)")
          .Choice("Your secret is safe with me.", "menu")
 
-     .Line("Hat", "Great! Awesome, a dirty old party hat! Now please take it off me, before the rough paper scratches my scalp!")
+     .Line("Hat", "Great! Awesome, a dirty old party hat! Now please take it off me, before the rough paper scratches my scalp!",
+           portrait: "Assets/Characters/Portraits/Gargoyle_PartyHat_portrait_framed.png")
          .Choice("(Take the hat back)", "menu");
 
         // =========================================================
