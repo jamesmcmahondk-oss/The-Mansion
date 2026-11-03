@@ -7,6 +7,11 @@ namespace The_Mansion.Data
     /*
      * All scenes in the game. See SCENE_GUIDE.md for how to write them.
      *
+     * Verbs: LOOK describes a hotspot and opens its .CloseUp(...) scene;
+     * ACT does its .OnAct(...) or moves on to its .GoesTo(...) scene;
+     * TALK and ITEM do their own things. Anything else gets a
+     * "You can't do that." style reply.
+     *
      * Hotspot positions are in pixels of the scene's background image
      * (0-1536 across, 0-1024 down; only Y 192-832 is visible in game).
      * Measure them with the F1 debug menu's hotspot editor.
@@ -41,7 +46,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Gargoyle", 135, 205, 205, 165)
                 .Describe("A sulky and rather sad looking gargoyle sits here.")
-                .GoesTo("FrontGargoyle");
+                .CloseUp("FrontGargoyle");
 
 
         public static Scene FountainCloseup { get; } =
@@ -77,7 +82,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Fountain", 0, 300, 380, 470)
                 .Describe("Water spills over the fountain's mossy tiers. Something glitters beneath the surface.")
-                .GoesTo("FountainCloseup")
+                .CloseUp("FountainCloseup")
 
             .Hotspot("Front Door", 770, 280, 300, 410)
                 .Describe("Wide stone steps lead up to the mansion's great carved doors.")
@@ -103,7 +108,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Glasshouse", 470, 250, 530, 270)
                 .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
-                .GoesTo("GlasshouseCloseup")
+                .CloseUp("GlasshouseCloseup")
 
             .Hotspot("Mansion", 1120, 192, 416, 300)
                 .Describe("Ivy smothers the mansion's left wing. Warm light glows in the tall windows.")
@@ -111,7 +116,7 @@ namespace The_Mansion.Data
             // Listed after the glasshouse so it wins where they overlap.
             .Hotspot("Statue", 770, 330, 120, 270)
                 .Describe("A hooded stone figure stands on a plinth in the long grass, watching the path.")
-                .GoesTo("StatueCloseup")
+                .CloseUp("StatueCloseup")
 
             .ReturnTo("Courtyard", "You follow the path back to the courtyard.");
 
@@ -212,11 +217,11 @@ namespace The_Mansion.Data
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
                 .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
                        p => p.Health -= 2)
-                .GoesTo("BenchCloseup")
+                .CloseUp("BenchCloseup")
 
             .Hotspot("Stone Bench", 1250, 690, 220, 142)
                 .Describe("A mossy stone bench beside the roses. Is that... singing underneath it?")
-                .GoesTo("BenchCloseup")
+                .CloseUp("BenchCloseup")
                 .OnAct("You sit for a moment. The stone is cold and damp. Somewhere a door creaks. You get up again.")
 
             .ReturnTo("Courtyard", "You head back to the courtyard.");
@@ -260,7 +265,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Well", 290, 590, 470, 220)
                 .Describe("Cold air rises from the well. You lean over to look inside...")
-                .GoesTo("WellCloseup")
+                .CloseUp("WellCloseup")
                 .OnTalk("\"Hello?\" ...Hello? ...hello? The echo takes rather too long to fade.")
 
             .Hotspot("Bucket", 470, 490, 95, 110)
@@ -297,11 +302,11 @@ namespace The_Mansion.Data
 
             .Hotspot("Old Gravestone", 580, 410, 120, 200)
                 .Describe("The inscription has worn away to almost nothing. Almost.")
-                .GoesTo("GravestoneCloseup")
+                .CloseUp("GravestoneCloseup")
 
             .Hotspot("Stone Cross", 1000, 260, 140, 250)
                 .Describe("A tall Celtic cross stands at the top of the steps, watching over the graves.")
-                .GoesTo("CrossCloseup")
+                .CloseUp("CrossCloseup")
 
             .Hotspot("Graveyard Path", 870, 560, 220, 240)
                 .Describe("Mossy steps lead up between the graves, deeper into the graveyard.")

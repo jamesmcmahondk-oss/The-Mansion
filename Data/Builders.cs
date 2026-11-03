@@ -146,10 +146,17 @@ namespace The_Mansion.Data
             return this;
         }
 
-        /// <summary>Clicking it moves the player to another scene.</summary>
+        /// <summary>ACT on it moves the player on to another place (a new scene).</summary>
         public HotspotBuilder GoesTo(string sceneName)
         {
             _hotspot.TargetScene = sceneName;
+            return this;
+        }
+
+        /// <summary>LOOK on it opens a close-up scene (e.g. the fountain close-up).</summary>
+        public HotspotBuilder CloseUp(string sceneName)
+        {
+            _hotspot.CloseUpScene = sceneName;
             return this;
         }
 

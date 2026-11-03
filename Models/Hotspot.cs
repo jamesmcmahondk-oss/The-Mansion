@@ -30,6 +30,11 @@ namespace The_Mansion.Models
         // Leave empty if clicking it should not change scene.
         public string TargetScene { get; set; } = "";
 
+        // Close-up scene opened when the player uses LOOK on this hotspot
+        // (e.g. the fountain close-up). TargetScene is for moving on to a new
+        // place and is used by ACT.
+        public string CloseUpScene { get; set; } = "";
+
         // True for hotspots on fixed screen UI (like the Return arrow) rather
         // than on the background picture: X/Y/Width/Height are then plain
         // 1920x1080 screen pixels.

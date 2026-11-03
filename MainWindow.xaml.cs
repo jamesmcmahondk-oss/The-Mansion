@@ -730,59 +730,112 @@ namespace The_Mansion
             e.Handled = true;
 
             /*
-             * TALK on something that can talk starts a conversation.
+             * Screen UI (the Return arrow) works with any verb.
              */
-            if (_interactionMode == InteractionMode.Talk &&
-                !string.IsNullOrWhiteSpace(hotspot.DialogueId))
+            if (hotspot.ScreenSpace)
+            {
+                if (!string.IsNullOrWhiteSpace(hotspot.Description))
+                {
+                    ShowDescription(hotspot.Description);
+                }
+
+                GoToScene(hotspot.TargetScene, hotspot.Name);
+                return;
+            }
+
+            switch (_interactionMode)
+            {
+                case InteractionMode.Look:
+                    LookAt(hotspot);
+                    break;
+
+                case InteractionMode.Talk:
+                    TalkTo(hotspot);
+                    break;
+
+                case InteractionMode.Act:
+                    ActOn(hotspot);
+                    break;
+
+                case InteractionMode.Item:
+                    if (_selectedItem == null)
+                    {
+                        OpenInventory();
+                    }
+                    else
+                    {
+                        UseSelectedItemOn(hotspot);
+                    }
+                    break;
+            }
+        }
+
+        // Replies when a verb does nothing on a hotspot.
+        private const string NothingToSeeText = "You see nothing special.";
+        private const string CantTalkText = "Who or what are you talking to?";
+        private const string CantActText = "You can't do that.";
+
+        /*
+         * LOOK: describe it, and open its close-up scene if it has one.
+         */
+        private void LookAt(Hotspot hotspot)
+        {
+            if (!string.IsNullOrWhiteSpace(hotspot.CloseUpScene))
+            {
+                GoToScene(hotspot.CloseUpScene, hotspot.Name);
+                return;
+            }
+
+            ShowDescription(string.IsNullOrWhiteSpace(hotspot.Description)
+                ? NothingToSeeText
+                : hotspot.Description);
+        }
+
+        /*
+         * TALK: a conversation (.TalkStarts), a plain reply (.OnTalk),
+         * or "Who or what are you talking to?".
+         */
+        private void TalkTo(Hotspot hotspot)
+        {
+            if (!string.IsNullOrWhiteSpace(hotspot.DialogueId))
             {
                 StartDialogue(hotspot.DialogueId);
                 return;
             }
 
-            /*
-             * TALK on something with a plain reply (.OnTalk).
-             */
-            if (_interactionMode == InteractionMode.Talk &&
-                !string.IsNullOrWhiteSpace(hotspot.TalkText))
-            {
-                ShowDescription(hotspot.TalkText);
-                return;
-            }
+            ShowDescription(string.IsNullOrWhiteSpace(hotspot.TalkText)
+                ? CantTalkText
+                : hotspot.TalkText);
+        }
 
-            /*
-             * ACT on something with an ACT conversation (e.g. a character
-             * who appears when you touch something).
-             */
-            if (_interactionMode == InteractionMode.Act &&
-                !string.IsNullOrWhiteSpace(hotspot.ActDialogueId))
+        /*
+         * ACT: a conversation (.ActStarts), a fight (.ActStartsFight), an
+         * action (.OnAct), moving on to a new place (.GoesTo) - or
+         * "You can't do that."
+         */
+        private void ActOn(Hotspot hotspot)
+        {
+            if (!string.IsNullOrWhiteSpace(hotspot.ActDialogueId))
             {
                 StartDialogue(hotspot.ActDialogueId);
                 return;
             }
 
-            /*
-             * ACT on something that starts a fight (.ActStartsFight).
-             */
-            if (_interactionMode == InteractionMode.Act &&
-                !string.IsNullOrWhiteSpace(hotspot.ActFightId))
+            if (!string.IsNullOrWhiteSpace(hotspot.ActFightId))
             {
                 StartFight(hotspot.ActFightId);
                 return;
             }
 
-            /*
-             * ACT on something with a plain reply and/or effect (.OnAct).
-             */
-            if (_interactionMode == InteractionMode.Act &&
-                (!string.IsNullOrWhiteSpace(hotspot.ActText) || hotspot.ActEffect != null || hotspot.ActResult != null))
+            if (hotspot.ActResult != null)
             {
-                if (hotspot.ActResult != null)
-                {
-                    ShowDescription(hotspot.ActResult(_player));
-                    AfterStoryChange();
-                    return;
-                }
+                ShowDescription(hotspot.ActResult(_player));
+                AfterStoryChange();
+                return;
+            }
 
+            if (!string.IsNullOrWhiteSpace(hotspot.ActText) || hotspot.ActEffect != null)
+            {
                 if (!string.IsNullOrWhiteSpace(hotspot.ActText))
                 {
                     ShowDescription(hotspot.ActText);
@@ -793,44 +846,30 @@ namespace The_Mansion
                 return;
             }
 
-            /*
-             * ITEM: use the selected item on the hotspot. (Screen UI such as
-             * the Return arrow still works normally.)
-             */
-            if (_interactionMode == InteractionMode.Item &&
-                !hotspot.ScreenSpace)
+            if (!string.IsNullOrWhiteSpace(hotspot.TargetScene))
             {
-                if (_selectedItem == null)
-                {
-                    OpenInventory();
-                }
-                else
-                {
-                    UseSelectedItemOn(hotspot);
-                }
-
+                GoToScene(hotspot.TargetScene, hotspot.Name);
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(hotspot.Description))
-            {
-                DescriptionText.Text = hotspot.Description;
-            }
+            ShowDescription(CantActText);
+        }
 
-            if (string.IsNullOrWhiteSpace(hotspot.TargetScene))
+        private void GoToScene(string sceneName, string hotspotName)
+        {
+            if (string.IsNullOrWhiteSpace(sceneName))
             {
                 return;
             }
 
-            Scene? targetScene =
-                Scenes.GetScene(hotspot.TargetScene);
+            Scene? targetScene = Scenes.GetScene(sceneName);
 
             if (targetScene == null)
             {
                 MessageBox.Show(
-                    $"The target scene '{hotspot.TargetScene}' " +
+                    $"The target scene '{sceneName}' " +
                     $"was not found.\n\n" +
-                    $"Hotspot: {hotspot.Name}",
+                    $"Hotspot: {hotspotName}",
                     "Missing scene",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning
@@ -2246,7 +2285,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             if (!hotspot.ItemUses.TryGetValue(itemName, out ItemUse? use))
             {
-                ShowDescription($"You try the {itemName} on the {hotspot.Name}. Nothing happens.");
+                ShowDescription($"You can't use the {itemName} on the {hotspot.Name}.");
                 return;
             }
 
