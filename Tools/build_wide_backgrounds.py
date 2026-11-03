@@ -21,6 +21,9 @@ BACKGROUNDS = [
     ("courtyard_source.png",               "courtyard.png",          70),
     ("garden_source.png",                  "garden.png",            110),
     ("statue_closeup_source.png",          "statue_closeup.png",     10),
+    ("mansion_right_source.png",           "mansion_right.png",      90),
+    ("well_source.png",                    "well.png",               60),
+    ("graveyard_entrance_source.png",      "graveyard_entrance.png", 110),
 ]
 
 for src_name, dst_name, shift in BACKGROUNDS:

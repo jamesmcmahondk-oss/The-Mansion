@@ -89,6 +89,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Side Path", 1300, 540, 200, 200)
                 .Describe("A cracked, winding path disappears into the overgrown dark beside the mansion.")
+                .GoesTo("MansionRight")
 
             .ReturnTo("FrontGate", "You walk back to the gates.");
 
@@ -138,6 +139,86 @@ namespace The_Mansion.Data
                 .OnAct("You pull at the sword. It doesn't move. Not yet, anyway.")
 
             .ReturnTo("Garden", "You step back from the statue.");
+
+
+        // =========================================================
+        // RIGHT OF THE MANSION: side path -> old well -> graveyard
+        // Backgrounds made by Tools/build_wide_backgrounds.py.
+        // =========================================================
+
+        public static Scene MansionRight { get; } =
+            NewScene("MansionRight",
+                     "Assets/Backgrounds/Mansion/mansion_right.png",
+                     "A wet stone path runs along the mansion's right wing, then climbs a misty hill towards an old well.")
+
+            .Hotspot("Lantern", 60, 290, 140, 160)
+                .Describe("An iron lantern on a stone post. Its flame burns steadily, despite the rain.")
+
+            .Hotspot("Windows", 240, 192, 450, 320)
+                .Describe("Candles burn behind the tall windows, but nothing moves inside.")
+
+            .Hotspot("Hill Path", 960, 450, 320, 340)
+                .Describe("The path winds up the hill to an old well.")
+                .GoesTo("Well")
+
+            .Hotspot("Old Well", 1170, 290, 140, 160)
+                .Describe("A small roofed well stands alone at the top of the hill.")
+                .GoesTo("Well")
+
+            .ReturnTo("Courtyard", "You head back to the courtyard.");
+
+
+        public static Scene Well { get; } =
+            NewScene("Well",
+                     "Assets/Backgrounds/Mansion/well.png",
+                     "An old stone well stands under a mossy roof. Beyond it, a path leads down to a fenced graveyard.")
+
+            .Hotspot("Well", 290, 590, 470, 220)
+                .Describe("Cold air rises from the well. You can't see the bottom.")
+                .OnTalk("\"Hello?\" ...Hello? ...hello? The echo takes rather too long to fade.")
+
+            .Hotspot("Bucket", 470, 490, 95, 110)
+                .Describe("A rusty bucket hangs from a chain over the well. It's empty.")
+                .OnAct("You crank the bucket down into the dark. It comes back up empty - and somehow colder.")
+
+            .Hotspot("Lantern", 810, 375, 70, 145)
+                .Describe("A lantern hangs from the well's post, swinging gently in a wind you can't feel.")
+
+            .Hotspot("Graveyard", 1000, 520, 500, 100)
+                .Describe("Gravestones crowd the hillside beyond the iron fence.")
+                .GoesTo("GraveyardEntrance")
+
+            .Hotspot("Graveyard Path", 1050, 620, 300, 210)
+                .Describe("A narrow path leads down past lit lanterns to the graveyard.")
+                .GoesTo("GraveyardEntrance")
+
+            .ReturnTo("MansionRight", "You walk back down the hill.");
+
+
+        public static Scene GraveyardEntrance { get; } =
+            NewScene("GraveyardEntrance",
+                     "Assets/Backgrounds/Mansion/graveyard_entrance.png",
+                     "The graveyard gates stand open. Mossy headstones lean beneath an ancient tree, and a stone cross rises over the hill.")
+
+            .Hotspot("Old Tree", 330, 192, 220, 300)
+                .Describe("A huge, gnarled oak. Its roots have tipped several headstones over.")
+
+            .Hotspot("Lantern", 130, 230, 130, 150)
+                .Describe("A lantern on the gatepost lights the way in. Someone keeps these burning.")
+
+            .Hotspot("Lantern", 1250, 420, 110, 140)
+                .Describe("A lantern on the gatepost lights the way in. Someone keeps these burning.")
+
+            .Hotspot("Old Gravestone", 580, 410, 120, 200)
+                .Describe("The inscription has worn away to almost nothing. Almost.")
+
+            .Hotspot("Stone Cross", 1000, 260, 140, 250)
+                .Describe("A tall Celtic cross stands at the top of the steps, watching over the graves.")
+
+            .Hotspot("Graveyard Path", 870, 560, 220, 240)
+                .Describe("Mossy steps lead up between the graves, deeper into the graveyard.")
+
+            .ReturnTo("Well", "You leave the graveyard behind.");
 
 
         public static Scene FrontGargoyle { get; } =
