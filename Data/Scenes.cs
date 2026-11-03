@@ -103,6 +103,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Glasshouse", 470, 250, 530, 270)
                 .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
+                .GoesTo("GlasshouseCloseup")
 
             .Hotspot("Mansion", 1120, 192, 416, 300)
                 .Describe("Ivy smothers the mansion's left wing. Warm light glows in the tall windows.")
@@ -141,6 +142,38 @@ namespace The_Mansion.Data
             .ReturnTo("Garden", "You step back from the statue.");
 
 
+        // The glasshouse on the left of the mansion (from the Garden).
+        public static Scene GlasshouseCloseup { get; } =
+            NewScene("GlasshouseCloseup",
+                     "Assets/Backgrounds/Mansion/glasshouse_closeup.png",
+                     "The glasshouse rises before you, all iron lace and misted glass. Inside, hundreds of candles burn among tall palms.")
+
+            .Hotspot("Glass Dome", 200, 192, 1280, 190)
+                .Describe("Rain beads on the great glass dome. Ivy has crept almost to the top.")
+
+            .Hotspot("Windows", 50, 400, 350, 300)
+                .Describe("Through the misted panes you can make out palms, ferns - and candles, far too many candles.")
+
+            .Hotspot("Windows", 1200, 400, 320, 300)
+                .Describe("Through the misted panes you can make out palms, ferns - and candles, far too many candles.")
+
+            .Hotspot("Lantern", 605, 530, 70, 160)
+                .Describe("An iron lantern on a stone pillar, lighting the steps.")
+
+            .Hotspot("Lantern", 955, 530, 70, 160)
+                .Describe("An iron lantern on a stone pillar, lighting the steps.")
+
+            .Hotspot("Chandelier", 735, 385, 160, 115)
+                .Describe("A chandelier blazes just inside, above the doors. Someone lit every candle.")
+
+            .Hotspot("Glasshouse Doors", 720, 500, 180, 290)
+                .Describe("Tall glass doors with brass handles. The air seeping out is warm and smells of earth and wax.")
+                .OnAct("You push the doors. They don't open - yet they rattle, as if something inside pushed back.")
+                .OnItem("Old Key", "The little brass key doesn't fit. The lock here is large and ornate.")
+
+            .ReturnTo("Garden", "You walk back to the garden.");
+
+
         // =========================================================
         // RIGHT OF THE MANSION: side path -> old well -> graveyard
         // Backgrounds made by Tools/build_wide_backgrounds.py.
@@ -149,23 +182,79 @@ namespace The_Mansion.Data
         public static Scene MansionRight { get; } =
             NewScene("MansionRight",
                      "Assets/Backgrounds/Mansion/mansion_right.png",
-                     "A wet stone path runs along the mansion's right wing, then climbs a misty hill towards an old well.")
+                     "A wet stone path curves along the mansion's right wing, past a servants' entrance, to an archway in the garden wall. Beyond it, steps climb to an old well.")
 
-            .Hotspot("Lantern", 60, 290, 140, 160)
+            .Hotspot("Lantern", 50, 290, 150, 190)
                 .Describe("An iron lantern on a stone post. Its flame burns steadily, despite the rain.")
 
-            .Hotspot("Windows", 240, 192, 450, 320)
+            .Hotspot("Windows", 240, 192, 400, 310)
                 .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
-            .Hotspot("Hill Path", 960, 450, 320, 340)
-                .Describe("The path winds up the hill to an old well.")
+            .Hotspot("Servants' Entrance", 790, 300, 180, 370)
+                .Describe("A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side.")
+                .OnAct("You try the handle. Locked - and bolted, by the sound of it.")
+                .OnItem("Old Key", "The little brass key is far too small for this lock.")
+
+            .Hotspot("Garden Arch", 1140, 400, 160, 380)
+                .Describe("An ivy-covered archway in the garden wall. Steps beyond it climb towards the well.")
                 .GoesTo("Well")
 
-            .Hotspot("Old Well", 1170, 290, 140, 160)
-                .Describe("A small roofed well stands alone at the top of the hill.")
+            // Listed after the arch so it wins where the two overlap.
+            .Hotspot("Path to the Back", 1060, 555, 125, 175)
+                .Describe("The cobbled path curves away along the garden wall, around to the back of the mansion.")
+                // .GoesTo("BackOfHouse")   <- add once the back of the house has a scene
+
+            .Hotspot("Old Well", 1160, 250, 130, 120)
+                .Describe("A small roofed well stands at the top of the hill.")
                 .GoesTo("Well")
+
+            .Hotspot("Rose Bush", 1300, 500, 236, 190)
+                .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
+                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
+                       p => p.Health -= 2)
+                .GoesTo("BenchCloseup")
+
+            .Hotspot("Stone Bench", 1250, 690, 220, 142)
+                .Describe("A mossy stone bench beside the roses. Is that... singing underneath it?")
+                .GoesTo("BenchCloseup")
+                .OnAct("You sit for a moment. The stone is cold and damp. Somewhere a door creaks. You get up again.")
 
             .ReturnTo("Courtyard", "You head back to the courtyard.");
+
+
+        // Close-up of the stone bench and the rose bush (from MansionRight).
+        // Ebria the drunk fairy sits underneath the bench.
+        public static Scene BenchCloseup { get; } =
+            NewScene("BenchCloseup",
+                     "Assets/Backgrounds/Mansion/bench_closeup.png",
+                     "A carved stone bench stands against the wall, half swallowed by an enormous rose bush. Something tiny hiccups underneath it.")
+
+            .Sprite("Assets/Characters/Ebria_Drinking.png", 700, 622, 175)
+
+            .Hotspot("Stone Bench", 320, 260, 1030, 400)
+                .Describe("The bench is carved with quatrefoils and a fleur-de-lis. Rain has pooled in the seat.")
+                .OnAct("You sit down. From underneath comes an indignant \"Oi! Some of us live here!\"")
+
+            .Hotspot("Roses", 420, 192, 1116, 75)
+                .Describe("Blood-red roses, heavy with rain. They smell of summer, which is unsettling in late autumn.")
+                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
+                       p => p.Health -= 2)
+
+            .Hotspot("Roses", 1350, 260, 186, 400)
+                .Describe("Blood-red roses, heavy with rain. They smell of summer, which is unsettling in late autumn.")
+                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
+                       p => p.Health -= 2)
+
+            .Hotspot("Garden Arch", 40, 280, 150, 70)
+                .Describe("Through the archway, lit steps climb towards the well.")
+                .GoesTo("Well")
+
+            // Listed last so she wins over the bench.
+            .Hotspot("Ebria", 700, 622, 120, 175)
+                .Describe("A tiny fairy with wild red hair sits under the bench, swigging from a bottle labelled ANOTHER BAD IDEA.")
+                .TalkStarts("Ebria")
+
+            .ReturnTo("MansionRight", "You leave the bench and its tenant in peace.");
 
 
         public static Scene Well { get; } =

@@ -62,6 +62,27 @@ namespace The_Mansion.Data
         /// The new picture should be framed like the normal one so hotspots
         /// still line up. Several can be added; the first true one wins.
         /// </summary>
+        /// <summary>
+        /// Puts a picture in the scene (transparent PNG) at X/Y with the given
+        /// height, in background image pixels - e.g. a character sitting under
+        /// a bench. Optional onlyWhen hides it while false. Pair it with a
+        /// .Hotspot(...) in the same place to make it clickable.
+        /// </summary>
+        public SceneBuilder Sprite(string image, double x, double y, double height,
+                                   Func<Player, bool>? onlyWhen = null)
+        {
+            _scene.Sprites.Add(new SceneSprite
+            {
+                Image = image,
+                X = x,
+                Y = y,
+                Height = height,
+                VisibleWhen = onlyWhen
+            });
+
+            return this;
+        }
+
         public SceneBuilder BackgroundWhen(Func<Player, bool> condition, string backgroundImage)
         {
             _scene.AlternateBackgrounds.Add(new SceneBackground
@@ -223,6 +244,10 @@ namespace The_Mansion.Data
 
         public SceneBuilder BackgroundWhen(Func<Player, bool> condition, string backgroundImage)
             => _scene.BackgroundWhen(condition, backgroundImage);
+
+        public SceneBuilder Sprite(string image, double x, double y, double height,
+                                   Func<Player, bool>? onlyWhen = null)
+            => _scene.Sprite(image, x, y, height, onlyWhen);
 
         public static implicit operator Scene(HotspotBuilder builder) => builder._scene.Build();
     }

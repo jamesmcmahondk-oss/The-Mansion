@@ -576,6 +576,21 @@ namespace The_Mansion
             _isCreatingHotspot = false;
             _hasDragged = false;
 
+            // Pictures placed in the scene (.Sprite), under the hotspots.
+            foreach (SceneSprite sprite in scene.Sprites)
+            {
+                if (sprite.VisibleWhen != null && !sprite.VisibleWhen(_player))
+                {
+                    continue;
+                }
+
+                Image? spriteImage = CreateSpriteImage(sprite);
+                if (spriteImage != null)
+                {
+                    SceneCanvas.Children.Add(spriteImage);
+                }
+            }
+
             foreach (Hotspot hotspot in scene.Hotspots)
             {
                 // .OnlyWhen(...) hotspots vanish while their condition is false.
@@ -594,6 +609,37 @@ namespace The_Mansion
             /*
              * Character rendering can be added here next.
              */
+        }
+
+        private Image? CreateSpriteImage(SceneSprite sprite)
+        {
+            try
+            {
+                var image = new Image
+                {
+                    Source = new BitmapImage(new Uri(
+                        $"pack://application:,,,/{sprite.Image}",
+                        UriKind.Absolute)),
+                    Stretch = Stretch.Uniform,
+                    IsHitTestVisible = false
+                };
+
+                Rect screen = ImageToScreen(new Rect(sprite.X, sprite.Y, 0, sprite.Height));
+                image.Height = screen.Height;
+                Canvas.SetLeft(image, screen.X);
+                Canvas.SetTop(image, screen.Y);
+                Panel.SetZIndex(image, 5);
+                return image;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Could not load sprite:\n\n{sprite.Image}\n\n{ex.Message}",
+                    "Sprite error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return null;
+            }
         }
 
         private Rectangle CreateHotspotRectangle(Hotspot hotspot)
