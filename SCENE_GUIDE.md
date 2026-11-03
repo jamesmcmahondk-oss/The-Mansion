@@ -36,6 +36,10 @@ public static Scene FountainCloseup { get; } =
   box over the object. A ready-made `.Hotspot(...)` line is copied to the
   clipboard; paste it into the scene.
 * `.ReturnTo(...)` makes the Return arrow (top left) go back somewhere.
+* `.Sprite("Assets/Characters/Ebria_Drinking.png", X, Y, height)` puts a
+  transparent picture in the scene (e.g. a character sitting under a bench).
+  Optional `onlyWhen: p => …` hides it while false. Add a `.Hotspot(...)` in the
+  same place to make it clickable.
 * `.BackgroundWhen(p => …, "image.png")` shows a different background once
   something has happened (see the recipe below). Put it right under `NewScene(...)`.
 

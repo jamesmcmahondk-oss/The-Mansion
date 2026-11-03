@@ -212,12 +212,49 @@ namespace The_Mansion.Data
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
                 .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
                        p => p.Health -= 2)
+                .GoesTo("BenchCloseup")
 
             .Hotspot("Stone Bench", 1250, 690, 220, 142)
-                .Describe("A mossy stone bench beside the roses.")
+                .Describe("A mossy stone bench beside the roses. Is that... singing underneath it?")
+                .GoesTo("BenchCloseup")
                 .OnAct("You sit for a moment. The stone is cold and damp. Somewhere a door creaks. You get up again.")
 
             .ReturnTo("Courtyard", "You head back to the courtyard.");
+
+
+        // Close-up of the stone bench and the rose bush (from MansionRight).
+        // Ebria the drunk fairy sits underneath the bench.
+        public static Scene BenchCloseup { get; } =
+            NewScene("BenchCloseup",
+                     "Assets/Backgrounds/Mansion/bench_closeup.png",
+                     "A carved stone bench stands against the wall, half swallowed by an enormous rose bush. Something tiny hiccups underneath it.")
+
+            .Sprite("Assets/Characters/Ebria_Drinking.png", 700, 622, 175)
+
+            .Hotspot("Stone Bench", 320, 260, 1030, 400)
+                .Describe("The bench is carved with quatrefoils and a fleur-de-lis. Rain has pooled in the seat.")
+                .OnAct("You sit down. From underneath comes an indignant \"Oi! Some of us live here!\"")
+
+            .Hotspot("Roses", 420, 192, 1116, 75)
+                .Describe("Blood-red roses, heavy with rain. They smell of summer, which is unsettling in late autumn.")
+                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
+                       p => p.Health -= 2)
+
+            .Hotspot("Roses", 1350, 260, 186, 400)
+                .Describe("Blood-red roses, heavy with rain. They smell of summer, which is unsettling in late autumn.")
+                .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
+                       p => p.Health -= 2)
+
+            .Hotspot("Garden Arch", 40, 280, 150, 70)
+                .Describe("Through the archway, lit steps climb towards the well.")
+                .GoesTo("Well")
+
+            // Listed last so she wins over the bench.
+            .Hotspot("Ebria", 700, 622, 120, 175)
+                .Describe("A tiny fairy with wild red hair sits under the bench, swigging from a bottle labelled ANOTHER BAD IDEA.")
+                .TalkStarts("Ebria")
+
+            .ReturnTo("MansionRight", "You leave the bench and its tenant in peace.");
 
 
         public static Scene Well { get; } =

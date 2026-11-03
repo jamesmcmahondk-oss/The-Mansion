@@ -4144,6 +4144,60 @@ namespace The_Mansion.Data
                     .Choice(
                         "Goodbye.");
         // =========================================================
+        // EBRIA, the drunk fairy (under the bench, BenchCloseup, TALK)
+        // =========================================================
+
+        public static Dialogue Ebria { get; } =
+            NewDialogue("Ebria", "Ebria")
+                .MetFlag("MetEbria")
+                .DimScene(false)               // she's sitting right there in the scene
+                .StartAt(p => p.HasFlag("MetEbria") ? "again" : "start")
+
+                .OnItem("Corkscrew", "corkscrew",
+                        removeItem: true,
+                        effect: p => p.SetFlag("GaveEbriaCorkscrew"))
+                .OnItem("Empty Bottle", "emptyBottle")
+                .OnOtherItems("Ebria squints at the {item}. \"Can you drink it? No? Then why are you showing it to me?\"")
+
+            .Line("start", "\"Shh! Shhh. You'll wake the bench.\" A tiny fairy peers up at you from under the stone, clutching a bottle bigger than her head. \"I'm Ebria. Who're you? Are you a bad idea? You look like a bad idea.\"")
+                .Choice("What are you doing under there?", "under")
+                .Choice("What's in the bottle?", "bottle")
+                .Choice("Do you live in the mansion?", "mansion")
+                .Choice("Goodbye, Ebria.")
+
+            .Line("menu", "\"Anything else? Make it quick, the bottle's getting warm.\"")
+                .Choice("What are you doing under there?", "under")
+                .Choice("What's in the bottle?", "bottle")
+                .Choice("Do you live in the mansion?", "mansion")
+                .Choice("King Hautain mentioned you.", "hautain", onlyIf: p => p.HasFlag("MetHautain"))
+                .Choice("Goodbye, Ebria.")
+
+            .Line("again", "\"Oh, it's you again.\" Hic. \"Still a bad idea?\"")
+                .SameChoicesAs("menu")
+
+            .Line("under", "\"Sheltering. From the rain. And from Quazimodo, who says I'm 'a hazard to the furniture'. The furniture has never complained.\"")
+                .Choice("Fair enough.", "menu")
+
+            .Line("bottle", "She turns the label towards you: ANOTHER BAD IDEA. \"Elderflower, mostly. And some regret. Want a sip? No. It's mine.\"")
+                .Choice("I'll pass.", "menu")
+
+            .Line("mansion", "\"Used to. Then there was a misunderstanding about the wine cellar. Then another one. Then they changed the locks.\" She sniffs. \"I dropped my key down the well out of spite.\"")
+                .Choice("Your key is down the well?", "key")
+                .Choice("That's sad.", "menu")
+
+            .Line("key", "\"Was. Probably still is. Little brass thing. Opens something important. I forget what. That was the point of the bottle.\"")
+                .Choice("I'll look for it.", "menu")
+
+            .Line("hautain", "Ebria snorts so hard she nearly drops the bottle. \"The frog? I invaded his lily pad once. Very small war. I lost. I fell in.\"")
+                .Choice("He mentioned that.", "menu")
+
+            .Line("corkscrew", "Ebria's eyes go huge. \"A CORKSCREW. Do you know how long I've been biting corks?\" She hugs it like a long-lost friend. \"For that, a secret: never play cards with the frog. He cheats. With his TONGUE.\"")
+                .Choice("I'll remember that.", "menu")
+
+            .Line("emptyBottle", "She peers into it hopefully, then looks up at you with deep betrayal. \"It's EMPTY. That's the worst kind.\"")
+                .Choice("Sorry.", "menu");
+
+        // =========================================================
         // LOOKUP (used by the game - no need to edit)
         // =========================================================
 

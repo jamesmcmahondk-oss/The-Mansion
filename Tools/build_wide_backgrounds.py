@@ -31,6 +31,7 @@ WIDE = [
     #  longer used: mansion_right_source.png)
     ("mansion_right_v2_source.png",        "mansion_right.png",         215),
     ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
+    ("bench_closeup_source.png",           "bench_closeup.png",         330),
     ("well_source.png",                    "well.png",                   60),
     ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
     ("well_closeup_source.png",            "well_closeup.png",          170),
