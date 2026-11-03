@@ -27,6 +27,15 @@ PORTRAITS = {
         glow=(0.38, 0.30),
         title="QUAZIMODO",
         subtitle="The Butler"),
+    # A picture that already has its own background (no transparency):
+    # "opaque" keeps that background and only re-lights it to match.
+    "Quazimodo_Beaten": dict(
+        source="Assets/Characters/Portraits/Sources/Quazimodo_beaten_source.jpg",
+        crop=(235, 105, 655, 665),
+        glow=(0.45, 0.28),
+        opaque=True,
+        title="QUAZIMODO",
+        subtitle="The Butler"),
     "Hautain": dict(
         source="Assets/Characters/Hautain.png",
         crop=(20, 0, 860, 1120),
@@ -92,20 +101,36 @@ def warm_light(char, glow_x, glow_y):
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
 
 
+def candle_grade(img, glow_x, glow_y):
+    """Give a picture with its own background the same warm candle light."""
+    a = np.asarray(img).astype(np.float32)
+    y, x = np.mgrid[0:OUT_H, 0:OUT_W].astype(np.float32)
+    d = np.hypot((x / OUT_W - glow_x), (y / OUT_H - glow_y))
+    glow = np.exp(-(d / 0.38) ** 2)[..., None]
+    a[..., :3] *= np.array([1.10, 0.98, 0.82], np.float32)       # warm, like candlelight
+    a[..., :3] += np.array([70, 40, 16], np.float32) * glow * 0.55   # glow behind the head
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+
+
 def build(name, spec):
     src = Image.open(spec["source"]).convert("RGBA")
     char = src.crop(spec["crop"]).resize((OUT_W, OUT_H), Image.LANCZOS)
     char = char.filter(ImageFilter.UnsharpMask(radius=1.2, percent=60, threshold=2))
-    char = warm_light(char, *spec["glow"])
 
-    # Soft dark shadow behind the figure so it sits in the scene.
-    shadow = Image.new("RGBA", char.size, (0, 0, 0, 0))
-    sh_alpha = char.split()[3].filter(ImageFilter.GaussianBlur(14)).point(lambda v: v * 0.55)
-    shadow.putalpha(sh_alpha)
+    if spec.get("opaque"):
+        img = candle_grade(char, *spec["glow"])
+    else:
+        char = warm_light(char, *spec["glow"])
 
-    img = background(*spec["glow"])
-    img.alpha_composite(shadow, (10, 12))
-    img.alpha_composite(char)
+        # Soft dark shadow behind the figure so it sits in the scene.
+        shadow = Image.new("RGBA", char.size, (0, 0, 0, 0))
+        sh_alpha = char.split()[3].filter(ImageFilter.GaussianBlur(14)).point(lambda v: v * 0.55)
+        shadow.putalpha(sh_alpha)
+
+        img = background(*spec["glow"])
+        img.alpha_composite(shadow, (10, 12))
+        img.alpha_composite(char)
+
     img = vignette(img)
     img.convert("RGB").save(os.path.join(OUT_DIR, f"{name}_portrait.png"))
 
