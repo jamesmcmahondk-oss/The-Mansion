@@ -174,7 +174,8 @@ namespace The_Mansion.Data
                      "An old stone well stands under a mossy roof. Beyond it, a path leads down to a fenced graveyard.")
 
             .Hotspot("Well", 290, 590, 470, 220)
-                .Describe("Cold air rises from the well. You can't see the bottom.")
+                .Describe("Cold air rises from the well. You lean over to look inside...")
+                .GoesTo("WellCloseup")
                 .OnTalk("\"Hello?\" ...Hello? ...hello? The echo takes rather too long to fade.")
 
             .Hotspot("Bucket", 470, 490, 95, 110)
@@ -211,14 +212,106 @@ namespace The_Mansion.Data
 
             .Hotspot("Old Gravestone", 580, 410, 120, 200)
                 .Describe("The inscription has worn away to almost nothing. Almost.")
+                .GoesTo("GravestoneCloseup")
 
             .Hotspot("Stone Cross", 1000, 260, 140, 250)
                 .Describe("A tall Celtic cross stands at the top of the steps, watching over the graves.")
+                .GoesTo("CrossCloseup")
 
             .Hotspot("Graveyard Path", 870, 560, 220, 240)
                 .Describe("Mossy steps lead up between the graves, deeper into the graveyard.")
 
             .ReturnTo("Well", "You leave the graveyard behind.");
+
+
+        // Looking down the well. The key can be fished out with the Ball of
+        // String (always works) or the bucket (a Luck test, try again).
+        public static Scene WellCloseup { get; } =
+            NewScene("WellCloseup",
+                     "Assets/Backgrounds/Mansion/well_closeup.png",
+                     "You peer down the well. Cobwebs stretch across the slick stones, and far below, something small glints in the dark.")
+
+            // The key is gone from the picture once you have it.
+            .BackgroundWhen(p => p.HasFlag("GotWellKey"),
+                            "Assets/Backgrounds/Mansion/well_closeup_empty.png")
+
+            .Hotspot("Well Shaft", 380, 280, 820, 420)
+                .Describe("The shaft drops away into darkness. The stones are wet and furred with cobwebs.")
+                .OnTalk("\"Hello down there?\" ...there. ...there. Something at the bottom seems to listen.")
+
+            .Hotspot("Bucket", 0, 300, 240, 350)
+                .Describe("The rusty bucket hangs from its chain at the edge of the well.")
+                .OnAct(p =>
+                {
+                    if (p.HasFlag("GotWellKey"))
+                    {
+                        return "You lower the bucket into the dark. It comes back up with nothing but cold water.";
+                    }
+
+                    if (p.TestLuck())
+                    {
+                        p.Give("Old Key");
+                        p.SetFlag("GotWellKey");
+                        return "You lower the bucket and scrape it along the bottom... When it comes back up, a small brass key is rattling inside!";
+                    }
+
+                    return "The bucket thuds against the bottom and swings straight past the glint. Maybe try again?";
+                })
+
+            .Hotspot("Glinting Key", 755, 685, 95, 75)
+                .Describe("At the very bottom of the well, a small brass key catches the light.")
+                .OnAct("It's far too deep to reach. You'd need something long - or something to fish with.")
+                .OnItem("Ball of String",
+                        "You tie a loop in the end of the string and lower it down... after a few patient tries the loop catches the key's handle. You reel up a small brass key!",
+                        effect: p =>
+                        {
+                            p.Give("Old Key");
+                            p.SetFlag("GotWellKey");
+                        })
+                .OnlyWhen(p => !p.HasFlag("GotWellKey"))
+
+            .ReturnTo("Well", "You step back from the edge of the well.");
+
+
+        // Close-ups in the graveyard (fitted by Tools/build_wide_backgrounds.py).
+        public static Scene CrossCloseup { get; } =
+            NewScene("CrossCloseup",
+                     "Assets/Backgrounds/Mansion/cross_closeup.png",
+                     "The great stone cross looms over you, every inch of it carved with endless knots.")
+
+            .Hotspot("Moon", 1040, 192, 110, 110)
+                .Describe("The full moon hangs over the graveyard. It looks closer than it should.")
+
+            .Hotspot("Celtic Cross", 600, 192, 430, 420)
+                .Describe("Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another.")
+                .OnTalk("You read the knots aloud, as if they were words. They are not. You feel slightly foolish.")
+
+            .Hotspot("Plinth", 530, 612, 520, 200)
+                .Describe("A mossy stepped plinth. A small knotwork panel is set into its face, as if something might be hidden behind it.")
+                .OnAct("You press the carved panel. It doesn't budge - but the stone around it sounds hollow.")
+                .OnItem("Old Key", "You search the plinth for a keyhole. There isn't one - not here, anyway.")
+
+            .ReturnTo("GraveyardEntrance", "You step back from the cross.");
+
+
+        public static Scene GravestoneCloseup { get; } =
+            NewScene("GravestoneCloseup",
+                     "Assets/Backgrounds/Mansion/gravestone_closeup.png",
+                     "An old headstone, smothered in ivy and lichen. Its inscription has almost worn away.")
+
+            .Hotspot("Gravestone", 520, 200, 500, 600)
+                .Describe("Ivy has crept up both sides of the stone, as if trying to hold it upright.")
+
+            .Hotspot("Carved Cross", 745, 235, 125, 215)
+                .Describe("A small Celtic cross is carved at the top, the same knotwork as the great cross on the hill.")
+
+            .Hotspot("Inscription", 630, 450, 330, 270)
+                .Describe("Most of the letters are gone. Only a few marks remain.")
+                .OnAct(p => p.TestWits()
+                    ? "You trace the worn letters with your finger: \"...HERE LIES ... FAITHFUL ... KEEPER OF THE KEYS ...\""
+                    : "You squint at the worn letters, but they won't come together. Perhaps another look?")
+
+            .ReturnTo("GraveyardEntrance", "You leave the old grave in peace.");
 
 
         public static Scene FrontGargoyle { get; } =

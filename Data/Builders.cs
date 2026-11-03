@@ -157,6 +157,17 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// ACT on it runs this and shows the text it returns - for replies
+        /// that depend on what happens, e.g.
+        /// .OnAct(p => p.TestLuck() ? "Got it!" : "It slips away.")
+        /// </summary>
+        public HotspotBuilder OnAct(Func<Player, string> action)
+        {
+            _hotspot.ActResult = action;
+            return this;
+        }
+
         /// <summary>ACT on it starts a conversation from Data/Dialogues.cs.</summary>
         public HotspotBuilder ActStarts(string dialogueId)
         {

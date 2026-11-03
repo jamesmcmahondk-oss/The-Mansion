@@ -58,6 +58,10 @@ namespace The_Mansion.Models
         public string ActText { get; set; } = "";
         public Action<Player>? ActEffect { get; set; }
 
+        // Optional: ACT runs this and shows the text it returns, so the reply
+        // can depend on what happened (e.g. a Luck test).
+        public Func<Player, string>? ActResult { get; set; }
+
         // Optional: the hotspot only exists while this returns true,
         // e.g. p => !p.HasFlag("TookKey"). Checked whenever the scene refreshes.
         public Func<Player, bool>? VisibleWhen { get; set; }
