@@ -27,7 +27,10 @@ WIDE = [
     ("courtyard_source.png",               "courtyard.png",              70),
     ("garden_source.png",                  "garden.png",                110),
     ("statue_closeup_source.png",          "statue_closeup.png",         10),
-    ("mansion_right_source.png",           "mansion_right.png",          90),
+    # (the first, 16:9 painting of the right side is kept in Sources but no
+    #  longer used: mansion_right_source.png)
+    ("mansion_right_v2_source.png",        "mansion_right.png",         215),
+    ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
     ("well_source.png",                    "well.png",                   60),
     ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
     ("well_closeup_source.png",            "well_closeup.png",          170),

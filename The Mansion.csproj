@@ -26,6 +26,7 @@
     <None Remove="Assets\Backgrounds\Mansion\well_closeup_empty.png" />
     <None Remove="Assets\Backgrounds\Mansion\cross_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\gravestone_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\glasshouse_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\left.png" />
     <None Remove="Assets\Backgrounds\Mansion\right.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
@@ -101,6 +102,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\well_closeup_empty.png" />
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\gravestone_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\glasshouse_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\left.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
