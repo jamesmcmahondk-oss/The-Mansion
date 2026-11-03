@@ -217,12 +217,20 @@ namespace The_Mansion.Data
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
                 .OnAct("You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)",
                        p => p.Health -= 2)
-                .CloseUp("BenchCloseup")
+
+            // The bench: sit on it (ACT) first. Then you hear something
+            // underneath, and LOOK opens the close-up with Ebria.
+            .Hotspot("Stone Bench", 1250, 690, 220, 142)
+                .Describe("A mossy stone bench beside the roses.")
+                .OnAct("You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.",
+                       p => p.SetFlag("HeardBenchNoise"))
+                .OnlyWhen(p => !p.HasFlag("HeardBenchNoise"))
 
             .Hotspot("Stone Bench", 1250, 690, 220, 142)
-                .Describe("A mossy stone bench beside the roses. Is that... singing underneath it?")
+                .Describe("Something is hiccuping under the bench.")
                 .CloseUp("BenchCloseup")
-                .OnAct("You sit for a moment. The stone is cold and damp. Somewhere a door creaks. You get up again.")
+                .OnAct("You sit down again. The hiccuping stops. Then: \"...I can hear you breathing.\"")
+                .OnlyWhen(p => p.HasFlag("HeardBenchNoise"))
 
             .ReturnTo("Courtyard", "You head back to the courtyard.");
 
