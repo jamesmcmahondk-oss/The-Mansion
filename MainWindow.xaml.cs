@@ -1470,6 +1470,13 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 ? dialogue.ChooseStartNode(_player)
                 : dialogue.StartNode;
 
+            // "You have now met this character" - set after the start line is
+            // picked, so a first meeting still starts at the first-meeting line.
+            if (!string.IsNullOrWhiteSpace(dialogue.MetFlag))
+            {
+                _player.SetFlag(dialogue.MetFlag);
+            }
+
             ShowDialogueNode(startNode);
         }
 

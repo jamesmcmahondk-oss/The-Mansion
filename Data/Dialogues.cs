@@ -36,6 +36,7 @@ namespace The_Mansion.Data
 
         public static Dialogue SadGargoyle { get; } =
             NewDialogue("SadGargoyle", "Sad Gargoyle")
+                .MetFlag("MetGargoyle")
                 .Portrait(
                     "Assets/Characters/Portraits/Gargoyle_portrait_framed.png")
 
@@ -317,7 +318,8 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "Tell me about Hautain.",
-                        "hautain")
+                        "hautain",
+                        onlyIf: p => p.HasFlag("MetHautain"))
 
                     .Choice(
                         "What's wrong with pigeons?",
@@ -739,7 +741,8 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "Hautain's coin?",
-                        "paymentRoyal")
+                        "paymentRoyal",
+                        onlyIf: p => p.HasFlag("MetHautain"))
 
                     .Choice(
                         "Noted.",
@@ -774,7 +777,8 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "Tell me about Quazimodo.",
-                        "quazimodo")
+                        "quazimodo",
+                        onlyIf: p => p.HasFlag("MetQuazimodo"))
 
                     .Choice(
                         "Thanks.",
@@ -808,11 +812,13 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "What's Quazimodo like?",
-                        "quazimodoLike")
+                        "quazimodoLike",
+                        onlyIf: p => p.HasFlag("MetQuazimodo"))
 
                     .Choice(
                         "Can I trust Quazimodo?",
-                        "quazimodoTrust")
+                        "quazimodoTrust",
+                        onlyIf: p => p.HasFlag("MetQuazimodo"))
 
                     .Choice(
                         "Any advice?",
@@ -863,7 +869,8 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "Tell me about Hautain.",
-                        "hautain")
+                        "hautain",
+                        onlyIf: p => p.HasFlag("MetHautain"))
 
                     .Choice(
                         "Who visits?",
@@ -1470,6 +1477,7 @@ namespace The_Mansion.Data
 
         public static Dialogue HautainCoins { get; } =
             NewDialogue("HautainCoins", "King Hautain")
+                .MetFlag("MetHautain")
                 .Portrait("Assets/Characters/Portraits/Hautain_portrait_framed.png")
                 .Character("Assets/Characters/Hautain.png")
                 .StandAt(495, 205, 285)
@@ -2474,11 +2482,14 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "What do you think of its residents?",
-                        "residentMenu")
+                        "residentMenu",
+                        onlyIf: p => p.HasFlag("MetMagnusAndSeverin") || p.HasFlag("MetEbria") || p.HasFlag("MetPip")
+                            || (p.HasFlag("MetVelvet") && p.HasFlag("MetSola")) || p.HasFlag("MetGrell"))
 
                     .Choice(
                         "What about Quazimod?",
-                        "quazimod")
+                        "quazimod",
+                        onlyIf: p => p.HasFlag("MetQuazimodo"))
 
                     .Choice(
                         "That's all I needed.",
@@ -2508,29 +2519,54 @@ namespace The_Mansion.Data
                         "Understood.",
                         "menu")
 
+                // Residents only appear once the player has met them
+                // (MetMagnusAndSeverin, MetEbria, MetPip, MetVelvet + MetSola,
+                // MetGrell). Split in two so there is always a way back.
                 .Line(
                     "residentMenu",
                     "\"The Crown maintains comprehensive diplomatic opinions.\"")
 
                     .Choice(
                         "Magnus and Severin?",
-                        "chefs")
+                        "chefs",
+                        onlyIf: p => p.HasFlag("MetMagnusAndSeverin"))
 
                     .Choice(
                         "Ebria?",
-                        "ebria")
+                        "ebria",
+                        onlyIf: p => p.HasFlag("MetEbria"))
 
                     .Choice(
                         "Pip?",
-                        "pip")
+                        "pip",
+                        onlyIf: p => p.HasFlag("MetPip"))
+
+                    .Choice(
+                        "And the others?",
+                        "residentMenu2",
+                        onlyIf: p => (p.HasFlag("MetVelvet") && p.HasFlag("MetSola")) || p.HasFlag("MetGrell"))
+
+                    .Choice(
+                        "Never mind.",
+                        "mansion")
+
+                .Line(
+                    "residentMenu2",
+                    "\"The Crown has opinions on those as well.\"")
 
                     .Choice(
                         "Velvet and Sola?",
-                        "velvetSola")
+                        "velvetSola",
+                        onlyIf: p => p.HasFlag("MetVelvet") && p.HasFlag("MetSola"))
 
                     .Choice(
                         "Gréll?",
-                        "grell")
+                        "grell",
+                        onlyIf: p => p.HasFlag("MetGrell"))
+
+                    .Choice(
+                        "Back to the others.",
+                        "residentMenu")
 
                 .Line(
                     "chefs",
@@ -2831,6 +2867,7 @@ namespace The_Mansion.Data
 
         public static Dialogue QuazimodoFrontDoor { get; } =
             NewDialogue("QuazimodoFrontDoor", "Quazimodo")
+                .MetFlag("MetQuazimodo")
                 .Portrait("Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
 
                 .StartAt(p =>
@@ -3357,7 +3394,8 @@ namespace The_Mansion.Data
 
                     .Choice(
                         "King Hautain gave it to me.",
-                        "hautainGift")
+                        "hautainGift",
+                        onlyIf: p => p.HasFlag("MetHautain"))
 
                     .Choice(
                         "Will that cover admission?",

@@ -338,6 +338,26 @@ NewDialogue("Pip", "Pip")
     .Choice("Bye, Pip.")
 ```
 
+### Only ask about people the player has met
+Give every character's conversation a met flag – it is set the moment the
+conversation starts (after `.StartAt` has picked the first line, so first
+meetings still work):
+```csharp
+NewDialogue("HautainCoins", "King Hautain")
+    .MetFlag("MetHautain")
+```
+Then, in anyone else's conversation, hide questions that name them:
+```csharp
+.Choice("Tell me about Hautain.", "hautain", onlyIf: p => p.HasFlag("MetHautain"))
+```
+Current flags: `MetGargoyle`, `MetHautain`, `MetQuazimodo`. Characters not in
+the game yet are already referred to as `MetPip`, `MetEbria`,
+`MetMagnusAndSeverin`, `MetVelvet`, `MetSola` and `MetGrell` – use those
+names with `.MetFlag(...)` when you write their conversations.
+
+Keep at least one answer **without** `onlyIf` on every line, so the player
+always has a way on.
+
 ### A stat check
 ```csharp
 .Choice("(Force the door)", "forced", onlyIf: p => p.Strength >= 14)
