@@ -1472,7 +1472,35 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
          * the player clicks again to dismiss it - hovering over hotspots
          * doesn't replace it. See ShowReply / Window_PreviewMouseLeftButtonDown.
          */
-        private bool _replyShowing;
+        private bool _replyShowingValue;
+
+        // Setting this also shows/hides the blinking "click to continue" hint.
+        private bool _replyShowing
+        {
+            get => _replyShowingValue;
+            set
+            {
+                _replyShowingValue = value;
+
+                if (value)
+                {
+                    ContinueHint.Visibility = Visibility.Visible;
+                    ContinueHint.BeginAnimation(OpacityProperty, new System.Windows.Media.Animation.DoubleAnimation
+                    {
+                        From = 1.0,
+                        To = 0.2,
+                        Duration = TimeSpan.FromSeconds(0.7),
+                        AutoReverse = true,
+                        RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever
+                    });
+                }
+                else
+                {
+                    ContinueHint.BeginAnimation(OpacityProperty, null);
+                    ContinueHint.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
 
         private void ShowReply(string text)
         {
@@ -1617,6 +1645,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void StartDialogue(string dialogueId)
         {
+            _replyShowing = false;
+
             Dialogue? dialogue = Dialogues.GetDialogue(dialogueId);
 
             if (dialogue == null)
@@ -2172,6 +2202,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void OpenInventory()
         {
+            _replyShowing = false;
+
             InventorySlots.Children.Clear();
 
             // Same item twice? Show it once.
@@ -2728,6 +2760,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void StartFight(string enemyId)
         {
+            _replyShowing = false;
+
             Enemy? enemy = Enemies.GetEnemy(enemyId);
 
             if (enemy == null)
