@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
@@ -34,7 +34,9 @@ namespace The_Mansion.Data
 
         public static Enemy AngryHautain { get; } =
             NewEnemy("AngryHautain", "King Hautain", skill: 4, health: 30)
-                .Portrait("Assets/Characters/Hautain_Attack.png")
+                .Portrait("Assets/Characters/Portraits/Hautain_portrait_framed.png")
+                .BeatenPortrait("Assets/Characters/Portraits/Hautain_Beaten_portrait_framed.png")
+                .Character("Assets/Characters/Hautain_Attack.png")
                 .StandAt(495, 205, 285)
                 .Intro("King Hautain leaps from his lily pad, sceptre raised! \"For the CROWN!\"")
                 .OnWin("King Hautain flops into the water with a mighty splash and paddles away into the reeds, croaking oaths of revenge.",
@@ -59,9 +61,8 @@ namespace The_Mansion.Data
                 .Portrait(
                     "Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
 
-                // Same approximate position Quazimodo uses during
-                // the front-door conversation.
-                .StandAt(60, 350, 400)
+                .BeatenPortrait(
+                    "Assets/Characters/Portraits/Quazimodo_Beaten_portrait_framed.png")
 
                 .Intro(
                     "Quazimodo slowly steps through the doorway and closes "

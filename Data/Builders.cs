@@ -233,7 +233,10 @@ namespace The_Mansion.Data
             _dialogue.Speaker = speaker;
         }
 
-        /// <summary>Character picture, e.g. "Assets/Characters/Pip.png".</summary>
+        /// <summary>
+        /// Close-up framed portrait, always shown in the same spot on the left,
+        /// e.g. "Assets/Characters/Portraits/Pip_portrait_framed.png".
+        /// </summary>
         public DialogueBuilder Portrait(string imagePath)
         {
             _dialogue.Portrait = imagePath;
@@ -241,16 +244,25 @@ namespace The_Mansion.Data
         }
 
         /// <summary>
-        /// Put the character inside the scene (background image pixels:
-        /// top-left corner and height) instead of on the right. Also stops
-        /// the scene dimming so they look part of it.
+        /// Full-body character picture shown in the scene, e.g.
+        /// "Assets/Characters/Pip.png". Place it with .StandAt(...);
+        /// without it, the character stands on the right.
+        /// </summary>
+        public DialogueBuilder Character(string imagePath)
+        {
+            _dialogue.Character = imagePath;
+            return this;
+        }
+
+        /// <summary>
+        /// Where the .Character(...) picture stands in the scene (background
+        /// image pixels: top-left corner and height).
         /// </summary>
         public DialogueBuilder StandAt(double x, double y, double height)
         {
-            _dialogue.PortraitX = x;
-            _dialogue.PortraitY = y;
-            _dialogue.PortraitHeight = height;
-            _dialogue.DimScene = false;
+            _dialogue.CharacterX = x;
+            _dialogue.CharacterY = y;
+            _dialogue.CharacterHeight = height;
             return this;
         }
 
@@ -274,14 +286,16 @@ namespace The_Mansion.Data
 
         /// <summary>
         /// Something the character says. lineId is the name other choices
-        /// use to jump here. Optional portrait swaps the picture for this line.
+        /// use to jump here. Optional portrait / character swap the close-up
+        /// or the full-body picture for this line only.
         /// </summary>
-        public DialogueBuilder Line(string lineId, string text, string portrait = "")
+        public DialogueBuilder Line(string lineId, string text, string portrait = "", string character = "")
         {
             var line = new DialogueNode
             {
                 Text = text,
-                Portrait = portrait
+                Portrait = portrait,
+                Character = character
             };
 
             _dialogue.Nodes[lineId] = line;
@@ -440,23 +454,43 @@ namespace The_Mansion.Data
             };
         }
 
-        /// <summary>Picture shown during the fight, e.g. "Assets/Characters/Hautain_Attack.png".</summary>
+        /// <summary>Close-up framed portrait, always in the same spot (as in dialogues).</summary>
         public EnemyBuilder Portrait(string imagePath)
         {
             _enemy.Portrait = imagePath;
             return this;
         }
 
+        /// <summary>Close-up portrait shown once the enemy is defeated.</summary>
+        public EnemyBuilder BeatenPortrait(string imagePath)
+        {
+            _enemy.BeatenPortrait = imagePath;
+            return this;
+        }
+
         /// <summary>
-        /// Put the enemy inside the scene (background image pixels: top-left
-        /// corner and height). Also stops the scene dimming.
+        /// Full-body picture shown in the scene during the fight, e.g.
+        /// "Assets/Characters/Hautain_Attack.png". Place it with .StandAt(...).
         /// </summary>
+        public EnemyBuilder Character(string imagePath)
+        {
+            _enemy.Character = imagePath;
+            return this;
+        }
+
+        /// <summary>Where the .Character(...) picture stands (background image pixels).</summary>
         public EnemyBuilder StandAt(double x, double y, double height)
         {
-            _enemy.PortraitX = x;
-            _enemy.PortraitY = y;
-            _enemy.PortraitHeight = height;
-            _enemy.DimScene = false;
+            _enemy.CharacterX = x;
+            _enemy.CharacterY = y;
+            _enemy.CharacterHeight = height;
+            return this;
+        }
+
+        /// <summary>Darken (or not) the scene during the fight.</summary>
+        public EnemyBuilder DimScene(bool dim = true)
+        {
+            _enemy.DimScene = dim;
             return this;
         }
 

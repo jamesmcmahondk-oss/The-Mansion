@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace The_Mansion.Models
 {
@@ -19,12 +19,24 @@ namespace The_Mansion.Models
         // Hits take 10 (20 for a double six), so 30 Health = about 3 hits.
         public int Health { get; set; }
 
-        // Picture and placement (same as dialogue portraits).
+        // Close-up framed portrait (always in the same spot), and the one
+        // shown once the enemy is beaten (optional).
         public string Portrait { get; set; } = "";
-        public double PortraitX { get; set; }
-        public double PortraitY { get; set; }
-        public double PortraitHeight { get; set; }
-        public bool DimScene { get; set; } = true;
+        public string BeatenPortrait { get; set; } = "";
+
+        // Full-body picture in the scene and its placement (as in dialogues).
+        public string Character { get; set; } = "";
+        public double CharacterX { get; set; }
+        public double CharacterY { get; set; }
+        public double CharacterHeight { get; set; }
+
+        // null = automatic, as in dialogues.
+        public bool? DimScene { get; set; }
+
+        public bool ShouldDimScene =>
+            DimScene ?? (string.IsNullOrWhiteSpace(Character)
+                ? string.IsNullOrWhiteSpace(Portrait)
+                : CharacterHeight <= 0);
 
         public bool CanFlee { get; set; } = true;
 

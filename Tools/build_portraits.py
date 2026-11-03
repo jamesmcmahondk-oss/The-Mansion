@@ -36,6 +36,15 @@ PORTRAITS = {
         opaque=True,
         title="QUAZIMODO",
         subtitle="The Butler"),
+    # Already painted in the portrait style: just resize and frame it.
+    "Hautain_Beaten": dict(
+        source="Assets/Characters/Portraits/Sources/Hautain_beaten_source.png",
+        crop=(0, 0, 768, 1024),
+        glow=(0.62, 0.24),
+        opaque=True,
+        keep_look=True,
+        title="HAUTAIN",
+        subtitle="The Frog King"),
     "Hautain": dict(
         source="Assets/Characters/Hautain.png",
         crop=(20, 0, 860, 1120),
@@ -117,7 +126,9 @@ def build(name, spec):
     char = src.crop(spec["crop"]).resize((OUT_W, OUT_H), Image.LANCZOS)
     char = char.filter(ImageFilter.UnsharpMask(radius=1.2, percent=60, threshold=2))
 
-    if spec.get("opaque"):
+    if spec.get("keep_look"):
+        img = char                      # already lit and toned like the others
+    elif spec.get("opaque"):
         img = candle_grade(char, *spec["glow"])
     else:
         char = warm_light(char, *spec["glow"])
@@ -131,7 +142,8 @@ def build(name, spec):
         img.alpha_composite(shadow, (10, 12))
         img.alpha_composite(char)
 
-    img = vignette(img)
+    if not spec.get("keep_look"):
+        img = vignette(img)
     img.convert("RGB").save(os.path.join(OUT_DIR, f"{name}_portrait.png"))
 
     # Framed version with a name plate.
