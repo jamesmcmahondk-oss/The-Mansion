@@ -19,7 +19,7 @@ for testing.
 
 ```csharp
 public static Scene FountainCloseup { get; } =
-    NewScene("FountainCloseup",                                  // name (used by GoesTo / ReturnTo)
+    NewScene("FountainCloseup",                                  // name (used by GoesTo / CloseUp / ReturnTo)
              "Assets/Backgrounds/Mansion/fountain_closeup.png",  // 1536x1024 background
              "Lily pads float on the dark water.")               // text shown on arrival
 
@@ -36,7 +36,7 @@ public static Scene FountainCloseup { get; } =
   box over the object. A ready-made `.Hotspot(...)` line is copied to the
   clipboard; paste it into the scene.
 * `.ReturnTo(...)` makes the Return arrow (top left) go back somewhere.
-* `.Sprite("Assets/Characters/Ebria_Drinking.png", X, Y, height)` puts a
+* `.Sprite("Assets/Characters/Ebria_UnderBench.png", X, Y, height)` puts a
   transparent picture in the scene (e.g. a character sitting under a bench).
   Optional `onlyWhen: p => …` hides it while false. Add a `.Hotspot(...)` in the
   same place to make it clickable.
@@ -49,8 +49,9 @@ Add any of these under a `.Hotspot(...)` line:
 
 | Line | Happens when… |
 |---|---|
-| `.Describe("text")` | it's clicked with LOOK (or a verb with no reaction of its own) |
-| `.GoesTo("SceneName")` | it's clicked → move to that scene |
+| `.Describe("text")` | LOOK on it → this description |
+| `.CloseUp("SceneName")` | LOOK on it → open that close-up scene |
+| `.GoesTo("SceneName")` | ACT on it → move on to that place (exits, paths, doors) |
 | `.OnTalk("text")` | TALK on it → this reply |
 | `.TalkStarts("DialogueId")` | TALK on it → start a conversation |
 | `.OnAct("text")` | ACT on it → this reply |
@@ -59,6 +60,18 @@ Add any of these under a `.Hotspot(...)` line:
 | `.OnItem("Item Name", "text")` | the player uses that item on it |
 | `.OnItem("Item Name", "text", effect: p => …, removeItem: true, startsDialogue: "Id")` | …with extras (all optional) |
 | `.OnlyWhen(p => …)` | the hotspot only exists while this is true |
+
+**How the verbs work** – each verb only does what it is set up to do:
+
+| Verb | Does | Otherwise says |
+|---|---|---|
+| LOOK | `.Describe` text, or opens the `.CloseUp` scene | "You see nothing special." |
+| ACT | `.ActStarts` / `.ActStartsFight` / `.OnAct`, or moves on via `.GoesTo` | "You can't do that." |
+| TALK | `.TalkStarts` / `.OnTalk` | "Who or what are you talking to?" |
+| ITEM | the matching `.OnItem` | "You can't use the *item* on the *hotspot*." |
+
+If a hotspot has both `.OnAct` and `.GoesTo`, ACT does the `.OnAct`. The Return
+arrow works with every verb.
 
 ## 3. The player: `p`
 
