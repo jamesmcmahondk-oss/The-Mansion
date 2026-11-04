@@ -29,6 +29,10 @@
     <None Remove="Assets\Backgrounds\Mansion\bench_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\rear_yard.png" />
     <None Remove="Assets\Backgrounds\Mansion\kitchen_garden.png" />
+    <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup_no_shears.png" />
+    <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup_no_charcoal.png" />
+    <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup_empty.png" />
     <None Remove="Assets\Backgrounds\Mansion\mansion_right_rose_cut.png" />
     <None Remove="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <None Remove="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
@@ -109,6 +113,10 @@
     <Resource Include="Assets\Backgrounds\Mansion\bench_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\rear_yard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\kitchen_garden.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup_no_shears.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup_no_charcoal.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup_empty.png" />
     <Resource Include="Assets\Backgrounds\Mansion\mansion_right_rose_cut.png" />
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />

@@ -416,43 +416,17 @@ namespace The_Mansion.Data
                 .OnAct("The grate is firmly set into the cobbles.")
 
             // ---- The tool shed --------------------------------------
-            // (No close-up picture yet: the door opens onto the workbench,
-            // and the useful things are taken one at a time.)
+            // The door leads into the close-up (ToolShedCloseup), where the
+            // shears and charcoal lie on the workbench.
             .Hotspot("Tool Shed", 990, 192, 480, 205)
                 .OnAct("The door is the part that opens.")
                 .Describe("A small gardening shed leans against the wall, its roof thick with moss. " +
                           "The tools outside have been left exactly where someone last used them. Apparently nobody came back for them.")
 
             .Hotspot("Shed Door", 1061, 400, 118, 293)
-                .Describe("A small gardening shed leans against the wall, its roof thick with moss.")
-                .OnAct("The shed door scrapes open. Inside: shelves of rusted tins, a little workbench, a pair of garden shears and a few sticks of charcoal.",
-                       p => p.SetFlag("OpenedToolShed"))
-                .OnlyWhen(p => !p.HasFlag("OpenedToolShed"))
-
-            .Hotspot("Workbench", 1061, 400, 118, 293)
-                .Describe("A sturdy pair of pruning shears lies on the workbench - rusty, but still serviceable. Beside them, a few sticks of charcoal.")
-                .OnAct("You take the garden shears.",
-                       p =>
-                       {
-                           p.Give("Garden Shears");
-                           p.SetFlag("GotGardenShears");
-                       })
-                .OnlyWhen(p => p.HasFlag("OpenedToolShed") && !p.HasFlag("GotGardenShears"))
-
-            .Hotspot("Workbench", 1061, 400, 118, 293)
-                .Describe("A few sticks of charcoal lie on the workbench. Messy, but still usable.")
-                .OnAct("You take the charcoal, and most of its dust with it.",
-                       p =>
-                       {
-                           p.Give("Charcoal");
-                           p.SetFlag("GotCharcoal");
-                       })
-                .OnlyWhen(p => p.HasFlag("GotGardenShears") && !p.HasFlag("GotCharcoal"))
-
-            .Hotspot("Workbench", 1061, 400, 118, 293)
-                .Describe("Rusted tins, broken pots and a locked cabinet. Nothing else worth taking.")
-                .OnAct("There's nothing else in the shed worth carrying around.")
-                .OnlyWhen(p => p.HasFlag("GotGardenShears") && p.HasFlag("GotCharcoal"))
+                .Describe("A plank door with an iron ring for a handle. It isn't locked.")
+                .CloseUp("ToolShedCloseup")
+                .GoesTo("ToolShedCloseup")
 
             .Hotspot("Rope", 1179, 411, 26, 82)
                 .Describe("A coil of old rope hangs on the shed wall. Damp, but stronger than it looks.")
@@ -477,6 +451,77 @@ namespace The_Mansion.Data
                 .Describe("A rake with half its teeth missing.")
 
             .ReturnTo("MansionRight", "You head back along the side of the Mansion.");
+
+
+        // Inside the tool shed (from the Rear Yard). The shears and the
+        // charcoal can be taken in any order; the picture changes to match
+        // (backgrounds built by Tools/build_tool_shed.py). The cabinet is
+        // locked and stays locked - the shed is not a lock puzzle.
+        public static Scene ToolShedCloseup { get; } =
+            NewScene("ToolShedCloseup",
+                     "Assets/Backgrounds/Mansion/tool_shed_closeup.png",
+                     "The shed door scrapes open. Inside it smells of rust, damp wood and old soil. A lantern burns on the roof beam.")
+
+            .BackgroundWhen(p => p.HasFlag("GotGardenShears") && p.HasFlag("GotCharcoal"),
+                            "Assets/Backgrounds/Mansion/tool_shed_closeup_empty.png")
+            .BackgroundWhen(p => p.HasFlag("GotGardenShears"),
+                            "Assets/Backgrounds/Mansion/tool_shed_closeup_no_shears.png")
+            .BackgroundWhen(p => p.HasFlag("GotCharcoal"),
+                            "Assets/Backgrounds/Mansion/tool_shed_closeup_no_charcoal.png")
+
+            .Hotspot("Shelves", 310, 192, 695, 215)
+                .Describe("Rusted tins with no labels, and terracotta pots - stacked, tipped over, one of them broken.")
+                .OnAct("You prise the lid off a tin. Rust, and the smell of old nails. You put the lid back.")
+
+            .Hotspot("Lantern", 985, 192, 110, 90)
+                .Describe("A small oil lantern hangs from the roof beam, lit. Someone keeps these lit.")
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
+
+            .Hotspot("Shed Door", 60, 300, 205, 532)
+                .Describe("The door hangs open behind you. Rain drips from its iron ring.")
+                .GoesTo("RearYard")
+
+            .Hotspot("Cabinet", 1185, 192, 315, 640)
+                .Describe("A tall, narrow cabinet, closed with a heavy iron padlock. Through the gaps in its boards you can see more rusted tins.")
+                .OnAct("Locked, and not worth the trouble. It's only more tins.")
+                .OnOtherItems("The {item} won't open the padlock. Not that the tins inside are worth it.")
+
+            .Hotspot("Workbench", 265, 520, 915, 130)
+                .Describe("A scarred old workbench, worn smooth where hands rested on it for years.")
+                .OnAct("You run a hand along the bench. Splinters, mostly.")
+
+            .Hotspot("Garden Shears", 485, 495, 265, 95)
+                .Describe("A sturdy pair of pruning shears - rusty, but still serviceable.")
+                .OnAct("You take the garden shears.",
+                       p =>
+                       {
+                           p.Give("Garden Shears");
+                           p.SetFlag("GotGardenShears");
+                       })
+                .OnlyWhen(p => !p.HasFlag("GotGardenShears"))
+
+            .Hotspot("Charcoal", 870, 500, 175, 85)
+                .Describe("A few sticks of charcoal. Messy, but still usable.")
+                .OnAct("You take the charcoal, and most of its dust with it.",
+                       p =>
+                       {
+                           p.Give("Charcoal");
+                           p.SetFlag("GotCharcoal");
+                       })
+                .OnlyWhen(p => !p.HasFlag("GotCharcoal"))
+
+            .Hotspot("Watering Can", 380, 700, 285, 132)
+                .Describe("An old galvanised watering can, dented and freckled with rust.")
+                .OnAct("Empty. It's raining anyway.")
+
+            .Hotspot("Seed Crate", 665, 740, 240, 92)
+                .Describe("A wooden seed crate.")
+                .OnAct("Empty, apart from a few dead leaves.")
+
+            .Hotspot("Flower Pots", 910, 715, 180, 117)
+                .Describe("More terracotta pots, stacked under the bench.")
+
+            .ReturnTo("RearYard", "You step back out into the rain.");
 
 
         // =========================================================

@@ -34,7 +34,7 @@ flowchart TD
     WELL --> GRAVE[Graveyard] --> STONE[Gravestone] & CROSS[Cross]
     GRAVE -.later.-> DEEP([Deeper graveyard])
     RIGHT -->|path round the back| REAR[Rear yard]
-    REAR --> SHED[Tool shed]
+    REAR --> SHED[Tool shed close-up]
     REAR -.bolted.-> KITCHEN([Kitchen])
     REAR -.held shut.-> CELLAR([Cellar])
     REAR -->|path around the Mansion| KGARDEN[Kitchen Garden] -->|garden door| GARDEN
@@ -104,7 +104,9 @@ taken.
 - **Rear yard:** kitchen door (bolted from inside – later a shortcut when
   the bolt is drawn from the kitchen), cellar doors (one knock, never
   explained), pump + trough, drain, The Sock (not an item, not a puzzle),
-  tool shed (Garden Shears, Charcoal, Rope – taken one at a time).
+  tool shed (Rope on the outside wall; inside, in its own close-up, the
+  Garden Shears and Charcoal on the workbench, taken in any order, and a
+  locked cabinet that stays locked – only more tins).
 - **Kitchen Garden:** a tended walled garden; the garden door leads back to
   the Garden. Scenery only, with a few hooks (below).
 
@@ -128,7 +130,6 @@ Don't explain these yet; each should pay off (or be noticed) later.
 | **Paper** – where is it found? (Charcoal: tool shed) | Decision |
 | **Red Rose** – who or what is it for? | Decision |
 | **Rope** – what is it for? | Decision |
-| **Tool shed close-up** (the shed currently opens in the yard) | Art |
 | **Glasshouse interior** (Grell's territory?) | Art + design |
 | **Entrance Hall** – where the Front Door leads | Art + design |
 | Kitchen and cellar (from inside the Mansion) | Design |
