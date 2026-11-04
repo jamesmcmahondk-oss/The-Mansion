@@ -6,6 +6,7 @@
     ResizeMode="CanMinimize"
     WindowStartupLocation="Manual"
     PreviewKeyDown="Window_PreviewKeyDown"
+    PreviewKeyUp="Window_PreviewKeyUp"
     PreviewMouseLeftButtonDown="Window_PreviewMouseLeftButtonDown"
     Background="Black">
 
@@ -530,10 +531,44 @@
                 <Canvas x:Name="SceneCanvas"
             Background="Transparent"
             MouseMove="SceneCanvas_MouseMove"
+            MouseLeave="SceneCanvas_MouseLeave"
             MouseLeftButtonDown="SceneCanvas_MouseLeftButtonDown"
             MouseLeftButtonUp="SceneCanvas_MouseLeftButtonUp"
             Height="800"
             Panel.ZIndex="10" VerticalAlignment="Top"/>
+
+                <!--
+                    Name of the hotspot under the cursor, following the mouse
+                    (placed by UpdateHoverLabel). Never takes clicks.
+                -->
+                <Canvas Height="800" VerticalAlignment="Top"
+                        IsHitTestVisible="False" Panel.ZIndex="15">
+                    <Border x:Name="HoverLabel"
+                            Visibility="Collapsed"
+                            Background="#B0000000"
+                            BorderBrush="#806B4A"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Padding="10,3,10,4">
+                        <TextBlock x:Name="HoverLabelText"
+                                   Foreground="#C8A96A"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="20"/>
+                    </Border>
+                </Canvas>
+
+                <!--
+                    Black curtain over the scene: ShowScene() snaps it to
+                    black and fades it away, so scenes don't hard-cut.
+                -->
+                <Rectangle x:Name="SceneFade"
+                           Fill="Black"
+                           Height="800"
+                           VerticalAlignment="Top"
+                           Opacity="0"
+                           IsHitTestVisible="False"
+                           Panel.ZIndex="30"/>
 
                 <!--
                     TALK DIALOG (scene part): dims the scene and blocks hotspot
@@ -818,10 +853,12 @@
                 <!--
                     INVENTORY (opened with the ITEM button): replaces the
                     description text in the middle panel. Up to 10 item slots
-                    in a row; hover to examine, click to pick an item, then
+                    in a row, more are paged with arrows or the mouse wheel; hover to examine, click to pick an item, then
                     click something in the scene to use it on. Esc closes.
                 -->
                 <Grid x:Name="InventoryPanel"
+                      Background="Transparent"
+                      MouseWheel="InventoryPanel_MouseWheel"
                       Margin="300,148,300,0"
                       VerticalAlignment="Top"
                       Visibility="Collapsed"

@@ -53,16 +53,19 @@ they're done; add new ones at the bottom of the right section.
       servants' entrance is gone (the kitchen door in the rear yard covers it).
 
 ## Step 3 – Feel and feedback
-- [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,
-      and a key that briefly shows every hotspot.
+- [x] **Show what's clickable** – the hotspot's name follows the cursor, and
+      holding Space outlines and names every hotspot in the scene.
 - [ ] **Less repetitive replies** – random variants of "You can't do that.",
       custom wrong-verb lines for important objects, item-specific misuse lines.
 - [ ] **Sound** – rain, footsteps, creaks, dice rattle, music.
-- [ ] **Scene transitions** – short fades instead of hard cuts.
+- [x] **Scene transitions** – each new scene fades in from black.
 - [ ] Faster verbs (e.g. left-click = sensible action, right-click = look).
 
 ## Step 4 – Player safety nets
-- [ ] **Autosave** on entering each scene.
+- [x] **Autosave** on entering each scene (not mid-conversation or fight);
+      "AUTOSAVE" is the first entry on every Load screen.
+- [x] Inventory holds more than 10 items: ◀ ▶ pages of 9 (also mouse wheel
+      or the Left/Right keys).
 - [ ] **Journal** of clues and conversations ("…KEEPER OF THE KEYS…", Ebria's key).
 - [ ] Healing (rest spots, food, potions) so Health matters outside fights.
 - [ ] Limit retries on Luck checks (e.g. the bucket) so they aren't a grind.
