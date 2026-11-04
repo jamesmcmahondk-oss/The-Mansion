@@ -47,7 +47,11 @@ they're done; add new ones at the bottom of the right section.
       red rose and mirror icons; statue without its sword; cross with the open
       plinth.
 - [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; rose bush
-      with one rose cut. (Well close-up with the mirror: done.)
+      with one rose cut. (Well close-up with the mirror: done. Darker bench
+      close-up: done.)
+- [ ] Right side of the mansion, before/after cutting a rose: the two pictures
+      in `Sources/Unused/` are portrait (2:3) - waiting for landscape (3:2)
+      versions, then they replace the right-side view.
 
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,

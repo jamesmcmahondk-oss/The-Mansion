@@ -32,9 +32,8 @@ WIDE = [
     ("statue_closeup_nosword_source.png",  "statue_closeup_nosword.png", 10),
     ("mansion_right_v2_source.png",        "mansion_right.png",         215),
     ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
-    # Bench with the fairy painted out (Tools/split_bench_fairy.py); the
-    # first bench painting stays in Sources as bench_closeup_source.png.
-    ("bench_closeup_clean_source.png",     "bench_closeup.png",          90),
+    # (bench_closeup.png now comes from bench_closeup_dark.png - see the end.
+    #  Older versions: bench_closeup_clean_source.png, bench_closeup_source.png)
     ("rear_yard_source.png",               "rear_yard.png",             110),
     ("kitchen_garden_source.png",          "kitchen_garden.png",        150),
     ("well_source.png",                    "well.png",                   60),
@@ -106,3 +105,8 @@ cv2.line(mask, (815, 735), (832, 752), 255, 12)                  # handle
 empty = cv2.inpaint(bgr, mask, 9, cv2.INPAINT_TELEA)
 Image.fromarray(cv2.cvtColor(empty, cv2.COLOR_BGR2RGB)).save(f"{OUT_DIR}/well_closeup_empty.png")
 print("wrote well_closeup.png, well_closeup_empty.png")
+
+# The darker, moodier bench close-up. Already in the final 1536x1024 layout
+# and lined up with the earlier version, so Ebria's sprite still fits.
+Image.open(f"{SRC_DIR}/bench_closeup_dark.png").convert("RGB").save(f"{OUT_DIR}/bench_closeup.png")
+print("wrote bench_closeup.png (dark)")
