@@ -10,7 +10,11 @@ they're done; add new ones at the bottom of the right section.
       (scenes, items, conversations, fights, pictures) when a Debug build starts.
 - [x] **Clean-up** – removed the stray `.whl` file, the empty `Character` class,
       the unused `LookBtn_MouseEnter` method and `Assets/UI/old`.
-- [ ] Fix whatever the first GitHub build finds.
+- [x] Fix whatever the first GitHub build finds. (It caught a mistake in the
+      clean-up – the verb buttons' hover handler had been removed. Fixed;
+      the game now builds on GitHub.)
+- [ ] Tidy the 5 compiler warnings (unused `_CurrentInteractionCursor` field;
+      `Scene.Name/BackgroundImage/Description` without defaults).
 - [ ] Decide: delete unused art (`Assets/Characters/Ebria_Drinking.png`, the old
       right-side painting in `Sources/`) or keep it for later.
 - [ ] **Git LFS** for the images (repo is ~180 MB and grows with every picture
