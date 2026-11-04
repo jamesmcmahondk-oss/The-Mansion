@@ -571,6 +571,43 @@
                            Panel.ZIndex="30"/>
 
                 <!--
+                    "New journal entry" notice: fades in and out top-right
+                    (ShowJournalToast). J opens the journal.
+                -->
+                <Border x:Name="JournalToast"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,40,40,0"
+                        Padding="22,12,22,14"
+                        Background="#E0100C0C"
+                        BorderBrush="#806B4A"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        Opacity="0"
+                        IsHitTestVisible="False"
+                        Panel.ZIndex="40">
+                    <StackPanel>
+                        <TextBlock Text="NEW JOURNAL ENTRY"
+                                   Foreground="#887966"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="14"/>
+                        <TextBlock x:Name="JournalToastText"
+                                   Margin="0,4,0,0"
+                                   Foreground="#C8A96A"
+                                   FontFamily="Georgia"
+                                   FontWeight="Bold"
+                                   FontSize="22"/>
+                        <TextBlock Text="Press J to read your journal"
+                                   Margin="0,4,0,0"
+                                   Foreground="#756A59"
+                                   FontFamily="Georgia"
+                                   FontStyle="Italic"
+                                   FontSize="14"/>
+                    </StackPanel>
+                </Border>
+
+                <!--
                     TALK DIALOG (scene part): dims the scene and blocks hotspot
                     clicks while talking, and shows the character's portrait on
                     the right. Portraits are 1024x1536; at 700px tall the feet
@@ -1192,6 +1229,8 @@
                             Style="{StaticResource GothicButton}" Click="GameMenuSave_Click"/>
                     <Button Content="LOAD GAME" Height="54" Margin="0,0,0,12"
                             Style="{StaticResource GothicButton}" Click="GameMenuLoad_Click"/>
+                    <Button Content="JOURNAL" Height="54" Margin="0,0,0,12"
+                            Style="{StaticResource GothicButton}" Click="GameMenuJournal_Click"/>
                     <Button Content="SETTINGS" Height="54" Margin="0,0,0,12"
                             Style="{StaticResource GothicButton}" Click="GameMenuSettings_Click"/>
                     <Button Content="QUIT TO TITLE" Height="54"
@@ -1206,6 +1245,58 @@
                                FontFamily="Georgia"
                                FontStyle="Italic"
                                FontSize="15"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ========================================= -->
+        <!-- JOURNAL (J, or JOURNAL in the game menu)  -->
+        <!-- Entries come from Data/Journal.cs.        -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="JournalScreen"
+              Visibility="Collapsed"
+              Background="#C8000000"
+              Panel.ZIndex="3650">
+
+            <Border Width="1100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="50,30,50,30"
+                    Background="#F0100C0C"
+                    BorderBrush="#806B4A"
+                    BorderThickness="2">
+                <StackPanel>
+                    <TextBlock Text="JOURNAL"
+                               HorizontalAlignment="Center"
+                               Foreground="#D5B77A"
+                               FontFamily="Georgia"
+                               FontWeight="Bold"
+                               FontSize="34"/>
+
+                    <TextBlock x:Name="JournalSubtitleText"
+                               HorizontalAlignment="Center"
+                               Margin="0,6,0,20"
+                               Foreground="#A89A84"
+                               FontFamily="Georgia"
+                               FontStyle="Italic"
+                               FontSize="18"/>
+
+                    <!-- One block per entry, newest first: ShowJournal() -->
+                    <ScrollViewer x:Name="JournalScroll"
+                                  Height="620"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Padding="0,0,16,0">
+                        <StackPanel x:Name="JournalEntriesPanel"/>
+                    </ScrollViewer>
+
+                    <Button Content="CLOSE"
+                            Width="200"
+                            Height="50"
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource GothicButton}"
+                            Click="JournalClose_Click"/>
                 </StackPanel>
             </Border>
         </Grid>

@@ -81,6 +81,7 @@ namespace The_Mansion.Data
                      "Rain-slick cobblestones glitter in the lantern light. A tiered fountain splashes beside the steps up to the front door.")
 
             .Hotspot("Fountain", 0, 300, 380, 470)
+                .OnTalk("The fountain burbles. It is not a conversation.")
                 .Describe("Water spills over the fountain's mossy tiers. Something glitters beneath the surface.")
                 .CloseUp("FountainCloseup")
 
@@ -107,6 +108,7 @@ namespace The_Mansion.Data
                      "The path ends in an overgrown garden. Mist curls around a hooded statue, and beyond it a great glasshouse glows in the dark.")
 
             .Hotspot("Glasshouse", 470, 250, 530, 270)
+                .OnAct("It's a long way to walk just to push on glass. A closer look first.")
                 .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
                 .CloseUp("GlasshouseCloseup")
 
@@ -115,6 +117,7 @@ namespace The_Mansion.Data
 
             // Listed after the glasshouse so it wins where they overlap.
             .Hotspot("Statue", 770, 330, 120, 270)
+                .OnTalk("The statue is too far away to hear you. Probably.")
                 .Describe("A hooded stone figure stands on a plinth in the long grass, watching the path.")
                 .CloseUp("StatueCloseup")
 
@@ -142,6 +145,7 @@ namespace The_Mansion.Data
 
             // Listed after the statue so they win where they overlap.
             .Hotspot("Hood", 808, 205, 72, 105)
+                .OnAct("You reach up into the hood. Stone, all the way back.")
                 .Describe("You peer into the hood. There is no face carved there at all - just shadow.")
 
             // THE FACELESS KNIGHT: the sword only comes free for someone who
@@ -184,23 +188,31 @@ namespace The_Mansion.Data
                 .Describe("Rain beads on the great glass dome. Ivy has crept almost to the top.")
 
             .Hotspot("Windows", 50, 400, 350, 300)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Through the misted panes you can make out palms, ferns - and candles, far too many candles.")
 
             .Hotspot("Windows", 1200, 400, 320, 300)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Through the misted panes you can make out palms, ferns - and candles, far too many candles.")
 
             .Hotspot("Lantern", 605, 530, 70, 160)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("An iron lantern on a stone pillar, lighting the steps.")
 
             .Hotspot("Lantern", 955, 530, 70, 160)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("An iron lantern on a stone pillar, lighting the steps.")
 
             .Hotspot("Chandelier", 735, 385, 160, 115)
+                .OnAct("It's on the other side of the glass. Which is probably for the best.")
                 .Describe("A chandelier blazes just inside, above the doors. Someone lit every candle.")
 
             .Hotspot("Glasshouse Doors", 720, 500, 180, 290)
+                .OnTalk("You call through the glass. Nobody answers. The candles burn on regardless.")
+                .OnOtherItems("You hold the {item} up to the glass. Nothing inside takes any notice.")
                 .Describe("Tall glass doors with brass handles. The air seeping out is warm and smells of earth and wax.")
-                .OnAct("You push the doors. They don't open - yet they rattle, as if something inside pushed back.")
+                .OnAct("You push the doors. They don't open - yet they rattle, as if something inside pushed back.",
+                       p => p.SetFlag("TriedGlasshouseDoors"))
 
             .ReturnTo("Garden", "You walk back to the garden.");
 
@@ -221,18 +233,22 @@ namespace The_Mansion.Data
                             "Assets/Backgrounds/Mansion/mansion_right_rose_cut.png")
 
             .Hotspot("Windows", 140, 260, 130, 270)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
             .Hotspot("Windows", 440, 200, 100, 330)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
             .Hotspot("Windows", 585, 280, 75, 230)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
             .Hotspot("Balustrade", 0, 560, 700, 272)
                 .Describe("A heavy stone balustrade runs along the foot of the wall, slick with rain.")
 
             .Hotspot("Old Well", 870, 230, 120, 150)
+                .OnTalk("You'd need to be a lot closer to talk down a well.")
                 .Describe("A small roofed well stands at the top of the hill.")
                 .GoesTo("Well")
 
@@ -246,9 +262,12 @@ namespace The_Mansion.Data
                 .GoesTo("RearYard")
 
             .Hotspot("Lantern", 760, 435, 45, 70)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern burns on the garden wall. Its flame burns steadily, despite the rain.")
 
             .Hotspot("Rose Bush", 980, 460, 480, 230)
+                .OnTalk("You compliment the roses. The thorns remain unpersuaded.")
+                .OnOtherItems("The rose bush is unimpressed by the {item}.")
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
                 .OnlyWhen(p => !p.HasFlag("GotRedRose"))
                 .OnAct(p => Roses.Touch(p))
@@ -257,17 +276,21 @@ namespace The_Mansion.Data
                         onlyIf: p => !p.HasFlag("GotRedRose"))
 
             .Hotspot("Rose Bush", 980, 460, 480, 230)
+                .OnTalk("You compliment the roses. The thorns remain unpersuaded.")
+                .OnOtherItems("The rose bush is unimpressed by the {item}.")
                 .Describe("A great tangle of blood-red roses. There's a small gap where you cut one.")
                 .OnlyWhen(p => p.HasFlag("GotRedRose"))
                 .OnAct(p => Roses.Touch(p))
                 .OnItem("Garden Shears", "You already have a rose. Leave the rest of them be.")
 
             .Hotspot("Hydrangeas", 1340, 690, 196, 142)
+                .OnAct("You leave them be. They look like they've had a difficult night.")
                 .Describe("Pale hydrangeas, heavy with rain. They have lost all their colour.")
 
             // The bench: sit on it (ACT) first. Then you hear something
             // underneath, and LOOK opens the close-up with Ebria.
             .Hotspot("Stone Bench", 1085, 700, 250, 132)
+                .OnTalk("The bench says nothing. Benches rarely do.")
                 .Describe("A mossy stone bench beside the roses.")
                 .OnAct("You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.",
                        p => p.SetFlag("HeardBenchNoise"))
@@ -305,24 +328,32 @@ namespace The_Mansion.Data
                 .Describe("Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard.")
 
             .Hotspot("Windows", 160, 245, 70, 175)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below.")
 
             .Hotspot("Windows", 410, 283, 45, 96)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below.")
 
             .Hotspot("Lantern", 560, 208, 55, 107)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern burns beside the service door. Someone keeps these lit.")
 
             // Bolted from inside - never opened by a key. Later: drawing the
             // bolt from the kitchen sets KitchenDoorUnlocked and this becomes
             // a shortcut (.GoesTo("Kitchen") with .OnlyWhen).
             .Hotspot("Kitchen Door", 603, 245, 192, 363)
+                .OnTalk("You call out. The bolt on the other side doesn't care who you are.")
+                .OnOtherItems("There's nothing on this side of the door for the {item} to work on.")
                 .Describe("A heavy service door leads into the Mansion, with a small barred window and heavy iron hardware. " +
                           "Generations of boots have worn the edges of the stone steps smooth.")
-                .OnAct("The door shifts half an inch, then stops against something solid. Bolted from the other side.")
+                .OnAct("The door shifts half an inch, then stops against something solid. Bolted from the other side.",
+                       p => p.SetFlag("TriedKitchenDoor"))
 
             // Something underneath holds them shut. The knock happens once.
             .Hotspot("Cellar Doors", 256, 544, 300, 128)
+                .OnTalk("You lean close to the gap and say hello. The rain answers instead.")
+                .OnOtherItems("The {item} won't shift whatever is holding the doors.")
                 .Describe("A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame.")
                 .OnAct("You pull the iron ring. The door rises an inch. Stops. Something underneath is holding it shut. ... " +
                        "A single quiet sound comes from underneath. Knock.",
@@ -330,6 +361,8 @@ namespace The_Mansion.Data
                 .OnlyWhen(p => !p.HasFlag("TriedCellarDoor"))
 
             .Hotspot("Cellar Doors", 256, 544, 300, 128)
+                .OnTalk("You lean close to the gap and say hello. The rain answers instead.")
+                .OnOtherItems("The {item} won't shift whatever is holding the doors.")
                 .Describe("A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame.")
                 .OnAct("Still blocked. Whatever is beneath it isn't moving.")
                 .OnlyWhen(p => p.HasFlag("TriedCellarDoor"))
@@ -339,6 +372,8 @@ namespace The_Mansion.Data
 
             // It is simply The Sock.
             .Hotspot("Sock", 933, 322, 30, 48)
+                .OnTalk("The Sock has nothing to say.")
+                .OnOtherItems("You and the {item} leave the Sock in peace.")
                 .Describe("A solitary black sock hangs from the washing line.")
                 .OnAct(p =>
                 {
@@ -375,6 +410,7 @@ namespace The_Mansion.Data
                 .OnlyWhen(p => p.HasFlag("TroughFilled"))
 
             .Hotspot("Drain", 760, 728, 75, 38)
+                .OnTalk("Your voice drops down the drain and doesn't come back up.")
                 .Describe("Rainwater disappears through an iron grate beneath the Mansion. " +
                           "A few tiny pale fragments have collected against the grate. Probably kitchen scraps.")
                 .OnAct("The grate is firmly set into the cobbles.")
@@ -383,6 +419,7 @@ namespace The_Mansion.Data
             // (No close-up picture yet: the door opens onto the workbench,
             // and the useful things are taken one at a time.)
             .Hotspot("Tool Shed", 990, 192, 480, 205)
+                .OnAct("The door is the part that opens.")
                 .Describe("A small gardening shed leans against the wall, its roof thick with moss. " +
                           "The tools outside have been left exactly where someone last used them. Apparently nobody came back for them.")
 
@@ -432,9 +469,11 @@ namespace The_Mansion.Data
                 .OnAct("It isn't coming free without taking half the shed with it.")
 
             .Hotspot("Pitchfork", 1248, 411, 44, 229)
+                .OnAct("You'd rather not carry a pitchfork around. It invites questions.")
                 .Describe("An old pitchfork. Several tines have rusted away.")
 
             .Hotspot("Rake", 1292, 411, 75, 229)
+                .OnAct("You leave the rake where it lies. Stepping on it later is a tradition you can do without.")
                 .Describe("A rake with half its teeth missing.")
 
             .ReturnTo("MansionRight", "You head back along the side of the Mansion.");
@@ -455,9 +494,11 @@ namespace The_Mansion.Data
                 .Describe("A high brick wall, thick with ivy. It keeps the wind out - and anything else.")
 
             .Hotspot("Windows", 30, 290, 80, 200)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Candles burn in the Mansion's windows. Someone keeps a lot of candles.")
 
             .Hotspot("Windows", 160, 192, 65, 270)
+                .OnAct("The windows are well out of reach.")
                 .Describe("Candles burn in the Mansion's windows. Someone keeps a lot of candles.")
 
             .Hotspot("Rain Barrels", 229, 448, 166, 150)
@@ -540,6 +581,7 @@ namespace The_Mansion.Data
                      "An old stone well stands under a mossy roof. Beyond it, a path leads down to a fenced graveyard.")
 
             .Hotspot("Well", 290, 590, 470, 220)
+                .OnOtherItems("You consider dropping the {item} down the well. You decide you might want it back.")
                 .Describe("Cold air rises from the well. You lean over to look inside...")
                 .CloseUp("WellCloseup")
                 .OnTalk("\"Hello?\" ...Hello? ...hello? The echo takes rather too long to fade.")
@@ -549,6 +591,7 @@ namespace The_Mansion.Data
                 .OnAct("You crank the bucket down into the dark. It comes back up empty - and somehow colder.")
 
             .Hotspot("Lantern", 810, 375, 70, 145)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern hangs from the well's post, swinging gently in a wind you can't feel.")
 
             .Hotspot("Graveyard", 1000, 520, 500, 100)
@@ -568,12 +611,15 @@ namespace The_Mansion.Data
                      "The graveyard gates stand open. Mossy headstones lean beneath an ancient tree, and a stone cross rises over the hill.")
 
             .Hotspot("Old Tree", 330, 192, 220, 300)
+                .OnAct("You'd rather not climb it in the rain. Or at all.")
                 .Describe("A huge, gnarled oak. Its roots have tipped several headstones over.")
 
             .Hotspot("Lantern", 130, 230, 130, 150)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern on the gatepost lights the way in. Someone keeps these burning.")
 
             .Hotspot("Lantern", 1250, 420, 110, 140)
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern on the gatepost lights the way in. Someone keeps these burning.")
 
             .Hotspot("Old Gravestone", 580, 410, 120, 200)
@@ -651,9 +697,12 @@ namespace The_Mansion.Data
                             "Assets/Backgrounds/Mansion/cross_closeup_open.png")
 
             .Hotspot("Moon", 1040, 192, 110, 110)
+                .OnAct("Out of reach. Comfortably.")
+                .OnTalk("The moon has heard it all before.")
                 .Describe("The full moon hangs over the graveyard. It looks closer than it should.")
 
             .Hotspot("Celtic Cross", 600, 192, 430, 420)
+                .OnOtherItems("You hold the {item} up to the cross. The spirals don't care.")
                 .Describe("Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another: " +
                           "one reaching up, one to the left, one to the right.")
                 .OnTalk("You read the knots aloud, as if they were words. They are not. You feel slightly foolish.")
@@ -704,9 +753,12 @@ namespace The_Mansion.Data
                      "An old headstone, smothered in ivy and lichen. Its inscription has almost worn away.")
 
             .Hotspot("Moon", 1200, 192, 130, 110)
+                .OnAct("Out of reach. Comfortably.")
+                .OnTalk("The moon has heard it all before.")
                 .Describe("The full moon hangs low over the graveyard.")
 
             .Hotspot("Gravestone", 525, 200, 505, 630)
+                .OnTalk("You speak to the stone. Whoever lies here stopped listening long ago.")
                 .Describe("Ivy has crept up both sides of the stone, as if trying to hold it upright.")
 
             .Hotspot("Carved Cross", 740, 250, 150, 220)
@@ -715,6 +767,7 @@ namespace The_Mansion.Data
             // Stats create shortcuts; items provide reliable solutions:
             // ACT is a Wits test (retry allowed), Charcoal + Paper always works.
             .Hotspot("Inscription", 680, 480, 280, 240)
+                .OnOtherItems("The {item} won't help you read the stone.")
                 .Describe("Most of the inscription has been worn smooth. A few shallow marks remain, but not enough to read.")
                 .OnAct(p => Gravestone.Read(p))
                 .OnItem("Charcoal", Gravestone.KnownText, onlyIf: p => p.HasFlag("ReadGravestone"))

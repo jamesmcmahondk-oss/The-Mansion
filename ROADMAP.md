@@ -55,8 +55,9 @@ they're done; add new ones at the bottom of the right section.
 ## Step 3 – Feel and feedback
 - [x] **Show what's clickable** – the hotspot's name follows the cursor, and
       holding Space outlines and names every hotspot in the scene.
-- [ ] **Less repetitive replies** – random variants of "You can't do that.",
-      custom wrong-verb lines for important objects, item-specific misuse lines.
+- [x] **Less repetitive replies** – variants of the fallback replies
+      (Data/Replies.cs), wrong-verb lines for ~40 objects, `.OnOtherItems` on
+      hotspots and `misuse:` lines on every item.
 - [ ] **Sound** – rain, footsteps, creaks, dice rattle, music.
 - [x] **Scene transitions** – each new scene fades in from black.
 - [ ] Faster verbs (e.g. left-click = sensible action, right-click = look).
@@ -66,7 +67,9 @@ they're done; add new ones at the bottom of the right section.
       "AUTOSAVE" is the first entry on every Load screen.
 - [x] Inventory holds more than 10 items: ◀ ▶ pages of 9 (also mouse wheel
       or the Left/Right keys).
-- [ ] **Journal** of clues and conversations ("…KEEPER OF THE KEYS…", Ebria's key).
+- [x] **Journal** (J, or the Esc menu): 17 entries that write themselves from
+      story flags (Data/Journal.cs), with a "New journal entry" notice.
+      Add entries as the inside of the Mansion grows.
 - [ ] Healing (rest spots, food, potions) so Health matters outside fights.
 - [ ] Limit retries on Luck checks (e.g. the bucket) so they aren't a grind.
 

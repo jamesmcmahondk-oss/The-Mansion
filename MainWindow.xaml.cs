@@ -284,6 +284,9 @@ namespace The_Mansion
                 ? new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A))
                 : new SolidColorBrush(Color.FromRgb(0x88, 0x79, 0x66));
 
+            // Anything worth writing down?
+            CheckJournal();
+
             // Died outside a fight (e.g. a trap)?
             if (_player.Health <= 0 && _player.MaxHealth > 0 &&
                 !IsInFight && GameScreen.Visibility == Visibility.Visible)
@@ -875,10 +878,8 @@ namespace The_Mansion
             }
         }
 
-        // Replies when a verb does nothing on a hotspot.
-        private const string NothingToSeeText = "You see nothing special.";
-        private const string CantTalkText = "Who or what are you talking to?";
-        private const string CantActText = "You can't do that.";
+        // Replies when a verb does nothing on a hotspot: Data/Replies.cs
+        // (a few variants each, so they don't repeat).
 
         /*
          * LOOK: describe it, and open its close-up scene if it has one.
@@ -892,7 +893,7 @@ namespace The_Mansion
             }
 
             ShowReply(string.IsNullOrWhiteSpace(hotspot.Description)
-                ? NothingToSeeText
+                ? Replies.Nothing()
                 : hotspot.Description);
         }
 
@@ -909,7 +910,7 @@ namespace The_Mansion
             }
 
             ShowReply(string.IsNullOrWhiteSpace(hotspot.TalkText)
-                ? CantTalkText
+                ? Replies.NoTalk()
                 : hotspot.TalkText);
         }
 
@@ -962,7 +963,7 @@ namespace The_Mansion
                 return;
             }
 
-            ShowReply(CantActText);
+            ShowReply(Replies.NoAct());
         }
 
         private void GoToScene(string sceneName, string hotspotName)
@@ -1686,7 +1687,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             !_gameOverShown &&
             !IsGameMenuOpen &&
             !IsSaveLoadOpen &&
-            !IsSettingsOpen;
+            !IsSettingsOpen &&
+            !IsJournalOpen;
 
         /*
          * The name of the thing under the cursor floats just below-right of
@@ -2169,11 +2171,29 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 #endif
 
+            // Typing in a text box (player name, debug flags): keys are just letters.
+            bool typing = Keyboard.FocusedElement is TextBox;
+
             // Hold Space to outline everything you can click in the scene.
             // (Handled so Space never "clicks" a focused button either.)
-            if (e.Key == Key.Space && CanUseHotspots)
+            if (e.Key == Key.Space && CanUseHotspots && !typing)
             {
                 RevealHotspots();
+                e.Handled = true;
+                return;
+            }
+
+            // J opens/closes the journal (Esc closes it too).
+            if (IsJournalOpen && ((e.Key == Key.J && !typing) || e.Key == Key.Escape))
+            {
+                CloseJournal();
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.J && CanOpenJournal && !typing)
+            {
+                ShowJournal(back: null);
                 e.Handled = true;
                 return;
             }
@@ -2226,7 +2246,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 
             // No dialogue keys while a menu is open.
-            if (IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen)
+            if (IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsJournalOpen)
             {
                 return;
             }
@@ -2790,6 +2810,24 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             ShowDescription($"Use {itemName} on...");
         }
 
+        /*
+         * Wrong item: the hotspot's own line (.OnOtherItems), else the
+         * item's own line (misuse:), else a general variant.
+         */
+        private static string CantUseText(string itemName, Hotspot hotspot)
+        {
+            if (!string.IsNullOrWhiteSpace(hotspot.OtherItemsText))
+            {
+                return Replies.Fill(hotspot.OtherItemsText, itemName, hotspot.Name);
+            }
+
+            string misuse = Items.GetItem(itemName).MisuseText;
+
+            return string.IsNullOrWhiteSpace(misuse)
+                ? Replies.NoUse(itemName, hotspot.Name)
+                : Replies.Fill(misuse, itemName, hotspot.Name);
+        }
+
         private void UseSelectedItemOn(Hotspot hotspot)
         {
             if (_selectedItem == null)
@@ -2805,7 +2843,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             if (use == null)
             {
-                ShowReply($"You can't use the {itemName} on the {hotspot.Name}.");
+                ShowReply(CantUseText(itemName, hotspot));
                 return;
             }
 
@@ -3804,6 +3842,132 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             ShowSaveLoad(saving: false, back: ShowGameMenu);
         }
 
+        private void GameMenuJournal_Click(object sender, RoutedEventArgs e)
+        {
+            HideGameMenu();
+            ShowJournal(back: ShowGameMenu);
+        }
+
+        // =========================================================
+        // JOURNAL (Data/Journal.cs) - J, or JOURNAL in the game menu
+        // =========================================================
+
+        private Action? _journalBack;
+
+        private bool IsJournalOpen => JournalScreen.Visibility == Visibility.Visible;
+
+        private bool CanOpenJournal =>
+            GameScreen.Visibility == Visibility.Visible &&
+            !_gameOverShown &&
+            !IsGameMenuOpen &&
+            !IsSaveLoadOpen &&
+            !IsSettingsOpen;
+
+        /*
+         * Adds any entries that have just come true and announces them.
+         * Called whenever the stats are refreshed, i.e. after anything happens.
+         */
+        private void CheckJournal()
+        {
+            if (GameScreen.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+            List<Journal.JournalEntry> added = Journal.Update(_player);
+
+            if (added.Count > 0)
+            {
+                ShowJournalToast(string.Join("  ·  ", added.Select(entry => entry.Title)));
+            }
+        }
+
+        private void ShowJournalToast(string titles)
+        {
+            JournalToastText.Text = titles;
+
+            var fade = new DoubleAnimationUsingKeyFrames();
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(300))));
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(3800))));
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(4600))));
+
+            JournalToast.BeginAnimation(OpacityProperty, fade);
+        }
+
+        private void ShowJournal(Action? back)
+        {
+            _journalBack = back;
+            CloseInventory();
+            HideRevealedHotspots();
+
+            // The notice isn't needed once you're reading it.
+            JournalToast.BeginAnimation(OpacityProperty, null);
+            JournalToast.Opacity = 0;
+
+            JournalEntriesPanel.Children.Clear();
+
+            // Newest first.
+            for (int i = _player.Journal.Count - 1; i >= 0; i--)
+            {
+                Journal.JournalEntry? entry = Journal.Get(_player.Journal[i]);
+                if (entry == null)
+                {
+                    continue;   // an entry removed since the game was saved
+                }
+
+                JournalEntriesPanel.Children.Add(new TextBlock
+                {
+                    Text = entry.Title,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A)),
+                    FontFamily = new FontFamily("Georgia"),
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 24,
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                JournalEntriesPanel.Children.Add(new TextBlock
+                {
+                    Text = entry.Text,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xDD, 0xD4, 0xC3)),
+                    FontFamily = new FontFamily("Georgia"),
+                    FontSize = 19,
+                    LineHeight = 28,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 6, 0, 26)
+                });
+            }
+
+            int count = JournalEntriesPanel.Children.Count / 2;
+            JournalSubtitleText.Text = count == 0
+                ? "Nothing written yet. What you discover will be noted here."
+                : $"{count} {(count == 1 ? "entry" : "entries")}, newest first  ·  J or Esc to close";
+
+            JournalScroll.ScrollToTop();
+            JournalScreen.Visibility = Visibility.Visible;
+        }
+
+        // goBack: return to where it was opened from (e.g. the game menu).
+        private void CloseJournal(bool goBack = true)
+        {
+            if (!IsJournalOpen)
+            {
+                return;
+            }
+
+            JournalScreen.Visibility = Visibility.Collapsed;
+
+            Action? back = _journalBack;
+            _journalBack = null;
+
+            if (goBack)
+            {
+                back?.Invoke();
+            }
+        }
+
+        private void JournalClose_Click(object sender, RoutedEventArgs e) => CloseJournal();
+
         private void GameMenuQuit_Click(object sender, RoutedEventArgs e)
         {
             var answer = MessageBox.Show(
@@ -3995,6 +4159,10 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             _player = save.ToPlayer();
             _selectedItem = null;
+            CloseJournal(goBack: false);
+
+            // Saves from before the journal: fill it in quietly.
+            Journal.Update(_player);
             _fightSnapshot = null;
 
             TitleScreen.Visibility = Visibility.Collapsed;
@@ -4014,6 +4182,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
         // Back to the title screen with a brand new hero.
         private void ResetToTitle()
         {
+            CloseJournal(goBack: false);
             _gameOverShown = false;
             GameOverScreen.Visibility = Visibility.Collapsed;
             SaveLoadScreen.Visibility = Visibility.Collapsed;
