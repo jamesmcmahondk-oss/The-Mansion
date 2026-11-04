@@ -76,8 +76,12 @@ they're done; add new ones at the bottom of the right section.
 - [ ] Limit retries on Luck checks (e.g. the bucket) so they aren't a grind.
 
 ## Step 5 – Code structure (when the story starts growing fast)
-- [ ] **Split `MainWindow.xaml.cs`** (3,800 lines) into a game engine (scenes,
-      verbs, dialogue, fights, inventory, saving) and the UI.
+- [x] **Split `MainWindow.xaml.cs`** (4,400 lines) into 13 files by area:
+      MainWindow.Scenes / .Verbs / .Dialogue / .Inventory / .Fights /
+      .SaveLoad / .Journal / .Trunk / .Settings / .Keyboard / .DebugMenu /
+      .HotspotEditor.cs, with startup and the title screens left in
+      MainWindow.xaml.cs. (A separate game engine, apart from the UI, can
+      come later if it's needed.)
 - [ ] **Unit tests** for fight maths, save/load and conversation links.
 - [ ] **Conversations**: one file per character; consider the Ink scripting
       language instead of C# for writing them.
