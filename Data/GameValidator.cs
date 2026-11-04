@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -82,7 +82,9 @@ namespace The_Mansion.Data
                     foreach (var use in hotspot.ItemUses)
                     {
                         CheckItem($"{h} .OnItem", use.Key);
-                        CheckDialogue($"{h} .OnItem(\"{use.Key}\")", use.Value.DialogueId);
+
+                        foreach (ItemUse reaction in use.Value)
+                            CheckDialogue($"{h} .OnItem(\"{use.Key}\")", reaction.DialogueId);
                     }
                 }
             }

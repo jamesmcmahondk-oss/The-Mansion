@@ -970,8 +970,7 @@
                             Width="163"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Panel.ZIndex="30"
-                            IsHitTestVisible="False">
+                            Panel.ZIndex="30">
                     <StackPanel.Resources>
                         <Style TargetType="TextBlock" x:Key="StatLabel">
                             <Setter Property="FontFamily" Value="Georgia"/>
@@ -1025,7 +1024,12 @@
                     <Rectangle Height="1" Fill="#806B4A" Margin="0,4,0,7"/>
 
                     <TextBlock Text="WEAPON" Style="{StaticResource StatLabel}" FontSize="12"/>
-                    <TextBlock x:Name="StatWeaponText" Text="None" Style="{StaticResource StatText}" Margin="0,0,0,6"/>
+                    <!-- Click to put the weapon away / take it out. -->
+                    <TextBlock x:Name="StatWeaponText" Text="None" Style="{StaticResource StatText}" Margin="0,0,0,6"
+                               Cursor="Hand"
+                               ToolTip="Click to put your weapon away or take it out"
+                               Background="Transparent"
+                               MouseLeftButtonDown="StatWeaponText_MouseLeftButtonDown"/>
 
                     <TextBlock Text="STATUS" Style="{StaticResource StatLabel}" FontSize="12"/>
                     <TextBlock x:Name="StatStatusText" Text="None" Style="{StaticResource StatText}"/>

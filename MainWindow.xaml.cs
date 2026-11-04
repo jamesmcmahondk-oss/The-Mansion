@@ -291,6 +291,49 @@ namespace The_Mansion
             }
         }
 
+        /*
+         * Clicking WEAPON in the stats panel puts the weapon away, or takes
+         * out the best weapon you're carrying. (Some puzzles care whether
+         * you're holding a weapon - e.g. the Faceless Knight.)
+         */
+        private void StatWeaponText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+
+            if (IsInFight || IsInDialogue || GameScreen.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+            bool armed = !string.IsNullOrWhiteSpace(_player.Weapon) && _player.Weapon != "None";
+
+            if (armed)
+            {
+                string weapon = _player.Weapon;
+                _player.Weapon = "None";
+                ShowReply($"You put the {weapon} away.");
+            }
+            else
+            {
+                Item? best = _player.Inventory
+                    .Select(Items.GetItem)
+                    .Where(i => i.WeaponBonus > 0)
+                    .OrderByDescending(i => i.WeaponBonus)
+                    .FirstOrDefault();
+
+                if (best == null)
+                {
+                    ShowReply("You have nothing to use as a weapon.");
+                    return;
+                }
+
+                _player.Weapon = best.Name;
+                ShowReply($"You take out the {best.Name}.");
+            }
+
+            UpdatePlayerStats();
+        }
+
         private void AcceptRollButton_Click(
       object sender,
       RoutedEventArgs e)
@@ -2315,9 +2358,10 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             slot.MouseEnter += (_, _) =>
             {
                 slot.BorderBrush = SlotHoverBrush;
+                string name = item.IsMemento ? $"{item.Name} (Memento)" : item.Name;
                 InventoryDescriptionText.Text = string.IsNullOrWhiteSpace(item.Description)
-                    ? item.Name
-                    : $"{item.Name}: {item.Description}";
+                    ? name
+                    : $"{name}: {item.Description}";
             };
 
             slot.MouseLeave += (_, _) => slot.BorderBrush = SlotBorderBrush;
@@ -2380,7 +2424,11 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             string itemName = _selectedItem;
 
-            if (!hotspot.ItemUses.TryGetValue(itemName, out ItemUse? use))
+            ItemUse? use = hotspot.ItemUses.TryGetValue(itemName, out List<ItemUse>? uses)
+                ? uses.FirstOrDefault(u => u.Condition == null || u.Condition(_player))
+                : null;
+
+            if (use == null)
             {
                 ShowReply($"You can't use the {itemName} on the {hotspot.Name}.");
                 return;
@@ -2481,8 +2529,11 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
-            if (_activeDialogue.ItemUses.TryGetValue(itemName, out DialogueItemUse? use) &&
-                (use.Condition == null || use.Condition(_player)))
+            DialogueItemUse? use = _activeDialogue.ItemUses.TryGetValue(itemName, out List<DialogueItemUse>? uses)
+                ? uses.FirstOrDefault(u => u.Condition == null || u.Condition(_player))
+                : null;
+
+            if (use != null)
             {
                 use.Effect?.Invoke(_player);
 

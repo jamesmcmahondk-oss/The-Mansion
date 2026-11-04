@@ -24,19 +24,24 @@ they're done; add new ones at the bottom of the right section.
       versions still take up space there). The build check downloads them,
       cached between builds, and fails if any image is missing.
 
-## Step 2 – Story and puzzles
-- [ ] **Puzzle dependency chart** – what the player must find/do, in what order,
-      to get inside; two or three routes. *Draft in `PUZZLES.md` – waiting for
-      your answers to the questions at the bottom.*
-- [ ] Give the open hooks a purpose: Old Key, hollow plinth under the cross,
-      locked servants' entrance, glasshouse doors, path to the back of the house.
-- [ ] **Entrance Hall** scene (Quazimodo's open doors lead to `EntranceHall`,
-      which doesn't exist yet – the data check reports it).
-- [ ] Back of the house scene (`.GoesTo("BackOfHouse")` is ready in a comment).
-
-- [x] **Scene list** – `SCENES.md`: every scene and close-up with its objects,
-      characters, items, exits and a map. Regenerate with
-      `python Tools/list_scenes.py` after changing scenes.
+## Step 2 – Story and puzzles (see `PUZZLES.md`)
+- [x] **Puzzle design for the outside** – `PUZZLES.md` (design rules, map,
+      puzzles). Decided: Worn Photograph memento, Cracked Hand Mirror (Old Key
+      retired), Wits-or-rubbing gravestone, rose hurts once, Faceless Knight.
+- [x] Graveyard Secret: gravestone clue → three spirals → plinth → Worn Photograph.
+- [x] Well: Cracked Hand Mirror; Ebria refuses it.
+- [x] Rose bush: hurts once; Garden Shears → Red Rose.
+- [x] Faceless Knight: put your weapon away (click WEAPON) → Stone Sword.
+- [x] Hautain ↔ Ebria cross-reference; the Gargoyle notices the rain.
+- [x] **Scene list** – `SCENES.md`, regenerate with `python Tools/list_scenes.py`.
+- [ ] **Rear yard** + **Tool shed** (garden shears) – *needs art*.
+- [ ] Where Charcoal and Paper are found.
+- [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
+- [ ] Servants' entrance as a shortcut from inside.
+- [ ] Glasshouse interior – *needs art + design*.
+- [ ] Art: item icons (mirror, photograph, rose, shears, sword, charcoal, paper),
+      well close-up with a mirror, statue without its sword, rose bush with one
+      rose cut.
 
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,
