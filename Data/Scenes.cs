@@ -631,7 +631,7 @@ namespace The_Mansion.Data
 
             // Background and sprite split from the painted-over picture by
             // Tools/split_bench_fairy.py.
-            .Sprite("Assets/Characters/Ebria_UnderBench.png", 429, 421, 397)
+            .Sprite("Assets/Characters/Ebria_UnderBench.png", 415, 396, 422)
 
             .Hotspot("Ferns", 0, 300, 140, 230)
                 .Describe("Ferns and lilies crowd the path, dripping with rain.")
