@@ -4206,6 +4206,9 @@ namespace The_Mansion.Data
         // Number of conversations (also makes sure they are all loaded).
         public static int Count => DialogueLookup.Count;
 
+        // Every conversation by id (used by the start-up data check).
+        public static IReadOnlyDictionary<string, Dialogue> All => DialogueLookup;
+
         public static Dialogue? GetDialogue(string dialogueId)
         {
             if (string.IsNullOrWhiteSpace(dialogueId))

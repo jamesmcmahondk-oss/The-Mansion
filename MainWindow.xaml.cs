@@ -103,6 +103,12 @@ namespace The_Mansion
             _ = Items.All.Count();
             _ = Enemies.All.Count();
 
+#if DEBUG
+            // Check every reference in the game data (scene names, items,
+            // conversations, fights, pictures) and list any mistakes.
+            Loaded += (_, _) => GameValidator.ShowProblems();
+#endif
+
             // Game area is exactly 1920x1080 screen pixels; the window
             // (with its title bar) is then centred on screen.
             // Window size comes from Settings (resolution / fullscreen).
@@ -606,10 +612,6 @@ namespace The_Mansion
 
                 SceneCanvas.Children.Add(hotspotRectangle);
             }
-
-            /*
-             * Character rendering can be added here next.
-             */
         }
 
         private Image? CreateSpriteImage(SceneSprite sprite)
@@ -1235,95 +1237,6 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     : Visibility.Collapsed;
         }
 
-        private void LookBtn_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var imagePath = "Assets/UI/look_glow.png";
-
-            try
-            {
-                var imageUri = new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute
-                );
-
-                LookBtn.Source = new BitmapImage(imageUri);
-               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load scene image:\n\n" +
-                    $"{imagePath}\n\n" +
-                    $"{ex.Message}",
-                    "Scene image error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
-
-        }
-
-      
-        private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
-        {
-
-            if (sender is not Image buttonImage)
-            {
-                return;
-            }
-
-            string imagePath = buttonImage.Source.ToString();
-            string buttonName = buttonImage.Name;
-
-            switch (buttonName)
-            {
-                case "LookBtn":
-                    {
-                         imagePath = "Assets/UI/look_glow.png";
-                        break;
-                    }
-
-                case "TalkBtn":
-                    {
-                         imagePath = "Assets/UI/talk_glow.png";
-                        break;
-                    }
-
-                case "ActBtn":
-                    {
-                         imagePath = "Assets/UI/act_glow.png";
-                        break;
-                    }
-
-                case "ItemBtn":
-                    {
-                         imagePath = "Assets/UI/item_glow.png";
-                        break;
-                    }
-            }
-            try
-            {
-                var imageUri = new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute
-                );
-
-                buttonImage.Source = new BitmapImage(imageUri);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load button image:\n\n" +
-                    $"{imagePath}\n\n" +
-                    $"{ex.Message}",
-                    "button image error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
-
-            e.Handled = true;
-        }
         private void SetButtonImage(Image buttonImage, string imagePath)
         {
             try

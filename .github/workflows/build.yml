@@ -1,0 +1,27 @@
+# Builds the game on Windows for every push and pull request, so compile
+# errors show up on GitHub (a red X) before anyone pulls the change.
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build (Debug)
+        run: dotnet build "The Mansion.csproj" --configuration Debug
+
+      - name: Build (Release)
+        run: dotnet build "The Mansion.csproj" --configuration Release

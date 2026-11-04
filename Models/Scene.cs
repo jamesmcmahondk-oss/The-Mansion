@@ -18,9 +18,6 @@ namespace The_Mansion.Models
         public List<Hotspot> Hotspots { get; set; }
             = new();
 
-        public List<Character> Characters { get; set; }
-            = new();
-
         // Other backgrounds to show once something has happened, e.g. the
         // door standing open. Checked top to bottom; the first one whose
         // condition is true wins. If none match, BackgroundImage is used.
@@ -48,7 +45,7 @@ namespace The_Mansion.Models
 
     public class SceneSprite
     {
-        // Transparent PNG, e.g. "Assets/Characters/Ebria_Drinking.png".
+        // Transparent PNG, e.g. "Assets/Characters/Ebria_UnderBench.png".
         public string Image { get; set; } = "";
 
         // Top-left corner and height in background image pixels (like
