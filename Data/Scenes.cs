@@ -126,6 +126,10 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/statue_closeup.png",
                      "The statue towers over you: a hooded figure in a ragged stone robe, its hands resting on the hilt of a great sword.")
 
+            // Hands folded around nothing once you've taken the sword.
+            .BackgroundWhen(p => p.HasFlag("TookStoneSword"),
+                            "Assets/Backgrounds/Mansion/statue_closeup_nosword.png")
+
             .Hotspot("Glasshouse", 264, 330, 384, 320)
                 .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
 
@@ -575,6 +579,10 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/cross_closeup.png",
                      "The great stone cross looms over you, every inch of it carved with endless knots.")
 
+            // The knotwork panel slides aside when the spirals are solved.
+            .BackgroundWhen(p => p.HasFlag("CrossOpened"),
+                            "Assets/Backgrounds/Mansion/cross_closeup_open.png")
+
             .Hotspot("Moon", 1040, 192, 110, 110)
                 .Describe("The full moon hangs over the graveyard. It looks closer than it should.")
 
@@ -613,6 +621,7 @@ namespace The_Mansion.Data
                            p.Give("Worn Photograph");
                            p.SetFlag("FoundPhotograph");
                        })
+                .ShowsPicture("Assets/Items/Sources/worn_photograph.png")
                 .OnlyWhen(p => p.HasFlag("CrossOpened") && !p.HasFlag("FoundPhotograph"))
 
             .Hotspot("Empty Plinth", 530, 612, 520, 200)

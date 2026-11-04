@@ -120,7 +120,10 @@ namespace The_Mansion.Data
             }
 
             foreach (Item item in Items.All)
+            {
                 CheckImage($"Item '{item.Name}' icon", item.Icon);
+                CheckImage($"Item '{item.Name}' picture", item.Picture);
+            }
 
             foreach (TrunkItem trunkItem in Trunk.Items)
                 CheckItem("Data/Trunk.cs", trunkItem.ItemName);

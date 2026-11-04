@@ -68,6 +68,10 @@ namespace The_Mansion.Models
         // can depend on what happened (e.g. a Luck test).
         public Func<Player, string>? ActResult { get; set; }
 
+        // Optional: a full-size picture shown after the ACT (e.g. the
+        // photograph you have just found). Click to close.
+        public string ActPicture { get; set; } = "";
+
         // Optional: the hotspot only exists while this returns true,
         // e.g. p => !p.HasFlag("TookKey"). Checked whenever the scene refreshes.
         public Func<Player, bool>? VisibleWhen { get; set; }

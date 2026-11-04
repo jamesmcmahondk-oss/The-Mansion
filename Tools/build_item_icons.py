@@ -26,6 +26,10 @@ ICONS = {
     "party_hat.png":         ("Assets/UI/trunk.png", (850, 325, 1095, 530)),
     "loose_change.png":      ("Assets/UI/trunk.png", (850, 575, 1025, 670)),
     "fork.png":              ("Assets/UI/trunk.png", (1050, 505, 1260, 745)),
+    # Item pictures (whole picture, squared to its centre)
+    "worn_photograph.png":   ("Assets/Items/Sources/worn_photograph.png",     (230, 0, 1306, 1024)),
+    "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (90, 60, 1190, 1160)),
+    "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (180, 150, 1060, 1110)),
     "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1465, 705)),
 }
 

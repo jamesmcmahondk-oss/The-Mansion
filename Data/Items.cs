@@ -30,7 +30,8 @@ namespace The_Mansion.Data
             int weaponBonus = 0,
             Func<Player, Fight, string>? inFight = null,
             bool usedUpInFight = false,
-            bool memento = false)
+            bool memento = false,
+            string picture = "")
         {
             var item = new Item
             {
@@ -40,7 +41,8 @@ namespace The_Mansion.Data
                 WeaponBonus = weaponBonus,
                 UseInFight = inFight,
                 UsedUpInFight = usedUpInFight,
-                IsMemento = memento
+                IsMemento = memento,
+                Picture = picture
             };
 
             ItemLookup[name] = item;
@@ -76,15 +78,18 @@ namespace The_Mansion.Data
         // From the bottom of the well. Not Ebria's - but she won't look at it.
         public static Item CrackedHandMirror { get; } =
             NewItem("Cracked Hand Mirror",
-                    "A small silver-backed hand mirror, fished from the bottom of the well. The glass is cracked straight across.");
+                    "A small silver-backed hand mirror, fished from the bottom of the well. The glass is clouded and cracked.",
+                    "Assets/Items/cracked_hand_mirror.png");
 
         // The first Memento: from the hidden compartment in the cross plinth.
         public static Item WornPhotograph { get; } =
             NewItem("Worn Photograph",
                     "A tiny, old photograph of the Mansion as it once was. A small group of people stands in front of it. " +
                     "Where one face should be, the picture has simply decayed away. On the back, in faded handwriting: " +
-                    "\"You said you'd come back.\"",
-                    memento: true);
+                    "\"You said you'd come back.\" (Right-click to look at it.)",
+                    "Assets/Items/worn_photograph.png",
+                    memento: true,
+                    picture: "Assets/Items/Sources/worn_photograph.png");
 
         // For a rubbing of the gravestone (use either one on the inscription
         // while carrying both). Charcoal: the tool shed. Paper: still to be decided.
@@ -108,7 +113,8 @@ namespace The_Mansion.Data
 
         public static Item RedRose { get; } =
             NewItem("Red Rose",
-                    "One perfect dark-red rose. It smells of summer, which is wrong this late in the year.");
+                    "One perfect dark-red rose. It smells of summer, which is wrong this late in the year.",
+                    "Assets/Items/red_rose.png");
 
         // =========================================================
         // THE CAR TRUNK (pick one before the game starts - Data/Trunk.cs)

@@ -27,6 +27,8 @@ WIDE = [
     ("courtyard_source.png",               "courtyard.png",              70),
     ("garden_source.png",                  "garden.png",                110),
     ("statue_closeup_source.png",          "statue_closeup.png",         10),
+    # After the sword is taken (lined up by Tools/align_variant.py).
+    ("statue_closeup_nosword_source.png",  "statue_closeup_nosword.png", 10),
     ("mansion_right_v2_source.png",        "mansion_right.png",         215),
     ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
     # Bench with the fairy painted out (Tools/split_bench_fairy.py); the

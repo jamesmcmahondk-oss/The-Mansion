@@ -43,9 +43,11 @@ they're done; add new ones at the bottom of the right section.
 - [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
 - [ ] Servants' entrance as a shortcut from inside.
 - [ ] Glasshouse interior – *needs art + design*.
-- [ ] Art: item icons (mirror, photograph, rose, shears, sword, charcoal, paper),
-      well close-up with a mirror, statue without its sword, rose bush with one
-      rose cut.
+- [x] Art: photograph (icon + full-size view, right-click in the inventory),
+      red rose and mirror icons; statue without its sword; cross with the open
+      plinth.
+- [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; well
+      close-up with a mirror (it still shows a key); rose bush with one rose cut.
 
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,

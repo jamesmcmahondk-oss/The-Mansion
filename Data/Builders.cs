@@ -196,6 +196,13 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>Show this picture full-size after the ACT (click to close).</summary>
+        public HotspotBuilder ShowsPicture(string imagePath)
+        {
+            _hotspot.ActPicture = imagePath;
+            return this;
+        }
+
         /// <summary>ACT on it starts a conversation from Data/Dialogues.cs.</summary>
         public HotspotBuilder ActStarts(string dialogueId)
         {

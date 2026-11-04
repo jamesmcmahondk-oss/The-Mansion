@@ -138,6 +138,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > The statue towers over you: a hooded figure in a ragged stone robe, its hands resting on the hilt of a great sword.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/statue_closeup_nosword.png` when **TookStoneSword**
 - **Reached from:** Garden – LOOK on *Statue*
 - **Return arrow →** Garden
 
@@ -303,6 +304,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > The great stone cross looms over you, every inch of it carved with endless knots.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/cross_closeup_open.png` when **CrossOpened**
 - **Reached from:** GraveyardEntrance – LOOK on *Stone Cross*
 - **Return arrow →** GraveyardEntrance
 

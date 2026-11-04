@@ -334,6 +334,27 @@ namespace The_Mansion
             UpdatePlayerStats();
         }
 
+        // Shows a picture full-screen until the next click.
+        private void ShowPicture(string imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+            {
+                return;
+            }
+
+            try
+            {
+                PictureViewerImage.Source = new BitmapImage(new Uri(
+                    $"pack://application:,,,/{imagePath}", UriKind.Absolute));
+                PictureViewer.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not load picture:\n\n{imagePath}\n\n{ex.Message}",
+                    "Picture error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void AcceptRollButton_Click(
       object sender,
       RoutedEventArgs e)
@@ -887,6 +908,11 @@ namespace The_Mansion
 
                 hotspot.ActEffect?.Invoke(_player);
                 AfterStoryChange();
+
+                if (!string.IsNullOrWhiteSpace(hotspot.ActPicture))
+                {
+                    ShowPicture(hotspot.ActPicture);
+                }
                 return;
             }
 
@@ -1548,6 +1574,14 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
          */
         private void Window_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // A picture being looked at closes on any click.
+            if (PictureViewer.Visibility == Visibility.Visible)
+            {
+                PictureViewer.Visibility = Visibility.Collapsed;
+                e.Handled = true;
+                return;
+            }
+
             if (!_replyShowing ||
                 GameScreen.Visibility != Visibility.Visible ||
                 IsInDialogue || IsInFight || _inventoryOpen ||
@@ -2370,6 +2404,13 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             {
                 args.Handled = true;
                 SelectItem(item.Name);
+            };
+
+            // Right-click: look at the item up close (if it has a picture).
+            slot.MouseRightButtonDown += (_, args) =>
+            {
+                args.Handled = true;
+                ShowPicture(string.IsNullOrWhiteSpace(item.Picture) ? item.Icon : item.Picture);
             };
 
             return slot;

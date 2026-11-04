@@ -34,6 +34,10 @@ namespace The_Mansion.Models
         // A Memento: an object that stirs memories the player doesn't know
         // they have. Shown as "Memento" in the inventory.
         public bool IsMemento { get; set; }
+
+        // Optional full-size picture, shown by right-clicking the item in
+        // the inventory (e.g. the Worn Photograph).
+        public string Picture { get; set; } = "";
     }
 
     /*

@@ -1043,6 +1043,35 @@
         <!-- ========================================= -->
         <!-- GAME OVER                                 -->
         <!-- ========================================= -->
+        <!-- PICTURE VIEWER (an item up close)         -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="PictureViewer"
+              Visibility="Collapsed"
+              Background="#E6000000"
+              Cursor="Hand"
+              Panel.ZIndex="3900">
+            <Image x:Name="PictureViewerImage"
+                   MaxWidth="1500"
+                   MaxHeight="900"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center">
+                <Image.Effect>
+                    <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.9" Color="Black"/>
+                </Image.Effect>
+            </Image>
+            <TextBlock Text="click to close"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,0,40"
+                       Foreground="#887966"
+                       FontFamily="Georgia"
+                       FontStyle="Italic"
+                       FontSize="16"/>
+        </Grid>
+
+        <!-- ========================================= -->
 
         <Grid x:Name="GameOverScreen"
               Visibility="Collapsed"
