@@ -126,6 +126,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
+    <Resource Include="Assets\Items\Sources\paper.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
     <Resource Include="Assets\Characters\*.png" />

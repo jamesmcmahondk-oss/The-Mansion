@@ -49,7 +49,7 @@ they're done; add new ones at the bottom of the right section.
 - [x] Icons for shears, sword, charcoal and rope (cropped from the scenes by
       Tools/build_item_icons.py); rose bush with one rose cut; well close-up
       with the mirror; darker bench close-up.
-- [ ] Paper icon (once we know where the Paper is found).
+- [x] Paper icon and close-up picture (right-click it in the inventory).
 - [x] Right side of the mansion: new view (roses, bench, arch to the well, path
       round the back). One rose is painted out once you've cut it. The
       servants' entrance is gone (the kitchen door in the rear yard covers it).

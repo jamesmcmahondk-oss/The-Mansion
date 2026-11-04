@@ -112,7 +112,9 @@ namespace The_Mansion.Data
 
         public static Item Paper { get; } =
             NewItem("Paper",
-                    "A few sheets of thin, yellowed paper.",
+                    "A few sheets of thin, yellowed paper. (Right-click to look at it.)",
+                    "Assets/Items/paper.png",
+                    picture: "Assets/Items/Sources/paper.png",
                     misuse: "There's nothing on the {target} worth writing down.");
 
         // Found in the tool shed (rear yard). Cuts a rose safely.
