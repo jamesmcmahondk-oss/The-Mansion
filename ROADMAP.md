@@ -17,7 +17,7 @@ they're done; add new ones at the bottom of the right section.
       `Scene.Name/BackgroundImage/Description` without defaults).
 - [x] Delete unused art: `Ebria_Drinking.png`, the old `Fountain.png`,
       `left.png`, `right.png` and the first right-side painting. Kept for later:
-      `right_closeup.png` / `right_open.png` (side door – servants' entrance?)
+      `right_closeup.png` / `right_open.png` (a side door)
       and the characters not in the game yet.
 - [x] **Git LFS** for the images (`*.png`, `*.jpg`, `*.jpeg`, `*.webp`). Current
       images moved to LFS in a new commit (history not rewritten, so old
@@ -38,16 +38,19 @@ they're done; add new ones at the bottom of the right section.
       cellar doors (one knock), hand pump + trough, drain, clothesline and The
       Sock, tool shed with Garden Shears, Charcoal and Rope.
 - [ ] Tool shed close-up – *needs art* (the shed opens in the yard for now).
-- [ ] **Kitchen Garden** (rear yard → glasshouse, closes the outdoor loop) – *needs art*.
+- [x] **Kitchen Garden** (rear yard → door in the wall → Garden): the outdoor loop is closed.
 - [ ] Where Paper is found (Charcoal: tool shed).
 - [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
-- [ ] Servants' entrance as a shortcut from inside.
 - [ ] Glasshouse interior – *needs art + design*.
 - [x] Art: photograph (icon + full-size view, right-click in the inventory),
       red rose and mirror icons; statue without its sword; cross with the open
       plinth.
 - [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; rose bush
-      with one rose cut. (Well close-up with the mirror: done.)
+      with one rose cut. (Well close-up with the mirror: done. Darker bench
+      close-up: done.)
+- [x] Right side of the mansion: new view (roses, bench, arch to the well, path
+      round the back). One rose is painted out once you've cut it. The
+      servants' entrance is gone (the kitchen door in the rear yard covers it).
 
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,

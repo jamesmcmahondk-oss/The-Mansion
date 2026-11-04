@@ -16,6 +16,7 @@ flowchart LR
     GlasshouseCloseup(["GlasshouseCloseup"])
     MansionRight["MansionRight"]
     RearYard["RearYard"]
+    KitchenGarden["KitchenGarden"]
     BenchCloseup(["BenchCloseup"])
     Well["Well"]
     GraveyardEntrance["GraveyardEntrance"]
@@ -33,11 +34,14 @@ flowchart LR
     Courtyard -->|ACT Side Path| MansionRight
     Garden -.->|LOOK Glasshouse| GlasshouseCloseup
     Garden -.->|LOOK Statue| StatueCloseup
+    MansionRight -->|ACT Old Well| Well
     MansionRight -->|ACT Garden Arch| Well
     MansionRight -->|ACT Path to the Back| RearYard
-    MansionRight -->|ACT Old Well| Well
     MansionRight -.->|LOOK Stone Bench| BenchCloseup
     RearYard -->|ACT Path Back| MansionRight
+    RearYard -->|ACT Path Around Mansion| KitchenGarden
+    KitchenGarden -->|ACT Garden Door| Garden
+    KitchenGarden -->|ACT Path Back| RearYard
     Well -.->|LOOK Well| WellCloseup
     Well -->|ACT Graveyard| GraveyardEntrance
     Well -->|ACT Graveyard Path| GraveyardEntrance
@@ -59,6 +63,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 - [GlasshouseCloseup](#glasshousecloseup) – Close-up
 - [MansionRight](#mansionright) – Scene
 - [RearYard](#rearyard) – Scene
+- [KitchenGarden](#kitchengarden) – Scene
 - [BenchCloseup](#benchcloseup) – Close-up
 - [Well](#well) – Scene
 - [GraveyardEntrance](#graveyardentrance) – Scene
@@ -122,7 +127,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > The path ends in an overgrown garden. Mist curls around a hooded statue, and beyond it a great glasshouse glows in the dark.
 
-- **Reached from:** Courtyard – ACT on *Garden Path*; StatueCloseup – Return arrow; GlasshouseCloseup – Return arrow
+- **Reached from:** Courtyard – ACT on *Garden Path*; StatueCloseup – Return arrow; GlasshouseCloseup – Return arrow; KitchenGarden – ACT on *Garden Door*
 - **Close-ups:** GlasshouseCloseup (LOOK *Glasshouse*); StatueCloseup (LOOK *Statue*)
 - **Return arrow →** Courtyard
 
@@ -171,23 +176,25 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 **Scene** · `Assets/Backgrounds/Mansion/mansion_right.png`
 
-> A wet stone path curves along the mansion's right wing, past a servants' entrance, to an archway in the garden wall. Beyond it, steps climb to an old well.
+> A wet stone path runs along the Mansion's right wing, between candlelit windows and a wall of roses. Ahead, an archway opens onto steps climbing to an old well.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/mansion_right_rose_cut.png` when **GotRedRose**
 - **Reached from:** Courtyard – ACT on *Side Path*; RearYard – ACT on *Path Back*; RearYard – Return arrow; BenchCloseup – Return arrow; Well – Return arrow
-- **Exits:** Well (ACT *Garden Arch*); RearYard (ACT *Path to the Back*); Well (ACT *Old Well*)
+- **Exits:** Well (ACT *Old Well*); Well (ACT *Garden Arch*); RearYard (ACT *Path to the Back*)
 - **Close-ups:** BenchCloseup (LOOK *Stone Bench*)
 - **Return arrow →** Courtyard
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
-| Lantern | An iron lantern on a stone post. Its flame burns steadily, despite the rain. | – | – | – |
-| Windows | Candles burn behind the tall windows, but nothing moves inside. | – | – | – |
-| Servants' Entrance | A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side. | You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked! | – | – |
-| Garden Arch | An ivy-covered archway in the garden wall. Steps beyond it climb towards the well. | → **Well** | – | – |
-| Path to the Back | The cobbled path curves away along the garden wall, around to the back of the mansion. | → **RearYard** | – | – |
+| Windows (3 places) | Candles burn behind the tall windows, but nothing moves inside. | – | – | – |
+| Balustrade | A heavy stone balustrade runs along the foot of the wall, slick with rain. | – | – | – |
 | Old Well | A small roofed well stands at the top of the hill. | → **Well** | – | – |
+| Garden Arch | An ivy-covered archway in the garden wall. Steps beyond it climb towards the well. | → **Well** | – | – |
+| Path to the Back | Beside the lantern, the cobbles slip round the corner of the Mansion, towards the back of the house. | → **RearYard** | – | – |
+| Lantern | A lantern burns on the garden wall. Its flame burns steadily, despite the rain. | – | – | – |
 | Rose Bush *(only when not GotRedRose)* | A great tangle of blood-red roses, impossibly in bloom this late in the year. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose. |
-| Rose Bush *(only when GotRedRose)* | A great tangle of blood-red roses. There's a small gap where you cut one. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
+| Rose Bush *(only when GotRedRose)* | A great tangle of blood-red roses. There's a small gap where you cut one. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: You already have a rose. Leave the rest of them be. |
+| Hydrangeas | Pale hydrangeas, heavy with rain. They have lost all their colour. | – | – | – |
 | Stone Bench *(only when not HeardBenchNoise)* | A mossy stone bench beside the roses. | You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.  [sets HeardBenchNoise] | – | – |
 | Stone Bench *(only when HeardBenchNoise)* | → **BenchCloseup** | You sit down again. The hiccuping stops. Then: "...I can hear you breathing." | – | – |
 
@@ -197,14 +204,14 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > A rain-soaked service yard behind the Mansion. Ordinary work seems to have simply stopped here.
 
-- **Reached from:** MansionRight – ACT on *Path to the Back*
-- **Exits:** MansionRight (ACT *Path Back*)
+- **Reached from:** MansionRight – ACT on *Path to the Back*; KitchenGarden – ACT on *Path Back*; KitchenGarden – Return arrow
+- **Exits:** MansionRight (ACT *Path Back*); KitchenGarden (ACT *Path Around Mansion*)
 - **Return arrow →** MansionRight
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Path Back | The wet path continues around the side of the Mansion. | → **MansionRight** | – | – |
-| Path Around Mansion | The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees. | – | – | – |
+| Path Around Mansion | The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees. | → **KitchenGarden** | – | – |
 | Ivy | Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard. | – | – | – |
 | Windows (2 places) | Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below. | – | – | – |
 | Lantern | A lantern burns beside the service door. Someone keeps these lit. | – | – | – |
@@ -226,6 +233,31 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Shovel | A heavy garden shovel hangs from a hook rusted solid around its handle. | It isn't coming free without taking half the shed with it. | – | – |
 | Pitchfork | An old pitchfork. Several tines have rusted away. | – | – | – |
 | Rake | A rake with half its teeth missing. | – | – | – |
+
+## KitchenGarden
+
+**Scene** · `Assets/Backgrounds/Mansion/kitchen_garden.png`
+
+> A walled kitchen garden. The beds are still planted and weeded, as if the gardener only just stepped out. Beyond a door in the wall, the glasshouse glows.
+
+- **Reached from:** RearYard – ACT on *Path Around Mansion*
+- **Exits:** Garden (ACT *Garden Door*); RearYard (ACT *Path Back*)
+- **Return arrow →** RearYard
+
+| Object | LOOK | ACT | TALK | Items |
+|---|---|---|---|---|
+| Garden Wall | A high brick wall, thick with ivy. It keeps the wind out - and anything else. | – | – | – |
+| Windows (2 places) | Candles burn in the Mansion's windows. Someone keeps a lot of candles. | – | – | – |
+| Rain Barrels | Two old rain barrels, full to the brim. | You peer into the barrel. Your reflection peers back. It takes a moment longer than it should. | – | – |
+| Potting Bench | A potting bench with a few terracotta pots and a seed box. Everything has been put away neatly. | – | – | – |
+| Hedge Clippers | A pair of hedge clippers, rusted completely shut. | They won't open. Whoever left them here hasn't been back for a very long time. | – | – |
+| Bean Poles | Two wigwams of bean poles. Nothing grows on them now except a few dead tendrils. | – | – | – |
+| Garden Door | An open door in the wall. Through it, the glasshouse glows in the mist. | → **Garden** | – | – |
+| Vegetable Beds | Raised beds of cabbages and leeks, fat and healthy despite the season. Someone still tends them. | You pull at a leek. It doesn't budge. It feels... rooted rather more firmly than leeks ought to be. | – | – |
+| Cabbage | An enormous purple cabbage. It is, objectively, a magnificent cabbage. | – | You compliment the cabbage. It accepts graciously. | – |
+| Plant Label | A wooden plant label. Whatever was written on it has washed away. | – | – | – |
+| Flower Pots | A few terracotta pots, one of them cracked and tipped on its side. | – | – | – |
+| Path Back | The path leads back to the service yard. | → **RearYard** | – | – |
 
 ## BenchCloseup
 
@@ -251,7 +283,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > An old stone well stands under a mossy roof. Beyond it, a path leads down to a fenced graveyard.
 
-- **Reached from:** MansionRight – ACT on *Garden Arch*; MansionRight – ACT on *Old Well*; GraveyardEntrance – Return arrow; WellCloseup – Return arrow
+- **Reached from:** MansionRight – ACT on *Old Well*; MansionRight – ACT on *Garden Arch*; GraveyardEntrance – Return arrow; WellCloseup – Return arrow
 - **Exits:** GraveyardEntrance (ACT *Graveyard*); GraveyardEntrance (ACT *Graveyard Path*)
 - **Close-ups:** WellCloseup (LOOK *Well*)
 - **Return arrow →** MansionRight

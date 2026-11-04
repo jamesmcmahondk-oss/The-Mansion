@@ -26,7 +26,7 @@ flowchart TD
     COURT -->|centre| DOOR[Front Door: Quazimodo] --> HALL([Entrance Hall])
     COURT -->|left| GARDEN[Garden] --> STATUE[Statue] & GLASS[Glasshouse]
     GLASS -.later.-> GLASSIN([Glasshouse interior: Grell?])
-    COURT -->|right| RIGHT[Right side] --> BENCH[Bench: Ebria] & SERV[Servants' entrance] & WELL[Well]
+    COURT -->|right| RIGHT[Right side] --> BENCH[Bench: Ebria] & WELL[Well]
     WELL --> GRAVE[Graveyard] -.later.-> DEEP([Deeper graveyard])
     RIGHT -->|around back| REAR[Rear yard] --> SHED[Tool shed] & KITCHEN([Kitchen]) & CELLAR([Cellar])
     REAR -.later.-> KGARDEN([Kitchen Garden]) -.-> GLASS
@@ -81,7 +81,6 @@ understanding, not an item. *(Needs: statue picture without the sword.)*
 | ~~Rear yard~~ ✅ built: kitchen door (bolted inside), cellar doors (one knock), pump + trough, drain, The Sock, tool shed (shears, charcoal, rope) | – |
 | **Tool shed close-up** (the shed currently opens in the yard) | Art |
 | **Kitchen Garden** (rear yard → glasshouse) | Art |
-| **Servants' entrance** becomes a **shortcut**: bolted from inside; slide the bolt once indoors | Inside scene |
 | **Glasshouse interior** (Grell's territory?) | Art + design |
 | Paper – where is it found? (Charcoal: tool shed) | Decision |
 | Item icons: mirror, photograph, rose, shears, sword, charcoal, paper | Art (or crops) |

@@ -213,35 +213,42 @@ namespace The_Mansion.Data
         public static Scene MansionRight { get; } =
             NewScene("MansionRight",
                      "Assets/Backgrounds/Mansion/mansion_right.png",
-                     "A wet stone path curves along the mansion's right wing, past a servants' entrance, to an archway in the garden wall. Beyond it, steps climb to an old well.")
+                     "A wet stone path runs along the Mansion's right wing, between candlelit windows and a wall of roses. " +
+                     "Ahead, an archway opens onto steps climbing to an old well.")
 
-            .Hotspot("Lantern", 50, 290, 150, 190)
-                .Describe("An iron lantern on a stone post. Its flame burns steadily, despite the rain.")
+            // One rose is gone from the picture once you've cut it.
+            .BackgroundWhen(p => p.HasFlag("GotRedRose"),
+                            "Assets/Backgrounds/Mansion/mansion_right_rose_cut.png")
 
-            .Hotspot("Windows", 240, 192, 400, 310)
+            .Hotspot("Windows", 140, 260, 130, 270)
                 .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
-            .Hotspot("Servants' Entrance", 790, 300, 180, 370)
-                .Describe("A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side.")
-                .OnAct("You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked!")
-                // Later: add a second "Servants' Entrance" hotspot with
-                // .GoesTo("...") and .OnlyWhen(p => p.HasFlag("ServantsDoorOpen")),
-                // and .OnlyWhen(p => !p.HasFlag("ServantsDoorOpen")) on this one.
+            .Hotspot("Windows", 440, 200, 100, 330)
+                .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
-            .Hotspot("Garden Arch", 1140, 400, 160, 380)
-                .Describe("An ivy-covered archway in the garden wall. Steps beyond it climb towards the well.")
-                .GoesTo("Well")
+            .Hotspot("Windows", 585, 280, 75, 230)
+                .Describe("Candles burn behind the tall windows, but nothing moves inside.")
 
-            // Listed after the arch so it wins where the two overlap.
-            .Hotspot("Path to the Back", 1060, 555, 125, 175)
-                .Describe("The cobbled path curves away along the garden wall, around to the back of the mansion.")
-                .GoesTo("RearYard")
+            .Hotspot("Balustrade", 0, 560, 700, 272)
+                .Describe("A heavy stone balustrade runs along the foot of the wall, slick with rain.")
 
-            .Hotspot("Old Well", 1160, 250, 130, 120)
+            .Hotspot("Old Well", 870, 230, 120, 150)
                 .Describe("A small roofed well stands at the top of the hill.")
                 .GoesTo("Well")
 
-            .Hotspot("Rose Bush", 1300, 500, 236, 190)
+            .Hotspot("Garden Arch", 800, 350, 145, 330)
+                .Describe("An ivy-covered archway in the garden wall. Steps beyond it climb towards the well.")
+                .GoesTo("Well")
+
+            // The path slips past the lantern, around the corner of the house.
+            .Hotspot("Path to the Back", 700, 420, 100, 160)
+                .Describe("Beside the lantern, the cobbles slip round the corner of the Mansion, towards the back of the house.")
+                .GoesTo("RearYard")
+
+            .Hotspot("Lantern", 760, 435, 45, 70)
+                .Describe("A lantern burns on the garden wall. Its flame burns steadily, despite the rain.")
+
+            .Hotspot("Rose Bush", 980, 460, 480, 230)
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
                 .OnlyWhen(p => !p.HasFlag("GotRedRose"))
                 .OnAct(p => Roses.Touch(p))
@@ -249,24 +256,24 @@ namespace The_Mansion.Data
                         effect: p => Roses.Cut(p),
                         onlyIf: p => !p.HasFlag("GotRedRose"))
 
-            .Hotspot("Rose Bush", 1300, 500, 236, 190)
+            .Hotspot("Rose Bush", 980, 460, 480, 230)
                 .Describe("A great tangle of blood-red roses. There's a small gap where you cut one.")
                 .OnlyWhen(p => p.HasFlag("GotRedRose"))
                 .OnAct(p => Roses.Touch(p))
-                .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose.",
-                        effect: p => Roses.Cut(p),
-                        onlyIf: p => !p.HasFlag("GotRedRose"))
                 .OnItem("Garden Shears", "You already have a rose. Leave the rest of them be.")
+
+            .Hotspot("Hydrangeas", 1340, 690, 196, 142)
+                .Describe("Pale hydrangeas, heavy with rain. They have lost all their colour.")
 
             // The bench: sit on it (ACT) first. Then you hear something
             // underneath, and LOOK opens the close-up with Ebria.
-            .Hotspot("Stone Bench", 1250, 690, 220, 142)
+            .Hotspot("Stone Bench", 1085, 700, 250, 132)
                 .Describe("A mossy stone bench beside the roses.")
                 .OnAct("You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.",
                        p => p.SetFlag("HeardBenchNoise"))
                 .OnlyWhen(p => !p.HasFlag("HeardBenchNoise"))
 
-            .Hotspot("Stone Bench", 1250, 690, 220, 142)
+            .Hotspot("Stone Bench", 1085, 700, 250, 132)
                 .Describe("Something is hiccuping under the bench.")
                 .CloseUp("BenchCloseup")
                 .OnAct("You sit down again. The hiccuping stops. Then: \"...I can hear you breathing.\"")
@@ -292,7 +299,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Path Around Mansion", 1440, 420, 96, 360)
                 .Describe("The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees.")
-                // .GoesTo("KitchenGarden")   <- add once the kitchen garden has a scene
+                .GoesTo("KitchenGarden")
 
             .Hotspot("Ivy", 200, 192, 300, 330)
                 .Describe("Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard.")
@@ -431,6 +438,66 @@ namespace The_Mansion.Data
                 .Describe("A rake with half its teeth missing.")
 
             .ReturnTo("MansionRight", "You head back along the side of the Mansion.");
+
+
+        // =========================================================
+        // KITCHEN GARDEN - walled vegetable garden behind the Mansion
+        // (from the Rear Yard). The door in the wall leads through to the
+        // Garden and glasshouse, closing the loop around the Mansion.
+        // =========================================================
+
+        public static Scene KitchenGarden { get; } =
+            NewScene("KitchenGarden",
+                     "Assets/Backgrounds/Mansion/kitchen_garden.png",
+                     "A walled kitchen garden. The beds are still planted and weeded, as if the gardener only just stepped out. Beyond a door in the wall, the glasshouse glows.")
+
+            .Hotspot("Garden Wall", 267, 267, 1269, 180)
+                .Describe("A high brick wall, thick with ivy. It keeps the wind out - and anything else.")
+
+            .Hotspot("Windows", 30, 290, 80, 200)
+                .Describe("Candles burn in the Mansion's windows. Someone keeps a lot of candles.")
+
+            .Hotspot("Windows", 160, 192, 65, 270)
+                .Describe("Candles burn in the Mansion's windows. Someone keeps a lot of candles.")
+
+            .Hotspot("Rain Barrels", 229, 448, 166, 150)
+                .Describe("Two old rain barrels, full to the brim.")
+                .OnAct("You peer into the barrel. Your reflection peers back. It takes a moment longer than it should.")
+
+            .Hotspot("Potting Bench", 400, 448, 171, 140)
+                .Describe("A potting bench with a few terracotta pots and a seed box. Everything has been put away neatly.")
+
+            // Not the tool shed's shears - these are scenery.
+            .Hotspot("Hedge Clippers", 475, 462, 88, 36)
+                .Describe("A pair of hedge clippers, rusted completely shut.")
+                .OnAct("They won't open. Whoever left them here hasn't been back for a very long time.")
+
+            .Hotspot("Bean Poles", 608, 437, 197, 208)
+                .Describe("Two wigwams of bean poles. Nothing grows on them now except a few dead tendrils.")
+
+            .Hotspot("Garden Door", 800, 363, 181, 213)
+                .Describe("An open door in the wall. Through it, the glasshouse glows in the mist.")
+                .GoesTo("Garden")
+
+            .Hotspot("Vegetable Beds", 997, 470, 539, 170)
+                .Describe("Raised beds of cabbages and leeks, fat and healthy despite the season. Someone still tends them.")
+                .OnAct("You pull at a leek. It doesn't budge. It feels... rooted rather more firmly than leeks ought to be.")
+
+            .Hotspot("Cabbage", 693, 651, 160, 106)
+                .Describe("An enormous purple cabbage. It is, objectively, a magnificent cabbage.")
+                .OnTalk("You compliment the cabbage. It accepts graciously.")
+
+            .Hotspot("Plant Label", 933, 640, 54, 107)
+                .Describe("A wooden plant label. Whatever was written on it has washed away.")
+
+            .Hotspot("Flower Pots", 341, 699, 171, 122)
+                .Describe("A few terracotta pots, one of them cracked and tipped on its side.")
+
+            .Hotspot("Path Back", 0, 597, 213, 192)
+                .Describe("The path leads back to the service yard.")
+                .GoesTo("RearYard")
+
+            .ReturnTo("RearYard", "You head back to the service yard.");
 
 
         // Close-up of the stone bench and the rose bush (from MansionRight).
