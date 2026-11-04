@@ -1,78 +1,105 @@
-# The Mansion – Puzzle Chart (DRAFT – for discussion)
+# The Mansion – Outside: Puzzle Design
 
-A proposal built from what's already in the game. Nothing here is built yet;
-change anything. Questions for you are at the bottom.
+The exterior is the game's hub and its tutorial. It shouldn't get much bigger;
+it should **interlock**: a clue in one place opens something in another,
+characters talk about each other, and doors opened from inside become shortcuts.
 
-## Act 1 goal: get inside the Mansion
+> *"This isn't a collection of rooms. Everyone actually lives here."*
 
-Three routes in, each suited to a different kind of player. At least one
-must always be possible; doing more gives extra rewards later.
+## Design rules
+
+- **Stats create shortcuts. Items provide reliable solutions.** A failed roll
+  never blocks progress – there is always another way (e.g. Wits *or* a rubbing).
+- **No more keys for their own sake.** Rewards should mean something: a
+  memory, a reaction, a new route.
+- **Don't tell the player where an item goes.** Classic inventory design.
+- **Mementos** are objects that stir memories the player doesn't know they
+  have. The first one belongs to the player's own mystery, not an NPC's quest.
+- Characters reference each other, and **their accounts don't agree**.
+- Comedy once; then the world remembers (the rose bush hurts *once*).
+
+## Outdoor map
 
 ```mermaid
 flowchart TD
-    START([Front gate]) --> COURT[Courtyard]
-
-    %% Route A - the front door (already built)
-    COURT --> DOOR[Front door: Quazimodo]
-    DOOR -->|good manners| IN
-    DOOR -->|bribe: Gold Coins / Royal Gold Coin / Loose Change| IN
-    DOOR -->|fight him| IN
-    FOUNTAIN[Fountain: Hautain] -->|steal or be given coins| COINS[Gold Coins / Royal Gold Coin]
-    COINS --> DOOR
-    GARG[Sad Gargoyle] -.->|hint: 'manners, not money'| DOOR
-
-    %% Route B - the servants' entrance (proposed)
-    WELL[Well close-up] -->|Ball of String, or bucket + Luck| OLDKEY[Old Key]
-    GRAVE[Gravestone] -->|Wits: '...KEEPER OF THE KEYS...'| HINT[Hint: look beneath the cross]
-    HINT --> PLINTH
-    OLDKEY --> PLINTH[Cross plinth: hidden keyhole]
-    PLINTH -->|opens compartment| SKEY[Servants' Key]
-    SKEY --> SDOOR[Servants' entrance]
-    SDOOR --> KITCHEN[Kitchen - Magnus & Severin]
-    KITCHEN --> IN
-
-    %% Route C - the glasshouse (proposed, harder)
-    STATUE[Hooded statue: stone sword] -->|'Not yet' - needs a reason| SWORD
-    EBRIA[Ebria under the bench] -->|Corkscrew -> she tells a secret| SECRET[How to free the sword / open the glasshouse]
-    SECRET --> SWORD[Statue releases the sword]
-    SWORD -->|cut the vines holding the doors| GLASS[Glasshouse]
-    GLASS --> CONSERVATORY[Conservatory - Velvet & Sola]
-    CONSERVATORY --> IN
-
-    IN([Inside: Entrance Hall / Kitchen / Conservatory])
+    GATE[Front Gate] --> COURT[Courtyard]
+    COURT -->|centre| DOOR[Front Door: Quazimodo] --> HALL([Entrance Hall])
+    COURT -->|left| GARDEN[Garden] --> STATUE[Statue] & GLASS[Glasshouse]
+    GLASS -.later.-> GLASSIN([Glasshouse interior: Grell?])
+    COURT -->|right| RIGHT[Right side] --> BENCH[Bench: Ebria] & SERV[Servants' entrance] & WELL[Well]
+    WELL --> GRAVE[Graveyard] -.later.-> DEEP([Deeper graveyard])
+    RIGHT -->|around back| REAR[Rear yard] --> SHED[Tool shed] & KITCHEN([Kitchen]) & CELLAR([Cellar])
+    REAR -.later.-> KGARDEN([Kitchen Garden]) -.-> GLASS
 ```
 
-## The routes
+Rounded boxes don't exist yet.
 
-| Route | Style | Needs | Lands you in | Built? |
-|---|---|---|---|---|
-| A. Front door | Social | Manners, a bribe, or a fight | Entrance Hall | Yes – only the Entrance Hall scene is missing |
-| B. Servants' entrance | Exploration / clues | Old Key + gravestone clue → Servants' Key | Kitchen | Hooks exist (key, inscription, hollow plinth, locked door) |
-| C. Glasshouse | Riddle / characters | Ebria's secret → statue's sword | Conservatory | Hooks exist (statue "not yet", rattling doors, Ebria) |
+## The puzzles
 
-## What this gives the existing hooks
+### 1. The Graveyard Secret → first Memento ✅ built
+1. **Gravestone inscription** – LOOK: worn smooth. ACT: **Wits test** (retry
+   allowed; failure says *"There must be another way to recover the
+   inscription."*). Or **Charcoal + Paper** (use either while carrying both):
+   a rubbing, always works. Reveals:
+   **THRICE FOR HEAVEN · ONCE FOR THE HEART · NEVER FOR THE HAND THAT LET GO**
+2. **The cross** – three spirals at the centre (up, left, right). Before the
+   clue: *"You push the carving. Nothing."* After it, each turns a quarter on
+   ACT and says where it points. Solution: **up ×3, left ×1, right ×0**.
+3. **The plinth opens** → **Worn Photograph** (Memento): the Mansion as it
+   was; a small group; one face decayed away; on the back *"You said you'd
+   come back."* Taking it: *the rain stops… you remember sunlight.*
+   Who the people are is **deliberately undecided** – it should fit the ending.
 
-| Hook | Becomes |
+### 2. The Well → Cracked Hand Mirror ✅ built
+Replaces the Old Key. Ball of String (always) or bucket (Luck, retry).
+**Show it to Ebria**: *"No." / "It's a mirror." / "I can see that."*, then
+*"Put that away."*, then *Ebria will not look at it.* Never taken – it isn't
+hers (and not her sister's either). Pays off much later.
+
+### 3. The Rose Bush → Red Rose ✅ built (shears not placed yet)
+First ACT: −2 Health, once. After: *"You've already conducted this
+experiment."* At ≤2 Health: *"Something resembling common sense finally
+intervenes."* (A rose bush must never kill you.) **Garden Shears** → **Red
+Rose**. Where the rose goes is not told. *(Needs: shears in the tool shed;
+ideally a picture with one rose missing.)*
+
+### 4. The Faceless Knight → Stone Sword ✅ built
+Words on the blade: **HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN.**
+Holding a weapon: the stone fingers tighten. Put it away (click **WEAPON** in
+the stats panel) → GRIND → the sword comes free (+2). The solution is
+understanding, not an item. *(Needs: statue picture without the sword.)*
+
+### 5. Characters who know each other ✅ built
+- **Hautain** on Ebria: *"THE BENCH-DWELLING MENACE."* She *"DESCENDED FROM THE
+  HEAVENS upon my Eastern Provinces."* – Ebria: *"I fell in the pond."*
+- **The Gargoyle** (second visit): *"You don't cast rain properly." … "Nothing."*
+  The first hint that something is wrong with the player.
+
+### 6. Still to build
+| What | Needs |
 |---|---|
-| Old Key (well) | Opens the hidden keyhole in the cross plinth |
-| "…KEEPER OF THE KEYS…" (gravestone, Wits) | The clue that the plinth hides something |
-| Hollow plinth (cross close-up) | Holds the Servants' Key |
-| Locked servants' entrance | Opens with the Servants' Key |
-| Stone sword ("Not yet, anyway") | Freed once you learn how (route C) |
-| Glasshouse doors that rattle back | Held shut by vines – and something inside |
-| Ebria + Corkscrew | Trades a secret for the corkscrew |
-| Gargoyle's Blessing (Luck +1) | Helps the bucket Luck test at the well |
-| Path to the back of the house | Act 2, or a fourth route later |
+| ~~Rear yard~~ ✅ built: kitchen door (bolted inside), cellar doors (one knock), pump + trough, drain, The Sock, tool shed (shears, charcoal, rope) | – |
+| **Tool shed close-up** (the shed currently opens in the yard) | Art |
+| **Kitchen Garden** (rear yard → glasshouse) | Art |
+| **Servants' entrance** becomes a **shortcut**: bolted from inside; slide the bolt once indoors | Inside scene |
+| **Glasshouse interior** (Grell's territory?) | Art + design |
+| Paper – where is it found? (Charcoal: tool shed) | Decision |
+| Item icons: mirror, photograph, rose, shears, sword, charcoal, paper | Art (or crops) |
+| Well close-up picture shows a key, not a mirror | Art |
 
-## Questions for you
-1. Is **"get inside"** the right goal for Act 1?
-2. Do you like **three routes** in, or should there be one main route with
-   optional extras?
-3. **The Old Key's story** – Ebria no longer mentions it. Who dropped it in the
-   well? (The "Keeper of the Keys" on the gravestone?)
-4. **What's behind the glasshouse doors?** (Hautain called Velvet "the eight-legged
-   Department of Unnecessary Infrastructure" – a giant spider fits "pushed back".)
-5. **What does Ebria trade for the Corkscrew** – is she the one who knows the
-   statue's secret?
-6. Should the routes **change what happens inside** (e.g. sneaking in via the
-   kitchen means Quazimodo doesn't know you're there)?
+## What the exterior teaches
+
+| Location | Teaches |
+|---|---|
+| Front Gate | LOOK / TALK |
+| Fountain | Consequences; characters react |
+| Courtyard | Navigation (ACT moves on) |
+| Garden | Investigation |
+| Statue | State / equipment puzzle |
+| Glasshouse | Locked places to come back to |
+| Right side | ACT reveals hidden things (the bench) |
+| Bench | Character discovery |
+| Rose bush | Health consequences – once |
+| Well | ITEM use |
+| Graveyard | Multi-scene puzzle |
+| Rear yard | Shortcuts |

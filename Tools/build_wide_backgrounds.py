@@ -14,6 +14,7 @@ centred; the rest of the screen is filled with a dark, blurred copy.
 
 The unseen top and bottom are filled with blurred edges.
 Run from the repo root:  python Tools/build_wide_backgrounds.py
+(needs Pillow, plus opencv-python-headless and numpy for the well)
 """
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
@@ -27,14 +28,17 @@ WIDE = [
     ("courtyard_source.png",               "courtyard.png",              70),
     ("garden_source.png",                  "garden.png",                110),
     ("statue_closeup_source.png",          "statue_closeup.png",         10),
+    # After the sword is taken (lined up by Tools/align_variant.py).
+    ("statue_closeup_nosword_source.png",  "statue_closeup_nosword.png", 10),
     ("mansion_right_v2_source.png",        "mansion_right.png",         215),
     ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
     # Bench with the fairy painted out (Tools/split_bench_fairy.py); the
     # first bench painting stays in Sources as bench_closeup_source.png.
     ("bench_closeup_clean_source.png",     "bench_closeup.png",          90),
+    ("rear_yard_source.png",               "rear_yard.png",             110),
     ("well_source.png",                    "well.png",                   60),
     ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
-    ("well_closeup_source.png",            "well_closeup.png",          170),
+    # (well_closeup.png now comes from well_closeup_mirror.png - see the end)
     ("gravestone_closeup_source.png",      "gravestone_closeup.png",     20),
 ]
 
@@ -74,17 +78,6 @@ def fitted(src, box):
     return bg
 
 
-def remove_key(src):
-    """Well close-up after the key has been taken: cover the glinting key at
-    the bottom with the dark stone just beside it."""
-    out = src.copy()
-    patch = src.crop((760, 735, 860, 805))           # plain dark well bottom
-    mask = Image.new("L", patch.size, 0)
-    ImageDraw.Draw(mask).ellipse((5, 5, patch.width - 6, patch.height - 6), fill=255)
-    out.paste(patch, (842, 735), mask.filter(ImageFilter.GaussianBlur(9)))
-    return out
-
-
 for name, dst, shift in WIDE:
     src = Image.open(f"{SRC_DIR}/{name}").convert("RGB")
     wide(src, shift).save(f"{OUT_DIR}/{dst}")
@@ -95,7 +88,20 @@ for name, dst, box in FITTED:
     fitted(src, box).save(f"{OUT_DIR}/{dst}")
     print("wrote", dst)
 
-# The well with the key gone.
-src = Image.open(f"{SRC_DIR}/well_closeup_source.png").convert("RGB")
-wide(remove_key(src), 170).save(f"{OUT_DIR}/well_closeup_empty.png")
-print("wrote well_closeup_empty.png")
+# The well close-up with the mirror at the bottom. This painting is already in
+# the final 1536x1024 layout; the "mirror taken" version paints the mirror out.
+import cv2
+import numpy as np
+
+src = Image.open(f"{SRC_DIR}/well_closeup_mirror.png").convert("RGB")
+# Shift it up 70 px so the mirror clears the menu's centre ornament.
+src = wide(src, 192 + 70)
+src.save(f"{OUT_DIR}/well_closeup.png")
+
+bgr = cv2.cvtColor(np.asarray(src), cv2.COLOR_RGB2BGR)
+mask = np.zeros(bgr.shape[:2], np.uint8)
+cv2.ellipse(mask, (803, 728), (30, 22), 0, 0, 360, 255, -1)      # glass
+cv2.line(mask, (815, 735), (832, 752), 255, 12)                  # handle
+empty = cv2.inpaint(bgr, mask, 9, cv2.INPAINT_TELEA)
+Image.fromarray(cv2.cvtColor(empty, cv2.COLOR_BGR2RGB)).save(f"{OUT_DIR}/well_closeup_empty.png")
+print("wrote well_closeup.png, well_closeup_empty.png")

@@ -24,19 +24,30 @@ they're done; add new ones at the bottom of the right section.
       versions still take up space there). The build check downloads them,
       cached between builds, and fails if any image is missing.
 
-## Step 2 – Story and puzzles
-- [ ] **Puzzle dependency chart** – what the player must find/do, in what order,
-      to get inside; two or three routes. *Draft in `PUZZLES.md` – waiting for
-      your answers to the questions at the bottom.*
-- [ ] Give the open hooks a purpose: Old Key, hollow plinth under the cross,
-      locked servants' entrance, glasshouse doors, path to the back of the house.
-- [ ] **Entrance Hall** scene (Quazimodo's open doors lead to `EntranceHall`,
-      which doesn't exist yet – the data check reports it).
-- [ ] Back of the house scene (`.GoesTo("BackOfHouse")` is ready in a comment).
-
-- [x] **Scene list** – `SCENES.md`: every scene and close-up with its objects,
-      characters, items, exits and a map. Regenerate with
-      `python Tools/list_scenes.py` after changing scenes.
+## Step 2 – Story and puzzles (see `PUZZLES.md`)
+- [x] **Puzzle design for the outside** – `PUZZLES.md` (design rules, map,
+      puzzles). Decided: Worn Photograph memento, Cracked Hand Mirror (Old Key
+      retired), Wits-or-rubbing gravestone, rose hurts once, Faceless Knight.
+- [x] Graveyard Secret: gravestone clue → three spirals → plinth → Worn Photograph.
+- [x] Well: Cracked Hand Mirror; Ebria refuses it.
+- [x] Rose bush: hurts once; Garden Shears → Red Rose.
+- [x] Faceless Knight: put your weapon away (click WEAPON) → Stone Sword.
+- [x] Hautain ↔ Ebria cross-reference; the Gargoyle notices the rain.
+- [x] **Scene list** – `SCENES.md`, regenerate with `python Tools/list_scenes.py`.
+- [x] **Rear yard** (from *Path to the Back*): kitchen door (bolted inside),
+      cellar doors (one knock), hand pump + trough, drain, clothesline and The
+      Sock, tool shed with Garden Shears, Charcoal and Rope.
+- [ ] Tool shed close-up – *needs art* (the shed opens in the yard for now).
+- [ ] **Kitchen Garden** (rear yard → glasshouse, closes the outdoor loop) – *needs art*.
+- [ ] Where Paper is found (Charcoal: tool shed).
+- [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
+- [ ] Servants' entrance as a shortcut from inside.
+- [ ] Glasshouse interior – *needs art + design*.
+- [x] Art: photograph (icon + full-size view, right-click in the inventory),
+      red rose and mirror icons; statue without its sword; cross with the open
+      plinth.
+- [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; rose bush
+      with one rose cut. (Well close-up with the mirror: done.)
 
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,

@@ -970,8 +970,7 @@
                             Width="163"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Panel.ZIndex="30"
-                            IsHitTestVisible="False">
+                            Panel.ZIndex="30">
                     <StackPanel.Resources>
                         <Style TargetType="TextBlock" x:Key="StatLabel">
                             <Setter Property="FontFamily" Value="Georgia"/>
@@ -1025,7 +1024,12 @@
                     <Rectangle Height="1" Fill="#806B4A" Margin="0,4,0,7"/>
 
                     <TextBlock Text="WEAPON" Style="{StaticResource StatLabel}" FontSize="12"/>
-                    <TextBlock x:Name="StatWeaponText" Text="None" Style="{StaticResource StatText}" Margin="0,0,0,6"/>
+                    <!-- Click to put the weapon away / take it out. -->
+                    <TextBlock x:Name="StatWeaponText" Text="None" Style="{StaticResource StatText}" Margin="0,0,0,6"
+                               Cursor="Hand"
+                               ToolTip="Click to put your weapon away or take it out"
+                               Background="Transparent"
+                               MouseLeftButtonDown="StatWeaponText_MouseLeftButtonDown"/>
 
                     <TextBlock Text="STATUS" Style="{StaticResource StatLabel}" FontSize="12"/>
                     <TextBlock x:Name="StatStatusText" Text="None" Style="{StaticResource StatText}"/>
@@ -1038,6 +1042,35 @@
 
         <!-- ========================================= -->
         <!-- GAME OVER                                 -->
+        <!-- ========================================= -->
+        <!-- PICTURE VIEWER (an item up close)         -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="PictureViewer"
+              Visibility="Collapsed"
+              Background="#E6000000"
+              Cursor="Hand"
+              Panel.ZIndex="3900">
+            <Image x:Name="PictureViewerImage"
+                   MaxWidth="1500"
+                   MaxHeight="900"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center">
+                <Image.Effect>
+                    <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.9" Color="Black"/>
+                </Image.Effect>
+            </Image>
+            <TextBlock Text="click to close"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,0,40"
+                       Foreground="#887966"
+                       FontFamily="Georgia"
+                       FontStyle="Italic"
+                       FontSize="16"/>
+        </Grid>
+
         <!-- ========================================= -->
 
         <Grid x:Name="GameOverScreen"

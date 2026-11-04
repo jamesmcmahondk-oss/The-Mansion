@@ -118,7 +118,7 @@ def parse_hotspots(body):
         if acts:
             a = acts[0]
             text = first_text(a)
-            h["OnAct"] = text if text and not a.strip().startswith("p =>") else "(depends on a dice roll / the story)"
+            h["OnAct"] = text if text and not a.strip().startswith("p =>") else "(depends on a dice roll / the story - see Data/Scenes.cs)"
             if "Health" in a:
                 h["OnAct"] += "  [changes Health]"
             if "Give(" in a:
@@ -222,6 +222,7 @@ for s in scenes:
     def cell(t):
         return (t or "–").replace("|", "\\|")
 
+    rows, counts = [], {}
     for h in s["hotspots"]:
         if h.get("ret"):
             continue
@@ -234,6 +235,16 @@ for s in scenes:
             act = (act or "") + f"  [sets {', '.join(h['sets'])}]"
         talk = f"conversation `{h['TalkStarts']}`" if h.get("TalkStarts") else h.get("OnTalk")
         items = "<br>".join(f"**{i}**: {t}" + (f" ({'; '.join(x)})" if x else "") for i, t, x in h.get("items", []))
+        row = (name, look, act, talk, items)
+        if row not in counts:
+            rows.append(row)
+        counts[row] = counts.get(row, 0) + 1
+
+    # The same object in several spots (e.g. a lantern on each gatepost) is listed once.
+    for row in rows:
+        name, look, act, talk, items = row
+        if counts[row] > 1:
+            name += f" ({counts[row]} places)"
         lines.append(f"| {cell(name)} | {cell(look)} | {cell(act)} | {cell(talk)} | {cell(items)} |")
     lines.append("")
 

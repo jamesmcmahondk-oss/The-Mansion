@@ -15,6 +15,7 @@ flowchart LR
     StatueCloseup(["StatueCloseup"])
     GlasshouseCloseup(["GlasshouseCloseup"])
     MansionRight["MansionRight"]
+    RearYard["RearYard"]
     BenchCloseup(["BenchCloseup"])
     Well["Well"]
     GraveyardEntrance["GraveyardEntrance"]
@@ -33,8 +34,10 @@ flowchart LR
     Garden -.->|LOOK Glasshouse| GlasshouseCloseup
     Garden -.->|LOOK Statue| StatueCloseup
     MansionRight -->|ACT Garden Arch| Well
+    MansionRight -->|ACT Path to the Back| RearYard
     MansionRight -->|ACT Old Well| Well
     MansionRight -.->|LOOK Stone Bench| BenchCloseup
+    RearYard -->|ACT Path Back| MansionRight
     Well -.->|LOOK Well| WellCloseup
     Well -->|ACT Graveyard| GraveyardEntrance
     Well -->|ACT Graveyard Path| GraveyardEntrance
@@ -55,6 +58,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 - [StatueCloseup](#statuecloseup) – Close-up
 - [GlasshouseCloseup](#glasshousecloseup) – Close-up
 - [MansionRight](#mansionright) – Scene
+- [RearYard](#rearyard) – Scene
 - [BenchCloseup](#benchcloseup) – Close-up
 - [Well](#well) – Scene
 - [GraveyardEntrance](#graveyardentrance) – Scene
@@ -134,16 +138,17 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > The statue towers over you: a hooded figure in a ragged stone robe, its hands resting on the hilt of a great sword.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/statue_closeup_nosword.png` when **TookStoneSword**
 - **Reached from:** Garden – LOOK on *Statue*
 - **Return arrow →** Garden
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
-| Glasshouse | Through the mist, candles glow behind the glasshouse's tall panes. | – | – | – |
-| Glasshouse | Through the mist, candles glow behind the glasshouse's tall panes. | – | – | – |
+| Glasshouse (2 places) | Through the mist, candles glow behind the glasshouse's tall panes. | – | – | – |
 | Statue | Ivy creeps up the ragged stone robe. Under the hood there is only darkness. | – | The statue says nothing. Statues usually don't. Usually. | – |
 | Hood | You peer into the hood. There is no face carved there at all - just shadow. | – | – | – |
-| Stone Sword | A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. | You pull at the sword. It doesn't move. Not yet, anyway. | – | – |
+| Stone Sword *(only when not TookStoneSword)* | A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. Words are cut along the blade: HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN. | (depends on a dice roll / the story - see Data/Scenes.cs)  [gives Stone Sword]  [sets TookStoneSword] | – | – |
+| Empty Hands *(only when TookStoneSword)* | The statue's stone hands are folded around nothing now. Under the hood, the darkness seems... satisfied. | – | – | – |
 
 ## GlasshouseCloseup
 
@@ -157,12 +162,10 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Glass Dome | Rain beads on the great glass dome. Ivy has crept almost to the top. | – | – | – |
-| Windows | Through the misted panes you can make out palms, ferns - and candles, far too many candles. | – | – | – |
-| Windows | Through the misted panes you can make out palms, ferns - and candles, far too many candles. | – | – | – |
-| Lantern | An iron lantern on a stone pillar, lighting the steps. | – | – | – |
-| Lantern | An iron lantern on a stone pillar, lighting the steps. | – | – | – |
+| Windows (2 places) | Through the misted panes you can make out palms, ferns - and candles, far too many candles. | – | – | – |
+| Lantern (2 places) | An iron lantern on a stone pillar, lighting the steps. | – | – | – |
 | Chandelier | A chandelier blazes just inside, above the doors. Someone lit every candle. | – | – | – |
-| Glasshouse Doors | Tall glass doors with brass handles. The air seeping out is warm and smells of earth and wax. | You push the doors. They don't open - yet they rattle, as if something inside pushed back. | – | **Old Key**: The little brass key doesn't fit. The lock here is large and ornate. |
+| Glasshouse Doors | Tall glass doors with brass handles. The air seeping out is warm and smells of earth and wax. | You push the doors. They don't open - yet they rattle, as if something inside pushed back. | – | – |
 
 ## MansionRight
 
@@ -170,8 +173,8 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > A wet stone path curves along the mansion's right wing, past a servants' entrance, to an archway in the garden wall. Beyond it, steps climb to an old well.
 
-- **Reached from:** Courtyard – ACT on *Side Path*; BenchCloseup – Return arrow; Well – Return arrow
-- **Exits:** Well (ACT *Garden Arch*); Well (ACT *Old Well*)
+- **Reached from:** Courtyard – ACT on *Side Path*; RearYard – ACT on *Path Back*; RearYard – Return arrow; BenchCloseup – Return arrow; Well – Return arrow
+- **Exits:** Well (ACT *Garden Arch*); RearYard (ACT *Path to the Back*); Well (ACT *Old Well*)
 - **Close-ups:** BenchCloseup (LOOK *Stone Bench*)
 - **Return arrow →** Courtyard
 
@@ -179,13 +182,50 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 |---|---|---|---|---|
 | Lantern | An iron lantern on a stone post. Its flame burns steadily, despite the rain. | – | – | – |
 | Windows | Candles burn behind the tall windows, but nothing moves inside. | – | – | – |
-| Servants' Entrance | A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side. | You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked! | – | **Old Key**: The little brass key is far too small for this lock. |
+| Servants' Entrance | A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side. | You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked! | – | – |
 | Garden Arch | An ivy-covered archway in the garden wall. Steps beyond it climb towards the well. | → **Well** | – | – |
-| Path to the Back | The cobbled path curves away along the garden wall, around to the back of the mansion. | – | – | – |
+| Path to the Back | The cobbled path curves away along the garden wall, around to the back of the mansion. | → **RearYard** | – | – |
 | Old Well | A small roofed well stands at the top of the hill. | → **Well** | – | – |
-| Rose Bush | A great tangle of blood-red roses, impossibly in bloom this late in the year. | You reach for a rose and prick your finger on a thorn. Ow. (-2 Health)  [changes Health] | – | – |
+| Rose Bush *(only when not GotRedRose)* | A great tangle of blood-red roses, impossibly in bloom this late in the year. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose. |
+| Rose Bush *(only when GotRedRose)* | A great tangle of blood-red roses. There's a small gap where you cut one. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
 | Stone Bench *(only when not HeardBenchNoise)* | A mossy stone bench beside the roses. | You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.  [sets HeardBenchNoise] | – | – |
 | Stone Bench *(only when HeardBenchNoise)* | → **BenchCloseup** | You sit down again. The hiccuping stops. Then: "...I can hear you breathing." | – | – |
+
+## RearYard
+
+**Scene** · `Assets/Backgrounds/Mansion/rear_yard.png`
+
+> A rain-soaked service yard behind the Mansion. Ordinary work seems to have simply stopped here.
+
+- **Reached from:** MansionRight – ACT on *Path to the Back*
+- **Exits:** MansionRight (ACT *Path Back*)
+- **Return arrow →** MansionRight
+
+| Object | LOOK | ACT | TALK | Items |
+|---|---|---|---|---|
+| Path Back | The wet path continues around the side of the Mansion. | → **MansionRight** | – | – |
+| Path Around Mansion | The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees. | – | – | – |
+| Ivy | Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard. | – | – | – |
+| Windows (2 places) | Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below. | – | – | – |
+| Lantern | A lantern burns beside the service door. Someone keeps these lit. | – | – | – |
+| Kitchen Door | A heavy service door leads into the Mansion, with a small barred window and heavy iron hardware. Generations of boots have worn the edges of the stone steps smooth. | The door shifts half an inch, then stops against something solid. Bolted from the other side. | – | – |
+| Cellar Doors *(only when not TriedCellarDoor)* | A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame. | You pull the iron ring. The door rises an inch. Stops. Something underneath is holding it shut. ... A single quiet sound comes from underneath. Knock.  [sets TriedCellarDoor] | – | – |
+| Cellar Doors *(only when TriedCellarDoor)* | A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame. | Still blocked. Whatever is beneath it isn't moving. | – | – |
+| Clothesline | An old washing line stretches across the yard. Almost everything that once hung from it is gone. | – | – | – |
+| Sock | A solitary black sock hangs from the washing line. | (depends on a dice roll / the story - see Data/Scenes.cs)  [sets TouchedSock] | – | – |
+| Hand Pump | An old iron hand pump feeds the stone washing trough. The metal is rusted, but the mechanism appears intact. | (depends on a dice roll / the story - see Data/Scenes.cs)  [sets TroughFilled] | – | – |
+| Stone Trough *(only when not TroughFilled)* | A deep stone trough stained by generations of water. | Dry, apart from rain collecting in the bottom. | – | – |
+| Stone Trough *(only when TroughFilled)* | Cold rainwater and pump water fill the old stone trough. | The water is painfully cold. | – | – |
+| Drain | Rainwater disappears through an iron grate beneath the Mansion. A few tiny pale fragments have collected against the grate. Probably kitchen scraps. | The grate is firmly set into the cobbles. | – | – |
+| Tool Shed | A small gardening shed leans against the wall, its roof thick with moss. The tools outside have been left exactly where someone last used them. Apparently nobody came back for them. | – | – | – |
+| Shed Door *(only when not OpenedToolShed)* | A small gardening shed leans against the wall, its roof thick with moss. | The shed door scrapes open. Inside: shelves of rusted tins, a little workbench, a pair of garden shears and a few sticks of charcoal.  [sets OpenedToolShed] | – | – |
+| Workbench *(only when OpenedToolShed and not GotGardenShears)* | A sturdy pair of pruning shears lies on the workbench - rusty, but still serviceable. Beside them, a few sticks of charcoal. | You take the garden shears.  [gives Garden Shears]  [sets GotGardenShears] | – | – |
+| Workbench *(only when GotGardenShears and not GotCharcoal)* | A few sticks of charcoal lie on the workbench. Messy, but still usable. | You take the charcoal, and most of its dust with it.  [gives Charcoal]  [sets GotCharcoal] | – | – |
+| Workbench *(only when GotGardenShears and GotCharcoal)* | Rusted tins, broken pots and a locked cabinet. Nothing else worth taking. | There's nothing else in the shed worth carrying around. | – | – |
+| Rope *(only when not GotRope)* | A coil of old rope hangs on the shed wall. Damp, but stronger than it looks. | You lift the coil of rope off its hook.  [gives Rope]  [sets GotRope] | – | – |
+| Shovel | A heavy garden shovel hangs from a hook rusted solid around its handle. | It isn't coming free without taking half the shed with it. | – | – |
+| Pitchfork | An old pitchfork. Several tines have rusted away. | – | – | – |
+| Rake | A rake with half its teeth missing. | – | – | – |
 
 ## BenchCloseup
 
@@ -202,7 +242,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 |---|---|---|---|---|
 | Ferns | Ferns and lilies crowd the path, dripping with rain. | – | – | – |
 | Stone Bench | The bench is carved with quatrefoils and scrolls. Rain has pooled in the seat. | You sit down. From underneath comes an indignant "Oi! Some of us live here!" | – | – |
-| Rose Bush | The rose bush has grown right under the bench. Its thorns glint in the dark. | You reach in under the bench and prick your finger on a thorn. Ow. (-2 Health)  [changes Health] | – | – |
+| Rose Bush | The rose bush has grown right under the bench. Its thorns glint in the dark. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
 | Ebria | A tiny fairy with wild red hair sits under the bench, swigging from a bottle labelled ANOTHER BAD IDEA. | – | conversation `Ebria` | – |
 
 ## Well
@@ -237,8 +277,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Old Tree | A huge, gnarled oak. Its roots have tipped several headstones over. | – | – | – |
-| Lantern | A lantern on the gatepost lights the way in. Someone keeps these burning. | – | – | – |
-| Lantern | A lantern on the gatepost lights the way in. Someone keeps these burning. | – | – | – |
+| Lantern (2 places) | A lantern on the gatepost lights the way in. Someone keeps these burning. | – | – | – |
 | Old Gravestone | → **GravestoneCloseup** | – | – | – |
 | Stone Cross | → **CrossCloseup** | – | – | – |
 | Graveyard Path | Mossy steps lead up between the graves, deeper into the graveyard. | – | – | – |
@@ -249,15 +288,15 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > You peer down the well. Cobwebs stretch across the slick stones, and far below, something small glints in the dark.
 
-- **Picture changes** to `Assets/Backgrounds/Mansion/well_closeup_empty.png` when **GotWellKey**
+- **Picture changes** to `Assets/Backgrounds/Mansion/well_closeup_empty.png` when **GotWellMirror**
 - **Reached from:** Well – LOOK on *Well*
 - **Return arrow →** Well
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Well Shaft | The shaft drops away into darkness. The stones are wet and furred with cobwebs. | – | "Hello down there?" ...there. ...there. Something at the bottom seems to listen. | – |
-| Bucket | The rusty bucket hangs from its chain at the edge of the well. | (depends on a dice roll / the story)  [gives Old Key]  [sets GotWellKey] | – | – |
-| Glinting Key *(only when not GotWellKey)* | At the very bottom of the well, a small brass key catches the light. | It's far too deep to reach. You'd need something long - or something to fish with. | – | **Ball of String**: You tie a loop in the end of the string and lower it down... after a few patient tries the loop catches the key's handle. You reel up a small brass key! (gives Old Key; sets GotWellKey) |
+| Bucket | The rusty bucket hangs from its chain at the edge of the well. | (depends on a dice roll / the story - see Data/Scenes.cs)  [gives Cracked Hand Mirror]  [sets GotWellMirror] | – | – |
+| Something Glinting *(only when not GotWellMirror)* | At the very bottom of the well, something small and silver catches the light. | It's far too deep to reach. You'd need something long - or something to fish with. | – | **Ball of String**: You tie a loop in the end of the string and lower it down... after a few patient tries the loop catches a handle. You reel up a small silver hand mirror. The glass is cracked straight across. (gives Cracked Hand Mirror; sets GotWellMirror) |
 
 ## CrossCloseup
 
@@ -265,14 +304,20 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > The great stone cross looms over you, every inch of it carved with endless knots.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/cross_closeup_open.png` when **CrossOpened**
 - **Reached from:** GraveyardEntrance – LOOK on *Stone Cross*
 - **Return arrow →** GraveyardEntrance
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Moon | The full moon hangs over the graveyard. It looks closer than it should. | – | – | – |
-| Celtic Cross | Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another. | – | You read the knots aloud, as if they were words. They are not. You feel slightly foolish. | – |
-| Plinth | A mossy stepped plinth. A small knotwork panel is set into its face, as if something might be hidden behind it. | You press the carved panel. It doesn't budge - but the stone around it sounds hollow. | – | **Old Key**: You search the plinth for a keyhole. There isn't one - not here, anyway. |
+| Celtic Cross | Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another: one reaching up, one to the left, one to the right. | – | You read the knots aloud, as if they were words. They are not. You feel slightly foolish. | – |
+| Upper Spiral | A small stone spiral at the very centre of the cross, reaching upward. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | – |
+| Left Spiral | A small stone spiral at the centre of the cross, curling to the left. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | – |
+| Right Spiral | A small stone spiral at the centre of the cross, curling to the right. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | – |
+| Plinth *(only when not CrossOpened)* | A mossy stepped plinth. A small knotwork panel is set into its face, as if something might be hidden behind it. | You press the carved panel. It doesn't budge - but the stone around it sounds hollow. | – | – |
+| Open Plinth *(only when CrossOpened and not FoundPhotograph)* | The knotwork panel in the plinth has slid aside. Something lies in the hollow behind it. | Inside the hollow lies a tiny, old photograph. As your fingers close around it, the rain stops. Not slows. Stops. You remember sunlight. You don't remember remembering sunlight. Then the rain resumes. (Memento: Worn Photograph)  [gives Worn Photograph]  [sets FoundPhotograph] | – | – |
+| Empty Plinth *(only when FoundPhotograph)* | The hollow in the plinth is empty now. | – | – | – |
 
 ## GravestoneCloseup
 
@@ -288,7 +333,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Moon | The full moon hangs low over the graveyard. | – | – | – |
 | Gravestone | Ivy has crept up both sides of the stone, as if trying to hold it upright. | – | – | – |
 | Carved Cross | A small Celtic cross is carved at the top, the same knotwork as the great cross on the hill. | – | – | – |
-| Inscription | Most of the letters are gone. Only a few marks remain. | (depends on a dice roll / the story) | – | – |
+| Inscription | Most of the inscription has been worn smooth. A few shallow marks remain, but not enough to read. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Charcoal**: ReadGravestone<br>**Charcoal**: ReadGravestone (sets ReadGravestone)<br>**Charcoal**: Charcoal straight onto the stone would only add marks. You need something to take a rubbing on.<br>**Paper**: ReadGravestone<br>**Paper**: ReadGravestone (sets ReadGravestone)<br>**Paper**: You press the paper against the stone. Without something to rub across it, it stays blank. |
 
 ## FrontGargoyle
 

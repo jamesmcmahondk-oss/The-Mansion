@@ -27,6 +27,10 @@
     <None Remove="Assets\Backgrounds\Mansion\gravestone_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\glasshouse_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\bench_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\rear_yard.png" />
+    <None Remove="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
+    <None Remove="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
+    <None Remove="Assets\Items\Sources\*.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_open.png" />
     <None Remove="Assets\Characters\*.png" />
@@ -101,6 +105,10 @@
     <Resource Include="Assets\Backgrounds\Mansion\gravestone_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\glasshouse_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\bench_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\rear_yard.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
+    <Resource Include="Assets\Items\Sources\worn_photograph.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
     <Resource Include="Assets\Characters\*.png" />

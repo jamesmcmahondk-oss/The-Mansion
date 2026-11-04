@@ -53,7 +53,8 @@ namespace The_Mansion.Models
 
         // What happens when the player uses an item on this hotspot,
         // keyed by item name. Items not listed get a "nothing happens" reply.
-        public Dictionary<string, ItemUse> ItemUses { get; set; } = new();
+        // Several reactions per item are allowed (see ItemUse.Condition).
+        public Dictionary<string, List<ItemUse>> ItemUses { get; set; } = new();
 
         // Reply when the player uses TALK on it (when there's no conversation).
         public string TalkText { get; set; } = "";
@@ -66,6 +67,10 @@ namespace The_Mansion.Models
         // Optional: ACT runs this and shows the text it returns, so the reply
         // can depend on what happened (e.g. a Luck test).
         public Func<Player, string>? ActResult { get; set; }
+
+        // Optional: a full-size picture shown after the ACT (e.g. the
+        // photograph you have just found). Click to close.
+        public string ActPicture { get; set; } = "";
 
         // Optional: the hotspot only exists while this returns true,
         // e.g. p => !p.HasFlag("TookKey"). Checked whenever the scene refreshes.
