@@ -22,6 +22,9 @@ namespace The_Mansion.Data
          *   weaponBonus  - added to attacks when this is the player's Weapon
          *   inFight      - what using it in a fight does; return the text to show
          *   usedUpInFight - it's gone after being used in a fight
+         *   misuse       - its own reply when used on something that doesn't
+         *                  react to it; {target} is the thing, e.g.
+         *                  "There's no cork in the {target}."
          */
         private static Item NewItem(
             string name,
@@ -31,7 +34,8 @@ namespace The_Mansion.Data
             Func<Player, Fight, string>? inFight = null,
             bool usedUpInFight = false,
             bool memento = false,
-            string picture = "")
+            string picture = "",
+            string misuse = "")
         {
             var item = new Item
             {
@@ -42,7 +46,8 @@ namespace The_Mansion.Data
                 UseInFight = inFight,
                 UsedUpInFight = usedUpInFight,
                 IsMemento = memento,
-                Picture = picture
+                Picture = picture,
+                MisuseText = misuse
             };
 
             ItemLookup[name] = item;
@@ -52,12 +57,14 @@ namespace The_Mansion.Data
         public static Item GoldCoins { get; } =
             NewItem("Gold Coins",
                     "A dripping handful of gold coins from the fountain. They belong to the Crown, apparently.",
-                    "Assets/Items/gold_coins.png");
+                    "Assets/Items/gold_coins.png",
+                    misuse: "The {target} shows no interest in money.");
 
         public static Item RoyalGoldCoin { get; } =
             NewItem("Royal Gold Coin",
                     "A single gold coin, graciously granted by King Hautain to a loyal subject.",
-                    "Assets/Items/royal_gold_coin.png");
+                    "Assets/Items/royal_gold_coin.png",
+                    misuse: "The {target} doesn't recognise the King's coin. Or the King.");
 
         public static Item GargoyleBlessing { get; } =
             NewItem("Gargoyle's Blessing",
@@ -73,13 +80,15 @@ namespace The_Mansion.Data
         public static Item StoneSword { get; } =
             NewItem("Stone Sword",
                     "The hooded statue's sword. It looks like solid stone and weighs almost nothing. (Weapon: +2 in fights.)",
-                    weaponBonus: 2);
+                    weaponBonus: 2,
+                    misuse: "You'd rather not chip the stone sword on the {target}.");
 
         // From the bottom of the well. Not Ebria's - but she won't look at it.
         public static Item CrackedHandMirror { get; } =
             NewItem("Cracked Hand Mirror",
                     "A small silver-backed hand mirror, fished from the bottom of the well. The glass is clouded and cracked.",
-                    "Assets/Items/cracked_hand_mirror.png");
+                    "Assets/Items/cracked_hand_mirror.png",
+                    misuse: "You angle the mirror at the {target}. The crack runs straight through the reflection.");
 
         // The first Memento: from the hidden compartment in the cross plinth.
         public static Item WornPhotograph { get; } =
@@ -89,32 +98,38 @@ namespace The_Mansion.Data
                     "\"You said you'd come back.\" (Right-click to look at it.)",
                     "Assets/Items/worn_photograph.png",
                     memento: true,
-                    picture: "Assets/Items/Sources/worn_photograph.png");
+                    picture: "Assets/Items/Sources/worn_photograph.png",
+                    misuse: "You hold the photograph up beside the {target}. It doesn't help you remember anything.");
 
         // For a rubbing of the gravestone (use either one on the inscription
         // while carrying both). Charcoal: the tool shed. Paper: still to be decided.
         public static Item Charcoal { get; } =
             NewItem("Charcoal",
-                    "A stick of charcoal. It leaves black smudges on everything, mostly you.");
+                    "A stick of charcoal. It leaves black smudges on everything, mostly you.",
+                    misuse: "You'd only make a mess of the {target}. And of yourself.");
 
         public static Item Paper { get; } =
             NewItem("Paper",
-                    "A few sheets of thin, yellowed paper.");
+                    "A few sheets of thin, yellowed paper.",
+                    misuse: "There's nothing on the {target} worth writing down.");
 
         // Found in the tool shed (rear yard). Cuts a rose safely.
         public static Item GardenShears { get; } =
             NewItem("Garden Shears",
-                    "Rusty garden shears. They still cut - mostly.");
+                    "Rusty garden shears. They still cut - mostly.",
+                    misuse: "There's nothing on the {target} that needs cutting.");
 
         // From the tool shed wall (rear yard). Use still to be decided.
         public static Item Rope { get; } =
             NewItem("Rope",
-                    "A coil of old rope. Damp, but stronger than it looks.");
+                    "A coil of old rope. Damp, but stronger than it looks.",
+                    misuse: "You can't think of a useful way to tie the rope to the {target}.");
 
         public static Item RedRose { get; } =
             NewItem("Red Rose",
                     "One perfect dark-red rose. It smells of summer, which is wrong this late in the year.",
-                    "Assets/Items/red_rose.png");
+                    "Assets/Items/red_rose.png",
+                    misuse: "The {target} doesn't seem like the place for the rose.");
 
         // =========================================================
         // THE CAR TRUNK (pick one before the game starts - Data/Trunk.cs)
@@ -123,33 +138,39 @@ namespace The_Mansion.Data
         public static Item Corkscrew { get; } =
             NewItem("Corkscrew",
                     "A wooden-handled corkscrew. Opens bottles. Possibly other things, if you're creative.",
-                    "Assets/Items/corkscrew.png");
+                    "Assets/Items/corkscrew.png",
+                    misuse: "There's no cork in the {target}.");
 
         public static Item Lighter { get; } =
             NewItem("Lighter",
                     "A battered petrol lighter. It still sparks - just. Light in a dark place is never wasted.",
-                    "Assets/Items/lighter.png");
+                    "Assets/Items/lighter.png",
+                    misuse: "The lighter sparks. The {target} is far too wet to care.");
 
         public static Item BallOfString { get; } =
             NewItem("Ball of String",
                     "A tangle of rough twine. Good for tying, climbing, or pretending you have a plan.",
-                    "Assets/Items/ball_of_string.png");
+                    "Assets/Items/ball_of_string.png",
+                    misuse: "You tie the string to the {target}, consider your plan, and untie it again.");
 
         public static Item PartyHat { get; } =
             NewItem("Party Hat",
                     "A polka-dot party hat trimmed with red tinsel. Nobody can stay angry at someone wearing a party hat. Probably.",
-                    "Assets/Items/party_hat.png");
+                    "Assets/Items/party_hat.png",
+                    misuse: "The {target} is not in a party mood.");
 
         public static Item LooseChange { get; } =
             NewItem("Loose Change",
                     "A few coins from the cup holder. Not much, but money talks - even in haunted mansions.",
-                    "Assets/Items/loose_change.png");
+                    "Assets/Items/loose_change.png",
+                    misuse: "The {target} can't be bought. Not with that much, anyway.");
 
         public static Item Fork { get; } =
             NewItem("Fork",
                     "A silver fork. Technically a weapon. (Taking it makes it your weapon: +1 in fights.)",
                     "Assets/Items/fork.png",
-                    weaponBonus: 1);
+                    weaponBonus: 1,
+                    misuse: "You prod the {target} with the fork. Nothing comes of it.");
 
         public static Item EmptyBottle { get; } =
             NewItem("Empty Bottle",
@@ -160,7 +181,8 @@ namespace The_Mansion.Data
                         fight.HurtEnemy(10);
                         return $"You hurl the bottle! It shatters over {fight.Enemy.Name}. (-10)";
                     },
-                    usedUpInFight: true);
+                    usedUpInFight: true,
+                    misuse: "You hold the bottle up to the {target}. It stays empty.");
 
 
         // =========================================================

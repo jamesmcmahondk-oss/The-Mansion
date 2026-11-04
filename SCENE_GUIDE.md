@@ -59,6 +59,7 @@ Add any of these under a `.Hotspot(...)` line:
 | `.ActStarts("DialogueId")` | ACT on it → start a conversation |
 | `.OnItem("Item Name", "text")` | the player uses that item on it |
 | `.OnItem("Item Name", "text", effect: p => …, removeItem: true, startsDialogue: "Id")` | …with extras (all optional) |
+| `.OnOtherItems("The rose bush is unimpressed by the {item}.")` | any *other* item used on it |
 | `.OnlyWhen(p => …)` | the hotspot only exists while this is true |
 
 **How the verbs work** – each verb only does what it is set up to do:
@@ -68,7 +69,12 @@ Add any of these under a `.Hotspot(...)` line:
 | LOOK | `.Describe` text, or opens the `.CloseUp` scene | "You see nothing special." |
 | ACT | `.ActStarts` / `.ActStartsFight` / `.OnAct`, or moves on via `.GoesTo` | "You can't do that." |
 | TALK | `.TalkStarts` / `.OnTalk` | "Who or what are you talking to?" |
-| ITEM | the matching `.OnItem` | "You can't use the *item* on the *hotspot*." |
+| ITEM | the matching `.OnItem`, else `.OnOtherItems` | the item's own `misuse:` line, else "You can't use the *item* on the *hotspot*." |
+
+The "Otherwise says" replies come in a few variants (`Data/Replies.cs`) so they
+don't repeat. Give **important objects** their own lines for the wrong verb
+(`.OnTalk("The bench says nothing. Benches rarely do.")`) – it makes the world
+feel alive.
 
 If a hotspot has both `.OnAct` and `.GoesTo`, ACT does the `.OnAct`. The Return
 arrow works with every verb.
@@ -186,6 +192,9 @@ public static Item RustyKey { get; } =
             "Assets/Items/rusty_key.png");     // optional 128x128 icon
 ```
 
+Add `misuse: "There's no cork in the {target}."` for the item's own reply when
+it's used on something that doesn't react to it.
+
 Icons: add a crop to `Tools/build_item_icons.py` and run it, or draw your own
 128×128 PNG. Items without an icon show their initials.
 
@@ -286,6 +295,24 @@ flags** – plus the current scene. So:
   them after loading.
 * **Renaming a scene** breaks saves made in it (the game will say so).
 * Saving isn't allowed during conversations or fights.
+* Every new scene is also **autosaved** (`autosave.json`), shown first on the
+  Load screens.
+
+## 10. The journal
+
+`Data/Journal.cs` – entries write themselves when their condition becomes true
+(checked after anything happens), with a "New journal entry" notice. The player
+reads it with **J** or JOURNAL in the Esc menu.
+
+```csharp
+public static JournalEntry Gravestone { get; } =
+    Entry("Gravestone", "The gravestone",
+          "The inscription on the old gravestone reads: THRICE FOR HEAVEN …",
+          p => p.HasFlag("ReadGravestone"));
+```
+
+Write entries in the player's voice, quote the game's own words, and don't
+explain more than the player knows. The id is saved – don't rename it later.
 
 ---
 

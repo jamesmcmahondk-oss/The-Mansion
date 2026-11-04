@@ -56,6 +56,10 @@ namespace The_Mansion.Models
         // Several reactions per item are allowed (see ItemUse.Condition).
         public Dictionary<string, List<ItemUse>> ItemUses { get; set; } = new();
 
+        // Optional reply for any other item ({item} is filled in), e.g.
+        // "The rose bush is unimpressed by the {item}."
+        public string OtherItemsText { get; set; } = "";
+
         // Reply when the player uses TALK on it (when there's no conversation).
         public string TalkText { get; set; } = "";
 

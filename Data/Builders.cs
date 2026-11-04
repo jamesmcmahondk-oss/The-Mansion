@@ -250,6 +250,17 @@ namespace The_Mansion.Data
         }
 
         /// <summary>
+        /// Reply when any item without its own .OnItem is used on it.
+        /// {item} is replaced by the item's name, e.g.
+        /// .OnOtherItems("The rose bush is unimpressed by the {item}.")
+        /// </summary>
+        public HotspotBuilder OnOtherItems(string text)
+        {
+            _hotspot.OtherItemsText = text;
+            return this;
+        }
+
+        /// <summary>
         /// The hotspot only exists while this is true,
         /// e.g. .OnlyWhen(p => !p.HasFlag("TookKey"))
         /// </summary>

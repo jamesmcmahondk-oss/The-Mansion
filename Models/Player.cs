@@ -27,6 +27,9 @@ namespace The_Mansion.Models
         // Use them to change what scenes, hotspots and characters do.
         public HashSet<string> Flags { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
+        // Journal entries found so far (ids from Data/Journal.cs), oldest first.
+        public List<string> Journal { get; set; } = new();
+
         // ---- Helpers for scene/dialogue code -------------------------
 
         public bool Has(string itemName) => Inventory.Contains(itemName);

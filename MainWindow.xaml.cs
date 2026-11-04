@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -282,6 +283,9 @@ namespace The_Mansion
             StatStatusText.Foreground = hasStatus
                 ? new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A))
                 : new SolidColorBrush(Color.FromRgb(0x88, 0x79, 0x66));
+
+            // Anything worth writing down?
+            CheckJournal();
 
             // Died outside a fight (e.g. a trap)?
             if (_player.Health <= 0 && _player.MaxHealth > 0 &&
@@ -598,8 +602,11 @@ namespace The_Mansion
         }
         private void ShowScene(Scene scene)
         {
+            bool newScene = _currentScene != scene;
+
             _currentScene = scene;
             _replyShowing = false;
+            HideHoverLabel();
 
             // .BackgroundWhen(...) can swap the picture after story events.
             _currentBackground = scene.GetBackground(_player);
@@ -608,6 +615,41 @@ namespace The_Mansion
             DescriptionText.Text = scene.Description;
 
             CreateSceneElements(scene);
+
+            if (newScene && GameScreen.Visibility == Visibility.Visible)
+            {
+                FadeInScene();
+                Autosave();
+            }
+        }
+
+        /*
+         * The black curtain snaps shut and fades away, so moving between
+         * scenes is a short fade from black rather than a hard cut.
+         */
+        private void FadeInScene()
+        {
+            var fade = new DoubleAnimation(1.0, 0.0, TimeSpan.FromMilliseconds(450))
+            {
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            SceneFade.BeginAnimation(OpacityProperty, fade);
+        }
+
+        /*
+         * Every new scene is saved to the autosave slot (only while exploring:
+         * never mid-conversation or mid-fight). Load it from any Load screen.
+         */
+        private void Autosave()
+        {
+            if (!CanSaveNow || _currentScene == null)
+            {
+                return;
+            }
+
+            // A failed autosave shouldn't interrupt play; manual saves still report errors.
+            SaveSystem.Save(SaveSystem.AutosaveSlot, SaveGame.From(_player, _currentScene.Name));
         }
 
         private void LoadSceneBackground(string imagePath)
@@ -641,6 +683,7 @@ namespace The_Mansion
              * and debug selection rectangle.
              */
             SceneCanvas.Children.Clear();
+            _hotspotsRevealed = false;
 
             _selectionRectangle = null;
             _isCreatingHotspot = false;
@@ -835,10 +878,8 @@ namespace The_Mansion
             }
         }
 
-        // Replies when a verb does nothing on a hotspot.
-        private const string NothingToSeeText = "You see nothing special.";
-        private const string CantTalkText = "Who or what are you talking to?";
-        private const string CantActText = "You can't do that.";
+        // Replies when a verb does nothing on a hotspot: Data/Replies.cs
+        // (a few variants each, so they don't repeat).
 
         /*
          * LOOK: describe it, and open its close-up scene if it has one.
@@ -852,7 +893,7 @@ namespace The_Mansion
             }
 
             ShowReply(string.IsNullOrWhiteSpace(hotspot.Description)
-                ? NothingToSeeText
+                ? Replies.Nothing()
                 : hotspot.Description);
         }
 
@@ -869,7 +910,7 @@ namespace The_Mansion
             }
 
             ShowReply(string.IsNullOrWhiteSpace(hotspot.TalkText)
-                ? CantTalkText
+                ? Replies.NoTalk()
                 : hotspot.TalkText);
         }
 
@@ -922,7 +963,7 @@ namespace The_Mansion
                 return;
             }
 
-            ShowReply(CantActText);
+            ShowReply(Replies.NoAct());
         }
 
         private void GoToScene(string sceneName, string hotspotName)
@@ -957,6 +998,11 @@ namespace The_Mansion
         {
             Point currentPosition =
                 e.GetPosition(SceneCanvas);
+
+            if (_hoveredHotspot != null)
+            {
+                UpdateHoverLabel(currentPosition);
+            }
 
             if (_showHotspotDebug)
             {
@@ -1615,12 +1661,169 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 return;
             }
 
+            _hoveredHotspot = hotspot;
+            UpdateHoverLabel(Mouse.GetPosition(SceneCanvas));
+
             if (_replyShowing)
             {
                 return;     // keep the reply until it's clicked away
             }
 
             ShowDescription(HoverText(hotspot));
+        }
+
+        // =========================================================
+        // SHOWING WHAT'S CLICKABLE
+        // =========================================================
+
+        private Hotspot? _hoveredHotspot;
+        private bool _hotspotsRevealed;
+
+        // Scene hotspots only respond while exploring.
+        private bool CanUseHotspots =>
+            GameScreen.Visibility == Visibility.Visible &&
+            !IsInDialogue &&
+            !IsInFight &&
+            !_gameOverShown &&
+            !IsGameMenuOpen &&
+            !IsSaveLoadOpen &&
+            !IsSettingsOpen &&
+            !IsJournalOpen;
+
+        /*
+         * The name of the thing under the cursor floats just below-right of
+         * it (flipped left/up near the edges so it never leaves the screen).
+         */
+        private void UpdateHoverLabel(Point mouse)
+        {
+            if (_hoveredHotspot == null || !CanUseHotspots)
+            {
+                HideHoverLabel();
+                return;
+            }
+
+            HoverLabelText.Text = _hoveredHotspot.ScreenSpace ? "Go back" : _hoveredHotspot.Name;
+            HoverLabel.Visibility = Visibility.Visible;
+            HoverLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            Size size = HoverLabel.DesiredSize;
+
+            double x = mouse.X + 26;
+            double y = mouse.Y + 30;
+
+            if (x + size.Width > 1910)
+            {
+                x = mouse.X - size.Width - 12;
+            }
+
+            if (y + size.Height > 790)
+            {
+                y = mouse.Y - size.Height - 12;
+            }
+
+            Canvas.SetLeft(HoverLabel, Math.Max(4, x));
+            Canvas.SetTop(HoverLabel, Math.Max(4, y));
+        }
+
+        private void HideHoverLabel()
+        {
+            _hoveredHotspot = null;
+            HoverLabel.Visibility = Visibility.Collapsed;
+        }
+
+        private void SceneCanvas_MouseLeave(object sender, MouseEventArgs e) => HideHoverLabel();
+
+        /*
+         * Holding Space outlines every hotspot in the scene and names it,
+         * so nothing clickable is hidden in the picture. Let go to hide them.
+         */
+        private void RevealHotspots()
+        {
+            if (_hotspotsRevealed || !CanUseHotspots || _inventoryOpen)
+            {
+                return;
+            }
+
+            _hotspotsRevealed = true;
+
+            var outlineBrush = new SolidColorBrush(Color.FromArgb(0xE0, 0xC8, 0xA9, 0x6A));
+            var fillBrush = new SolidColorBrush(Color.FromArgb(0x30, 0xC8, 0xA9, 0x6A));
+
+            foreach (Rectangle rectangle in SceneCanvas.Children.OfType<Rectangle>().ToList())
+            {
+                if (rectangle.Tag is not Hotspot hotspot || hotspot.ScreenSpace)
+                {
+                    continue;
+                }
+
+                var outline = new Rectangle
+                {
+                    Width = rectangle.Width,
+                    Height = rectangle.Height,
+                    Stroke = outlineBrush,
+                    StrokeThickness = 3,
+                    StrokeDashArray = new DoubleCollection { 4, 2 },
+                    Fill = fillBrush,
+                    RadiusX = 10,
+                    RadiusY = 10,
+                    IsHitTestVisible = false,
+                    Tag = RevealTag
+                };
+                Canvas.SetLeft(outline, Canvas.GetLeft(rectangle));
+                Canvas.SetTop(outline, Canvas.GetTop(rectangle));
+                Panel.SetZIndex(outline, 11);
+                SceneCanvas.Children.Add(outline);
+
+                var name = new Border
+                {
+                    Background = new SolidColorBrush(Color.FromArgb(0xB0, 0, 0, 0)),
+                    CornerRadius = new CornerRadius(4),
+                    Padding = new Thickness(8, 2, 8, 3),
+                    IsHitTestVisible = false,
+                    Tag = RevealTag,
+                    Child = new TextBlock
+                    {
+                        Text = hotspot.Name,
+                        Foreground = outlineBrush,
+                        FontFamily = new FontFamily("Georgia"),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 18
+                    }
+                };
+                name.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                double left = Canvas.GetLeft(rectangle) + (rectangle.Width - name.DesiredSize.Width) / 2;
+                double top = Canvas.GetTop(rectangle) + (rectangle.Height - name.DesiredSize.Height) / 2;
+                Canvas.SetLeft(name, Math.Clamp(left, 4, 1916 - name.DesiredSize.Width));
+                Canvas.SetTop(name, Math.Clamp(top, 4, 796 - name.DesiredSize.Height));
+                Panel.SetZIndex(name, 12);
+                SceneCanvas.Children.Add(name);
+            }
+        }
+
+        private const string RevealTag = "reveal";
+
+        private void HideRevealedHotspots()
+        {
+            if (!_hotspotsRevealed)
+            {
+                return;
+            }
+
+            _hotspotsRevealed = false;
+
+            foreach (FrameworkElement element in SceneCanvas.Children.OfType<FrameworkElement>()
+                         .Where(child => RevealTag.Equals(child.Tag)).ToList())
+            {
+                SceneCanvas.Children.Remove(element);
+            }
+        }
+
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space && _hotspotsRevealed)
+            {
+                HideRevealedHotspots();
+                e.Handled = true;
+            }
         }
 
         private string HoverText(Hotspot hotspot)
@@ -1659,6 +1862,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
         private void Hotspot_MouseLeave(object sender, MouseEventArgs e)
         {
+            HideHoverLabel();
+
             // A click reply is showing: leave it there.
             if (_replyShowing)
             {
@@ -1720,6 +1925,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
                 : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
+            HideHoverLabel();
+            HideRevealedHotspots();
             DescriptionText.Visibility = Visibility.Collapsed;
             DialoguePanel.Visibility = Visibility.Visible;
 
@@ -1964,6 +2171,40 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 #endif
 
+            // Typing in a text box (player name, debug flags): keys are just letters.
+            bool typing = Keyboard.FocusedElement is TextBox;
+
+            // Hold Space to outline everything you can click in the scene.
+            // (Handled so Space never "clicks" a focused button either.)
+            if (e.Key == Key.Space && CanUseHotspots && !typing)
+            {
+                RevealHotspots();
+                e.Handled = true;
+                return;
+            }
+
+            // J opens/closes the journal (Esc closes it too).
+            if (IsJournalOpen && ((e.Key == Key.J && !typing) || e.Key == Key.Escape))
+            {
+                CloseJournal();
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.J && CanOpenJournal && !typing)
+            {
+                ShowJournal(back: null);
+                e.Handled = true;
+                return;
+            }
+
+            if (_inventoryOpen && (e.Key == Key.Left || e.Key == Key.Right))
+            {
+                TurnInventoryPage(e.Key == Key.Left ? -1 : +1);
+                e.Handled = true;
+                return;
+            }
+
             if (e.Key == Key.Escape && _inventoryOpen)
             {
                 CloseInventory();
@@ -2005,7 +2246,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             }
 
             // No dialogue keys while a menu is open.
-            if (IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen)
+            if (IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsJournalOpen)
             {
                 return;
             }
@@ -2249,12 +2490,17 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
         private static readonly Brush SlotHoverBrush =
             new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
 
-        private void OpenInventory()
+        /*
+         * Up to 10 items fit in the row. With more, the row shows 9 at a
+         * time between ◀ ▶ arrows (the mouse wheel and the arrow keys page too).
+         */
+        private const int InventorySlotsWhenFits = 10;
+        private const int InventorySlotsPerPage = 9;
+        private int _inventoryPage;
+        private string _inventoryHint = "";
+
+        private List<string> InventoryItemNames()
         {
-            _replyShowing = false;
-
-            InventorySlots.Children.Clear();
-
             // Same item twice? Show it once.
             var itemNames = new List<string>();
             foreach (string name in _player.Inventory)
@@ -2264,16 +2510,122 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     itemNames.Add(name);
                 }
             }
+            return itemNames;
+        }
 
-            foreach (string name in itemNames)
+        private int InventoryPageCount(int itemCount) =>
+            itemCount <= InventorySlotsWhenFits
+                ? 1
+                : (itemCount + InventorySlotsPerPage - 1) / InventorySlotsPerPage;
+
+        private void ShowInventoryPage()
+        {
+            InventorySlots.Children.Clear();
+
+            List<string> itemNames = InventoryItemNames();
+            int pages = InventoryPageCount(itemNames.Count);
+            _inventoryPage = Math.Clamp(_inventoryPage, 0, pages - 1);
+
+            if (pages == 1)
+            {
+                foreach (string name in itemNames)
+                {
+                    InventorySlots.Children.Add(CreateInventorySlot(Items.GetItem(name)));
+                }
+
+                InventoryHintText.Text = _inventoryHint;
+                return;
+            }
+
+            InventorySlots.Children.Add(CreateInventoryPageArrow(-1, _inventoryPage > 0));
+
+            foreach (string name in itemNames
+                         .Skip(_inventoryPage * InventorySlotsPerPage)
+                         .Take(InventorySlotsPerPage))
             {
                 InventorySlots.Children.Add(CreateInventorySlot(Items.GetItem(name)));
-
-                if (InventorySlots.Children.Count == 10)
-                {
-                    break; // 10 slots fit in the panel
-                }
             }
+
+            // Keep the right arrow in the same place on a part-filled last page.
+            int missing = InventorySlotsPerPage -
+                (InventorySlots.Children.Count - 1);
+            if (missing > 0)
+            {
+                InventorySlots.Children.Add(new Border { Width = missing * 128 });
+            }
+
+            InventorySlots.Children.Add(CreateInventoryPageArrow(+1, _inventoryPage < pages - 1));
+
+            InventoryHintText.Text = $"Page {_inventoryPage + 1} of {pages}  ·  {_inventoryHint}";
+        }
+
+        private void TurnInventoryPage(int step)
+        {
+            if (!_inventoryOpen)
+            {
+                return;
+            }
+
+            int pages = InventoryPageCount(InventoryItemNames().Count);
+            int page = Math.Clamp(_inventoryPage + step, 0, pages - 1);
+
+            if (page != _inventoryPage)
+            {
+                _inventoryPage = page;
+                ShowInventoryPage();
+            }
+        }
+
+        private Border CreateInventoryPageArrow(int step, bool enabled)
+        {
+            var arrow = new Border
+            {
+                Width = 44,
+                Height = 116,
+                Margin = new Thickness(0, 0, step < 0 ? 12 : 0, 0),
+                Background = new SolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)),
+                BorderBrush = SlotBorderBrush,
+                BorderThickness = new Thickness(2),
+                CornerRadius = new CornerRadius(6),
+                Opacity = enabled ? 1.0 : 0.3,
+                Cursor = enabled ? Cursors.Hand : null,
+                Child = new TextBlock
+                {
+                    Text = step < 0 ? "\u25C0" : "\u25B6",
+                    Foreground = SlotHoverBrush,
+                    FontSize = 26,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                }
+            };
+
+            if (enabled)
+            {
+                arrow.MouseEnter += (_, _) => arrow.BorderBrush = SlotHoverBrush;
+                arrow.MouseLeave += (_, _) => arrow.BorderBrush = SlotBorderBrush;
+            }
+
+            arrow.MouseLeftButtonDown += (_, args) =>
+            {
+                args.Handled = true;
+                TurnInventoryPage(step);
+            };
+
+            return arrow;
+        }
+
+        private void InventoryPanel_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            TurnInventoryPage(e.Delta > 0 ? -1 : +1);
+            e.Handled = true;
+        }
+
+        private void OpenInventory()
+        {
+            _replyShowing = false;
+            _inventoryPage = 0;
+
+            List<string> itemNames = InventoryItemNames();
 
             InventoryDescriptionText.Text = itemNames.Count == 0
                 ? "Your pockets are empty."
@@ -2283,19 +2635,21 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             {
                 // Using something in the fight: inventory replaces the dice panel.
                 FightPanel.Visibility = Visibility.Collapsed;
-                InventoryHintText.Text = "Click an item to use it in the fight  ·  Esc to go back";
+                _inventoryHint = "Click an item to use it in the fight  ·  Esc to go back";
             }
             else if (IsInDialogue && _activeDialogue != null)
             {
                 // Offering something to the character: inventory replaces the conversation.
                 DialoguePanel.Visibility = Visibility.Collapsed;
-                InventoryHintText.Text =
+                _inventoryHint =
                     $"Click an item to offer it to {_activeDialogue.Speaker}  ·  Esc to go back";
             }
             else
             {
-                InventoryHintText.Text = "Click an item to use it  ·  Esc to close";
+                _inventoryHint = "Click an item to use it  ·  Esc to close";
             }
+
+            ShowInventoryPage();
 
             DescriptionText.Visibility = Visibility.Collapsed;
             InventoryPanel.Visibility = Visibility.Visible;
@@ -2456,6 +2810,24 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             ShowDescription($"Use {itemName} on...");
         }
 
+        /*
+         * Wrong item: the hotspot's own line (.OnOtherItems), else the
+         * item's own line (misuse:), else a general variant.
+         */
+        private static string CantUseText(string itemName, Hotspot hotspot)
+        {
+            if (!string.IsNullOrWhiteSpace(hotspot.OtherItemsText))
+            {
+                return Replies.Fill(hotspot.OtherItemsText, itemName, hotspot.Name);
+            }
+
+            string misuse = Items.GetItem(itemName).MisuseText;
+
+            return string.IsNullOrWhiteSpace(misuse)
+                ? Replies.NoUse(itemName, hotspot.Name)
+                : Replies.Fill(misuse, itemName, hotspot.Name);
+        }
+
         private void UseSelectedItemOn(Hotspot hotspot)
         {
             if (_selectedItem == null)
@@ -2471,7 +2843,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             if (use == null)
             {
-                ShowReply($"You can't use the {itemName} on the {hotspot.Name}.");
+                ShowReply(CantUseText(itemName, hotspot));
                 return;
             }
 
@@ -2861,6 +3233,8 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                 ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
                 : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
+            HideHoverLabel();
+            HideRevealedHotspots();
 
             DescriptionText.Visibility = Visibility.Collapsed;
             DialoguePanel.Visibility = Visibility.Collapsed;
@@ -3468,6 +3842,132 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
             ShowSaveLoad(saving: false, back: ShowGameMenu);
         }
 
+        private void GameMenuJournal_Click(object sender, RoutedEventArgs e)
+        {
+            HideGameMenu();
+            ShowJournal(back: ShowGameMenu);
+        }
+
+        // =========================================================
+        // JOURNAL (Data/Journal.cs) - J, or JOURNAL in the game menu
+        // =========================================================
+
+        private Action? _journalBack;
+
+        private bool IsJournalOpen => JournalScreen.Visibility == Visibility.Visible;
+
+        private bool CanOpenJournal =>
+            GameScreen.Visibility == Visibility.Visible &&
+            !_gameOverShown &&
+            !IsGameMenuOpen &&
+            !IsSaveLoadOpen &&
+            !IsSettingsOpen;
+
+        /*
+         * Adds any entries that have just come true and announces them.
+         * Called whenever the stats are refreshed, i.e. after anything happens.
+         */
+        private void CheckJournal()
+        {
+            if (GameScreen.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+            List<Journal.JournalEntry> added = Journal.Update(_player);
+
+            if (added.Count > 0)
+            {
+                ShowJournalToast(string.Join("  ·  ", added.Select(entry => entry.Title)));
+            }
+        }
+
+        private void ShowJournalToast(string titles)
+        {
+            JournalToastText.Text = titles;
+
+            var fade = new DoubleAnimationUsingKeyFrames();
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(300))));
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(3800))));
+            fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(4600))));
+
+            JournalToast.BeginAnimation(OpacityProperty, fade);
+        }
+
+        private void ShowJournal(Action? back)
+        {
+            _journalBack = back;
+            CloseInventory();
+            HideRevealedHotspots();
+
+            // The notice isn't needed once you're reading it.
+            JournalToast.BeginAnimation(OpacityProperty, null);
+            JournalToast.Opacity = 0;
+
+            JournalEntriesPanel.Children.Clear();
+
+            // Newest first.
+            for (int i = _player.Journal.Count - 1; i >= 0; i--)
+            {
+                Journal.JournalEntry? entry = Journal.Get(_player.Journal[i]);
+                if (entry == null)
+                {
+                    continue;   // an entry removed since the game was saved
+                }
+
+                JournalEntriesPanel.Children.Add(new TextBlock
+                {
+                    Text = entry.Title,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A)),
+                    FontFamily = new FontFamily("Georgia"),
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 24,
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                JournalEntriesPanel.Children.Add(new TextBlock
+                {
+                    Text = entry.Text,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xDD, 0xD4, 0xC3)),
+                    FontFamily = new FontFamily("Georgia"),
+                    FontSize = 19,
+                    LineHeight = 28,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 6, 0, 26)
+                });
+            }
+
+            int count = JournalEntriesPanel.Children.Count / 2;
+            JournalSubtitleText.Text = count == 0
+                ? "Nothing written yet. What you discover will be noted here."
+                : $"{count} {(count == 1 ? "entry" : "entries")}, newest first  ·  J or Esc to close";
+
+            JournalScroll.ScrollToTop();
+            JournalScreen.Visibility = Visibility.Visible;
+        }
+
+        // goBack: return to where it was opened from (e.g. the game menu).
+        private void CloseJournal(bool goBack = true)
+        {
+            if (!IsJournalOpen)
+            {
+                return;
+            }
+
+            JournalScreen.Visibility = Visibility.Collapsed;
+
+            Action? back = _journalBack;
+            _journalBack = null;
+
+            if (goBack)
+            {
+                back?.Invoke();
+            }
+        }
+
+        private void JournalClose_Click(object sender, RoutedEventArgs e) => CloseJournal();
+
         private void GameMenuQuit_Click(object sender, RoutedEventArgs e)
         {
             var answer = MessageBox.Show(
@@ -3509,6 +4009,12 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             SaveSlotsPanel.Children.Clear();
 
+            // The autosave can be loaded but never saved over by hand.
+            if (!saving)
+            {
+                SaveSlotsPanel.Children.Add(CreateSaveSlotButton(SaveSystem.AutosaveSlot, saving));
+            }
+
             for (int slot = 1; slot <= SaveSystem.SlotCount; slot++)
             {
                 SaveSlotsPanel.Children.Add(CreateSaveSlotButton(slot, saving));
@@ -3521,11 +4027,13 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
         {
             SaveGame? save = SaveSystem.Load(slot);
 
+            string slotName = slot == SaveSystem.AutosaveSlot ? "AUTOSAVE" : $"SLOT {slot}";
+
             var title = new TextBlock
             {
                 Text = save == null
-                    ? $"SLOT {slot}  -  Empty"
-                    : $"SLOT {slot}  -  {save.PlayerName}",
+                    ? $"{slotName}  -  Empty"
+                    : $"{slotName}  -  {save.PlayerName}",
                 FontSize = 22
             };
 
@@ -3651,6 +4159,10 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             _player = save.ToPlayer();
             _selectedItem = null;
+            CloseJournal(goBack: false);
+
+            // Saves from before the journal: fill it in quietly.
+            Journal.Update(_player);
             _fightSnapshot = null;
 
             TitleScreen.Visibility = Visibility.Collapsed;
@@ -3670,6 +4182,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
         // Back to the title screen with a brand new hero.
         private void ResetToTitle()
         {
+            CloseJournal(goBack: false);
             _gameOverShown = false;
             GameOverScreen.Visibility = Visibility.Collapsed;
             SaveLoadScreen.Visibility = Visibility.Collapsed;
