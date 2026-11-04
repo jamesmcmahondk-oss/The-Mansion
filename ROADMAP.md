@@ -19,11 +19,10 @@ they're done; add new ones at the bottom of the right section.
       `left.png`, `right.png` and the first right-side painting. Kept for later:
       `right_closeup.png` / `right_open.png` (side door – servants' entrance?)
       and the characters not in the game yet.
-- [ ] **Git LFS** for the images (`*.png`, `*.jpg`, `*.jpeg`, `*.webp`). Blocked:
-      this cloud session's network policy doesn't allow `lfs.github.com`, so the
-      images can't be uploaded from here. Either allow that host in the cloud
-      environment's network settings, or do it from Visual Studio on your PC.
-      The build check will then need `git lfs pull` (with caching).
+- [x] **Git LFS** for the images (`*.png`, `*.jpg`, `*.jpeg`, `*.webp`). Current
+      images moved to LFS in a new commit (history not rewritten, so old
+      versions still take up space there). The build check downloads them,
+      cached between builds, and fails if any image is missing.
 
 ## Step 2 – Story and puzzles
 - [ ] **Puzzle dependency chart** – what the player must find/do, in what order,

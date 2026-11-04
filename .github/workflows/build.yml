@@ -15,6 +15,31 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v5
 
+      # The images are stored in Git LFS. Cache them between builds so each
+      # build doesn't use up the repository's LFS download allowance.
+      - name: List the LFS images
+        shell: bash
+        run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore cached LFS images
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+
+      - name: Download LFS images
+        shell: bash
+        run: git lfs pull
+
+      # Fail if any image is still an LFS pointer (would build a broken game).
+      - name: Check the images are real
+        shell: bash
+        run: |
+          if grep -rl --include=*.png --include=*.jpg "version https://git-lfs" Assets; then
+            echo "Some images were not downloaded from LFS"; exit 1
+          fi
+
       - name: Install .NET
         uses: actions/setup-dotnet@v5
         with:
