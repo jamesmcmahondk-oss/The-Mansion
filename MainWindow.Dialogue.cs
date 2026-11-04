@@ -289,6 +289,10 @@ namespace The_Mansion
             // Choices may have changed flags/items, so hotspots may change.
             RefreshSceneHotspots();
 
+            // Meeting someone (.MetFlag) or a choice may have earned a journal
+            // entry; announce it now rather than at the next stats refresh.
+            CheckJournal();
+
             if (_currentScene != null)
             {
                 ShowDescription(_currentScene.Description);
