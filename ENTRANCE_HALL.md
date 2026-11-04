@@ -2,7 +2,14 @@
 
 The first room inside the Mansion, and the hub for the house: the same job the
 Courtyard does outside. **This is a draft for discussion.** Anything marked
-*(suggestion)* is open; nothing here is built yet.
+*(suggestion)* is open.
+
+**Built so far:** the background (`entrance_hall.png`) and the scene with its
+hotspots – staircase, landing, window, chandelier, family portrait (the
+Worn Photograph reacts to it), the left, right and low doors, grandfather
+clock, covered mirror, candles, coat stand and the cat. The doors and the
+stairs answer "Not yet" until the rooms beyond exist. Quazimodo's greeting
+and the puzzles below are not built.
 
 > Outside taught the player the verbs. Inside, the house starts to **notice
 > them** – quietly, without explaining itself.

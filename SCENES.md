@@ -26,6 +26,7 @@ flowchart LR
     GravestoneCloseup(["GravestoneCloseup"])
     FrontGargoyle(["FrontGargoyle"])
     FrontDoor["FrontDoor"]
+    EntranceHall["EntranceHall"]
     FrontGate -->|ACT Fountain| Courtyard
     FrontGate -->|ACT Front Door| FrontDoor
     FrontGate -.->|LOOK Gargoyle| FrontGargoyle
@@ -53,7 +54,6 @@ flowchart LR
     GraveyardEntrance -.->|LOOK Old Gravestone| GravestoneCloseup
     GraveyardEntrance -.->|LOOK Stone Cross| CrossCloseup
     FrontDoor -->|ACT Open Front Doors| EntranceHall
-    EntranceHall{{"EntranceHall – not made yet"}}
 ```
 
 Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
@@ -78,6 +78,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 - [GravestoneCloseup](#gravestonecloseup) – Close-up
 - [FrontGargoyle](#frontgargoyle) – Close-up
 - [FrontDoor](#frontdoor) – Scene
+- [EntranceHall](#entrancehall) – Scene
 
 ## FrontGate
 
@@ -427,7 +428,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 > The heavy front door towers over you. A grotesque metal knocker hangs at its centre.
 
 - **Picture changes** to `Assets/Backgrounds/Mansion/Front_door_open.png` when **FrontDoorOpen**
-- **Reached from:** FrontGate – ACT on *Front Door*; Courtyard – ACT on *Front Door*
+- **Reached from:** FrontGate – ACT on *Front Door*; Courtyard – ACT on *Front Door*; EntranceHall – Return arrow
 - **Exits:** EntranceHall (ACT *Open Front Doors*)
 - **Return arrow →** Courtyard
 - **Characters:** Quazimodo (ACT *Front Doors*, conversation `QuazimodoFrontDoor`)
@@ -437,3 +438,29 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Front Doors *(only when not FrontDoorOpen)* | Heavy wooden front doors. They appear to be locked. | conversation `QuazimodoFrontDoor` | The door does not answer. This is unsurprising. | – |
 | Open Front Doors *(only when FrontDoorOpen)* | The enormous front doors stand open. Beyond them waits the dark entrance hall. | → **EntranceHall** | – | – |
 | Door Knocker *(only when not FrontDoorOpen)* | The grotesque iron door knocker is freezing cold. | You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion. | – | **Gold Coins**: You rap the knocker with a gold coin. <br>**Royal Gold Coin**: You rap the knocker with the King's coin.  |
+
+## EntranceHall
+
+**Scene** · `Assets/Backgrounds/Mansion/entrance_hall.png`
+
+> The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.
+
+- **Reached from:** FrontDoor – ACT on *Open Front Doors*
+- **Return arrow →** FrontDoor
+
+| Object | LOOK | ACT | TALK | Items |
+|---|---|---|---|---|
+| Staircase | A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark. | You put a hand on the banister and look up into the dark. Not yet. | – | – |
+| Landing | The stairs turn at a landing and climb on along the right-hand wall, into shadow. | You put a hand on the banister and look up into the dark. Not yet. | – | – |
+| Window | A tall window above the stairs, framed by heavy red curtains. Rain streams down the glass. | The window is far above the stairs, and it doesn't look as if it opens. | – | – |
+| Chandelier | A great brass chandelier, every candle lit. Fine silver threads are strung between its arms, glinting. | Far out of reach. | – | – |
+| Family Portrait | A family portrait in a heavy gilt frame: five people in their best clothes. Where one face should be, the paint has flaked away to bare canvas. | The frame is fixed firmly to the wall. | Nobody in the portrait answers. One of them couldn't if they wanted to. | **Worn Photograph**: You hold the photograph up beside the portrait. Your eyes keep going to the same place in both: the face that isn't there. |
+| Left Door | A tall panelled door on the left side of the hall. | The handle turns, but the door doesn't open. Not yet. | – | – |
+| Right Door | A tall panelled door on the right side of the hall. | The handle turns, but the door doesn't open. Not yet. | – | – |
+| Low Door | A small, low door, tucked in under the stairs. | It doesn't open. | – | – |
+| Grandfather Clock | A tall grandfather clock. Its hands have stopped at a quarter past something. | You nudge the pendulum. It swings once, then stops again. | The clock has nothing to say. It has stopped saying anything at all. | – |
+| Covered Mirror | A tall mirror, covered completely by a grey dust sheet. | You take hold of a corner of the sheet... and decide to leave it where it is. | – | – |
+| Candles | Candles burn in a brass sconce. Someone keeps these lit. | The brass is hot. Whoever lit them wants them to stay lit. | – | – |
+| Candles | Candles burn in a brass sconce on the landing. Someone keeps these lit. | Out of reach from down here. | – | – |
+| Coat Stand | A crooked coat stand. An old coat hangs from it, still damp. | You leave the coat where it is. It isn't yours. | "Good evening, Quazimodo." It is a coat stand. | – |
+| Cat | A black cat sits on the stairs, watching you with unblinking yellow eyes. | You reach towards the cat. It shifts exactly far enough to stay out of reach. | You say hello. The cat considers this, and looks away. | – |
