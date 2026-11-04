@@ -29,6 +29,7 @@
     <None Remove="Assets\Backgrounds\Mansion\bench_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\rear_yard.png" />
     <None Remove="Assets\Backgrounds\Mansion\kitchen_garden.png" />
+    <None Remove="Assets\Backgrounds\Mansion\mansion_right_rose_cut.png" />
     <None Remove="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <None Remove="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <None Remove="Assets\Items\Sources\*.png" />
@@ -108,6 +109,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\bench_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\rear_yard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\kitchen_garden.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\mansion_right_rose_cut.png" />
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />

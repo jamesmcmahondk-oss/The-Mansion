@@ -34,9 +34,9 @@ flowchart LR
     Courtyard -->|ACT Side Path| MansionRight
     Garden -.->|LOOK Glasshouse| GlasshouseCloseup
     Garden -.->|LOOK Statue| StatueCloseup
+    MansionRight -->|ACT Old Well| Well
     MansionRight -->|ACT Garden Arch| Well
     MansionRight -->|ACT Path to the Back| RearYard
-    MansionRight -->|ACT Old Well| Well
     MansionRight -.->|LOOK Stone Bench| BenchCloseup
     RearYard -->|ACT Path Back| MansionRight
     RearYard -->|ACT Path Around Mansion| KitchenGarden
@@ -176,23 +176,25 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 **Scene** · `Assets/Backgrounds/Mansion/mansion_right.png`
 
-> A wet stone path curves along the mansion's right wing, past a servants' entrance, to an archway in the garden wall. Beyond it, steps climb to an old well.
+> A wet stone path runs along the Mansion's right wing, between candlelit windows and a wall of roses. Ahead, an archway opens onto steps climbing to an old well.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/mansion_right_rose_cut.png` when **GotRedRose**
 - **Reached from:** Courtyard – ACT on *Side Path*; RearYard – ACT on *Path Back*; RearYard – Return arrow; BenchCloseup – Return arrow; Well – Return arrow
-- **Exits:** Well (ACT *Garden Arch*); RearYard (ACT *Path to the Back*); Well (ACT *Old Well*)
+- **Exits:** Well (ACT *Old Well*); Well (ACT *Garden Arch*); RearYard (ACT *Path to the Back*)
 - **Close-ups:** BenchCloseup (LOOK *Stone Bench*)
 - **Return arrow →** Courtyard
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
-| Lantern | An iron lantern on a stone post. Its flame burns steadily, despite the rain. | – | – | – |
-| Windows | Candles burn behind the tall windows, but nothing moves inside. | – | – | – |
-| Servants' Entrance | A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side. | You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked! | – | – |
-| Garden Arch | An ivy-covered archway in the garden wall. Steps beyond it climb towards the well. | → **Well** | – | – |
-| Path to the Back | The cobbled path curves away along the garden wall, around to the back of the mansion. | → **RearYard** | – | – |
+| Windows (3 places) | Candles burn behind the tall windows, but nothing moves inside. | – | – | – |
+| Balustrade | A heavy stone balustrade runs along the foot of the wall, slick with rain. | – | – | – |
 | Old Well | A small roofed well stands at the top of the hill. | → **Well** | – | – |
+| Garden Arch | An ivy-covered archway in the garden wall. Steps beyond it climb towards the well. | → **Well** | – | – |
+| Path to the Back | Beside the lantern, the cobbles slip round the corner of the Mansion, towards the back of the house. | → **RearYard** | – | – |
+| Lantern | A lantern burns on the garden wall. Its flame burns steadily, despite the rain. | – | – | – |
 | Rose Bush *(only when not GotRedRose)* | A great tangle of blood-red roses, impossibly in bloom this late in the year. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose. |
-| Rose Bush *(only when GotRedRose)* | A great tangle of blood-red roses. There's a small gap where you cut one. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
+| Rose Bush *(only when GotRedRose)* | A great tangle of blood-red roses. There's a small gap where you cut one. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: You already have a rose. Leave the rest of them be. |
+| Hydrangeas | Pale hydrangeas, heavy with rain. They have lost all their colour. | – | – | – |
 | Stone Bench *(only when not HeardBenchNoise)* | A mossy stone bench beside the roses. | You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.  [sets HeardBenchNoise] | – | – |
 | Stone Bench *(only when HeardBenchNoise)* | → **BenchCloseup** | You sit down again. The hiccuping stops. Then: "...I can hear you breathing." | – | – |
 
@@ -281,7 +283,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > An old stone well stands under a mossy roof. Beyond it, a path leads down to a fenced graveyard.
 
-- **Reached from:** MansionRight – ACT on *Garden Arch*; MansionRight – ACT on *Old Well*; GraveyardEntrance – Return arrow; WellCloseup – Return arrow
+- **Reached from:** MansionRight – ACT on *Old Well*; MansionRight – ACT on *Garden Arch*; GraveyardEntrance – Return arrow; WellCloseup – Return arrow
 - **Exits:** GraveyardEntrance (ACT *Graveyard*); GraveyardEntrance (ACT *Graveyard Path*)
 - **Close-ups:** WellCloseup (LOOK *Well*)
 - **Return arrow →** MansionRight

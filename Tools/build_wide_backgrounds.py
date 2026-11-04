@@ -20,6 +20,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
 W, H = 1536, 1024
 BAND_TOP, BAND_BOTTOM = 192, 832
+RIGHT_SHIFT = 10          # right side of the Mansion: pixels moved up
 SRC_DIR = "Assets/Backgrounds/Mansion/Sources"
 OUT_DIR = "Assets/Backgrounds/Mansion"
 
@@ -30,7 +31,7 @@ WIDE = [
     ("statue_closeup_source.png",          "statue_closeup.png",         10),
     # After the sword is taken (lined up by Tools/align_variant.py).
     ("statue_closeup_nosword_source.png",  "statue_closeup_nosword.png", 10),
-    ("mansion_right_v2_source.png",        "mansion_right.png",         215),
+    # (mansion_right.png now comes from mansion_right_v3_source.png - see the end)
     ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
     # (bench_closeup.png now comes from bench_closeup_dark.png - see the end.
     #  Older versions: bench_closeup_clean_source.png, bench_closeup_source.png)
@@ -110,3 +111,35 @@ print("wrote well_closeup.png, well_closeup_empty.png")
 # and lined up with the earlier version, so Ebria's sprite still fits.
 Image.open(f"{SRC_DIR}/bench_closeup_dark.png").convert("RGB").save(f"{OUT_DIR}/bench_closeup.png")
 print("wrote bench_closeup.png (dark)")
+
+# The right side of the Mansion (rose walk). Shifted so the bench and roses
+# sit in the visible band; the "rose cut" version paints one rose out.
+src = Image.open(f"{SRC_DIR}/mansion_right_v3_source.png").convert("RGB")
+right = wide(src, 192 + RIGHT_SHIFT)
+right.save(f"{OUT_DIR}/mansion_right.png")
+
+# One rose painted out (the one the player cuts with the garden shears).
+bgr = cv2.cvtColor(np.asarray(right), cv2.COLOR_RGB2BGR)
+mask = np.zeros(bgr.shape[:2], np.uint8)
+cv2.ellipse(mask, (1322, 567), (26, 17), 0, 0, 360, 255, -1)
+cut = cv2.inpaint(bgr, mask, 7, cv2.INPAINT_TELEA)
+# Lay real leaves from just below over the smoothed gap so it isn't a smudge.
+# Search nearby for the leafiest patch with the least red (no other rose).
+best = None
+for py in range(520, 660, 4):
+    for px in range(1220, 1420, 4):
+        if abs(py - 550) < 40 and abs(px - 1292) < 70:
+            continue
+        cand = bgr[py:py + 34, px:px + 60].astype(np.float32)
+        red = np.clip(cand[..., 2] - cand[..., 1] - 30, 0, None).sum()
+        green = cand[..., 1].mean()
+        score = red - green * 20
+        if best is None or score < best[0]:
+            best = (score, py, px)
+_, py, px = best
+patch = bgr[py:py + 34, px:px + 60].astype(np.float32)
+soft = cv2.GaussianBlur(mask[550:584, 1292:1352].astype(np.float32) / 255, (0, 0), 4)[..., None]
+region = cut[550:584, 1292:1352].astype(np.float32)
+cut[550:584, 1292:1352] = (patch * soft + region * (1 - soft)).astype(np.uint8)
+Image.fromarray(cv2.cvtColor(cut, cv2.COLOR_BGR2RGB)).save(f"{OUT_DIR}/mansion_right_rose_cut.png")
+print("wrote mansion_right.png, mansion_right_rose_cut.png")
