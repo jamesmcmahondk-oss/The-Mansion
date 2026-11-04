@@ -52,12 +52,22 @@ namespace The_Mansion.Data
         public static Scene FountainCloseup { get; } =
             NewScene("FountainCloseup",
                      "Assets/Backgrounds/Mansion/fountain_closeup.png",
-                     "Lily pads float on the dark water. Beneath the surface, a small pile of gold coins glitters.")
+                     "Lily pads float on the dark water. Spouts of water splash down from the fountain above.")
+
+            // The coins vanish from the picture while you have them, and come
+            // back if you return them (Tools/patch_variant.py made the pair).
+            .BackgroundWhen(p => p.HasFlag("StoleCoins"),
+                            "Assets/Backgrounds/Mansion/fountain_closeup_nocoins.png")
 
             .Hotspot("Gold Coins", 595, 655, 295, 175)
                 .Describe("Several old gold coins rest at the bottom of the fountain.")
 
                 // ACT on the coins: King Hautain appears on the lily pad.
+                .ActStarts("HautainCoins")
+                .OnlyWhen(p => !p.HasFlag("StoleCoins"))
+
+            .Hotspot("Fountain Floor", 595, 655, 295, 175)
+                .Describe("A cleaner patch on the fountain floor, where the coins used to lie.")
                 .ActStarts("HautainCoins")
 
                 // Put the stolen coins back to make peace with the King.
@@ -69,6 +79,15 @@ namespace The_Mansion.Data
                             p.ClearFlag("StoleCoins");
                             p.StatusEffect = "None";
                         })
+                .OnlyWhen(p => p.HasFlag("StoleCoins"))
+
+            .Hotspot("Fountain", 1040, 192, 496, 330)
+                .Describe("The fountain's carved stone base, green with moss. Above it, stone lions spit water into the basin.")
+                .OnTalk("The lions keep their mouths full.")
+
+            .Hotspot("Water Lily", 160, 470, 160, 110)
+                .Describe("A single pale water lily, open in the rain.")
+                .OnAct("You leave it be. It's the only thing here that looks content.")
 
             .ReturnTo("Courtyard", "You step away from the fountain.");
 

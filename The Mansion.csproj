@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Backgrounds\Mansion\fountain_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\fountain_closeup_nocoins.png" />
     <None Remove="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
     <None Remove="Assets\Backgrounds\Mansion\frontgate.png" />
     <None Remove="Assets\Backgrounds\Mansion\Front_door.png" />
@@ -97,6 +98,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\fountain_closeup.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Backgrounds\Mansion\fountain_closeup_nocoins.png" />
     <Resource Include="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
     <Resource Include="Assets\Backgrounds\Mansion\frontgate.png" />
     <Resource Include="Assets\Backgrounds\Mansion\Front_door.png" />

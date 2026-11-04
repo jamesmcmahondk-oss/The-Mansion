@@ -99,15 +99,19 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 **Close-up** · `Assets/Backgrounds/Mansion/fountain_closeup.png`
 
-> Lily pads float on the dark water. Beneath the surface, a small pile of gold coins glitters.
+> Lily pads float on the dark water. Spouts of water splash down from the fountain above.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/fountain_closeup_nocoins.png` when **StoleCoins**
 - **Reached from:** Courtyard – LOOK on *Fountain*
 - **Return arrow →** Courtyard
-- **Characters:** King Hautain (ACT *Gold Coins*, conversation `HautainCoins`)
+- **Characters:** King Hautain (ACT *Gold Coins*, conversation `HautainCoins`); King Hautain (ACT *Fountain Floor*, conversation `HautainCoins`)
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
-| Gold Coins | Several old gold coins rest at the bottom of the fountain. | conversation `HautainCoins` | – | **Gold Coins**: You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging "Hmph." (Royal Grudge lifted) (item used up) |
+| Gold Coins *(only when not StoleCoins)* | Several old gold coins rest at the bottom of the fountain. | conversation `HautainCoins` | – | – |
+| Fountain Floor *(only when StoleCoins)* | A cleaner patch on the fountain floor, where the coins used to lie. | conversation `HautainCoins` | – | **Gold Coins**: You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging "Hmph." (Royal Grudge lifted) (item used up) |
+| Fountain | The fountain's carved stone base, green with moss. Above it, stone lions spit water into the basin. | – | The lions keep their mouths full. | – |
+| Water Lily | A single pale water lily, open in the rain. | You leave it be. It's the only thing here that looks content. | – | – |
 
 ## Courtyard
 
