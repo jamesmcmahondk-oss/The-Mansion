@@ -37,6 +37,11 @@ namespace The_Mansion.Data
         public static Dialogue SadGargoyle { get; } =
             NewDialogue("SadGargoyle", "Sad Gargoyle")
                 .MetFlag("MetGargoyle")
+
+                // Second visit: he notices something small and wrong about you.
+                .StartAt(p => p.HasFlag("MetGargoyle") && !p.HasFlag("GargoyleNoticedRain")
+                    ? "rain"
+                    : "start")
                 .Portrait(
                     "Assets/Characters/Portraits/Gargoyle_portrait_framed.png")
 
@@ -52,6 +57,31 @@ namespace The_Mansion.Data
                     "The gargoyle examines the {item}. "
                     + "\"No, thank you. I already possess several things I never asked for. "
                     + "Most of them are moss.\"")
+
+                // =====================================================
+                // SOMETHING ABOUT YOU (once)
+                // =====================================================
+
+                .Line(
+                    "rain",
+                    "The gargoyle squints at you through the drizzle. "
+                    + "\"You don't cast rain properly.\"")
+
+                    .Choice(
+                        "What?",
+                        "rainNothing",
+                        effect: p => p.SetFlag("GargoyleNoticedRain"))
+
+                .Line(
+                    "rainNothing",
+                    "\"Nothing.\" He looks away, very quickly. \"Did you want something?\"")
+
+                    .Choice(
+                        "...Yes.",
+                        "menu")
+
+                    .Choice(
+                        "Never mind.")
 
                 // =====================================================
                 // INTRODUCTION
@@ -2532,7 +2562,7 @@ namespace The_Mansion.Data
                         onlyIf: p => p.HasFlag("MetMagnusAndSeverin"))
 
                     .Choice(
-                        "Ebria?",
+                        "I met Ebria.",
                         "ebria",
                         onlyIf: p => p.HasFlag("MetEbria"))
 
@@ -2590,29 +2620,33 @@ namespace The_Mansion.Data
                         "I'll let him know.",
                         "residentMenu")
 
+                // His version of the Lily Pad War. Ebria's version: "I fell in the pond."
                 .Line(
                     "ebria",
-                    "\"The airborne tavern incident.\"")
+                    "\"THE BENCH-DWELLING MENACE.\" Hautain very nearly falls off his lily pad. "
+                    + "\"That creature once DESCENDED FROM THE HEAVENS upon my Eastern Provinces!\"")
 
                     .Choice(
-                        "That's Ebria.",
-                        "residentMenu")
+                        "She says she fell in the pond.",
+                        "ebriaFell")
 
                     .Choice(
-                        "Anything else?",
+                        "What happened?",
                         "ebriaMore")
 
                 .Line(
                     "ebriaMore",
-                    "\"She once attempted to annex the Eastern Lily while intoxicated.\"")
+                    "\"Three hours of savage combat. She seized the Eastern Lily. "
+                    + "The Royal Navy - that is, I - repelled her with tremendous valour.\"")
 
                     .Choice(
-                        "Did she succeed?",
-                        "ebriaAnnex")
+                        "And then?",
+                        "ebriaFell")
 
                 .Line(
-                    "ebriaAnnex",
-                    "\"She fell in.\"")
+                    "ebriaFell",
+                    "\"FELL?\" Hautain swells to twice his size. \"She was DEFEATED. "
+                    + "Into the water. Which is technically falling. Tactically.\"")
 
                     .Choice(
                         "Sounds like Ebria.",
@@ -4171,9 +4205,44 @@ namespace The_Mansion.Data
 
                 .OnItem("Empty Bottle", "emptyBottle")
 
+                // The mirror from the well. She refuses it - more firmly each time.
+                // It isn't hers, so it is never taken.
+                .OnItem("Cracked Hand Mirror", "mirror",
+                        effect: p => p.SetFlag("ShowedEbriaMirror"),
+                        onlyIf: p => !p.HasFlag("ShowedEbriaMirror"))
+                .OnItem("Cracked Hand Mirror", "mirrorAgain",
+                        effect: p => p.SetFlag("ShowedEbriaMirrorTwice"),
+                        onlyIf: p => !p.HasFlag("ShowedEbriaMirrorTwice"))
+                .OnItem("Cracked Hand Mirror", "mirrorRefused")
+
                 .OnOtherItems(
                     "Ebria studies the {item} with grave concentration. " +
                     "\"Can I drink it? No? Then you've misunderstood our relationship.\"")
+
+            // ---------------------------------------------------------
+            // THE MIRROR (offered with ITEM)
+            // ---------------------------------------------------------
+
+            .Line("mirror",
+                "Ebria looks at the mirror. The drunken smile disappears. \"No.\"")
+                .Choice("No?", "mirrorNo")
+
+            .Line("mirrorNo",
+                "\"I said no.\"")
+                .Choice("It's a mirror.", "mirrorSee")
+                .Choice("(Put it away)", "menu")
+
+            .Line("mirrorSee",
+                "\"I can see that.\" She doesn't look at it again.")
+                .Choice("(Put it away)", "menu")
+
+            .Line("mirrorAgain",
+                "\"Put that away.\"")
+                .Choice("(Put it away)", "menu")
+
+            .Line("mirrorRefused",
+                "Ebria will not look at it.")
+                .Choice("(Put it away)", "menu")
 
             // ---------------------------------------------------------
             // FIRST MEETING

@@ -61,7 +61,9 @@ namespace The_Mansion.Models
 
         // What happens when the player offers an item (ITEM button during
         // the conversation), keyed by item name.
-        public Dictionary<string, DialogueItemUse> ItemUses { get; set; }
+        // Several reactions per item are allowed; the first one whose
+        // onlyIf is true is used.
+        public Dictionary<string, List<DialogueItemUse>> ItemUses { get; set; }
             = new(StringComparer.OrdinalIgnoreCase);
 
         // Reply to any other item. "{item}" is replaced by the item's name.
