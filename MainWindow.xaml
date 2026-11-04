@@ -1254,51 +1254,99 @@
         <!-- Entries come from Data/Journal.cs.        -->
         <!-- ========================================= -->
 
+        <!--
+            An open book (Assets/UI/journal_book.png, 1536x1024, shown at
+            1440x960). Left page: the entry titles, newest first - click one.
+            Right page: the chosen entry. Positions are in the 1440x960 book.
+        -->
         <Grid x:Name="JournalScreen"
               Visibility="Collapsed"
-              Background="#C8000000"
+              Background="#D8000000"
+              MouseLeftButtonDown="JournalScreen_MouseLeftButtonDown"
               Panel.ZIndex="3650">
 
-            <Border Width="1100"
+            <Canvas x:Name="JournalBook"
+                    Width="1440"
+                    Height="960"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Padding="50,30,50,30"
-                    Background="#F0100C0C"
-                    BorderBrush="#806B4A"
-                    BorderThickness="2">
-                <StackPanel>
-                    <TextBlock Text="JOURNAL"
-                               HorizontalAlignment="Center"
-                               Foreground="#D5B77A"
+                    Background="Transparent">
+
+                <Image Source="/Assets/UI/journal_book.png"
+                       Width="1440"
+                       Height="960"
+                       Stretch="Fill">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.8" Color="Black"/>
+                    </Image.Effect>
+                </Image>
+
+                <!-- LEFT PAGE: the contents -->
+                <TextBlock Canvas.Left="195" Canvas.Top="105"
+                           Text="Journal"
+                           Foreground="#3A2412"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontWeight="Bold"
+                           FontSize="44"/>
+
+                <TextBlock x:Name="JournalSubtitleText"
+                           Canvas.Left="198" Canvas.Top="165"
+                           Width="470"
+                           TextWrapping="Wrap"
+                           Foreground="#6B4E31"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="17"/>
+
+                <Rectangle Canvas.Left="198" Canvas.Top="200"
+                           Width="470" Height="1.5"
+                           Fill="#7A5A38" Opacity="0.6"/>
+
+                <!-- Entry titles, built by ShowJournal(); the wheel scrolls. -->
+                <ScrollViewer x:Name="JournalScroll"
+                              Canvas.Left="190" Canvas.Top="215"
+                              Width="490" Height="580"
+                              VerticalScrollBarVisibility="Hidden">
+                    <StackPanel x:Name="JournalEntriesPanel"/>
+                </ScrollViewer>
+
+                <!-- RIGHT PAGE: the chosen entry -->
+                <TextBlock x:Name="JournalEntryTitle"
+                           Canvas.Left="785" Canvas.Top="110"
+                           Width="500"
+                           TextWrapping="Wrap"
+                           Foreground="#3A2412"
+                           FontFamily="Georgia"
+                           FontWeight="Bold"
+                           FontSize="30"/>
+
+                <ScrollViewer x:Name="JournalEntryScroll"
+                              Canvas.Left="785" Canvas.Top="200"
+                              Width="510" Height="590"
+                              VerticalScrollBarVisibility="Hidden">
+                    <TextBlock x:Name="JournalEntryText"
+                               Width="495"
+                               TextWrapping="Wrap"
+                               Foreground="#3A2412"
                                FontFamily="Georgia"
-                               FontWeight="Bold"
-                               FontSize="34"/>
+                               FontSize="22"
+                               LineHeight="34"/>
+                </ScrollViewer>
 
-                    <TextBlock x:Name="JournalSubtitleText"
-                               HorizontalAlignment="Center"
-                               Margin="0,6,0,20"
-                               Foreground="#A89A84"
-                               FontFamily="Georgia"
-                               FontStyle="Italic"
-                               FontSize="18"/>
-
-                    <!-- One block per entry, newest first: ShowJournal() -->
-                    <ScrollViewer x:Name="JournalScroll"
-                                  Height="620"
-                                  VerticalScrollBarVisibility="Auto"
-                                  Padding="0,0,16,0">
-                        <StackPanel x:Name="JournalEntriesPanel"/>
-                    </ScrollViewer>
-
-                    <Button Content="CLOSE"
-                            Width="200"
-                            Height="50"
-                            Margin="0,20,0,0"
-                            HorizontalAlignment="Center"
-                            Style="{StaticResource GothicButton}"
-                            Click="JournalClose_Click"/>
-                </StackPanel>
-            </Border>
+                <!-- Close, bottom corner of the right page -->
+                <TextBlock x:Name="JournalCloseText"
+                           Canvas.Left="1150" Canvas.Top="790"
+                           Text="Close  ✕"
+                           Foreground="#6B4E31"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="20"
+                           Cursor="Hand"
+                           MouseEnter="JournalClose_MouseEnter"
+                           MouseLeave="JournalClose_MouseLeave"
+                           MouseLeftButtonDown="JournalClose_MouseLeftButtonDown"/>
+            </Canvas>
         </Grid>
 
         <!-- ========================================= -->

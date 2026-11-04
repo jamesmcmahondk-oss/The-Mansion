@@ -47,6 +47,7 @@
     <None Remove="Assets\UI\attack_glow.png" />
     <None Remove="Assets\UI\flee.png" />
     <None Remove="Assets\UI\flee_glow.png" />
+    <None Remove="Assets\UI\journal_book.png" />
     <None Remove="Assets\Characters\Chef.png" />
     <None Remove="Assets\Characters\Death.png" />
     <None Remove="Assets\Characters\FrogPrince.png" />
@@ -149,6 +150,7 @@
     <Resource Include="Assets\UI\attack_glow.png" />
     <Resource Include="Assets\UI\flee.png" />
     <Resource Include="Assets\UI\flee_glow.png" />
+    <Resource Include="Assets\UI\journal_book.png" />
     <Resource Include="Assets\UI\Dice\*.png" />
   </ItemGroup>
 

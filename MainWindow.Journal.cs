@@ -48,6 +48,11 @@ namespace The_Mansion
 
             if (added.Count > 0)
             {
+                foreach (Journal.JournalEntry entry in added)
+                {
+                    _unreadJournal.Add(entry.Id);
+                }
+
                 ShowJournalToast(string.Join("  ·  ", added.Select(entry => entry.Title)));
             }
         }
@@ -65,6 +70,15 @@ namespace The_Mansion
             JournalToast.BeginAnimation(OpacityProperty, fade);
         }
 
+        // Ink colours on the journal's paper.
+        private static readonly Brush JournalInk = new SolidColorBrush(Color.FromRgb(0x3A, 0x24, 0x12));
+        private static readonly Brush JournalFadedInk = new SolidColorBrush(Color.FromRgb(0x6B, 0x4E, 0x31));
+        private static readonly Brush JournalRedInk = new SolidColorBrush(Color.FromRgb(0x7A, 0x1E, 0x14));
+
+        // Entries not read yet this session (marked on the contents page).
+        private readonly HashSet<string> _unreadJournal = new(StringComparer.OrdinalIgnoreCase);
+        private string _journalSelected = "";
+
         private void ShowJournal(Action? back)
         {
             _journalBack = back;
@@ -75,46 +89,130 @@ namespace The_Mansion
             JournalToast.BeginAnimation(OpacityProperty, null);
             JournalToast.Opacity = 0;
 
-            JournalEntriesPanel.Children.Clear();
+            List<Journal.JournalEntry> entries = JournalEntriesNewestFirst();
 
-            // Newest first.
-            for (int i = _player.Journal.Count - 1; i >= 0; i--)
-            {
-                Journal.JournalEntry? entry = Journal.Get(_player.Journal[i]);
-                if (entry == null)
-                {
-                    continue;   // an entry removed since the game was saved
-                }
+            // Open on the newest unread entry, else the newest one.
+            Journal.JournalEntry? first =
+                entries.FirstOrDefault(entry => _unreadJournal.Contains(entry.Id)) ??
+                entries.FirstOrDefault();
 
-                JournalEntriesPanel.Children.Add(new TextBlock
-                {
-                    Text = entry.Title,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A)),
-                    FontFamily = new FontFamily("Georgia"),
-                    FontWeight = FontWeights.Bold,
-                    FontSize = 24,
-                    TextWrapping = TextWrapping.Wrap
-                });
+            _journalSelected = first?.Id ?? "";
 
-                JournalEntriesPanel.Children.Add(new TextBlock
-                {
-                    Text = entry.Text,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0xDD, 0xD4, 0xC3)),
-                    FontFamily = new FontFamily("Georgia"),
-                    FontSize = 19,
-                    LineHeight = 28,
-                    TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 6, 0, 26)
-                });
-            }
+            JournalSubtitleText.Text = entries.Count == 0
+                ? "Nothing written yet."
+                : $"{entries.Count} {(entries.Count == 1 ? "entry" : "entries")}, newest first";
 
-            int count = JournalEntriesPanel.Children.Count / 2;
-            JournalSubtitleText.Text = count == 0
-                ? "Nothing written yet. What you discover will be noted here."
-                : $"{count} {(count == 1 ? "entry" : "entries")}, newest first  ·  J or Esc to close";
+            BuildJournalContents(entries);
+            ShowJournalEntry(first);
 
             JournalScroll.ScrollToTop();
             JournalScreen.Visibility = Visibility.Visible;
+        }
+
+        private List<Journal.JournalEntry> JournalEntriesNewestFirst()
+        {
+            var entries = new List<Journal.JournalEntry>();
+
+            for (int i = _player.Journal.Count - 1; i >= 0; i--)
+            {
+                Journal.JournalEntry? entry = Journal.Get(_player.Journal[i]);
+                if (entry != null)      // null: an entry removed since the game was saved
+                {
+                    entries.Add(entry);
+                }
+            }
+
+            return entries;
+        }
+
+        // The left page: one line per entry. The chosen one is in red ink,
+        // unread ones are marked "new".
+        private void BuildJournalContents(List<Journal.JournalEntry> entries)
+        {
+            JournalEntriesPanel.Children.Clear();
+
+            foreach (Journal.JournalEntry entry in entries)
+            {
+                bool selected = entry.Id == _journalSelected;
+
+                var line = new TextBlock
+                {
+                    FontFamily = new FontFamily("Georgia"),
+                    FontSize = 22,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(8, 0, 8, 14),
+                    Foreground = selected ? JournalRedInk : JournalInk,
+                    FontWeight = selected ? FontWeights.Bold : FontWeights.Normal,
+                    Cursor = Cursors.Hand
+                };
+
+                line.Inlines.Add(new System.Windows.Documents.Run(entry.Title));
+
+                if (_unreadJournal.Contains(entry.Id))
+                {
+                    line.Inlines.Add(new System.Windows.Documents.Run("   new")
+                    {
+                        Foreground = JournalRedInk,
+                        FontStyle = FontStyles.Italic,
+                        FontSize = 16
+                    });
+                }
+
+                line.MouseEnter += (_, _) => line.TextDecorations = TextDecorations.Underline;
+                line.MouseLeave += (_, _) => line.TextDecorations = null;
+                line.MouseLeftButtonDown += (_, args) =>
+                {
+                    args.Handled = true;
+                    _journalSelected = entry.Id;
+                    ShowJournalEntry(entry);
+                    BuildJournalContents(JournalEntriesNewestFirst());
+                };
+
+                JournalEntriesPanel.Children.Add(line);
+            }
+        }
+
+        // The right page.
+        private void ShowJournalEntry(Journal.JournalEntry? entry)
+        {
+            if (entry == null)
+            {
+                JournalEntryTitle.Text = "";
+                JournalEntryText.Text = "What you discover will be written here.";
+                JournalEntryText.Foreground = JournalFadedInk;
+                JournalEntryText.FontStyle = FontStyles.Italic;
+                return;
+            }
+
+            _unreadJournal.Remove(entry.Id);
+
+            JournalEntryTitle.Text = entry.Title;
+            JournalEntryText.Text = entry.Text;
+            JournalEntryText.Foreground = JournalInk;
+            JournalEntryText.FontStyle = FontStyles.Normal;
+            JournalEntryScroll.ScrollToTop();
+        }
+
+        // Clicking the dark area around the book closes it.
+        private void JournalScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource == JournalScreen)
+            {
+                CloseJournal();
+                e.Handled = true;
+            }
+        }
+
+        private void JournalClose_MouseEnter(object sender, MouseEventArgs e) =>
+            JournalCloseText.Foreground = JournalRedInk;
+
+        private void JournalClose_MouseLeave(object sender, MouseEventArgs e) =>
+            JournalCloseText.Foreground = JournalFadedInk;
+
+        private void JournalClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            CloseJournal();
         }
 
         // goBack: return to where it was opened from (e.g. the game menu).
@@ -136,6 +234,5 @@ namespace The_Mansion
             }
         }
 
-        private void JournalClose_Click(object sender, RoutedEventArgs e) => CloseJournal();
     }
 }
