@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Python packages (tools)
+*.whl
+__pycache__/
+.lfs-assets-id
