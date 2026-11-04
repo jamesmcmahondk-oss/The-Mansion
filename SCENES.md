@@ -16,6 +16,7 @@ flowchart LR
     GlasshouseCloseup(["GlasshouseCloseup"])
     MansionRight["MansionRight"]
     RearYard["RearYard"]
+    ToolShedCloseup(["ToolShedCloseup"])
     KitchenGarden["KitchenGarden"]
     BenchCloseup(["BenchCloseup"])
     Well["Well"]
@@ -40,6 +41,9 @@ flowchart LR
     MansionRight -.->|LOOK Stone Bench| BenchCloseup
     RearYard -->|ACT Path Back| MansionRight
     RearYard -->|ACT Path Around Mansion| KitchenGarden
+    RearYard -->|ACT Shed Door| ToolShedCloseup
+    RearYard -.->|LOOK Shed Door| ToolShedCloseup
+    ToolShedCloseup -->|ACT Shed Door| RearYard
     KitchenGarden -->|ACT Garden Door| Garden
     KitchenGarden -->|ACT Path Back| RearYard
     Well -.->|LOOK Well| WellCloseup
@@ -63,6 +67,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 - [GlasshouseCloseup](#glasshousecloseup) – Close-up
 - [MansionRight](#mansionright) – Scene
 - [RearYard](#rearyard) – Scene
+- [ToolShedCloseup](#toolshedcloseup) – Close-up
 - [KitchenGarden](#kitchengarden) – Scene
 - [BenchCloseup](#benchcloseup) – Close-up
 - [Well](#well) – Scene
@@ -204,8 +209,9 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > A rain-soaked service yard behind the Mansion. Ordinary work seems to have simply stopped here.
 
-- **Reached from:** MansionRight – ACT on *Path to the Back*; KitchenGarden – ACT on *Path Back*; KitchenGarden – Return arrow
-- **Exits:** MansionRight (ACT *Path Back*); KitchenGarden (ACT *Path Around Mansion*)
+- **Reached from:** MansionRight – ACT on *Path to the Back*; ToolShedCloseup – ACT on *Shed Door*; ToolShedCloseup – Return arrow; KitchenGarden – ACT on *Path Back*; KitchenGarden – Return arrow
+- **Exits:** MansionRight (ACT *Path Back*); KitchenGarden (ACT *Path Around Mansion*); ToolShedCloseup (ACT *Shed Door*)
+- **Close-ups:** ToolShedCloseup (LOOK *Shed Door*)
 - **Return arrow →** MansionRight
 
 | Object | LOOK | ACT | TALK | Items |
@@ -225,14 +231,37 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Stone Trough *(only when TroughFilled)* | Cold rainwater and pump water fill the old stone trough. | The water is painfully cold. | – | – |
 | Drain | Rainwater disappears through an iron grate beneath the Mansion. A few tiny pale fragments have collected against the grate. Probably kitchen scraps. | The grate is firmly set into the cobbles. | Your voice drops down the drain and doesn't come back up. | – |
 | Tool Shed | A small gardening shed leans against the wall, its roof thick with moss. The tools outside have been left exactly where someone last used them. Apparently nobody came back for them. | The door is the part that opens. | – | – |
-| Shed Door *(only when not OpenedToolShed)* | A small gardening shed leans against the wall, its roof thick with moss. | The shed door scrapes open. Inside: shelves of rusted tins, a little workbench, a pair of garden shears and a few sticks of charcoal.  [sets OpenedToolShed] | – | – |
-| Workbench *(only when OpenedToolShed and not GotGardenShears)* | A sturdy pair of pruning shears lies on the workbench - rusty, but still serviceable. Beside them, a few sticks of charcoal. | You take the garden shears.  [gives Garden Shears]  [sets GotGardenShears] | – | – |
-| Workbench *(only when GotGardenShears and not GotCharcoal)* | A few sticks of charcoal lie on the workbench. Messy, but still usable. | You take the charcoal, and most of its dust with it.  [gives Charcoal]  [sets GotCharcoal] | – | – |
-| Workbench *(only when GotGardenShears and GotCharcoal)* | Rusted tins, broken pots and a locked cabinet. Nothing else worth taking. | There's nothing else in the shed worth carrying around. | – | – |
+| Shed Door | → **ToolShedCloseup** | → **ToolShedCloseup** | – | – |
 | Rope *(only when not GotRope)* | A coil of old rope hangs on the shed wall. Damp, but stronger than it looks. | You lift the coil of rope off its hook.  [gives Rope]  [sets GotRope] | – | – |
 | Shovel | A heavy garden shovel hangs from a hook rusted solid around its handle. | It isn't coming free without taking half the shed with it. | – | – |
 | Pitchfork | An old pitchfork. Several tines have rusted away. | You'd rather not carry a pitchfork around. It invites questions. | – | – |
 | Rake | A rake with half its teeth missing. | You leave the rake where it lies. Stepping on it later is a tradition you can do without. | – | – |
+
+## ToolShedCloseup
+
+**Close-up** · `Assets/Backgrounds/Mansion/tool_shed_closeup.png`
+
+> The shed door scrapes open. Inside it smells of rust, damp wood and old soil. A lantern burns on the roof beam.
+
+- **Picture changes** to `Assets/Backgrounds/Mansion/tool_shed_closeup_empty.png` when **GotGardenShears and GotCharcoal**
+- **Picture changes** to `Assets/Backgrounds/Mansion/tool_shed_closeup_no_shears.png` when **GotGardenShears**
+- **Picture changes** to `Assets/Backgrounds/Mansion/tool_shed_closeup_no_charcoal.png` when **GotCharcoal**
+- **Reached from:** RearYard – ACT on *Shed Door*; RearYard – LOOK on *Shed Door*
+- **Exits:** RearYard (ACT *Shed Door*)
+- **Return arrow →** RearYard
+
+| Object | LOOK | ACT | TALK | Items |
+|---|---|---|---|---|
+| Shelves | Rusted tins with no labels, and terracotta pots - stacked, tipped over, one of them broken. | You prise the lid off a tin. Rust, and the smell of old nails. You put the lid back. | – | – |
+| Lantern | A small oil lantern hangs from the roof beam, lit. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
+| Shed Door | The door hangs open behind you. Rain drips from its iron ring. | → **RearYard** | – | – |
+| Cabinet | A tall, narrow cabinet, closed with a heavy iron padlock. Through the gaps in its boards you can see more rusted tins. | Locked, and not worth the trouble. It's only more tins. | – | – |
+| Workbench | A scarred old workbench, worn smooth where hands rested on it for years. | You run a hand along the bench. Splinters, mostly. | – | – |
+| Garden Shears *(only when not GotGardenShears)* | A sturdy pair of pruning shears - rusty, but still serviceable. | You take the garden shears.  [gives Garden Shears]  [sets GotGardenShears] | – | – |
+| Charcoal *(only when not GotCharcoal)* | A few sticks of charcoal. Messy, but still usable. | You take the charcoal, and most of its dust with it.  [gives Charcoal]  [sets GotCharcoal] | – | – |
+| Watering Can | An old galvanised watering can, dented and freckled with rust. | Empty. It's raining anyway. | – | – |
+| Seed Crate | A wooden seed crate. | Empty, apart from a few dead leaves. | – | – |
+| Flower Pots | More terracotta pots, stacked under the bench. | – | – | – |
 
 ## KitchenGarden
 
