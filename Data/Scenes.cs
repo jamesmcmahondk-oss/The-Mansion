@@ -107,16 +107,33 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/garden.png",
                      "The path ends in an overgrown garden. Mist curls around a hooded statue, and beyond it a great glasshouse glows in the dark.")
 
-            .Hotspot("Glasshouse", 470, 250, 530, 270)
+            // The statue's hands are empty once you've taken its sword
+            // (backgrounds built by Tools/build_garden.py).
+            .BackgroundWhen(p => p.HasFlag("TookStoneSword"),
+                            "Assets/Backgrounds/Mansion/garden_nosword.png")
+
+            .Hotspot("Glasshouse", 465, 240, 540, 310)
                 .OnAct("It's a long way to walk just to push on glass. A closer look first.")
                 .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
                 .CloseUp("GlasshouseCloseup")
 
-            .Hotspot("Mansion", 1120, 192, 416, 300)
+            .Hotspot("Mansion", 1080, 192, 456, 380)
                 .Describe("Ivy smothers the mansion's left wing. Warm light glows in the tall windows.")
+                .OnAct("The windows are well out of reach.")
+
+            .Hotspot("Lantern", 60, 290, 130, 150)
+                .Describe("A lantern on a stone pillar lights the garden path. Someone keeps these lit.")
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
+
+            .Hotspot("Balustrade", 1300, 610, 236, 200)
+                .Describe("A stone balustrade, furred with moss and wet leaves.")
+
+            .Hotspot("Garden Path", 330, 640, 520, 192)
+                .Describe("The wet path winds back towards the courtyard.")
+                .GoesTo("Courtyard")
 
             // Listed after the glasshouse so it wins where they overlap.
-            .Hotspot("Statue", 770, 330, 120, 270)
+            .Hotspot("Statue", 765, 340, 120, 285)
                 .OnTalk("The statue is too far away to hear you. Probably.")
                 .Describe("A hooded stone figure stands on a plinth in the long grass, watching the path.")
                 .CloseUp("StatueCloseup")

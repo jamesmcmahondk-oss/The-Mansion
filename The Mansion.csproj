@@ -17,6 +17,7 @@
     <None Remove="Assets\Backgrounds\Mansion\Front_door_open.png" />
     <None Remove="Assets\Backgrounds\Mansion\courtyard.png" />
     <None Remove="Assets\Backgrounds\Mansion\garden.png" />
+    <None Remove="Assets\Backgrounds\Mansion\garden_nosword.png" />
     <None Remove="Assets\Backgrounds\Mansion\statue_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\mansion_right.png" />
     <None Remove="Assets\Backgrounds\Mansion\well.png" />
@@ -102,6 +103,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\Front_door_open.png" />
     <Resource Include="Assets\Backgrounds\Mansion\courtyard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\garden.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\garden_nosword.png" />
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\mansion_right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\well.png" />
