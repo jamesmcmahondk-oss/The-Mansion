@@ -13,12 +13,17 @@ they're done; add new ones at the bottom of the right section.
 - [x] Fix whatever the first GitHub build finds. (It caught a mistake in the
       clean-up – the verb buttons' hover handler had been removed. Fixed;
       the game now builds on GitHub.)
-- [ ] Tidy the 5 compiler warnings (unused `_CurrentInteractionCursor` field;
+- [x] Tidy the 5 compiler warnings (unused `_CurrentInteractionCursor` field;
       `Scene.Name/BackgroundImage/Description` without defaults).
-- [ ] Decide: delete unused art (`Assets/Characters/Ebria_Drinking.png`, the old
-      right-side painting in `Sources/`) or keep it for later.
-- [ ] **Git LFS** for the images (repo is ~180 MB and grows with every picture
-      change). Needs Git LFS enabled on GitHub; changes how the repo stores files.
+- [x] Delete unused art: `Ebria_Drinking.png`, the old `Fountain.png`,
+      `left.png`, `right.png` and the first right-side painting. Kept for later:
+      `right_closeup.png` / `right_open.png` (side door – servants' entrance?)
+      and the characters not in the game yet.
+- [ ] **Git LFS** for the images (`*.png`, `*.jpg`, `*.jpeg`, `*.webp`). Blocked:
+      this cloud session's network policy doesn't allow `lfs.github.com`, so the
+      images can't be uploaded from here. Either allow that host in the cloud
+      environment's network settings, or do it from Visual Studio on your PC.
+      The build check will then need `git lfs pull` (with caching).
 
 ## Step 2 – Story and puzzles
 - [ ] **Puzzle dependency chart** – what the player must find/do, in what order,

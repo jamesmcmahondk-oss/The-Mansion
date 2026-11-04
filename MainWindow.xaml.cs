@@ -85,7 +85,6 @@ namespace The_Mansion
 
             return Cursors.Arrow;
         }
-        private Cursor _CurrentInteractionCursor;
         /*
          * Small movement threshold so a normal click on an existing
          * hotspot is not mistaken for drawing a new hotspot.
@@ -660,8 +659,7 @@ namespace The_Mansion
                 Width = screenRect.Width,
                 Height = screenRect.Height,
 
-                Tag = hotspot,
-                Cursor = _CurrentInteractionCursor
+                Tag = hotspot
             };
 
             if (_showHotspotDebug)
