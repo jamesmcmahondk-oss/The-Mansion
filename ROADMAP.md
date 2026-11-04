@@ -41,7 +41,9 @@ they're done; add new ones at the bottom of the right section.
       changes as each is taken (Tools/build_tool_shed.py).
 - [x] **Kitchen Garden** (rear yard → door in the wall → Garden): the outdoor loop is closed.
 - [ ] Where Paper is found (Charcoal: tool shed).
-- [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
+- [x] **Entrance Hall** – picture and scene with its hotspots. The doors, the
+      stairs and the low door give a "Not yet" reply until the rooms exist.
+- [ ] Decide the Entrance Hall's first puzzles (ENTRANCE_HALL.md).
 - [ ] Glasshouse interior – *needs art + design*.
 - [x] Art: photograph (icon + full-size view, right-click in the inventory),
       red rose and mirror icons; statue without its sword; cross with the open

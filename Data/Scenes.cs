@@ -977,6 +977,87 @@ namespace The_Mansion.Data
               "Courtyard",
               "You step away from the front door.");
 
+
+        // =========================================================
+        // INSIDE THE MANSION
+        // =========================================================
+
+        // The Entrance Hall - the hub of the house (see ENTRANCE_HALL.md).
+        // The rooms beyond aren't built yet: the doors and the stairs give a
+        // holding reply (marked "not built yet") until they are.
+        public static Scene EntranceHall { get; } =
+            NewScene("EntranceHall",
+                     "Assets/Backgrounds/Mansion/entrance_hall.png",
+                     "The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.")
+
+            .Hotspot("Staircase", 440, 360, 420, 450)
+                .Describe("A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark.")
+                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
+
+            .Hotspot("Landing", 760, 290, 390, 220)
+                .Describe("The stairs turn at a landing and climb on along the right-hand wall, into shadow.")
+                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
+
+            .Hotspot("Window", 560, 192, 195, 280)
+                .Describe("A tall window above the stairs, framed by heavy red curtains. Rain streams down the glass.")
+                .OnAct("The window is far above the stairs, and it doesn't look as if it opens.")
+
+            .Hotspot("Chandelier", 640, 192, 300, 80)
+                .Describe("A great brass chandelier, every candle lit. Fine silver threads are strung between its arms, glinting.")
+                .OnAct("Far out of reach.")
+
+            .Hotspot("Family Portrait", 275, 192, 170, 385)
+                .Describe("A family portrait in a heavy gilt frame: five people in their best clothes. " +
+                          "Where one face should be, the paint has flaked away to bare canvas.")
+                .OnAct("The frame is fixed firmly to the wall.")
+                .OnTalk("Nobody in the portrait answers. One of them couldn't if they wanted to.")
+                .OnItem("Worn Photograph",
+                        "You hold the photograph up beside the portrait. Your eyes keep going to the same place in both: the face that isn't there.")
+
+            .Hotspot("Left Door", 135, 300, 100, 520)
+                .Describe("A tall panelled door on the left side of the hall.")
+                .OnAct("The handle turns, but the door doesn't open. Not yet.")    // not built yet: library
+
+            .Hotspot("Right Door", 1385, 240, 140, 592)
+                .Describe("A tall panelled door on the right side of the hall.")
+                .OnAct("The handle turns, but the door doesn't open. Not yet.")    // not built yet: dining room
+
+            .Hotspot("Low Door", 895, 545, 105, 190)
+                .Describe("A small, low door, tucked in under the stairs.")
+                .OnAct("It doesn't open.")    // not built yet: cellar (no key - see PUZZLES.md)
+
+            .Hotspot("Grandfather Clock", 1075, 385, 85, 447)
+                .Describe("A tall grandfather clock. Its hands have stopped at a quarter past something.")
+                .OnAct("You nudge the pendulum. It swings once, then stops again.")
+                .OnTalk("The clock has nothing to say. It has stopped saying anything at all.")
+
+            // Never explained (like the reflection in the rain barrel).
+            .Hotspot("Covered Mirror", 1160, 385, 180, 447)
+                .Describe("A tall mirror, covered completely by a grey dust sheet.")
+                .OnAct("You take hold of a corner of the sheet... and decide to leave it where it is.")
+
+            .Hotspot("Candles", 1265, 280, 70, 90)
+                .Describe("Candles burn in a brass sconce. Someone keeps these lit.")
+                .OnAct("The brass is hot. Whoever lit them wants them to stay lit.")
+
+            .Hotspot("Candles", 1035, 230, 55, 65)
+                .Describe("Candles burn in a brass sconce on the landing. Someone keeps these lit.")
+                .OnAct("Out of reach from down here.")
+
+            .Hotspot("Coat Stand", 10, 380, 160, 452)
+                .Describe("A crooked coat stand. An old coat hangs from it, still damp.")
+                .OnAct("You leave the coat where it is. It isn't yours.")
+                .OnTalk("\"Good evening, Quazimodo.\" It is a coat stand.")
+
+            // Listed last so she wins over the stairs.
+            .Hotspot("Cat", 540, 610, 65, 100)
+                .Describe("A black cat sits on the stairs, watching you with unblinking yellow eyes.")
+                .OnTalk("You say hello. The cat considers this, and looks away.")
+                .OnAct("You reach towards the cat. It shifts exactly far enough to stay out of reach.")
+                .OnOtherItems("The cat looks at the {item}, then at you, with deep disappointment.")
+
+            .ReturnTo("FrontDoor", "You step back out into the rain.");
+
         // =========================================================
         // PUZZLE HELPERS (used by the scenes above)
         // =========================================================

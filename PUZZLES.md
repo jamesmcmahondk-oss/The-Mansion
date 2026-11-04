@@ -27,7 +27,7 @@ flowchart TD
     GATE[Front Gate] --> COURT[Courtyard]
     GATE --> GARG[Gargoyle]
     COURT --> FOUNT[Fountain: Hautain]
-    COURT -->|centre| DOOR[Front Door: Quazimodo] --> HALL([Entrance Hall])
+    COURT -->|centre| DOOR[Front Door: Quazimodo] --> HALL[Entrance Hall]
     COURT -->|left| GARDEN[Garden] --> STATUE[Statue] & GLASS[Glasshouse]
     GLASS -.later.-> GLASSIN([Glasshouse interior: Grell?])
     COURT -->|right| RIGHT[Right side] --> BENCH[Bench: Ebria] & WELL[Well]
@@ -131,7 +131,7 @@ Don't explain these yet; each should pay off (or be noticed) later.
 | **Red Rose** – who or what is it for? | Decision |
 | **Rope** – what is it for? | Decision |
 | **Glasshouse interior** (Grell's territory?) | Art + design |
-| **Entrance Hall** – where the Front Door leads | Art + design |
+| **Entrance Hall** – scene built; its puzzles and the rooms beyond | Design |
 | Kitchen and cellar (from inside the Mansion) | Design |
 
 ## What the exterior teaches

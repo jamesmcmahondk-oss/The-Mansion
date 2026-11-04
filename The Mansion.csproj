@@ -31,6 +31,7 @@
     <None Remove="Assets\Backgrounds\Mansion\bench_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\rear_yard.png" />
     <None Remove="Assets\Backgrounds\Mansion\kitchen_garden.png" />
+    <None Remove="Assets\Backgrounds\Mansion\entrance_hall.png" />
     <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup_no_shears.png" />
     <None Remove="Assets\Backgrounds\Mansion\tool_shed_closeup_no_charcoal.png" />
@@ -118,6 +119,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\bench_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\rear_yard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\kitchen_garden.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\entrance_hall.png" />
     <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup_no_shears.png" />
     <Resource Include="Assets\Backgrounds\Mansion\tool_shed_closeup_no_charcoal.png" />
