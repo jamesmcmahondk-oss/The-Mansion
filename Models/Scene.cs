@@ -9,16 +9,13 @@ namespace The_Mansion.Models
     public class Scene
     {
 
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
-        public string BackgroundImage { get; set; }
+        public string BackgroundImage { get; set; } = "";
 
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
         public List<Hotspot> Hotspots { get; set; }
-            = new();
-
-        public List<Character> Characters { get; set; }
             = new();
 
         // Other backgrounds to show once something has happened, e.g. the
@@ -48,7 +45,7 @@ namespace The_Mansion.Models
 
     public class SceneSprite
     {
-        // Transparent PNG, e.g. "Assets/Characters/Ebria_Drinking.png".
+        // Transparent PNG, e.g. "Assets/Characters/Ebria_UnderBench.png".
         public string Image { get; set; } = "";
 
         // Top-left corner and height in background image pixels (like

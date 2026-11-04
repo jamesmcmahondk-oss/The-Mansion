@@ -119,6 +119,8 @@ namespace The_Mansion.Data
 
         public static IEnumerable<Item> All => ItemLookup.Values;
 
+        public static bool Exists(string name) => ItemLookup.ContainsKey(name);
+
         // Unknown names still work - they just get no icon/description.
         public static Item GetItem(string name)
         {

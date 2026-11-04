@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Backgrounds\Mansion\Fountain.png" />
     <None Remove="Assets\Backgrounds\Mansion\fountain_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
     <None Remove="Assets\Backgrounds\Mansion\frontgate.png" />
@@ -28,8 +27,6 @@
     <None Remove="Assets\Backgrounds\Mansion\gravestone_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\glasshouse_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\bench_closeup.png" />
-    <None Remove="Assets\Backgrounds\Mansion\left.png" />
-    <None Remove="Assets\Backgrounds\Mansion\right.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\right_open.png" />
     <None Remove="Assets\Characters\*.png" />
@@ -85,7 +82,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Backgrounds\Mansion\Fountain.png" />
     <Resource Include="Assets\Backgrounds\Mansion\fountain_closeup.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -105,8 +101,6 @@
     <Resource Include="Assets\Backgrounds\Mansion\gravestone_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\glasshouse_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\bench_closeup.png" />
-    <Resource Include="Assets\Backgrounds\Mansion\left.png" />
-    <Resource Include="Assets\Backgrounds\Mansion\right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
     <Resource Include="Assets\Characters\*.png" />

@@ -85,7 +85,6 @@ namespace The_Mansion
 
             return Cursors.Arrow;
         }
-        private Cursor _CurrentInteractionCursor;
         /*
          * Small movement threshold so a normal click on an existing
          * hotspot is not mistaken for drawing a new hotspot.
@@ -102,6 +101,12 @@ namespace The_Mansion
             _ = Dialogues.Count;
             _ = Items.All.Count();
             _ = Enemies.All.Count();
+
+#if DEBUG
+            // Check every reference in the game data (scene names, items,
+            // conversations, fights, pictures) and list any mistakes.
+            Loaded += (_, _) => GameValidator.ShowProblems();
+#endif
 
             // Game area is exactly 1920x1080 screen pixels; the window
             // (with its title bar) is then centred on screen.
@@ -606,10 +611,6 @@ namespace The_Mansion
 
                 SceneCanvas.Children.Add(hotspotRectangle);
             }
-
-            /*
-             * Character rendering can be added here next.
-             */
         }
 
         private Image? CreateSpriteImage(SceneSprite sprite)
@@ -658,8 +659,7 @@ namespace The_Mansion
                 Width = screenRect.Width,
                 Height = screenRect.Height,
 
-                Tag = hotspot,
-                Cursor = _CurrentInteractionCursor
+                Tag = hotspot
             };
 
             if (_showHotspotDebug)
@@ -1235,35 +1235,6 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     : Visibility.Collapsed;
         }
 
-        private void LookBtn_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var imagePath = "Assets/UI/look_glow.png";
-
-            try
-            {
-                var imageUri = new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute
-                );
-
-                LookBtn.Source = new BitmapImage(imageUri);
-               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load scene image:\n\n" +
-                    $"{imagePath}\n\n" +
-                    $"{ex.Message}",
-                    "Scene image error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
-
-        }
-
-      
         private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
         {
 
@@ -1324,6 +1295,7 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
 
             e.Handled = true;
         }
+
         private void SetButtonImage(Image buttonImage, string imagePath)
         {
             try

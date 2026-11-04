@@ -1,4 +1,4 @@
-"""
+﻿"""
 Turns paintings of any shape into 1536x1024 scene backgrounds like the others.
 
 The game shows only rows 192-832 of a background (the rest is off screen or
@@ -27,8 +27,6 @@ WIDE = [
     ("courtyard_source.png",               "courtyard.png",              70),
     ("garden_source.png",                  "garden.png",                110),
     ("statue_closeup_source.png",          "statue_closeup.png",         10),
-    # (the first, 16:9 painting of the right side is kept in Sources but no
-    #  longer used: mansion_right_source.png)
     ("mansion_right_v2_source.png",        "mansion_right.png",         215),
     ("glasshouse_closeup_source.png",      "glasshouse_closeup.png",    230),
     # Bench with the fairy painted out (Tools/split_bench_fairy.py); the
