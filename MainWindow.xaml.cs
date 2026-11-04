@@ -1237,6 +1237,67 @@ $@"            .Hotspot(""New Hotspot"", {xText}, {yText}, {widthText}, {heightT
                     : Visibility.Collapsed;
         }
 
+        private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+            if (sender is not Image buttonImage)
+            {
+                return;
+            }
+
+            string imagePath = buttonImage.Source.ToString();
+            string buttonName = buttonImage.Name;
+
+            switch (buttonName)
+            {
+                case "LookBtn":
+                    {
+                         imagePath = "Assets/UI/look_glow.png";
+                        break;
+                    }
+
+                case "TalkBtn":
+                    {
+                         imagePath = "Assets/UI/talk_glow.png";
+                        break;
+                    }
+
+                case "ActBtn":
+                    {
+                         imagePath = "Assets/UI/act_glow.png";
+                        break;
+                    }
+
+                case "ItemBtn":
+                    {
+                         imagePath = "Assets/UI/item_glow.png";
+                        break;
+                    }
+            }
+            try
+            {
+                var imageUri = new Uri(
+                    $"pack://application:,,,/{imagePath}",
+                    UriKind.Absolute
+                );
+
+                buttonImage.Source = new BitmapImage(imageUri);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Could not load button image:\n\n" +
+                    $"{imagePath}\n\n" +
+                    $"{ex.Message}",
+                    "button image error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+            e.Handled = true;
+        }
+
         private void SetButtonImage(Image buttonImage, string imagePath)
         {
             try
