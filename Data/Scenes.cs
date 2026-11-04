@@ -52,12 +52,22 @@ namespace The_Mansion.Data
         public static Scene FountainCloseup { get; } =
             NewScene("FountainCloseup",
                      "Assets/Backgrounds/Mansion/fountain_closeup.png",
-                     "Lily pads float on the dark water. Beneath the surface, a small pile of gold coins glitters.")
+                     "Lily pads float on the dark water. Spouts of water splash down from the fountain above.")
+
+            // The coins vanish from the picture while you have them, and come
+            // back if you return them (Tools/patch_variant.py made the pair).
+            .BackgroundWhen(p => p.HasFlag("StoleCoins"),
+                            "Assets/Backgrounds/Mansion/fountain_closeup_nocoins.png")
 
             .Hotspot("Gold Coins", 595, 655, 295, 175)
                 .Describe("Several old gold coins rest at the bottom of the fountain.")
 
                 // ACT on the coins: King Hautain appears on the lily pad.
+                .ActStarts("HautainCoins")
+                .OnlyWhen(p => !p.HasFlag("StoleCoins"))
+
+            .Hotspot("Fountain Floor", 595, 655, 295, 175)
+                .Describe("A cleaner patch on the fountain floor, where the coins used to lie.")
                 .ActStarts("HautainCoins")
 
                 // Put the stolen coins back to make peace with the King.
@@ -69,6 +79,15 @@ namespace The_Mansion.Data
                             p.ClearFlag("StoleCoins");
                             p.StatusEffect = "None";
                         })
+                .OnlyWhen(p => p.HasFlag("StoleCoins"))
+
+            .Hotspot("Fountain", 1040, 192, 496, 330)
+                .Describe("The fountain's carved stone base, green with moss. Above it, stone lions spit water into the basin.")
+                .OnTalk("The lions keep their mouths full.")
+
+            .Hotspot("Water Lily", 160, 470, 160, 110)
+                .Describe("A single pale water lily, open in the rain.")
+                .OnAct("You leave it be. It's the only thing here that looks content.")
 
             .ReturnTo("Courtyard", "You step away from the fountain.");
 
@@ -107,16 +126,33 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/garden.png",
                      "The path ends in an overgrown garden. Mist curls around a hooded statue, and beyond it a great glasshouse glows in the dark.")
 
-            .Hotspot("Glasshouse", 470, 250, 530, 270)
+            // The statue's hands are empty once you've taken its sword
+            // (backgrounds built by Tools/build_garden.py).
+            .BackgroundWhen(p => p.HasFlag("TookStoneSword"),
+                            "Assets/Backgrounds/Mansion/garden_nosword.png")
+
+            .Hotspot("Glasshouse", 465, 240, 540, 310)
                 .OnAct("It's a long way to walk just to push on glass. A closer look first.")
                 .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
                 .CloseUp("GlasshouseCloseup")
 
-            .Hotspot("Mansion", 1120, 192, 416, 300)
+            .Hotspot("Mansion", 1080, 192, 456, 380)
                 .Describe("Ivy smothers the mansion's left wing. Warm light glows in the tall windows.")
+                .OnAct("The windows are well out of reach.")
+
+            .Hotspot("Lantern", 60, 290, 130, 150)
+                .Describe("A lantern on a stone pillar lights the garden path. Someone keeps these lit.")
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
+
+            .Hotspot("Balustrade", 1300, 610, 236, 200)
+                .Describe("A stone balustrade, furred with moss and wet leaves.")
+
+            .Hotspot("Garden Path", 330, 640, 520, 192)
+                .Describe("The wet path winds back towards the courtyard.")
+                .GoesTo("Courtyard")
 
             // Listed after the glasshouse so it wins where they overlap.
-            .Hotspot("Statue", 770, 330, 120, 270)
+            .Hotspot("Statue", 765, 340, 120, 285)
                 .OnTalk("The statue is too far away to hear you. Probably.")
                 .Describe("A hooded stone figure stands on a plinth in the long grass, watching the path.")
                 .CloseUp("StatueCloseup")
@@ -595,7 +631,7 @@ namespace The_Mansion.Data
 
             // Background and sprite split from the painted-over picture by
             // Tools/split_bench_fairy.py.
-            .Sprite("Assets/Characters/Ebria_UnderBench.png", 429, 421, 397)
+            .Sprite("Assets/Characters/Ebria_UnderBench.png", 415, 396, 422)
 
             .Hotspot("Ferns", 0, 300, 140, 230)
                 .Describe("Ferns and lilies crowd the path, dripping with rain.")

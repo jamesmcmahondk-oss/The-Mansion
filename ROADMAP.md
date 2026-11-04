@@ -46,9 +46,10 @@ they're done; add new ones at the bottom of the right section.
 - [x] Art: photograph (icon + full-size view, right-click in the inventory),
       red rose and mirror icons; statue without its sword; cross with the open
       plinth.
-- [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; rose bush
-      with one rose cut. (Well close-up with the mirror: done. Darker bench
-      close-up: done.)
+- [x] Icons for shears, sword, charcoal and rope (cropped from the scenes by
+      Tools/build_item_icons.py); rose bush with one rose cut; well close-up
+      with the mirror; darker bench close-up.
+- [x] Paper icon and close-up picture (right-click it in the inventory).
 - [x] Right side of the mansion: new view (roses, bench, arch to the well, path
       round the back). One rose is painted out once you've cut it. The
       servants' entrance is gone (the kitchen door in the rear yard covers it).
@@ -75,8 +76,12 @@ they're done; add new ones at the bottom of the right section.
 - [ ] Limit retries on Luck checks (e.g. the bucket) so they aren't a grind.
 
 ## Step 5 – Code structure (when the story starts growing fast)
-- [ ] **Split `MainWindow.xaml.cs`** (3,800 lines) into a game engine (scenes,
-      verbs, dialogue, fights, inventory, saving) and the UI.
+- [x] **Split `MainWindow.xaml.cs`** (4,400 lines) into 13 files by area:
+      MainWindow.Scenes / .Verbs / .Dialogue / .Inventory / .Fights /
+      .SaveLoad / .Journal / .Trunk / .Settings / .Keyboard / .DebugMenu /
+      .HotspotEditor.cs, with startup and the title screens left in
+      MainWindow.xaml.cs. (A separate game engine, apart from the UI, can
+      come later if it's needed.)
 - [ ] **Unit tests** for fight maths, save/load and conversation links.
 - [ ] **Conversations**: one file per character; consider the Ink scripting
       language instead of C# for writing them.

@@ -34,6 +34,7 @@ flowchart LR
     Courtyard -->|ACT Garden Path| Garden
     Courtyard -->|ACT Side Path| MansionRight
     Garden -.->|LOOK Glasshouse| GlasshouseCloseup
+    Garden -->|ACT Garden Path| Courtyard
     Garden -.->|LOOK Statue| StatueCloseup
     MansionRight -->|ACT Old Well| Well
     MansionRight -->|ACT Garden Arch| Well
@@ -98,15 +99,19 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 **Close-up** · `Assets/Backgrounds/Mansion/fountain_closeup.png`
 
-> Lily pads float on the dark water. Beneath the surface, a small pile of gold coins glitters.
+> Lily pads float on the dark water. Spouts of water splash down from the fountain above.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/fountain_closeup_nocoins.png` when **StoleCoins**
 - **Reached from:** Courtyard – LOOK on *Fountain*
 - **Return arrow →** Courtyard
-- **Characters:** King Hautain (ACT *Gold Coins*, conversation `HautainCoins`)
+- **Characters:** King Hautain (ACT *Gold Coins*, conversation `HautainCoins`); King Hautain (ACT *Fountain Floor*, conversation `HautainCoins`)
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
-| Gold Coins | Several old gold coins rest at the bottom of the fountain. | conversation `HautainCoins` | – | **Gold Coins**: You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging "Hmph." (Royal Grudge lifted) (item used up) |
+| Gold Coins *(only when not StoleCoins)* | Several old gold coins rest at the bottom of the fountain. | conversation `HautainCoins` | – | – |
+| Fountain Floor *(only when StoleCoins)* | A cleaner patch on the fountain floor, where the coins used to lie. | conversation `HautainCoins` | – | **Gold Coins**: You drop the stolen coins back into the fountain. From somewhere among the lily pads comes a grudging "Hmph." (Royal Grudge lifted) (item used up) |
+| Fountain | The fountain's carved stone base, green with moss. Above it, stone lions spit water into the basin. | – | The lions keep their mouths full. | – |
+| Water Lily | A single pale water lily, open in the rain. | You leave it be. It's the only thing here that looks content. | – | – |
 
 ## Courtyard
 
@@ -114,7 +119,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > Rain-slick cobblestones glitter in the lantern light. A tiered fountain splashes beside the steps up to the front door.
 
-- **Reached from:** FrontGate – ACT on *Fountain*; FountainCloseup – Return arrow; Garden – Return arrow; MansionRight – Return arrow; FrontDoor – Return arrow
+- **Reached from:** FrontGate – ACT on *Fountain*; FountainCloseup – Return arrow; Garden – ACT on *Garden Path*; Garden – Return arrow; MansionRight – Return arrow; FrontDoor – Return arrow
 - **Exits:** FrontDoor (ACT *Front Door*); Garden (ACT *Garden Path*); MansionRight (ACT *Side Path*)
 - **Close-ups:** FountainCloseup (LOOK *Fountain*)
 - **Return arrow →** FrontGate
@@ -132,14 +137,19 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > The path ends in an overgrown garden. Mist curls around a hooded statue, and beyond it a great glasshouse glows in the dark.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/garden_nosword.png` when **TookStoneSword**
 - **Reached from:** Courtyard – ACT on *Garden Path*; StatueCloseup – Return arrow; GlasshouseCloseup – Return arrow; KitchenGarden – ACT on *Garden Door*
+- **Exits:** Courtyard (ACT *Garden Path*)
 - **Close-ups:** GlasshouseCloseup (LOOK *Glasshouse*); StatueCloseup (LOOK *Statue*)
 - **Return arrow →** Courtyard
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Glasshouse | → **GlasshouseCloseup** | It's a long way to walk just to push on glass. A closer look first. | – | – |
-| Mansion | Ivy smothers the mansion's left wing. Warm light glows in the tall windows. | – | – | – |
+| Mansion | Ivy smothers the mansion's left wing. Warm light glows in the tall windows. | The windows are well out of reach. | – | – |
+| Lantern | A lantern on a stone pillar lights the garden path. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
+| Balustrade | A stone balustrade, furred with moss and wet leaves. | – | – | – |
+| Garden Path | The wet path winds back towards the courtyard. | → **Courtyard** | – | – |
 | Statue | → **StatueCloseup** | – | The statue is too far away to hear you. Probably. | – |
 
 ## StatueCloseup

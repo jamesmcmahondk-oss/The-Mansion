@@ -11,12 +11,14 @@
 
   <ItemGroup>
     <None Remove="Assets\Backgrounds\Mansion\fountain_closeup.png" />
+    <None Remove="Assets\Backgrounds\Mansion\fountain_closeup_nocoins.png" />
     <None Remove="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
     <None Remove="Assets\Backgrounds\Mansion\frontgate.png" />
     <None Remove="Assets\Backgrounds\Mansion\Front_door.png" />
     <None Remove="Assets\Backgrounds\Mansion\Front_door_open.png" />
     <None Remove="Assets\Backgrounds\Mansion\courtyard.png" />
     <None Remove="Assets\Backgrounds\Mansion\garden.png" />
+    <None Remove="Assets\Backgrounds\Mansion\garden_nosword.png" />
     <None Remove="Assets\Backgrounds\Mansion\statue_closeup.png" />
     <None Remove="Assets\Backgrounds\Mansion\mansion_right.png" />
     <None Remove="Assets\Backgrounds\Mansion\well.png" />
@@ -47,6 +49,7 @@
     <None Remove="Assets\UI\attack_glow.png" />
     <None Remove="Assets\UI\flee.png" />
     <None Remove="Assets\UI\flee_glow.png" />
+    <None Remove="Assets\UI\journal_book.png" />
     <None Remove="Assets\Characters\Chef.png" />
     <None Remove="Assets\Characters\Death.png" />
     <None Remove="Assets\Characters\FrogPrince.png" />
@@ -95,12 +98,14 @@
     <Resource Include="Assets\Backgrounds\Mansion\fountain_closeup.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Backgrounds\Mansion\fountain_closeup_nocoins.png" />
     <Resource Include="Assets\Backgrounds\Mansion\FrontGargoyle.png" />
     <Resource Include="Assets\Backgrounds\Mansion\frontgate.png" />
     <Resource Include="Assets\Backgrounds\Mansion\Front_door.png" />
     <Resource Include="Assets\Backgrounds\Mansion\Front_door_open.png" />
     <Resource Include="Assets\Backgrounds\Mansion\courtyard.png" />
     <Resource Include="Assets\Backgrounds\Mansion\garden.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\garden_nosword.png" />
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\mansion_right.png" />
     <Resource Include="Assets\Backgrounds\Mansion\well.png" />
@@ -121,6 +126,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
+    <Resource Include="Assets\Items\Sources\paper.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
     <Resource Include="Assets\Characters\*.png" />
@@ -149,12 +155,21 @@
     <Resource Include="Assets\UI\attack_glow.png" />
     <Resource Include="Assets\UI\flee.png" />
     <Resource Include="Assets\UI\flee_glow.png" />
+    <Resource Include="Assets\UI\journal_book.png" />
     <Resource Include="Assets\UI\Dice\*.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Models\Hotspot.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <!-- MainWindow is split into several files (MainWindow.Fights.cs etc.);
+       show them under MainWindow.xaml in Solution Explorer. -->
+  <ItemGroup>
+    <Compile Update="MainWindow.*.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

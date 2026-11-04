@@ -9,7 +9,7 @@ point the item's Icon at the new file in Data/Items.cs.
 """
 import os
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
 SIZE = 128
 OUT_DIR = "Assets/Items"
@@ -30,12 +30,31 @@ ICONS = {
     "worn_photograph.png":   ("Assets/Items/Sources/worn_photograph.png",     (230, 0, 1306, 1024)),
     "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (90, 60, 1190, 1160)),
     "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (180, 150, 1060, 1110)),
+    "paper.png":             ("Assets/Items/Sources/paper.png",               (40, 20, 1220, 1240)),
     "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1465, 705)),
+
+    # Outside the Mansion
+    "garden_shears.png":     ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (480, 490, 755, 595)),
+    "charcoal.png":          ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (865, 495, 1050, 590)),
+    "rope.png":              ("Assets/Backgrounds/Mansion/rear_yard.png",         (1168, 388, 1234, 496)),
+    # Tall and thin: cut out exactly, laid diagonally (third value = degrees,
+    # fourth = brightness - the statue is in deep shadow).
+    "stone_sword.png":       ("Assets/Backgrounds/Mansion/statue_closeup.png",    (822, 455, 866, 822), -45, 1.9),
 }
 
 
-def make_icon(src_path, box):
+def make_icon(src_path, box, angle=0, brightness=1.0):
     img = Image.open(src_path).convert("RGB")
+
+    if brightness != 1.0:
+        img = ImageEnhance.Brightness(img).enhance(brightness)
+
+    if angle:
+        # Cut the box out exactly and turn it, on a dark background.
+        img = img.crop(box).rotate(angle, resample=Image.BICUBIC, expand=True,
+                                   fillcolor=(14, 11, 10))
+        box = (0, 0, img.width, img.height)
+
     left, top, right, bottom = box
     # Square the crop around its centre.
     side = max(right - left, bottom - top)
@@ -59,6 +78,6 @@ def make_icon(src_path, box):
 
 
 os.makedirs(OUT_DIR, exist_ok=True)
-for name, (src, box) in ICONS.items():
-    make_icon(src, box).save(os.path.join(OUT_DIR, name))
+for name, (src, box, *angle) in ICONS.items():
+    make_icon(src, box, *angle).save(os.path.join(OUT_DIR, name))
     print("wrote", os.path.join(OUT_DIR, name))

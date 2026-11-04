@@ -11,7 +11,10 @@ painting, re-lit to match the repaint's shadows.
 
 Usage (from the repo root; needs opencv-python-headless and numpy):
     python Tools/split_bench_fairy.py path/to/ebria_composite.webp
-Prints where to place the sprite (background pixels) for Data/Scenes.cs.
+Prints where the sprite sits in the composite. In the game it is placed with
+.Sprite("Assets/Characters/Ebria_UnderBench.png", 415, 396, 422) and then
+re-lit for the darker bench with Tools/relight_sprite.py (measured at the
+old placement 429 421 397, which keeps her lighting as approved).
 """
 import sys
 import cv2
@@ -51,15 +54,24 @@ cv2.ellipse(core, (640, 560), (110, 190), 0, 0, 360, cv2.GC_PR_FGD, -1)
 cv2.rectangle(core, (600, 600), (740, 740), cv2.GC_FGD, -1)
 cv2.circle(core, (600, 380), 35, cv2.GC_FGD, -1)
 cv2.rectangle(core, (790, 320), (830, 560), cv2.GC_BGD, -1)
-cv2.rectangle(core, (415, 315), (440, 600), cv2.GC_BGD, -1)
 body = grabcut(core)
 
-outline = np.array([(448, 330), (520, 318), (565, 318), (640, 322), (700, 368), (770, 365), (778, 405),
-                    (778, 500), (765, 560), (790, 690), (815, 745), (760, 775), (600, 770), (440, 762),
-                    (432, 720), (452, 640), (440, 500), (442, 400)], np.int32)
+# Generous outline: the bottle reaches out to the right and the wing tips
+# out to the left (both used to be clipped).
+outline = np.array([(436, 322), (520, 312), (565, 312), (640, 318), (690, 360), (775, 358), (790, 372),
+                    (790, 425), (778, 500), (765, 560), (790, 690), (815, 745), (760, 775), (600, 770),
+                    (440, 762), (428, 720), (440, 640), (430, 500), (430, 400)], np.int32)
 full = np.full((H, W), cv2.GC_BGD, np.uint8)
 cv2.fillPoly(full, [outline], cv2.GC_PR_FGD)
 full[body > 0] = cv2.GC_FGD
+# Definitely her: the whole bottle, and strokes along the wing veins to the tips.
+cv2.fillPoly(full, [np.array([(668, 388), (700, 377), (760, 372), (764, 382), (764, 408), (705, 414),
+                              (670, 404)], np.int32)], cv2.GC_FGD)
+for a, b in [((555, 430), (452, 336)), ((540, 470), (470, 420)), ((545, 500), (462, 628)),
+             ((540, 520), (500, 610))]:
+    cv2.line(full, a, b, cv2.GC_FGD, 9)
+# Definitely bench: the carved stone just left of the wings.
+cv2.rectangle(full, (422, 425), (462, 565), cv2.GC_BGD, -1)
 fg = cv2.morphologyEx(grabcut(full), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
 
 # 3. Fill behind her with the original painting, re-lit like the repaint.

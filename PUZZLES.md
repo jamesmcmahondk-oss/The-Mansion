@@ -133,7 +133,6 @@ Don't explain these yet; each should pay off (or be noticed) later.
 | **Glasshouse interior** (Grell's territory?) | Art + design |
 | **Entrance Hall** – where the Front Door leads | Art + design |
 | Kitchen and cellar (from inside the Mansion) | Design |
-| Item icons: shears, sword, charcoal, paper, rope | Art (or crops) |
 
 ## What the exterior teaches
 
