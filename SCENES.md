@@ -15,6 +15,7 @@ flowchart LR
     StatueCloseup(["StatueCloseup"])
     GlasshouseCloseup(["GlasshouseCloseup"])
     MansionRight["MansionRight"]
+    RearYard["RearYard"]
     BenchCloseup(["BenchCloseup"])
     Well["Well"]
     GraveyardEntrance["GraveyardEntrance"]
@@ -33,8 +34,10 @@ flowchart LR
     Garden -.->|LOOK Glasshouse| GlasshouseCloseup
     Garden -.->|LOOK Statue| StatueCloseup
     MansionRight -->|ACT Garden Arch| Well
+    MansionRight -->|ACT Path to the Back| RearYard
     MansionRight -->|ACT Old Well| Well
     MansionRight -.->|LOOK Stone Bench| BenchCloseup
+    RearYard -->|ACT Path Back| MansionRight
     Well -.->|LOOK Well| WellCloseup
     Well -->|ACT Graveyard| GraveyardEntrance
     Well -->|ACT Graveyard Path| GraveyardEntrance
@@ -55,6 +58,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 - [StatueCloseup](#statuecloseup) – Close-up
 - [GlasshouseCloseup](#glasshousecloseup) – Close-up
 - [MansionRight](#mansionright) – Scene
+- [RearYard](#rearyard) – Scene
 - [BenchCloseup](#benchcloseup) – Close-up
 - [Well](#well) – Scene
 - [GraveyardEntrance](#graveyardentrance) – Scene
@@ -168,8 +172,8 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > A wet stone path curves along the mansion's right wing, past a servants' entrance, to an archway in the garden wall. Beyond it, steps climb to an old well.
 
-- **Reached from:** Courtyard – ACT on *Side Path*; BenchCloseup – Return arrow; Well – Return arrow
-- **Exits:** Well (ACT *Garden Arch*); Well (ACT *Old Well*)
+- **Reached from:** Courtyard – ACT on *Side Path*; RearYard – ACT on *Path Back*; RearYard – Return arrow; BenchCloseup – Return arrow; Well – Return arrow
+- **Exits:** Well (ACT *Garden Arch*); RearYard (ACT *Path to the Back*); Well (ACT *Old Well*)
 - **Close-ups:** BenchCloseup (LOOK *Stone Bench*)
 - **Return arrow →** Courtyard
 
@@ -179,11 +183,48 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Windows | Candles burn behind the tall windows, but nothing moves inside. | – | – | – |
 | Servants' Entrance | A smaller door at the top of a few worn steps - the servants' entrance. Lanterns burn on either side. | You knock on the door, but there is no response. Jiggling the handle reveals a surprise! ...It's locked! | – | – |
 | Garden Arch | An ivy-covered archway in the garden wall. Steps beyond it climb towards the well. | → **Well** | – | – |
-| Path to the Back | The cobbled path curves away along the garden wall, around to the back of the mansion. | – | – | – |
+| Path to the Back | The cobbled path curves away along the garden wall, around to the back of the mansion. | → **RearYard** | – | – |
 | Old Well | A small roofed well stands at the top of the hill. | → **Well** | – | – |
-| Rose Bush | A great tangle of blood-red roses, impossibly in bloom this late in the year. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose without losing another finger.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
+| Rose Bush *(only when not GotRedRose)* | A great tangle of blood-red roses, impossibly in bloom this late in the year. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose. |
+| Rose Bush *(only when GotRedRose)* | A great tangle of blood-red roses. There's a small gap where you cut one. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
 | Stone Bench *(only when not HeardBenchNoise)* | A mossy stone bench beside the roses. | You sit down on the cold, damp stone... and from somewhere underneath you comes a faint hiccup. Then a tiny, slurred giggle.  [sets HeardBenchNoise] | – | – |
 | Stone Bench *(only when HeardBenchNoise)* | → **BenchCloseup** | You sit down again. The hiccuping stops. Then: "...I can hear you breathing." | – | – |
+
+## RearYard
+
+**Scene** · `Assets/Backgrounds/Mansion/rear_yard.png`
+
+> A rain-soaked service yard behind the Mansion. Ordinary work seems to have simply stopped here.
+
+- **Reached from:** MansionRight – ACT on *Path to the Back*
+- **Exits:** MansionRight (ACT *Path Back*)
+- **Return arrow →** MansionRight
+
+| Object | LOOK | ACT | TALK | Items |
+|---|---|---|---|---|
+| Path Back | The wet path continues around the side of the Mansion. | → **MansionRight** | – | – |
+| Path Around Mansion | The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees. | – | – | – |
+| Ivy | Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard. | – | – | – |
+| Windows (2 places) | Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below. | – | – | – |
+| Lantern | A lantern burns beside the service door. Someone keeps these lit. | – | – | – |
+| Kitchen Door | A heavy service door leads into the Mansion, with a small barred window and heavy iron hardware. Generations of boots have worn the edges of the stone steps smooth. | The door shifts half an inch, then stops against something solid. Bolted from the other side. | – | – |
+| Cellar Doors *(only when not TriedCellarDoor)* | A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame. | You pull the iron ring. The door rises an inch. Stops. Something underneath is holding it shut. ... A single quiet sound comes from underneath. Knock.  [sets TriedCellarDoor] | – | – |
+| Cellar Doors *(only when TriedCellarDoor)* | A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame. | Still blocked. Whatever is beneath it isn't moving. | – | – |
+| Clothesline | An old washing line stretches across the yard. Almost everything that once hung from it is gone. | – | – | – |
+| Sock | A solitary black sock hangs from the washing line. | (depends on a dice roll / the story - see Data/Scenes.cs)  [sets TouchedSock] | – | – |
+| Hand Pump | An old iron hand pump feeds the stone washing trough. The metal is rusted, but the mechanism appears intact. | (depends on a dice roll / the story - see Data/Scenes.cs)  [sets TroughFilled] | – | – |
+| Stone Trough *(only when not TroughFilled)* | A deep stone trough stained by generations of water. | Dry, apart from rain collecting in the bottom. | – | – |
+| Stone Trough *(only when TroughFilled)* | Cold rainwater and pump water fill the old stone trough. | The water is painfully cold. | – | – |
+| Drain | Rainwater disappears through an iron grate beneath the Mansion. A few tiny pale fragments have collected against the grate. Probably kitchen scraps. | The grate is firmly set into the cobbles. | – | – |
+| Tool Shed | A small gardening shed leans against the wall, its roof thick with moss. The tools outside have been left exactly where someone last used them. Apparently nobody came back for them. | – | – | – |
+| Shed Door *(only when not OpenedToolShed)* | A small gardening shed leans against the wall, its roof thick with moss. | The shed door scrapes open. Inside: shelves of rusted tins, a little workbench, a pair of garden shears and a few sticks of charcoal.  [sets OpenedToolShed] | – | – |
+| Workbench *(only when OpenedToolShed and not GotGardenShears)* | A sturdy pair of pruning shears lies on the workbench - rusty, but still serviceable. Beside them, a few sticks of charcoal. | You take the garden shears.  [gives Garden Shears]  [sets GotGardenShears] | – | – |
+| Workbench *(only when GotGardenShears and not GotCharcoal)* | A few sticks of charcoal lie on the workbench. Messy, but still usable. | You take the charcoal, and most of its dust with it.  [gives Charcoal]  [sets GotCharcoal] | – | – |
+| Workbench *(only when GotGardenShears and GotCharcoal)* | Rusted tins, broken pots and a locked cabinet. Nothing else worth taking. | There's nothing else in the shed worth carrying around. | – | – |
+| Rope *(only when not GotRope)* | A coil of old rope hangs on the shed wall. Damp, but stronger than it looks. | You lift the coil of rope off its hook.  [gives Rope]  [sets GotRope] | – | – |
+| Shovel | A heavy garden shovel hangs from a hook rusted solid around its handle. | It isn't coming free without taking half the shed with it. | – | – |
+| Pitchfork | An old pitchfork. Several tines have rusted away. | – | – | – |
+| Rake | A rake with half its teeth missing. | – | – | – |
 
 ## BenchCloseup
 
@@ -200,7 +241,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 |---|---|---|---|---|
 | Ferns | Ferns and lilies crowd the path, dripping with rain. | – | – | – |
 | Stone Bench | The bench is carved with quatrefoils and scrolls. Rain has pooled in the seat. | You sit down. From underneath comes an indignant "Oi! Some of us live here!" | – | – |
-| Rose Bush | The rose bush has grown right under the bench. Its thorns glint in the dark. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose without losing another finger.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
+| Rose Bush | The rose bush has grown right under the bench. Its thorns glint in the dark. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | **Garden Shears**: Snip. Much better. You cut one perfect dark-red rose.<br>**Garden Shears**: You already have a rose. Leave the rest of them be. |
 | Ebria | A tiny fairy with wild red hair sits under the bench, swigging from a bottle labelled ANOTHER BAD IDEA. | – | conversation `Ebria` | – |
 
 ## Well

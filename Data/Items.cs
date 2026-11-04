@@ -87,7 +87,7 @@ namespace The_Mansion.Data
                     memento: true);
 
         // For a rubbing of the gravestone (use either one on the inscription
-        // while carrying both). Where they're found is still to be decided.
+        // while carrying both). Charcoal: the tool shed. Paper: still to be decided.
         public static Item Charcoal { get; } =
             NewItem("Charcoal",
                     "A stick of charcoal. It leaves black smudges on everything, mostly you.");
@@ -96,10 +96,15 @@ namespace The_Mansion.Data
             NewItem("Paper",
                     "A few sheets of thin, yellowed paper.");
 
-        // Found in the tool shed (not built yet). Cuts a rose safely.
+        // Found in the tool shed (rear yard). Cuts a rose safely.
         public static Item GardenShears { get; } =
             NewItem("Garden Shears",
                     "Rusty garden shears. They still cut - mostly.");
+
+        // From the tool shed wall (rear yard). Use still to be decided.
+        public static Item Rope { get; } =
+            NewItem("Rope",
+                    "A coil of old rope. Damp, but stronger than it looks.");
 
         public static Item RedRose { get; } =
             NewItem("Red Rose",

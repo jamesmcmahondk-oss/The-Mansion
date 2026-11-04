@@ -34,8 +34,12 @@ they're done; add new ones at the bottom of the right section.
 - [x] Faceless Knight: put your weapon away (click WEAPON) → Stone Sword.
 - [x] Hautain ↔ Ebria cross-reference; the Gargoyle notices the rain.
 - [x] **Scene list** – `SCENES.md`, regenerate with `python Tools/list_scenes.py`.
-- [ ] **Rear yard** + **Tool shed** (garden shears) – *needs art*.
-- [ ] Where Charcoal and Paper are found.
+- [x] **Rear yard** (from *Path to the Back*): kitchen door (bolted inside),
+      cellar doors (one knock), hand pump + trough, drain, clothesline and The
+      Sock, tool shed with Garden Shears, Charcoal and Rope.
+- [ ] Tool shed close-up – *needs art* (the shed opens in the yard for now).
+- [ ] **Kitchen Garden** (rear yard → glasshouse, closes the outdoor loop) – *needs art*.
+- [ ] Where Paper is found (Charcoal: tool shed).
 - [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
 - [ ] Servants' entrance as a shortcut from inside.
 - [ ] Glasshouse interior – *needs art + design*.

@@ -32,6 +32,7 @@ WIDE = [
     # Bench with the fairy painted out (Tools/split_bench_fairy.py); the
     # first bench painting stays in Sources as bench_closeup_source.png.
     ("bench_closeup_clean_source.png",     "bench_closeup.png",          90),
+    ("rear_yard_source.png",               "rear_yard.png",             110),
     ("well_source.png",                    "well.png",                   60),
     ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
     ("well_closeup_source.png",            "well_closeup.png",          170),

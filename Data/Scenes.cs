@@ -231,7 +231,7 @@ namespace The_Mansion.Data
             // Listed after the arch so it wins where the two overlap.
             .Hotspot("Path to the Back", 1060, 555, 125, 175)
                 .Describe("The cobbled path curves away along the garden wall, around to the back of the mansion.")
-                // .GoesTo("BackOfHouse")   <- add once the back of the house has a scene
+                .GoesTo("RearYard")
 
             .Hotspot("Old Well", 1160, 250, 130, 120)
                 .Describe("A small roofed well stands at the top of the hill.")
@@ -239,10 +239,19 @@ namespace The_Mansion.Data
 
             .Hotspot("Rose Bush", 1300, 500, 236, 190)
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
+                .OnlyWhen(p => !p.HasFlag("GotRedRose"))
                 .OnAct(p => Roses.Touch(p))
-                .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose without losing another finger.",
+                .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose.",
                         effect: p => Roses.Cut(p),
-                        onlyIf: p => !p.HasFlag("CutRose"))
+                        onlyIf: p => !p.HasFlag("GotRedRose"))
+
+            .Hotspot("Rose Bush", 1300, 500, 236, 190)
+                .Describe("A great tangle of blood-red roses. There's a small gap where you cut one.")
+                .OnlyWhen(p => p.HasFlag("GotRedRose"))
+                .OnAct(p => Roses.Touch(p))
+                .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose.",
+                        effect: p => Roses.Cut(p),
+                        onlyIf: p => !p.HasFlag("GotRedRose"))
                 .OnItem("Garden Shears", "You already have a rose. Leave the rest of them be.")
 
             // The bench: sit on it (ACT) first. Then you hear something
@@ -260,6 +269,164 @@ namespace The_Mansion.Data
                 .OnlyWhen(p => p.HasFlag("HeardBenchNoise"))
 
             .ReturnTo("Courtyard", "You head back to the courtyard.");
+
+
+        // =========================================================
+        // REAR YARD - the service side of the Mansion (from MansionRight).
+        // No characters: exploration, resources (shears, charcoal, rope),
+        // and future shortcuts (kitchen door, cellar). See PUZZLES.md.
+        // =========================================================
+
+        public static Scene RearYard { get; } =
+            NewScene("RearYard",
+                     "Assets/Backgrounds/Mansion/rear_yard.png",
+                     "A rain-soaked service yard behind the Mansion. Ordinary work seems to have simply stopped here.")
+
+            .Hotspot("Path Back", 0, 450, 95, 330)
+                .Describe("The wet path continues around the side of the Mansion.")
+                .GoesTo("MansionRight")
+
+            .Hotspot("Path Around Mansion", 1440, 420, 96, 360)
+                .Describe("The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees.")
+                // .GoesTo("KitchenGarden")   <- add once the kitchen garden has a scene
+
+            .Hotspot("Ivy", 200, 192, 300, 330)
+                .Describe("Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard.")
+
+            .Hotspot("Windows", 160, 245, 70, 175)
+                .Describe("Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below.")
+
+            .Hotspot("Windows", 410, 283, 45, 96)
+                .Describe("Narrow service windows overlook the yard. A few glow warmly despite the abandoned courtyard below.")
+
+            .Hotspot("Lantern", 560, 208, 55, 107)
+                .Describe("A lantern burns beside the service door. Someone keeps these lit.")
+
+            // Bolted from inside - never opened by a key. Later: drawing the
+            // bolt from the kitchen sets KitchenDoorUnlocked and this becomes
+            // a shortcut (.GoesTo("Kitchen") with .OnlyWhen).
+            .Hotspot("Kitchen Door", 603, 245, 192, 363)
+                .Describe("A heavy service door leads into the Mansion, with a small barred window and heavy iron hardware. " +
+                          "Generations of boots have worn the edges of the stone steps smooth.")
+                .OnAct("The door shifts half an inch, then stops against something solid. Bolted from the other side.")
+
+            // Something underneath holds them shut. The knock happens once.
+            .Hotspot("Cellar Doors", 256, 544, 300, 128)
+                .Describe("A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame.")
+                .OnAct("You pull the iron ring. The door rises an inch. Stops. Something underneath is holding it shut. ... " +
+                       "A single quiet sound comes from underneath. Knock.",
+                       p => p.SetFlag("TriedCellarDoor"))
+                .OnlyWhen(p => !p.HasFlag("TriedCellarDoor"))
+
+            .Hotspot("Cellar Doors", 256, 544, 300, 128)
+                .Describe("A pair of heavy cellar doors descend beneath the Mansion. The left door doesn't quite sit flush with its frame.")
+                .OnAct("Still blocked. Whatever is beneath it isn't moving.")
+                .OnlyWhen(p => p.HasFlag("TriedCellarDoor"))
+
+            .Hotspot("Clothesline", 810, 288, 240, 22)
+                .Describe("An old washing line stretches across the yard. Almost everything that once hung from it is gone.")
+
+            // It is simply The Sock.
+            .Hotspot("Sock", 933, 322, 30, 48)
+                .Describe("A solitary black sock hangs from the washing line.")
+                .OnAct(p =>
+                {
+                    if (p.HasFlag("TouchedSock"))
+                    {
+                        return "Still damp.";
+                    }
+
+                    p.SetFlag("TouchedSock");
+                    return "Damp.";
+                })
+
+            .Hotspot("Hand Pump", 875, 390, 165, 120)
+                .Describe("An old iron hand pump feeds the stone washing trough. The metal is rusted, but the mechanism appears intact.")
+                .OnAct(p =>
+                {
+                    if (p.HasFlag("TroughFilled"))
+                    {
+                        return "Cold water splashes into the already-full trough.";
+                    }
+
+                    p.SetFlag("TroughFilled");
+                    return "The handle complains loudly. After several strokes, cold water spills into the trough.";
+                })
+
+            .Hotspot("Stone Trough", 800, 510, 245, 58)
+                .Describe("A deep stone trough stained by generations of water.")
+                .OnAct("Dry, apart from rain collecting in the bottom.")
+                .OnlyWhen(p => !p.HasFlag("TroughFilled"))
+
+            .Hotspot("Stone Trough", 800, 510, 245, 58)
+                .Describe("Cold rainwater and pump water fill the old stone trough.")
+                .OnAct("The water is painfully cold.")
+                .OnlyWhen(p => p.HasFlag("TroughFilled"))
+
+            .Hotspot("Drain", 760, 728, 75, 38)
+                .Describe("Rainwater disappears through an iron grate beneath the Mansion. " +
+                          "A few tiny pale fragments have collected against the grate. Probably kitchen scraps.")
+                .OnAct("The grate is firmly set into the cobbles.")
+
+            // ---- The tool shed --------------------------------------
+            // (No close-up picture yet: the door opens onto the workbench,
+            // and the useful things are taken one at a time.)
+            .Hotspot("Tool Shed", 990, 192, 480, 205)
+                .Describe("A small gardening shed leans against the wall, its roof thick with moss. " +
+                          "The tools outside have been left exactly where someone last used them. Apparently nobody came back for them.")
+
+            .Hotspot("Shed Door", 1061, 400, 118, 293)
+                .Describe("A small gardening shed leans against the wall, its roof thick with moss.")
+                .OnAct("The shed door scrapes open. Inside: shelves of rusted tins, a little workbench, a pair of garden shears and a few sticks of charcoal.",
+                       p => p.SetFlag("OpenedToolShed"))
+                .OnlyWhen(p => !p.HasFlag("OpenedToolShed"))
+
+            .Hotspot("Workbench", 1061, 400, 118, 293)
+                .Describe("A sturdy pair of pruning shears lies on the workbench - rusty, but still serviceable. Beside them, a few sticks of charcoal.")
+                .OnAct("You take the garden shears.",
+                       p =>
+                       {
+                           p.Give("Garden Shears");
+                           p.SetFlag("GotGardenShears");
+                       })
+                .OnlyWhen(p => p.HasFlag("OpenedToolShed") && !p.HasFlag("GotGardenShears"))
+
+            .Hotspot("Workbench", 1061, 400, 118, 293)
+                .Describe("A few sticks of charcoal lie on the workbench. Messy, but still usable.")
+                .OnAct("You take the charcoal, and most of its dust with it.",
+                       p =>
+                       {
+                           p.Give("Charcoal");
+                           p.SetFlag("GotCharcoal");
+                       })
+                .OnlyWhen(p => p.HasFlag("GotGardenShears") && !p.HasFlag("GotCharcoal"))
+
+            .Hotspot("Workbench", 1061, 400, 118, 293)
+                .Describe("Rusted tins, broken pots and a locked cabinet. Nothing else worth taking.")
+                .OnAct("There's nothing else in the shed worth carrying around.")
+                .OnlyWhen(p => p.HasFlag("GotGardenShears") && p.HasFlag("GotCharcoal"))
+
+            .Hotspot("Rope", 1179, 411, 26, 82)
+                .Describe("A coil of old rope hangs on the shed wall. Damp, but stronger than it looks.")
+                .OnAct("You lift the coil of rope off its hook.",
+                       p =>
+                       {
+                           p.Give("Rope");
+                           p.SetFlag("GotRope");
+                       })
+                .OnlyWhen(p => !p.HasFlag("GotRope"))
+
+            .Hotspot("Shovel", 1205, 411, 43, 229)
+                .Describe("A heavy garden shovel hangs from a hook rusted solid around its handle.")
+                .OnAct("It isn't coming free without taking half the shed with it.")
+
+            .Hotspot("Pitchfork", 1248, 411, 44, 229)
+                .Describe("An old pitchfork. Several tines have rusted away.")
+
+            .Hotspot("Rake", 1292, 411, 75, 229)
+                .Describe("A rake with half its teeth missing.")
+
+            .ReturnTo("MansionRight", "You head back along the side of the Mansion.");
 
 
         // Close-up of the stone bench and the rose bush (from MansionRight).
@@ -283,9 +450,9 @@ namespace The_Mansion.Data
             .Hotspot("Rose Bush", 830, 630, 240, 200)
                 .Describe("The rose bush has grown right under the bench. Its thorns glint in the dark.")
                 .OnAct(p => Roses.Touch(p))
-                .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose without losing another finger.",
+                .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose.",
                         effect: p => Roses.Cut(p),
-                        onlyIf: p => !p.HasFlag("CutRose"))
+                        onlyIf: p => !p.HasFlag("GotRedRose"))
                 .OnItem("Garden Shears", "You already have a rose. Leave the rest of them be.")
 
             // Listed last so she wins over the bench.
@@ -609,25 +776,25 @@ namespace The_Mansion.Data
         {
             public static string Touch(Player p)
             {
-                if (p.HasFlag("PrickedByRoses"))
+                if (p.HasFlag("PrickedByRoseBush"))
                 {
                     return "You eye the thorns. You've already conducted this experiment.";
                 }
 
                 if (p.Health <= 2)
                 {
-                    return "You reach toward the thorns. Something resembling common sense finally intervenes.";
+                    return "You reach toward the thorns. Something resembling common sense finally intervenes. Perhaps not.";
                 }
 
                 p.Health -= 2;
-                p.SetFlag("PrickedByRoses");
+                p.SetFlag("PrickedByRoseBush");
                 return "You reach for one of the roses. The thorn answers first. Ow. (-2 Health)";
             }
 
             public static void Cut(Player p)
             {
                 p.Give("Red Rose");
-                p.SetFlag("CutRose");
+                p.SetFlag("GotRedRose");
             }
         }
 

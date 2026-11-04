@@ -28,7 +28,8 @@ flowchart TD
     GLASS -.later.-> GLASSIN([Glasshouse interior: Grell?])
     COURT -->|right| RIGHT[Right side] --> BENCH[Bench: Ebria] & SERV[Servants' entrance] & WELL[Well]
     WELL --> GRAVE[Graveyard] -.later.-> DEEP([Deeper graveyard])
-    RIGHT -->|around back| REAR([Rear yard]) --> SHED([Tool shed]) & KITCHEN([Kitchen door]) & CELLAR([Cellar doors])
+    RIGHT -->|around back| REAR[Rear yard] --> SHED[Tool shed] & KITCHEN([Kitchen]) & CELLAR([Cellar])
+    REAR -.later.-> KGARDEN([Kitchen Garden]) -.-> GLASS
 ```
 
 Rounded boxes don't exist yet.
@@ -77,11 +78,12 @@ understanding, not an item. *(Needs: statue picture without the sword.)*
 ### 6. Still to build
 | What | Needs |
 |---|---|
-| **Rear yard** (from *Path to the Back*): kitchen door (locked from inside → later a shortcut), coal-cellar doors (lift half an inch), drainpipe (rattles), laundry line (one sock), vent window (hear something inside) | Art |
-| **Tool shed**: garden shears (take), shovel, rope, oil can, broken rake, locked cabinet | Art |
+| ~~Rear yard~~ ✅ built: kitchen door (bolted inside), cellar doors (one knock), pump + trough, drain, The Sock, tool shed (shears, charcoal, rope) | – |
+| **Tool shed close-up** (the shed currently opens in the yard) | Art |
+| **Kitchen Garden** (rear yard → glasshouse) | Art |
 | **Servants' entrance** becomes a **shortcut**: bolted from inside; slide the bolt once indoors | Inside scene |
 | **Glasshouse interior** (Grell's territory?) | Art + design |
-| Charcoal and Paper – where are they found? | Decision |
+| Paper – where is it found? (Charcoal: tool shed) | Decision |
 | Item icons: mirror, photograph, rose, shears, sword, charcoal, paper | Art (or crops) |
 | Well close-up picture shows a key, not a mirror | Art |
 
