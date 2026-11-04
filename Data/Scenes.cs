@@ -292,7 +292,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Path Around Mansion", 1440, 420, 96, 360)
                 .Describe("The narrow service path continues around the Mansion. Something glass-roofed is visible through the trees.")
-                // .GoesTo("KitchenGarden")   <- add once the kitchen garden has a scene
+                .GoesTo("KitchenGarden")
 
             .Hotspot("Ivy", 200, 192, 300, 330)
                 .Describe("Ivy has claimed most of the rear wall. The Mansion rises almost vertically above the little service yard.")
@@ -431,6 +431,66 @@ namespace The_Mansion.Data
                 .Describe("A rake with half its teeth missing.")
 
             .ReturnTo("MansionRight", "You head back along the side of the Mansion.");
+
+
+        // =========================================================
+        // KITCHEN GARDEN - walled vegetable garden behind the Mansion
+        // (from the Rear Yard). The door in the wall leads through to the
+        // Garden and glasshouse, closing the loop around the Mansion.
+        // =========================================================
+
+        public static Scene KitchenGarden { get; } =
+            NewScene("KitchenGarden",
+                     "Assets/Backgrounds/Mansion/kitchen_garden.png",
+                     "A walled kitchen garden. The beds are still planted and weeded, as if the gardener only just stepped out. Beyond a door in the wall, the glasshouse glows.")
+
+            .Hotspot("Garden Wall", 267, 267, 1269, 180)
+                .Describe("A high brick wall, thick with ivy. It keeps the wind out - and anything else.")
+
+            .Hotspot("Windows", 30, 290, 80, 200)
+                .Describe("Candles burn in the Mansion's windows. Someone keeps a lot of candles.")
+
+            .Hotspot("Windows", 160, 192, 65, 270)
+                .Describe("Candles burn in the Mansion's windows. Someone keeps a lot of candles.")
+
+            .Hotspot("Rain Barrels", 229, 448, 166, 150)
+                .Describe("Two old rain barrels, full to the brim.")
+                .OnAct("You peer into the barrel. Your reflection peers back. It takes a moment longer than it should.")
+
+            .Hotspot("Potting Bench", 400, 448, 171, 140)
+                .Describe("A potting bench with a few terracotta pots and a seed box. Everything has been put away neatly.")
+
+            // Not the tool shed's shears - these are scenery.
+            .Hotspot("Hedge Clippers", 475, 462, 88, 36)
+                .Describe("A pair of hedge clippers, rusted completely shut.")
+                .OnAct("They won't open. Whoever left them here hasn't been back for a very long time.")
+
+            .Hotspot("Bean Poles", 608, 437, 197, 208)
+                .Describe("Two wigwams of bean poles. Nothing grows on them now except a few dead tendrils.")
+
+            .Hotspot("Garden Door", 800, 363, 181, 213)
+                .Describe("An open door in the wall. Through it, the glasshouse glows in the mist.")
+                .GoesTo("Garden")
+
+            .Hotspot("Vegetable Beds", 997, 470, 539, 170)
+                .Describe("Raised beds of cabbages and leeks, fat and healthy despite the season. Someone still tends them.")
+                .OnAct("You pull at a leek. It doesn't budge. It feels... rooted rather more firmly than leeks ought to be.")
+
+            .Hotspot("Cabbage", 693, 651, 160, 106)
+                .Describe("An enormous purple cabbage. It is, objectively, a magnificent cabbage.")
+                .OnTalk("You compliment the cabbage. It accepts graciously.")
+
+            .Hotspot("Plant Label", 933, 640, 54, 107)
+                .Describe("A wooden plant label. Whatever was written on it has washed away.")
+
+            .Hotspot("Flower Pots", 341, 699, 171, 122)
+                .Describe("A few terracotta pots, one of them cracked and tipped on its side.")
+
+            .Hotspot("Path Back", 0, 597, 213, 192)
+                .Describe("The path leads back to the service yard.")
+                .GoesTo("RearYard")
+
+            .ReturnTo("RearYard", "You head back to the service yard.");
 
 
         // Close-up of the stone bench and the rose bush (from MansionRight).

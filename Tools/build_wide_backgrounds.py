@@ -36,6 +36,7 @@ WIDE = [
     # first bench painting stays in Sources as bench_closeup_source.png.
     ("bench_closeup_clean_source.png",     "bench_closeup.png",          90),
     ("rear_yard_source.png",               "rear_yard.png",             110),
+    ("kitchen_garden_source.png",          "kitchen_garden.png",        150),
     ("well_source.png",                    "well.png",                   60),
     ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
     # (well_closeup.png now comes from well_closeup_mirror.png - see the end)

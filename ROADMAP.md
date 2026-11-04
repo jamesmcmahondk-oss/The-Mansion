@@ -38,7 +38,7 @@ they're done; add new ones at the bottom of the right section.
       cellar doors (one knock), hand pump + trough, drain, clothesline and The
       Sock, tool shed with Garden Shears, Charcoal and Rope.
 - [ ] Tool shed close-up – *needs art* (the shed opens in the yard for now).
-- [ ] **Kitchen Garden** (rear yard → glasshouse, closes the outdoor loop) – *needs art*.
+- [x] **Kitchen Garden** (rear yard → door in the wall → Garden): the outdoor loop is closed.
 - [ ] Where Paper is found (Charcoal: tool shed).
 - [ ] **Entrance Hall** – *needs art* (the data check reports it missing).
 - [ ] Servants' entrance as a shortcut from inside.
