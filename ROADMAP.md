@@ -34,6 +34,10 @@ they're done; add new ones at the bottom of the right section.
       which doesn't exist yet – the data check reports it).
 - [ ] Back of the house scene (`.GoesTo("BackOfHouse")` is ready in a comment).
 
+- [x] **Scene list** – `SCENES.md`: every scene and close-up with its objects,
+      characters, items, exits and a map. Regenerate with
+      `python Tools/list_scenes.py` after changing scenes.
+
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,
       and a key that briefly shows every hotspot.
