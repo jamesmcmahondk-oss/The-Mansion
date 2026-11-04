@@ -26,7 +26,8 @@ they're done; add new ones at the bottom of the right section.
 
 ## Step 2 – Story and puzzles
 - [ ] **Puzzle dependency chart** – what the player must find/do, in what order,
-      to get inside; two or three routes.
+      to get inside; two or three routes. *Draft in `PUZZLES.md` – waiting for
+      your answers to the questions at the bottom.*
 - [ ] Give the open hooks a purpose: Old Key, hollow plinth under the cross,
       locked servants' entrance, glasshouse doors, path to the back of the house.
 - [ ] **Entrance Hall** scene (Quazimodo's open doors lead to `EntranceHall`,
