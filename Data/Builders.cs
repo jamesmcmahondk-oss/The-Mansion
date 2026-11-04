@@ -196,6 +196,13 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>Show this picture full-size after the ACT (click to close).</summary>
+        public HotspotBuilder ShowsPicture(string imagePath)
+        {
+            _hotspot.ActPicture = imagePath;
+            return this;
+        }
+
         /// <summary>ACT on it starts a conversation from Data/Dialogues.cs.</summary>
         public HotspotBuilder ActStarts(string dialogueId)
         {
@@ -212,23 +219,44 @@ namespace The_Mansion.Data
 
         /// <summary>
         /// What happens when the player uses a particular item on it.
-        /// Add one line per item. Other items get "Nothing happens".
+        /// Add one line per item. Other items get "You can't use...".
+        /// The same item can be listed more than once with different onlyIf
+        /// conditions; the first one that's true is used.
         /// </summary>
         public HotspotBuilder OnItem(
             string itemName,
             string text,
             Action<Player>? effect = null,
             bool removeItem = false,
-            string startsDialogue = "")
+            string startsDialogue = "",
+            Func<Player, bool>? onlyIf = null)
         {
-            _hotspot.ItemUses[itemName] = new ItemUse
+            if (!_hotspot.ItemUses.TryGetValue(itemName, out List<ItemUse>? uses))
+            {
+                uses = new List<ItemUse>();
+                _hotspot.ItemUses[itemName] = uses;
+            }
+
+            uses.Add(new ItemUse
             {
                 Text = text,
                 Effect = effect,
                 RemoveItem = removeItem,
-                DialogueId = startsDialogue
-            };
+                DialogueId = startsDialogue,
+                Condition = onlyIf
+            });
 
+            return this;
+        }
+
+        /// <summary>
+        /// Reply when any item without its own .OnItem is used on it.
+        /// {item} is replaced by the item's name, e.g.
+        /// .OnOtherItems("The rose bush is unimpressed by the {item}.")
+        /// </summary>
+        public HotspotBuilder OnOtherItems(string text)
+        {
+            _hotspot.OtherItemsText = text;
             return this;
         }
 
@@ -406,13 +434,20 @@ namespace The_Mansion.Data
             bool removeItem = false,
             Func<Player, bool>? onlyIf = null)
         {
-            _dialogue.ItemUses[itemName] = new DialogueItemUse
+            if (!_dialogue.ItemUses.TryGetValue(itemName, out List<DialogueItemUse>? uses))
+            {
+                uses = new List<DialogueItemUse>();
+                _dialogue.ItemUses[itemName] = uses;
+            }
+
+            // Same item more than once: the first reaction whose onlyIf is true wins.
+            uses.Add(new DialogueItemUse
             {
                 GoesTo = goesTo,
                 Effect = effect,
                 RemoveItem = removeItem,
                 Condition = onlyIf
-            };
+            });
 
             return this;
         }
@@ -463,13 +498,16 @@ namespace The_Mansion.Data
         {
             foreach (var pair in _dialogue.ItemUses)
             {
-                string? next = pair.Value.GoesTo;
-
-                if (next != null && !_dialogue.Nodes.ContainsKey(next))
+                foreach (DialogueItemUse use in pair.Value)
                 {
-                    throw new InvalidOperationException(
-                        $"Dialogue '{_id}': OnItem(\"{pair.Key}\") goes to '{next}', " +
-                        $"but there is no line with that name.");
+                    string? next = use.GoesTo;
+
+                    if (next != null && !_dialogue.Nodes.ContainsKey(next))
+                    {
+                        throw new InvalidOperationException(
+                            $"Dialogue '{_id}': OnItem(\"{pair.Key}\") goes to '{next}', " +
+                            $"but there is no line with that name.");
+                    }
                 }
             }
 

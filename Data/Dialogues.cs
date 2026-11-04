@@ -37,6 +37,11 @@ namespace The_Mansion.Data
         public static Dialogue SadGargoyle { get; } =
             NewDialogue("SadGargoyle", "Sad Gargoyle")
                 .MetFlag("MetGargoyle")
+
+                // Second visit: he notices something small and wrong about you.
+                .StartAt(p => p.HasFlag("MetGargoyle") && !p.HasFlag("GargoyleNoticedRain")
+                    ? "rain"
+                    : "start")
                 .Portrait(
                     "Assets/Characters/Portraits/Gargoyle_portrait_framed.png")
 
@@ -52,6 +57,31 @@ namespace The_Mansion.Data
                     "The gargoyle examines the {item}. "
                     + "\"No, thank you. I already possess several things I never asked for. "
                     + "Most of them are moss.\"")
+
+                // =====================================================
+                // SOMETHING ABOUT YOU (once)
+                // =====================================================
+
+                .Line(
+                    "rain",
+                    "The gargoyle squints at you through the drizzle. "
+                    + "\"You don't cast rain properly.\"")
+
+                    .Choice(
+                        "What?",
+                        "rainNothing",
+                        effect: p => p.SetFlag("GargoyleNoticedRain"))
+
+                .Line(
+                    "rainNothing",
+                    "\"Nothing.\" He looks away, very quickly. \"Did you want something?\"")
+
+                    .Choice(
+                        "...Yes.",
+                        "menu")
+
+                    .Choice(
+                        "Never mind.")
 
                 // =====================================================
                 // INTRODUCTION
@@ -2532,7 +2562,7 @@ namespace The_Mansion.Data
                         onlyIf: p => p.HasFlag("MetMagnusAndSeverin"))
 
                     .Choice(
-                        "Ebria?",
+                        "I met Ebria.",
                         "ebria",
                         onlyIf: p => p.HasFlag("MetEbria"))
 
@@ -2590,29 +2620,33 @@ namespace The_Mansion.Data
                         "I'll let him know.",
                         "residentMenu")
 
+                // His version of the Lily Pad War. Ebria's version: "I fell in the pond."
                 .Line(
                     "ebria",
-                    "\"The airborne tavern incident.\"")
+                    "\"THE BENCH-DWELLING MENACE.\" Hautain very nearly falls off his lily pad. "
+                    + "\"That creature once DESCENDED FROM THE HEAVENS upon my Eastern Provinces!\"")
 
                     .Choice(
-                        "That's Ebria.",
-                        "residentMenu")
+                        "She says she fell in the pond.",
+                        "ebriaFell")
 
                     .Choice(
-                        "Anything else?",
+                        "What happened?",
                         "ebriaMore")
 
                 .Line(
                     "ebriaMore",
-                    "\"She once attempted to annex the Eastern Lily while intoxicated.\"")
+                    "\"Three hours of savage combat. She seized the Eastern Lily. "
+                    + "The Royal Navy - that is, I - repelled her with tremendous valour.\"")
 
                     .Choice(
-                        "Did she succeed?",
-                        "ebriaAnnex")
+                        "And then?",
+                        "ebriaFell")
 
                 .Line(
-                    "ebriaAnnex",
-                    "\"She fell in.\"")
+                    "ebriaFell",
+                    "\"FELL?\" Hautain swells to twice his size. \"She was DEFEATED. "
+                    + "Into the water. Which is technically falling. Tactically.\"")
 
                     .Choice(
                         "Sounds like Ebria.",
@@ -4144,57 +4178,446 @@ namespace The_Mansion.Data
                     .Choice(
                         "Goodbye.");
         // =========================================================
-        // EBRIA, the drunk fairy (under the bench, BenchCloseup, TALK)
+        // EBRIA, the drunk fairy
+        // Found beneath the stone bench in BenchCloseup.
+        //
+        // FIRST ENCOUNTER RULES:
+        // - Ebria is funny, sharp, drunk and occasionally mean.
+        // - She is NEVER stupid because she is drunk.
+        // - Drinking is avoidance, not carefree hedonism.
+        // - She does not willingly discuss her sister.
+        // - References to "we", memory and identity are deliberate cracks.
+        // - Do NOT reveal: sister, twin, mirror, violet ribbon or guilt yet.
+        // - "Just Ebria" is deliberate foreshadowing of her identity arc.
         // =========================================================
 
         public static Dialogue Ebria { get; } =
             NewDialogue("Ebria", "Ebria")
                 .MetFlag("MetEbria")
-                .DimScene(false)               // she's sitting right there in the scene
+                .DimScene(false)
                 .StartAt(p => p.HasFlag("MetEbria") ? "again" : "start")
 
-                .OnItem("Corkscrew", "corkscrew",
-                        removeItem: true,
-                        effect: p => p.SetFlag("GaveEbriaCorkscrew"))
+                .OnItem(
+                    "Corkscrew",
+                    "corkscrew",
+                    removeItem: true,
+                    effect: p => p.SetFlag("GaveEbriaCorkscrew"))
+
                 .OnItem("Empty Bottle", "emptyBottle")
-                .OnOtherItems("Ebria squints at the {item}. \"Can you drink it? No? Then why are you showing it to me?\"")
 
-            .Line("start", "\"Shh! Shhh. You'll wake the bench.\" A tiny fairy peers up at you from under the stone, clutching a bottle bigger than her head. \"I'm Ebria. Who're you? Are you a bad idea? You look like a bad idea.\"")
-                .Choice("What are you doing under there?", "under")
+                // The mirror from the well. She refuses it - more firmly each time.
+                // It isn't hers, so it is never taken.
+                .OnItem("Cracked Hand Mirror", "mirror",
+                        effect: p => p.SetFlag("ShowedEbriaMirror"),
+                        onlyIf: p => !p.HasFlag("ShowedEbriaMirror"))
+                .OnItem("Cracked Hand Mirror", "mirrorAgain",
+                        effect: p => p.SetFlag("ShowedEbriaMirrorTwice"),
+                        onlyIf: p => !p.HasFlag("ShowedEbriaMirrorTwice"))
+                .OnItem("Cracked Hand Mirror", "mirrorRefused")
+
+                .OnOtherItems(
+                    "Ebria studies the {item} with grave concentration. " +
+                    "\"Can I drink it? No? Then you've misunderstood our relationship.\"")
+
+            // ---------------------------------------------------------
+            // THE MIRROR (offered with ITEM)
+            // ---------------------------------------------------------
+
+            .Line("mirror",
+                "Ebria looks at the mirror. The drunken smile disappears. \"No.\"")
+                .Choice("No?", "mirrorNo")
+
+            .Line("mirrorNo",
+                "\"I said no.\"")
+                .Choice("It's a mirror.", "mirrorSee")
+                .Choice("(Put it away)", "menu")
+
+            .Line("mirrorSee",
+                "\"I can see that.\" She doesn't look at it again.")
+                .Choice("(Put it away)", "menu")
+
+            .Line("mirrorAgain",
+                "\"Put that away.\"")
+                .Choice("(Put it away)", "menu")
+
+            .Line("mirrorRefused",
+                "Ebria will not look at it.")
+                .Choice("(Put it away)", "menu")
+
+            // ---------------------------------------------------------
+            // FIRST MEETING
+            // ---------------------------------------------------------
+
+            .Line(
+                "start",
+                "\"Ow.\" " +
+                "A tiny voice comes from beneath the bench. " +
+                "A fairy peers out, bottle clasped against her chest. " +
+                "\"You're supposed to sit on the top part.\" " +
+                "She squints up at you. " +
+                "\"Who are you? No, wait. Let me guess. Lost, dead, or annoying?\"")
+                .Choice("What are you doing under the bench?", "under")
                 .Choice("What's in the bottle?", "bottle")
-                .Choice("Do you live in the mansion?", "mansion")
-                .Choice("Goodbye, Ebria.")
+                .Choice("Who are you?", "who")
+                .Choice("Are you all right?", "alright")
+                .Choice("I'll leave you alone.")
 
-            .Line("menu", "\"Anything else? Make it quick, the bottle's getting warm.\"")
-                .Choice("What are you doing under there?", "under")
-                .Choice("What's in the bottle?", "bottle")
-                .Choice("Do you live in the mansion?", "mansion")
-                .Choice("King Hautain mentioned you.", "hautain", onlyIf: p => p.HasFlag("MetHautain"))
-                .Choice("Goodbye, Ebria.")
+            // ---------------------------------------------------------
+            // MAIN MENU
+            // ---------------------------------------------------------
 
-            .Line("again", "\"Oh, it's you again.\" Hic. \"Still a bad idea?\"")
+            .Line(
+                "menu",
+                "Ebria takes another drink. " +
+                "\"Well? You've already found me. Might as well make it inconvenient.\"")
+                .Choice("Why are you hiding under here?", "under")
+                .Choice("Why do you drink so much?", "whyDrink")
+                .Choice("Do you live in the mansion?", "mansion")
+                .Choice(
+                    "King Hautain mentioned you.",
+                    "hautain",
+                    onlyIf: p => p.HasFlag("MetHautain"))
+                .Choice("That's enough questions.")
+
+            // ---------------------------------------------------------
+            // RETURN VISIT
+            // ---------------------------------------------------------
+
+            .Line(
+                "again",
+                "\"Oh. You.\" " +
+                "Ebria peers around you suspiciously. " +
+                "\"Did you bring wine? No? Then this friendship remains terribly one-sided.\"")
                 .SameChoicesAs("menu")
 
-            .Line("under", "\"Sheltering. From the rain. And from Quazimodo, who says I'm 'a hazard to the furniture'. The furniture has never complained.\"")
+            // ---------------------------------------------------------
+            // WHO ARE YOU?
+            // ---------------------------------------------------------
+
+            .Line(
+                "who",
+                "\"Ebria.\" " +
+                "She pauses as though expecting something else to follow. " +
+                "\"Just Ebria.\" " +
+                "Another pause. She drinks. " +
+                "\"That's plenty.\"")
+                .Choice("Just Ebria?", "justEbria")
+                .Choice("Nice to meet you.", "menu")
+
+            .Line(
+                "justEbria",
+                "For a moment she doesn't answer. " +
+                "\"Were you expecting a title?\" " +
+                "She lifts the bottle. " +
+                "\"Fine. Ebria the Damp. Ebria Beneath-the-Bench. " +
+                "First of Her Name, hopefully last.\"")
+                .Choice("I'll stick with Ebria.", "menu")
+
+            // ---------------------------------------------------------
+            // UNDER THE BENCH
+            // ---------------------------------------------------------
+
+            .Line(
+                "under",
+                "\"It's dry. Mostly quiet. " +
+                "Nobody expects anything from things found under benches.\" " +
+                "She pats the stone beside her. " +
+                "\"And this one doesn't ask stupid questions.\"")
+                .Choice("I just asked a stupid question, didn't I?", "stupidQuestion")
+                .Choice("Are you hiding from someone?", "hiding")
                 .Choice("Fair enough.", "menu")
 
-            .Line("bottle", "She turns the label towards you: ANOTHER BAD IDEA. \"Elderflower, mostly. And some regret. Want a sip? No. It's mine.\"")
-                .Choice("I'll pass.", "menu")
+            .Line(
+                "stupidQuestion",
+                "\"Oh, several.\" " +
+                "She raises the bottle toward you. " +
+                "\"But you're new. There's still time to improve.\"")
+                .Choice("Encouraging.", "menu")
 
-            .Line("mansion", "\"Used to. Then there was a misunderstanding about the wine cellar. Then another one. Then they changed the locks.\" She sniffs. \"I dropped my key down the well out of spite.\"")
-                .Choice("Your key is down the well?", "key")
-                .Choice("That's sad.", "menu")
+            .Line(
+                "hiding",
+                "\"Hiding? No.\" " +
+                "She considers this while taking a drink. " +
+                "\"Hiding implies somebody is looking for you.\" " +
+                "She stares at the bottle for a moment. " +
+                "\"I'm sheltering.\"")
+                .Choice("From what?", "sheltering")
+                .Choice("Right. Sheltering.", "menu")
 
-            .Line("key", "\"Was. Probably still is. Little brass thing. Opens something important. I forget what. That was the point of the bottle.\"")
-                .Choice("I'll look for it.", "menu")
+            .Line(
+                "sheltering",
+                "\"Rain. Conversation. Consequences. Quazimodo when he's carrying a broom.\" " +
+                "She nods solemnly. " +
+                "\"Mostly the broom.\"")
+                .Choice("Sounds dangerous.", "menu")
 
-            .Line("hautain", "Ebria snorts so hard she nearly drops the bottle. \"The frog? I invaded his lily pad once. Very small war. I lost. I fell in.\"")
-                .Choice("He mentioned that.", "menu")
+            // ---------------------------------------------------------
+            // THE BOTTLE
+            // ---------------------------------------------------------
 
-            .Line("corkscrew", "Ebria's eyes go huge. \"A CORKSCREW. Do you know how long I've been biting corks?\" She hugs it like a long-lost friend. \"For that, a secret: never play cards with the frog. He cheats. With his TONGUE.\"")
-                .Choice("I'll remember that.", "menu")
+            .Line(
+                "bottle",
+                "Ebria immediately pulls the bottle closer. " +
+                "\"Mine.\" " +
+                "She looks at the label. " +
+                "\"Elderflower, apparently. Or furniture polish. " +
+                "The writing keeps wandering about.\"")
+                .Choice("Do you even know what you're drinking?", "knowDrink")
+                .Choice("I wasn't going to take it.", "menu")
 
-            .Line("emptyBottle", "She peers into it hopefully, then looks up at you with deep betrayal. \"It's EMPTY. That's the worst kind.\"")
+            .Line(
+                "knowDrink",
+                "\"Of course I do.\" " +
+                "She takes a deliberate sip. " +
+                "\"I'm drinking this.\" " +
+                "She taps the bottle. " +
+                "\"What this is remains a secondary concern.\"")
+                .Choice("That seems sensible.", "menu")
+
+            // ---------------------------------------------------------
+            // WHY DO YOU DRINK?
+            //
+            // This gets dangerously close to the real reason.
+            // Ebria allows one truthful answer, then immediately deflects.
+            // ---------------------------------------------------------
+
+            .Line(
+                "whyDrink",
+                "\"Because being drunk makes people ask fewer questions.\" " +
+                "She looks directly at you. " +
+                "\"Usually.\"")
+                .Choice("I'm serious.", "seriousDrink")
+                .Choice("Point taken.", "menu")
+
+            .Line(
+                "seriousDrink",
+                "The smile slips from her voice for just a moment. " +
+                "\"So am I.\" " +
+                "She takes another drink. " +
+                "\"Some things are louder when you're sober.\"")
+                .Choice("What things?", "whatThings")
+                .Choice("I won't pry.", "menu")
+
+            .Line(
+                "whatThings",
+                "\"Memories.\" " +
+                "The answer comes too quickly. " +
+                "Ebria looks down at the bottle. " +
+                "\"Also frogs. Horrible creatures. Never stop talking.\"")
+                .Choice("You changed the subject.", "changedSubject")
+                .Choice("Frogs. Right.", "menu")
+
+            .Line(
+                "changedSubject",
+                "\"Yes.\" " +
+                "She drinks. " +
+                "\"And beautifully, I thought.\"")
+                .Choice("All right.", "menu")
+
+            // ---------------------------------------------------------
+            // ARE YOU ALL RIGHT?
+            //
+            // Adds some of Ebria's established mean-drunk quality.
+            // She is observant and capable of turning a question back
+            // against whoever asked it.
+            // ---------------------------------------------------------
+
+            .Line(
+                "alright",
+                "\"Are you?\" " +
+                "Ebria looks you over. " +
+                "\"You're wandering around a dead garden talking to things under furniture. " +
+                "I'm drinking. At least one of us has a plan.\"")
+                .Choice("I'll take that as a no.", "notAlright")
+                .Choice("I was only asking.", "onlyAsking")
+                .Choice("Fair point.", "menu")
+
+            .Line(
+                "notAlright",
+                "\"Take it however you like.\" " +
+                "She settles farther beneath the bench. " +
+                "\"Everyone else does.\"")
+                .Choice("I'll leave it alone.", "menu")
+
+            .Line(
+                "onlyAsking",
+                "\"People usually are.\" " +
+                "She takes a drink. " +
+                "\"They seldom want the answer nearly as much as they want credit for asking.\"")
+                .Choice("That was a little harsh.", "harsh")
+                .Choice("Fine. I won't ask again.", "menu")
+
+            .Line(
+                "harsh",
+                "Ebria looks away. " +
+                "\"Yes.\" " +
+                "She takes another drink. " +
+                "\"I'm very talented.\"")
+                .Choice("I noticed.", "menu")
+
+            // ---------------------------------------------------------
+            // THE MANSION
+            //
+            // "We did" is the first accidental indication that there
+            // used to be another person central to Ebria's existence.
+            // No relationship is revealed here.
+            // ---------------------------------------------------------
+
+            .Line(
+                "mansion",
+                "\"Live there?\" " +
+                "She glances toward the mansion. " +
+                "\"I used to spend more time inside.\" " +
+                "A pause. " +
+                "\"We did.\" " +
+                "Ebria blinks, then immediately drinks. " +
+                "\"Anyway. Too many stairs.\"")
+                .Choice("We?", "we")
+                .Choice("What happened?", "whatHappened")
+                .Choice("Too many stairs. Understood.", "menu")
+
+            .Line(
+                "we",
+                "\"Did I say we?\" " +
+                "She stares into the bottle. " +
+                "\"Clearly this isn't working hard enough.\"")
+                .Choice("Who did you mean?", "whoWe")
+                .Choice("Forget I asked.", "menu")
+
+            .Line(
+                "whoWe",
+                "Ebria goes very still. " +
+                "\"Someone who should be.\" " +
+                "The bottle rises between you. " +
+                "\"Congratulations. You've reached the end of that conversation.\"")
+                .Choice("All right.", "menu")
+
+            .Line(
+                "whatHappened",
+                "\"Life.\" " +
+                "She takes another drink. " +
+                "\"Death.\" " +
+                "Another. " +
+                "\"Architecture.\" " +
+                "She points vaguely toward the mansion. " +
+                "\"One of those. Pick whichever answer makes you go away.\"")
+                .Choice("Architecture it is.", "menu")
+
+            // ---------------------------------------------------------
+            // HAUTAIN
+            // ---------------------------------------------------------
+
+            .Line(
+                "hautain",
+                "Ebria groans. " +
+                "\"Oh, not the frog.\" " +
+                "She points the bottle at you. " +
+                "\"Whatever he told you, remember that he is four inches tall " +
+                "and calls himself a king.\"")
+                .Choice("He said you invaded his lily pad.", "lilyPad")
+                .Choice("You don't like him?", "likeHautain")
+                .Choice("I'll keep that in mind.", "menu")
+
+            .Line(
+                "lilyPad",
+                "\"Invaded.\" " +
+                "Ebria snorts. " +
+                "\"I fell in the pond.\" " +
+                "She gestures indignantly. " +
+                "\"Apparently collapsing face-first onto sovereign territory " +
+                "constitutes an act of war.\"")
+                .Choice("Did you apologize?", "apologizeHautain")
+                .Choice("Sounds like Hautain.", "menu")
+
+            .Line(
+                "apologizeHautain",
+                "\"Eventually.\" " +
+                "She takes a drink. " +
+                "\"To the lily pad.\"")
+                .Choice("Naturally.", "menu")
+
+            .Line(
+                "likeHautain",
+                "\"I adore him.\" " +
+                "Ebria takes a long drink. " +
+                "\"Preferably from a great distance, in another pond, " +
+                "on another continent.\"")
+                .Choice("I'll tell him you said that.", "tellHautain")
+                .Choice("Understood.", "menu")
+
+            .Line(
+                "tellHautain",
+                "\"Do. He'll declare war again.\" " +
+                "She sighs. " +
+                "\"It gives him something to do.\"")
+                .Choice("Fair enough.", "menu")
+
+            // ---------------------------------------------------------
+            // CORKSCREW
+            //
+            // A tiny relationship beat:
+            // practical kindness makes Ebria uncomfortable because it
+            // creates the possibility of actually liking the player.
+            // ---------------------------------------------------------
+
+            .Line(
+                "corkscrew",
+                "Ebria stares at the corkscrew. " +
+                "\"Oh.\" " +
+                "For once, she seems completely lost for words. " +
+                "She takes it carefully. " +
+                "\"Do you have any idea how many corks I've opened with my teeth?\"")
+                .Choice("I'm guessing several.", "corkscrewSeveral")
+                .Choice("Consider it a gift.", "corkscrewGift")
+
+            .Line(
+                "corkscrewSeveral",
+                "\"Thirty-seven.\" " +
+                "She runs her thumb reverently over the corkscrew. " +
+                "\"Thirty-eight if you count the one I swallowed.\"")
+                .Choice("I wasn't going to.", "menu")
+
+            .Line(
+                "corkscrewGift",
+                "Ebria looks at you, then quickly back at the corkscrew. " +
+                "\"Well. That's inconvenient.\"")
+                .Choice("What is?", "giftInconvenient")
+
+            .Line(
+                "giftInconvenient",
+                "\"Now I have to like you a little.\" " +
+                "She points the corkscrew at you. " +
+                "\"Don't make a habit of it.\"")
+                .Choice("No promises.", "menu")
+
+            // ---------------------------------------------------------
+            // EMPTY BOTTLE
+            //
+            // The "empty things" line is intentionally ambiguous here.
+            // It gains additional meaning once Ebria's history is known.
+            // ---------------------------------------------------------
+
+            .Line(
+                "emptyBottle",
+                "Ebria takes the bottle with sudden interest. " +
+                "She turns it upside down. Nothing. " +
+                "She looks at you. Then at the bottle. Then back at you. " +
+                "\"You brought a drunk fairy an empty bottle.\"")
+                .Choice("I thought you might want it.", "wantEmptyBottle")
+                .Choice("In hindsight, that was cruel.", "emptyCruel")
+
+            .Line(
+                "wantEmptyBottle",
+                "\"For what? Memories?\" " +
+                "She hands it back. " +
+                "\"I've already got too many empty things.\"")
+                .Choice("...Right.", "menu")
+
+            .Line(
+                "emptyCruel",
+                "\"Good.\" " +
+                "She nods approvingly. " +
+                "\"Self-awareness. Rare around here.\"")
                 .Choice("Sorry.", "menu");
 
         // =========================================================
@@ -4205,6 +4628,9 @@ namespace The_Mansion.Data
 
         // Number of conversations (also makes sure they are all loaded).
         public static int Count => DialogueLookup.Count;
+
+        // Every conversation by id (used by the start-up data check).
+        public static IReadOnlyDictionary<string, Dialogue> All => DialogueLookup;
 
         public static Dialogue? GetDialogue(string dialogueId)
         {

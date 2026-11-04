@@ -26,6 +26,7 @@ namespace The_Mansion.Data
         public string StatusEffect { get; set; } = "None";
         public List<string> Inventory { get; set; } = new();
         public List<string> Flags { get; set; } = new();
+        public List<string> Journal { get; set; } = new();
 
         public static SaveGame From(Player player, string sceneName) => new()
         {
@@ -40,7 +41,8 @@ namespace The_Mansion.Data
             Weapon = player.Weapon,
             StatusEffect = player.StatusEffect,
             Inventory = new List<string>(player.Inventory),
-            Flags = new List<string>(player.Flags)
+            Flags = new List<string>(player.Flags),
+            Journal = new List<string>(player.Journal)
         };
 
         public Player ToPlayer()
@@ -55,7 +57,8 @@ namespace The_Mansion.Data
                 Wits = Wits,
                 Weapon = Weapon,
                 StatusEffect = StatusEffect,
-                Inventory = new List<string>(Inventory)
+                Inventory = new List<string>(Inventory),
+                Journal = new List<string>(Journal)
             };
 
             foreach (string flag in Flags)
@@ -69,12 +72,15 @@ namespace The_Mansion.Data
 
     /*
      * Reads and writes save slots as small JSON files in
-     *   %AppData%\The Mansion\Saves\slot1.json ... slot3.json
+     *   %AppData%\The Mansion\Saves\slot1.json ... slot3.json (+ autosave.json)
      * (C:\Users\<you>\AppData\Roaming\The Mansion\Saves).
      */
     public static class SaveSystem
     {
         public const int SlotCount = 3;
+
+        // Slot 0 is the autosave, written every time a new scene is entered.
+        public const int AutosaveSlot = 0;
 
         private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
@@ -83,7 +89,9 @@ namespace The_Mansion.Data
             "The Mansion",
             "Saves");
 
-        private static string SlotPath(int slot) => Path.Combine(SaveFolder, $"slot{slot}.json");
+        private static string SlotPath(int slot) => Path.Combine(
+            SaveFolder,
+            slot == AutosaveSlot ? "autosave.json" : $"slot{slot}.json");
 
         // Returns an error message, or null if it worked.
         public static string? Save(int slot, SaveGame save)
@@ -118,7 +126,7 @@ namespace The_Mansion.Data
 
         public static bool AnySaves()
         {
-            for (int slot = 1; slot <= SlotCount; slot++)
+            for (int slot = AutosaveSlot; slot <= SlotCount; slot++)
             {
                 if (Load(slot) != null)
                 {

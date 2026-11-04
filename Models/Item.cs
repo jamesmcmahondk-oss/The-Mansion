@@ -30,6 +30,19 @@ namespace The_Mansion.Models
 
         // The item is gone after being used in a fight (e.g. thrown).
         public bool UsedUpInFight { get; set; }
+
+        // A Memento: an object that stirs memories the player doesn't know
+        // they have. Shown as "Memento" in the inventory.
+        public bool IsMemento { get; set; }
+
+        // Optional full-size picture, shown by right-clicking the item in
+        // the inventory (e.g. the Worn Photograph).
+        public string Picture { get; set; } = "";
+
+        // Optional: its own reply when it's used on something that doesn't
+        // react to it ({target} is filled in). Otherwise a general
+        // "You can't use the X on the Y." variant is used.
+        public string MisuseText { get; set; } = "";
     }
 
     /*
@@ -49,5 +62,10 @@ namespace The_Mansion.Models
 
         // Optional: start a conversation (Data/Dialogues.cs) afterwards.
         public string DialogueId { get; set; } = "";
+
+        // Optional: only react like this when true. A hotspot can have several
+        // reactions to the same item; the first one whose condition is true
+        // is used.
+        public Func<Player, bool>? Condition { get; set; }
     }
 }
