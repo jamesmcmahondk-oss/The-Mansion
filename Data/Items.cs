@@ -80,6 +80,7 @@ namespace The_Mansion.Data
         public static Item StoneSword { get; } =
             NewItem("Stone Sword",
                     "The hooded statue's sword. It looks like solid stone and weighs almost nothing. (Weapon: +2 in fights.)",
+                    "Assets/Items/stone_sword.png",
                     weaponBonus: 2,
                     misuse: "You'd rather not chip the stone sword on the {target}.");
 
@@ -106,6 +107,7 @@ namespace The_Mansion.Data
         public static Item Charcoal { get; } =
             NewItem("Charcoal",
                     "A stick of charcoal. It leaves black smudges on everything, mostly you.",
+                    "Assets/Items/charcoal.png",
                     misuse: "You'd only make a mess of the {target}. And of yourself.");
 
         public static Item Paper { get; } =
@@ -117,12 +119,14 @@ namespace The_Mansion.Data
         public static Item GardenShears { get; } =
             NewItem("Garden Shears",
                     "Rusty garden shears. They still cut - mostly.",
+                    "Assets/Items/garden_shears.png",
                     misuse: "There's nothing on the {target} that needs cutting.");
 
         // From the tool shed wall (rear yard). Use still to be decided.
         public static Item Rope { get; } =
             NewItem("Rope",
                     "A coil of old rope. Damp, but stronger than it looks.",
+                    "Assets/Items/rope.png",
                     misuse: "You can't think of a useful way to tie the rope to the {target}.");
 
         public static Item RedRose { get; } =
