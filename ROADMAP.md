@@ -46,8 +46,8 @@ they're done; add new ones at the bottom of the right section.
 - [x] Art: photograph (icon + full-size view, right-click in the inventory),
       red rose and mirror icons; statue without its sword; cross with the open
       plinth.
-- [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; well
-      close-up with a mirror (it still shows a key); rose bush with one rose cut.
+- [ ] Art still wanted: icons for shears, sword, charcoal, rope, paper; rose bush
+      with one rose cut. (Well close-up with the mirror: done.)
 
 ## Step 3 – Feel and feedback
 - [ ] **Show what's clickable** – hotspot highlight / name next to the cursor,

@@ -525,7 +525,7 @@ namespace The_Mansion.Data
 
         // Looking down the well. Something silver can be fished out with the
         // Ball of String (always works) or the bucket (a Luck test, try again):
-        // the Cracked Hand Mirror. (The picture still shows a key - needs new art.)
+        // the Cracked Hand Mirror.
         public static Scene WellCloseup { get; } =
             NewScene("WellCloseup",
                      "Assets/Backgrounds/Mansion/well_closeup.png",
@@ -535,11 +535,11 @@ namespace The_Mansion.Data
             .BackgroundWhen(p => p.HasFlag("GotWellMirror"),
                             "Assets/Backgrounds/Mansion/well_closeup_empty.png")
 
-            .Hotspot("Well Shaft", 380, 280, 820, 420)
+            .Hotspot("Well Shaft", 380, 215, 820, 420)
                 .Describe("The shaft drops away into darkness. The stones are wet and furred with cobwebs.")
                 .OnTalk("\"Hello down there?\" ...there. ...there. Something at the bottom seems to listen.")
 
-            .Hotspot("Bucket", 0, 300, 240, 350)
+            .Hotspot("Bucket", 0, 300, 240, 290)
                 .Describe("The rusty bucket hangs from its chain at the edge of the well.")
                 .OnAct(p =>
                 {
@@ -558,7 +558,7 @@ namespace The_Mansion.Data
                     return "The bucket thuds against the bottom and swings straight past the glint. Maybe try again?";
                 })
 
-            .Hotspot("Something Glinting", 755, 685, 95, 75)
+            .Hotspot("Something Glinting", 772, 702, 66, 54)
                 .Describe("At the very bottom of the well, something small and silver catches the light.")
                 .OnAct("It's far too deep to reach. You'd need something long - or something to fish with.")
                 .OnItem("Ball of String",
