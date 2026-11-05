@@ -289,6 +289,7 @@ namespace The_Mansion
         {
             CloseJournal(goBack: false);
             CloseCrossPuzzle();
+            Sound.Ambience("");
             _gameOverShown = false;
             GameOverScreen.Visibility = Visibility.Collapsed;
             SaveLoadScreen.Visibility = Visibility.Collapsed;

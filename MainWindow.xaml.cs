@@ -138,6 +138,7 @@ namespace The_Mansion
             // (with its title bar) is then centred on screen.
             // Window size comes from Settings (resolution / fullscreen).
             SourceInitialized += (_, _) => ApplyDisplaySettings();
+            ApplySoundSettings();
             Loaded += (_, _) =>
             {
                 if (!_settings.Fullscreen)

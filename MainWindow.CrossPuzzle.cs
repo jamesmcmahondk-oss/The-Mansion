@@ -109,6 +109,7 @@ namespace The_Mansion
                 };
                 DiscRotation(disc).BeginAnimation(RotateTransform.AngleProperty, shudder);
                 CrossPuzzleStatusText.Text = "You push the spiral. The stone won't move.";
+                Sound.Play("stone_stuck");
                 return;
             }
 
@@ -124,6 +125,7 @@ namespace The_Mansion
                 EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.25 }
             };
             DiscRotation(disc).BeginAnimation(RotateTransform.AngleProperty, turn);
+            Sound.Play("stone_grind");
 
             CrossPuzzleStatusText.Text = step > 0
                 ? "The spiral grinds a quarter turn under your hand."
@@ -141,6 +143,11 @@ namespace The_Mansion
             _crossPuzzleSolving = true;
             CrossPuzzleStatusText.Text = "Something clicks deep inside the stone. The spirals lock in place.";
 
+            // The click lands as the turn settles.
+            var click = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(450) };
+            click.Tick += (_, _) => { click.Stop(); Sound.Play("puzzle_click"); };
+            click.Start();
+
             foreach (string spiral in CrossPuzzle.Spirals)
             {
                 var glow = new DropShadowEffect { BlurRadius = 22, ShadowDepth = 0, Opacity = 0, Color = Color.FromRgb(0xFF, 0xC8, 0x6A) };
@@ -156,6 +163,7 @@ namespace The_Mansion
             {
                 timer.Stop();
                 CloseCrossPuzzle();
+                Sound.Play("stone_slide");
                 AfterStoryChange();      // the plinth picture opens
                 FadeInScene();
                 ShowReply("Somewhere below, stone slides against stone. The panel in the plinth has opened.");

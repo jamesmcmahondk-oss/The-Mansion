@@ -38,6 +38,11 @@ namespace The_Mansion
 
             CreateSceneElements(scene);
 
+            if (GameScreen.Visibility == Visibility.Visible)
+            {
+                Sound.Ambience(AmbienceFor(scene));
+            }
+
             if (newScene && GameScreen.Visibility == Visibility.Visible)
             {
                 FadeInScene();
@@ -67,6 +72,14 @@ namespace The_Mansion
                 }
             }, DispatcherPriority.ApplicationIdle);
         }
+
+        // Looping background sound for a scene: rain outdoors, the hall's
+        // quiet inside. (Add indoor scenes here as they are built.)
+        private static string AmbienceFor(Scene scene) => scene.Name switch
+        {
+            "EntranceHall" => "hall_ambience",
+            _ => "rain_loop"
+        };
 
         /*
          * The black curtain snaps shut and fades away, so moving between
@@ -362,6 +375,11 @@ namespace The_Mansion
          */
         private void ActOn(Hotspot hotspot)
         {
+            if (!string.IsNullOrWhiteSpace(hotspot.ActSound))
+            {
+                Sound.Play(hotspot.ActSound);
+            }
+
             if (!string.IsNullOrWhiteSpace(hotspot.ActDialogueId))
             {
                 StartDialogue(hotspot.ActDialogueId);

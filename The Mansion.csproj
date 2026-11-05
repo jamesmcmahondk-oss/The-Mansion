@@ -177,4 +177,13 @@
     </Compile>
   </ItemGroup>
 
+  <!-- Sounds are copied next to the game (WPF's MediaPlayer can't play
+       sounds packed inside the program). See Assets/Sounds/README.md. -->
+  <ItemGroup>
+    <None Remove="Assets\Sounds\**" />
+    <Content Include="Assets\Sounds\**\*.wav;Assets\Sounds\**\*.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

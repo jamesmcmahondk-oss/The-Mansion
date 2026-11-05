@@ -558,6 +558,7 @@ namespace The_Mansion.Data
                           "The tools outside have been left exactly where someone last used them. Apparently nobody came back for them.")
 
             .Hotspot("Shed Door", 1061, 400, 118, 293)
+                .Sound("door_creak")
                 .Describe("A plank door with an iron ring for a handle. It isn't locked.")
                 .CloseUp("ToolShedCloseup")
                 .GoesTo("ToolShedCloseup")
@@ -996,12 +997,14 @@ namespace The_Mansion.Data
               .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
           .Hotspot("Open Front Doors", 585, 335, 380, 470)
+              .Sound("door_creak")
               .Describe("The front doors stand open. Beyond them, candlelight, a chequered floor and a grand staircase.")
               .GoesTo("EntranceHall")
               .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
 
           // Listed after the doors so they win where they overlap.
           .Hotspot("Door Knocker", 668, 515, 75, 100)
+              .Sound("door_knock")
               .Describe("A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold.")
               .OnAct("You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
               .OnItem("Gold Coins", "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.")
@@ -1009,6 +1012,7 @@ namespace The_Mansion.Data
               .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
           .Hotspot("Door Knocker", 800, 515, 75, 100)
+              .Sound("door_knock")
               .Describe("A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold.")
               .OnAct("You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
               .OnItem("Gold Coins", "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.")

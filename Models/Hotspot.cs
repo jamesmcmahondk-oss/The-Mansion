@@ -55,6 +55,9 @@ namespace The_Mansion.Models
         // (e.g. "Cross" - see MainWindow.CrossPuzzle.cs).
         public string ActPuzzle { get; set; } = "";
 
+        // Sound played when the player uses ACT on it (Assets/Sounds).
+        public string ActSound { get; set; } = "";
+
         // What happens when the player uses an item on this hotspot,
         // keyed by item name. Items not listed get a "nothing happens" reply.
         // Several reactions per item are allowed (see ItemUse.Condition).

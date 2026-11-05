@@ -178,6 +178,13 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>ACT on it plays this sound (Assets/Sounds/name.wav), e.g. .Sound("door_knock").</summary>
+        public HotspotBuilder Sound(string soundName)
+        {
+            _hotspot.ActSound = soundName;
+            return this;
+        }
+
         /// <summary>ACT on it opens a puzzle screen, e.g. .ActOpensPuzzle("Cross").</summary>
         public HotspotBuilder ActOpensPuzzle(string puzzle)
         {

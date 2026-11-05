@@ -276,6 +276,7 @@ namespace The_Mansion
 
             _diceTimer?.Stop();
             _diceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(70) };
+            Sound.Play("dice_roll");
             _diceTimer.Tick += (_, _) =>
             {
                 ticks++;
@@ -362,6 +363,7 @@ namespace The_Mansion
             if (winner > 0 && playerCanHit)
             {
                 _fight.HurtEnemy(damage);
+                Sound.Play("hit");
                 outcome = critical
                     ? $"{why}A crushing blow strikes {enemy.Name}! (-{damage})"
                     : $"{why}You strike {enemy.Name}! (-{damage})";
@@ -373,6 +375,7 @@ namespace The_Mansion
             else if (winner < 0)
             {
                 _player.Health = Math.Max(0, _player.Health - damage);
+                Sound.Play("hit");
                 outcome = critical
                     ? $"{why}A vicious blow! (-{damage} Health)"
                     : $"{why}{enemy.Name} hits you! (-{damage} Health)";

@@ -114,8 +114,45 @@ namespace The_Mansion
             SettingsScreen.Visibility = Visibility.Visible;
         }
 
+        // Sound volumes from Settings (called at start-up and when changed).
+        private void ApplySoundSettings()
+        {
+            Sound.EffectsVolume = _settings.EffectsVolume / 100.0;
+            Sound.MusicVolume = _settings.MusicVolume / 100.0;
+            Sound.ApplyMusicVolume();
+        }
+
+        private bool _buildingSettings;
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_buildingSettings || EffectsVolumeText == null || MusicVolumeText == null)
+            {
+                return;
+            }
+
+            _settings.EffectsVolume = (int)EffectsVolumeSlider.Value;
+            _settings.MusicVolume = (int)MusicVolumeSlider.Value;
+            EffectsVolumeText.Text = _settings.EffectsVolume.ToString();
+            MusicVolumeText.Text = _settings.MusicVolume.ToString();
+            ApplySoundSettings();
+            _settings.Save();
+
+            if (sender == EffectsVolumeSlider)
+            {
+                Sound.Play("puzzle_click");   // a sample at the new volume
+            }
+        }
+
         private void BuildSettingsScreen()
         {
+            _buildingSettings = true;
+            EffectsVolumeSlider.Value = _settings.EffectsVolume;
+            MusicVolumeSlider.Value = _settings.MusicVolume;
+            EffectsVolumeText.Text = _settings.EffectsVolume.ToString();
+            MusicVolumeText.Text = _settings.MusicVolume.ToString();
+            _buildingSettings = false;
+
             FullscreenButton.Content = _settings.Fullscreen ? "FULLSCREEN: ON" : "FULLSCREEN: OFF";
 
             ResolutionList.Children.Clear();

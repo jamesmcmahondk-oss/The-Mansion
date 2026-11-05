@@ -53,6 +53,7 @@ namespace The_Mansion
                     _unreadJournal.Add(entry.Id);
                 }
 
+                Sound.Play("journal_entry");
                 ShowJournalToast(string.Join("  ·  ", added.Select(entry => entry.Title)));
             }
         }
@@ -106,6 +107,7 @@ namespace The_Mansion
             ShowJournalEntry(first);
 
             JournalScroll.ScrollToTop();
+            Sound.Play("journal_open");
             JournalScreen.Visibility = Visibility.Visible;
         }
 
