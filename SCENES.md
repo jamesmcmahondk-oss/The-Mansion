@@ -34,6 +34,7 @@ flowchart LR
     FrontGate -.->|LOOK Gargoyle| FrontGargoyle
     Courtyard -.->|LOOK Fountain| FountainCloseup
     Courtyard -->|ACT Front Door| FrontDoor
+    Courtyard -->|ACT Front Door| FrontDoor
     Courtyard -->|ACT Garden Path| Garden
     Courtyard -->|ACT Side Path| MansionRight
     Garden -.->|LOOK Glasshouse| GlasshouseCloseup
@@ -130,17 +131,24 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > Rain-slick cobblestones glitter in the lantern light. A tiered fountain splashes beside the steps up to the front door.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/courtyard_open.png` when **FrontDoorOpen**
 - **Reached from:** FrontGate – ACT on *Fountain*; FrontGate – ACT on *Driveway*; FountainCloseup – Return arrow; Garden – ACT on *Garden Path*; Garden – Return arrow; MansionRight – Return arrow; FrontDoor – Return arrow
-- **Exits:** FrontDoor (ACT *Front Door*); Garden (ACT *Garden Path*); MansionRight (ACT *Side Path*)
+- **Exits:** FrontDoor (ACT *Front Door*); FrontDoor (ACT *Front Door*); Garden (ACT *Garden Path*); MansionRight (ACT *Side Path*)
 - **Close-ups:** FountainCloseup (LOOK *Fountain*)
 - **Return arrow →** FrontGate
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Fountain | → **FountainCloseup** | – | The fountain burbles. It is not a conversation. | – |
-| Front Door | Wide stone steps lead up to the mansion's great carved doors. | → **FrontDoor** | – | – |
-| Garden Path | A path runs behind the fountain, along the balustrade, around the left wing of the mansion. | → **Garden** | – | – |
-| Side Path | A cracked, winding path disappears into the overgrown dark beside the mansion. | → **MansionRight** | – | – |
+| Statue | A robed stone woman stands at the top of the fountain, hands folded, looking away from the house. | She's well out of reach, at the top of the fountain. | She keeps looking away. You get the feeling it's deliberate. | – |
+| Front Door *(only when not FrontDoorOpen)* | Wide stone steps lead up to the mansion's great carved doors. | → **FrontDoor** | – | – |
+| Front Door *(only when FrontDoorOpen)* | At the top of the steps the great doors stand open. Candlelight spills out into the rain. | → **FrontDoor** | – | – |
+| Lantern (2 places) | An iron lantern beside the door. Someone keeps these lit. | Too high to reach from down here. | – | – |
+| Urn (2 places) | A stone urn on the balustrade, overflowing with ivy and red flowers. | – | – | – |
+| Windows (2 places) | Rows of tall Gothic windows, every one of them lit. Nobody appears in any of them. | The windows are well out of reach. | – | – |
+| Lamp Post | A lamp post at the edge of the courtyard, lighting the way round the side of the house. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
+| Garden Path | Past the fountain, a cobbled path winds away towards a hooded statue and a glowing glasshouse. | → **Garden** | – | – |
+| Side Path | A wet cobbled path curves away round the right side of the mansion. | → **MansionRight** | – | – |
 
 ## Garden
 
@@ -159,7 +167,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Glasshouse | → **GlasshouseCloseup** | It's a long way to walk just to push on glass. A closer look first. | – | – |
 | Mansion | Ivy smothers the mansion's left wing. Warm light glows in the tall windows. | The windows are well out of reach. | – | – |
 | Lantern | A lantern on a stone pillar lights the garden path. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
-| Balustrade | A stone balustrade, furred with moss and wet leaves. | – | – | – |
+| Hydrangeas | Pink hydrangeas, heavy with rain, crowd the foot of the mansion wall. | – | – | – |
 | Garden Path | The wet path winds back towards the courtyard. | → **Courtyard** | – | – |
 | Statue | → **StatueCloseup** | – | The statue is too far away to hear you. Probably. | – |
 
@@ -176,6 +184,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Glasshouse (2 places) | Through the mist, candles glow behind the glasshouse's tall panes. | – | – | – |
+| Mansion | The mansion's ivy-covered wall rises beside the statue, every window lit. | The windows are well out of reach. | – | – |
 | Statue | Ivy creeps up the ragged stone robe. Under the hood there is only darkness. | – | The statue says nothing. Statues usually don't. Usually. | – |
 | Hood | You peer into the hood. There is no face carved there at all - just shadow. | You reach up into the hood. Stone, all the way back. | – | – |
 | Stone Sword *(only when not TookStoneSword)* | A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. Words are cut along the blade: HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN. | (depends on a dice roll / the story - see Data/Scenes.cs)  [gives Stone Sword]  [sets TookStoneSword] | – | – |
@@ -438,7 +447,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 > The heavy front door towers over you. A grotesque metal knocker hangs at its centre.
 
 - **Picture changes** to `Assets/Backgrounds/Mansion/Front_door_open.png` when **FrontDoorOpen**
-- **Reached from:** FrontGate – ACT on *Front Door*; FrontGate – ACT on *Front Door*; Courtyard – ACT on *Front Door*; EntranceHall – Return arrow
+- **Reached from:** FrontGate – ACT on *Front Door*; FrontGate – ACT on *Front Door*; Courtyard – ACT on *Front Door*; Courtyard – ACT on *Front Door*; EntranceHall – Return arrow
 - **Exits:** EntranceHall (ACT *Open Front Doors*)
 - **Return arrow →** Courtyard
 - **Characters:** Quazimodo (ACT *Front Doors*, conversation `QuazimodoFrontDoor`)
