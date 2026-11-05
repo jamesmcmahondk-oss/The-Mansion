@@ -165,29 +165,29 @@ namespace The_Mansion.Data
                 .OnTalk("She keeps looking away. You get the feeling it's deliberate.")
                 .OnAct("She's well out of reach, at the top of the fountain.")
 
-            .Hotspot("Front Door", 625, 250, 550, 470)
+            .Hotspot("Front Door", 595, 250, 550, 470)
                 .Describe("Wide stone steps lead up to the mansion's great carved doors.")
                 .GoesTo("FrontDoor")
                 .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-            .Hotspot("Front Door", 625, 250, 550, 470)
+            .Hotspot("Front Door", 595, 250, 550, 470)
                 .Describe("At the top of the steps the great doors stand open. Candlelight spills out into the rain.")
                 .GoesTo("FrontDoor")
                 .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
 
             // Listed after the front door so they win where they overlap.
-            .Hotspot("Lantern", 705, 240, 55, 130)
+            .Hotspot("Lantern", 675, 240, 55, 130)
                 .Describe("An iron lantern beside the door. Someone keeps these lit.")
                 .OnAct("Too high to reach from down here.")
 
-            .Hotspot("Lantern", 1040, 240, 55, 130)
+            .Hotspot("Lantern", 1010, 240, 55, 130)
                 .Describe("An iron lantern beside the door. Someone keeps these lit.")
                 .OnAct("Too high to reach from down here.")
 
-            .Hotspot("Urn", 625, 395, 115, 120)
+            .Hotspot("Urn", 595, 395, 115, 120)
                 .Describe("A stone urn on the balustrade, overflowing with ivy and red flowers.")
 
-            .Hotspot("Urn", 1055, 395, 115, 120)
+            .Hotspot("Urn", 1025, 395, 115, 120)
                 .Describe("A stone urn on the balustrade, overflowing with ivy and red flowers.")
 
             .Hotspot("Windows", 280, 192, 330, 250)
@@ -202,8 +202,8 @@ namespace The_Mansion.Data
                 .Describe("A lamp post at the edge of the courtyard, lighting the way round the side of the house.")
                 .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
 
-            .Hotspot("Garden Path", 230, 560, 250, 90)
-                .Describe("A path runs behind the fountain, along the front of the mansion, round its left wing.")
+            .Hotspot("Garden Path", 300, 450, 170, 130)
+                .Describe("Past the fountain, a cobbled path winds away towards a hooded statue and a glowing glasshouse.")
                 .GoesTo("Garden")
 
             .Hotspot("Side Path", 1300, 560, 140, 260)
@@ -225,28 +225,28 @@ namespace The_Mansion.Data
             .BackgroundWhen(p => p.HasFlag("TookStoneSword"),
                             "Assets/Backgrounds/Mansion/garden_nosword.png")
 
-            .Hotspot("Glasshouse", 465, 240, 540, 310)
+            .Hotspot("Glasshouse", 430, 330, 600, 180)
                 .OnAct("It's a long way to walk just to push on glass. A closer look first.")
                 .Describe("A vast glasshouse of iron and glass. Candlelight flickers inside, though nobody seems to be tending it.")
                 .CloseUp("GlasshouseCloseup")
 
-            .Hotspot("Mansion", 1080, 192, 456, 380)
+            .Hotspot("Mansion", 1090, 192, 446, 450)
                 .Describe("Ivy smothers the mansion's left wing. Warm light glows in the tall windows.")
                 .OnAct("The windows are well out of reach.")
 
-            .Hotspot("Lantern", 60, 290, 130, 150)
+            .Hotspot("Lantern", 40, 290, 150, 170)
                 .Describe("A lantern on a stone pillar lights the garden path. Someone keeps these lit.")
                 .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
 
-            .Hotspot("Balustrade", 1300, 610, 236, 200)
-                .Describe("A stone balustrade, furred with moss and wet leaves.")
+            .Hotspot("Hydrangeas", 1260, 560, 276, 200)
+                .Describe("Pink hydrangeas, heavy with rain, crowd the foot of the mansion wall.")
 
-            .Hotspot("Garden Path", 330, 640, 520, 192)
+            .Hotspot("Garden Path", 280, 640, 520, 192)
                 .Describe("The wet path winds back towards the courtyard.")
                 .GoesTo("Courtyard")
 
             // Listed after the glasshouse so it wins where they overlap.
-            .Hotspot("Statue", 765, 340, 120, 285)
+            .Hotspot("Statue", 775, 340, 120, 300)
                 .OnTalk("The statue is too far away to hear you. Probably.")
                 .Describe("A hooded stone figure stands on a plinth in the long grass, watching the path.")
                 .CloseUp("StatueCloseup")
@@ -263,25 +263,29 @@ namespace The_Mansion.Data
             .BackgroundWhen(p => p.HasFlag("TookStoneSword"),
                             "Assets/Backgrounds/Mansion/statue_closeup_nosword.png")
 
-            .Hotspot("Glasshouse", 264, 330, 384, 320)
+            .Hotspot("Glasshouse", 200, 280, 400, 300)
                 .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
 
-            .Hotspot("Glasshouse", 992, 330, 352, 320)
+            .Hotspot("Glasshouse", 930, 280, 160, 300)
                 .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
 
-            .Hotspot("Statue", 656, 200, 336, 624)
+            .Hotspot("Mansion", 1170, 192, 366, 420)
+                .Describe("The mansion's ivy-covered wall rises beside the statue, every window lit.")
+                .OnAct("The windows are well out of reach.")
+
+            .Hotspot("Statue", 600, 192, 330, 500)
                 .Describe("Ivy creeps up the ragged stone robe. Under the hood there is only darkness.")
                 .OnTalk("The statue says nothing. Statues usually don't. Usually.")
 
             // Listed after the statue so they win where they overlap.
-            .Hotspot("Hood", 808, 205, 72, 105)
+            .Hotspot("Hood", 690, 192, 130, 130)
                 .OnAct("You reach up into the hood. Stone, all the way back.")
                 .Describe("You peer into the hood. There is no face carved there at all - just shadow.")
 
             // THE FACELESS KNIGHT: the sword only comes free for someone who
             // isn't holding a weapon of their own (put it away by clicking
             // WEAPON in the stats panel).
-            .Hotspot("Stone Sword", 825, 350, 55, 425)
+            .Hotspot("Stone Sword", 745, 270, 60, 425)
                 .Describe("A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. " +
                           "Words are cut along the blade: HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN.")
                 .OnAct(p =>
@@ -301,7 +305,7 @@ namespace The_Mansion.Data
                 })
                 .OnlyWhen(p => !p.HasFlag("TookStoneSword"))
 
-            .Hotspot("Empty Hands", 825, 350, 55, 425)
+            .Hotspot("Empty Hands", 720, 270, 110, 120)
                 .Describe("The statue's stone hands are folded around nothing now. Under the hood, the darkness seems... satisfied.")
                 .OnlyWhen(p => p.HasFlag("TookStoneSword"))
 
@@ -314,30 +318,30 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/glasshouse_closeup.png",
                      "The glasshouse rises before you, all iron lace and misted glass. Inside, hundreds of candles burn among tall palms.")
 
-            .Hotspot("Glass Dome", 200, 192, 1280, 190)
+            .Hotspot("Glass Dome", 470, 192, 630, 60)
                 .Describe("Rain beads on the great glass dome. Ivy has crept almost to the top.")
 
-            .Hotspot("Windows", 50, 400, 350, 300)
+            .Hotspot("Windows", 60, 410, 330, 310)
                 .OnAct("The windows are well out of reach.")
                 .Describe("Through the misted panes you can make out palms, ferns - and candles, far too many candles.")
 
-            .Hotspot("Windows", 1200, 400, 320, 300)
+            .Hotspot("Windows", 1210, 410, 320, 310)
                 .OnAct("The windows are well out of reach.")
                 .Describe("Through the misted panes you can make out palms, ferns - and candles, far too many candles.")
 
-            .Hotspot("Lantern", 605, 530, 70, 160)
+            .Hotspot("Lantern", 612, 545, 58, 130)
                 .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("An iron lantern on a stone pillar, lighting the steps.")
 
-            .Hotspot("Lantern", 955, 530, 70, 160)
+            .Hotspot("Lantern", 960, 545, 58, 130)
                 .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("An iron lantern on a stone pillar, lighting the steps.")
 
-            .Hotspot("Chandelier", 735, 385, 160, 115)
+            .Hotspot("Chandelier", 775, 445, 70, 60)
                 .OnAct("It's on the other side of the glass. Which is probably for the best.")
                 .Describe("A chandelier blazes just inside, above the doors. Someone lit every candle.")
 
-            .Hotspot("Glasshouse Doors", 720, 500, 180, 290)
+            .Hotspot("Glasshouse Doors", 725, 500, 170, 275)
                 .OnTalk("You call through the glass. Nobody answers. The candles burn on regardless.")
                 .OnOtherItems("You hold the {item} up to the glass. Nothing inside takes any notice.")
                 .Describe("Tall glass doors with brass handles. The air seeping out is warm and smells of earth and wax.")

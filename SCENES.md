@@ -147,7 +147,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Urn (2 places) | A stone urn on the balustrade, overflowing with ivy and red flowers. | – | – | – |
 | Windows (2 places) | Rows of tall Gothic windows, every one of them lit. Nobody appears in any of them. | The windows are well out of reach. | – | – |
 | Lamp Post | A lamp post at the edge of the courtyard, lighting the way round the side of the house. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
-| Garden Path | A path runs behind the fountain, along the front of the mansion, round its left wing. | → **Garden** | – | – |
+| Garden Path | Past the fountain, a cobbled path winds away towards a hooded statue and a glowing glasshouse. | → **Garden** | – | – |
 | Side Path | A wet cobbled path curves away round the right side of the mansion. | → **MansionRight** | – | – |
 
 ## Garden
@@ -167,7 +167,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Glasshouse | → **GlasshouseCloseup** | It's a long way to walk just to push on glass. A closer look first. | – | – |
 | Mansion | Ivy smothers the mansion's left wing. Warm light glows in the tall windows. | The windows are well out of reach. | – | – |
 | Lantern | A lantern on a stone pillar lights the garden path. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
-| Balustrade | A stone balustrade, furred with moss and wet leaves. | – | – | – |
+| Hydrangeas | Pink hydrangeas, heavy with rain, crowd the foot of the mansion wall. | – | – | – |
 | Garden Path | The wet path winds back towards the courtyard. | → **Courtyard** | – | – |
 | Statue | → **StatueCloseup** | – | The statue is too far away to hear you. Probably. | – |
 
@@ -184,6 +184,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Glasshouse (2 places) | Through the mist, candles glow behind the glasshouse's tall panes. | – | – | – |
+| Mansion | The mansion's ivy-covered wall rises beside the statue, every window lit. | The windows are well out of reach. | – | – |
 | Statue | Ivy creeps up the ragged stone robe. Under the hood there is only darkness. | – | The statue says nothing. Statues usually don't. Usually. | – |
 | Hood | You peer into the hood. There is no face carved there at all - just shadow. | You reach up into the hood. Stone, all the way back. | – | – |
 | Stone Sword *(only when not TookStoneSword)* | A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. Words are cut along the blade: HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN. | (depends on a dice roll / the story - see Data/Scenes.cs)  [gives Stone Sword]  [sets TookStoneSword] | – | – |
