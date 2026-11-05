@@ -511,35 +511,93 @@ namespace The_Mansion
             BackstoryScreen.Visibility = Visibility.Visible;
 
             _backstoryFullText =
-                "Nobody remembers exactly when the mansion was abandoned.\n\n" +
+                "There was a time when the Mansion was full of ordinary things.\n\n" +
 
-                "Some say its last owner simply disappeared. " +
-                "Others insist that the house was never truly empty.\n\n" +
+                "Smoke rose from its chimneys.\n\n" +
 
-                "Whatever the truth, people in the surrounding countryside " +
-                "have learned to keep their distance after sunset.\n\n" +
+                "Servants crossed the yard behind the kitchens.\n\n" +
 
-                "You, unfortunately, have never been especially good " +
-                "at taking advice.\n\n" +
+                "Vegetables grew in neat rows beneath the garden wall, " +
+                "and candles burned late into the evening inside the Glasshouse.\n\n" +
 
-                "And tonight, beneath a cold autumn moon, " +
-                "you find yourself standing before its gates.";
+                "People lived here.\n\n" +
+
+                "Then, at some point, they didn't.\n\n" +
+
+                "Nobody remembers exactly when the Mansion was abandoned.\n\n" +
+
+                "There was no fire.\n\n" +
+
+                "No terrible accident.\n\n" +
+
+                "No final carriage seen fleeing through the gates.\n\n" +
+
+                "The gardens simply stopped being tended.\n\n" +
+
+                "The deliveries stopped coming.\n\n" +
+
+                "The gates rusted shut.\n\n" +
+
+                "And eventually, people stopped asking why.\n\n" +
+
+                "Years passed.\n\n" +
+
+                "Ivy climbed the walls. Paths vanished beneath weeds and autumn leaves. " +
+                "The surrounding countryside learned to ignore the old house on the hill.\n\n" +
+
+                "But one thing remained difficult to ignore.\n\n" +
+
+                "The lights never went out.\n\n" +
+
+                "Even now, on certain nights, warm light appears behind darkened windows.\n\n" +
+
+                "Candles still flicker beyond the rain-streaked glass of the old Glasshouse.\n\n" +
+
+                "Nobody goes there to light them.\n\n" +
+
+                "At least, nobody admits to it.\n\n" +
+
+                "And tonight, beneath a cold autumn moon, you are standing before the gates.\n\n" +
+
+                "Rain falls quietly through the trees.\n\n" +
+
+                "Beyond the iron bars, the Mansion waits.\n\n" +
+
+                "You don't remember the journey here.\n\n" +
+
+                "You don't remember deciding to come.\n\n" +
+
+                "You try to remember where you were before this.\n\n" +
+
+                "Nothing comes.\n\n" +
+
+                "Then a light appears in an upstairs window.\n\n" +
+
+                "Something about the sight troubles you.\n\n" +
+
+                "Not because it is frightening.\n\n" +
+
+                "Because it is familiar.\n\n" +
+
+                "You've seen that window before.\n\n" +
+
+                "You're certain of it.\n\n" +
+
+                "You just can't remember when.";
 
             BackstoryText.Text = "";
 
             _backstoryCharacterIndex = 0;
 
             _backstoryTimer?.Stop();
-            _backstoryTimer = new DispatcherTimer();
-
-            _backstoryTimer.Interval =
-                TimeSpan.FromMilliseconds(25);
+            _backstoryTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(25)
+            };
 
             _backstoryTimer.Tick += BackstoryTimer_Tick;
-
             _backstoryTimer.Start();
         }
-
         private void TitleButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is not Rectangle button)
