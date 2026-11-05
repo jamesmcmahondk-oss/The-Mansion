@@ -4796,6 +4796,7 @@ namespace The_Mansion.Data
         public static Dialogue Ebria { get; } =
             NewDialogue("Ebria", "Ebria")
                 .MetFlag("MetEbria")
+                .Portrait("Assets/Characters/Portraits/Ebria_portrait_framed.png")
                 .DimScene(false)
                 .StartAt(p => p.HasFlag("MetEbria") ? "again" : "start")
 

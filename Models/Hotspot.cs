@@ -63,6 +63,10 @@ namespace The_Mansion.Models
         // Reply when the player uses TALK on it (when there's no conversation).
         public string TalkText { get; set; } = "";
 
+        // Optional: TALK runs this and shows the text it returns, so the
+        // reply can change (e.g. a different line the second time).
+        public Func<Player, string>? TalkResult { get; set; }
+
         // Reply and optional effect when the player uses ACT on it
         // (when there's no ACT conversation).
         public string ActText { get; set; } = "";
