@@ -945,79 +945,55 @@ namespace The_Mansion.Data
               "Assets/Backgrounds/Mansion/Front_door_open.png")
 
           // =====================================================
-          // CLOSED FRONT DOORS
+          // THE DOORS (picture pair: the open doorway was patched into the
+          // closed picture by Tools/patch_variant.py, so nothing else moves)
           // =====================================================
 
-          .Hotspot(
-              "Front Doors",
-              590,
-              300,
-              375,
-              500)
-
-              .Describe(
-                  "Heavy wooden front doors. "
-                  + "They appear to be locked.")
-
-              .OnTalk(
-                  "The door does not answer. "
-                  + "This is unsurprising.")
-
+          .Hotspot("Front Doors", 585, 335, 380, 470)
+              .Describe("Heavy carved wooden doors under a pointed arch, with a window of stone tracery above. They appear to be locked.")
+              .OnTalk("The door does not answer. This is unsurprising.")
               .ActStarts("QuazimodoFrontDoor")
+              .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-              .OnlyWhen(
-                  p => !p.HasFlag("FrontDoorOpen"))
-
-          // =====================================================
-          // OPEN FRONT DOORS
-          // =====================================================
-
-          .Hotspot(
-              "Open Front Doors",
-              590,
-              300,
-              375,
-              500)
-
-              .Describe(
-                  "The enormous front doors stand open. "
-                  + "Beyond them waits the dark entrance hall.")
-
+          .Hotspot("Open Front Doors", 585, 335, 380, 470)
+              .Describe("The front doors stand open. Beyond them, candlelight, a chequered floor and a grand staircase.")
               .GoesTo("EntranceHall")
+              .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
 
-              .OnlyWhen(
-                  p => p.HasFlag("FrontDoorOpen"))
+          // Listed after the doors so they win where they overlap.
+          .Hotspot("Door Knocker", 668, 515, 75, 100)
+              .Describe("A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold.")
+              .OnAct("You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
+              .OnItem("Gold Coins", "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.")
+              .OnItem("Royal Gold Coin", "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said.")
+              .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-          // =====================================================
-          // DOOR KNOCKER
-          // =====================================================
+          .Hotspot("Door Knocker", 800, 515, 75, 100)
+              .Describe("A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold.")
+              .OnAct("You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
+              .OnItem("Gold Coins", "You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.")
+              .OnItem("Royal Gold Coin", "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said.")
+              .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-          .Hotspot(
-              "Door Knocker",
-              685,
-              515,
-              175,
-              90)
+          .Hotspot("Window", 500, 192, 510, 115)
+              .Describe("Stone tracery above the doors, glowing with candlelight from inside.")
+              .OnAct("Far out of reach.")
 
-              .Describe(
-                  "The grotesque iron door knocker is freezing cold.")
+          .Hotspot("Lantern", 350, 192, 110, 300)
+              .Describe("An iron lantern beside the door. Someone keeps these lit.")
+              .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
 
-              .OnAct(
-                  "You rap the iron knocker against the door. "
-                  + "The sound echoes somewhere deep inside the Mansion.")
+          .Hotspot("Lantern", 1090, 192, 110, 300)
+              .Describe("An iron lantern beside the door. Someone keeps these lit.")
+              .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
 
-              .OnItem(
-                  "Gold Coins",
-                  "You rap the knocker with a gold coin. "
-                  + "Nothing. Manners, not money, the gargoyle said.")
+          .Hotspot("Urn", 195, 500, 200, 260)
+              .Describe("A stone urn overflowing with ivy and small red flowers, wet with rain.")
+              .OnAct("You'd rather not dig through someone's flowerpot.")
 
-              .OnItem(
-                  "Royal Gold Coin",
-                  "You rap the knocker with the King's coin. "
-                  + "Nothing. Manners, not money, the gargoyle said.")
-
-              .OnlyWhen(
-                  p => !p.HasFlag("FrontDoorOpen"))
+          .Hotspot("Urn", 1150, 500, 200, 260)
+              .Describe("A stone urn overflowing with ivy and small red flowers, wet with rain.")
+              .OnAct("You'd rather not dig through someone's flowerpot.")
 
           // =====================================================
           // RETURN
