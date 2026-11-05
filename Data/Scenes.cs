@@ -143,27 +143,71 @@ namespace The_Mansion.Data
 
 
         // Between the front gate and the fountain close-up / front door.
-        // Background made by Tools/build_courtyard.py.
+        // Background: ChatGPT picture (Nov 2026); the open-door version is patched from a second one.
         public static Scene Courtyard { get; } =
             NewScene("Courtyard",
                      "Assets/Backgrounds/Mansion/courtyard.png",
                      "Rain-slick cobblestones glitter in the lantern light. A tiered fountain splashes beside the steps up to the front door.")
 
-            .Hotspot("Fountain", 0, 300, 380, 470)
+            // Once Quazimodo has let you in, the doors stand open here too
+            // (courtyard_open.png: the doorway from a second picture, lined up
+            // on the door frame and patched in by Tools/patch_variant.py).
+            .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"),
+                            "Assets/Backgrounds/Mansion/courtyard_open.png")
+
+            .Hotspot("Fountain", 0, 520, 360, 362)
                 .OnTalk("The fountain burbles. It is not a conversation.")
-                .Describe("Water spills over the fountain's mossy tiers. Something glitters beneath the surface.")
+                .Describe("Water spills over the fountain's tiers into a wide basin. Something glitters beneath the surface.")
                 .CloseUp("FountainCloseup")
 
-            .Hotspot("Front Door", 770, 280, 300, 410)
+            .Hotspot("Statue", 110, 285, 140, 235)
+                .Describe("A robed stone woman stands at the top of the fountain, hands folded, looking away from the house.")
+                .OnTalk("She keeps looking away. You get the feeling it's deliberate.")
+                .OnAct("She's well out of reach, at the top of the fountain.")
+
+            .Hotspot("Front Door", 625, 250, 550, 470)
                 .Describe("Wide stone steps lead up to the mansion's great carved doors.")
                 .GoesTo("FrontDoor")
+                .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-            .Hotspot("Garden Path", 400, 560, 220, 110)
-                .Describe("A path runs behind the fountain, along the balustrade, around the left wing of the mansion.")
+            .Hotspot("Front Door", 625, 250, 550, 470)
+                .Describe("At the top of the steps the great doors stand open. Candlelight spills out into the rain.")
+                .GoesTo("FrontDoor")
+                .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
+
+            // Listed after the front door so they win where they overlap.
+            .Hotspot("Lantern", 705, 240, 55, 130)
+                .Describe("An iron lantern beside the door. Someone keeps these lit.")
+                .OnAct("Too high to reach from down here.")
+
+            .Hotspot("Lantern", 1040, 240, 55, 130)
+                .Describe("An iron lantern beside the door. Someone keeps these lit.")
+                .OnAct("Too high to reach from down here.")
+
+            .Hotspot("Urn", 625, 395, 115, 120)
+                .Describe("A stone urn on the balustrade, overflowing with ivy and red flowers.")
+
+            .Hotspot("Urn", 1055, 395, 115, 120)
+                .Describe("A stone urn on the balustrade, overflowing with ivy and red flowers.")
+
+            .Hotspot("Windows", 280, 192, 330, 250)
+                .Describe("Rows of tall Gothic windows, every one of them lit. Nobody appears in any of them.")
+                .OnAct("The windows are well out of reach.")
+
+            .Hotspot("Windows", 1130, 192, 260, 250)
+                .Describe("Rows of tall Gothic windows, every one of them lit. Nobody appears in any of them.")
+                .OnAct("The windows are well out of reach.")
+
+            .Hotspot("Lamp Post", 1440, 360, 96, 160)
+                .Describe("A lamp post at the edge of the courtyard, lighting the way round the side of the house.")
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
+
+            .Hotspot("Garden Path", 230, 560, 250, 90)
+                .Describe("A path runs behind the fountain, along the front of the mansion, round its left wing.")
                 .GoesTo("Garden")
 
-            .Hotspot("Side Path", 1300, 540, 200, 200)
-                .Describe("A cracked, winding path disappears into the overgrown dark beside the mansion.")
+            .Hotspot("Side Path", 1300, 560, 140, 260)
+                .Describe("A wet cobbled path curves away round the right side of the mansion.")
                 .GoesTo("MansionRight")
 
             .ReturnTo("FrontGate", "You walk back to the gates.");
