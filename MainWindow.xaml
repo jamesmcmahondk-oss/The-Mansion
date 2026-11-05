@@ -103,6 +103,15 @@
              Cursor="Hand"
              MouseLeftButtonDown="TitleButton_MouseDown"/>
 
+                <Rectangle x:Name="CreditsBtn"
+             Canvas.Left="239"
+             Canvas.Top="766"
+             Width="360"
+             Height="74"
+             Fill="Transparent"
+             Cursor="Hand"
+             MouseLeftButtonDown="TitleButton_MouseDown"/>
+
                 <Rectangle x:Name="QuitBtn"
              Canvas.Left="239"
              Canvas.Top="877"
@@ -1357,6 +1366,64 @@
                            Cursor="Hand"
                            MouseLeftButtonDown="CrossPuzzleBack_MouseLeftButtonDown"/>
             </Canvas>
+        </Grid>
+
+        <!-- ========================================= -->
+        <!-- CREDITS (title screen)                    -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="CreditsScreen"
+              Visibility="Collapsed"
+              Background="#E0000000"
+              Cursor="Hand"
+              MouseLeftButtonDown="CreditsScreen_MouseLeftButtonDown"
+              Panel.ZIndex="3660">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" x:Key="CreditRole">
+                    <Setter Property="Foreground" Value="#887966"/>
+                    <Setter Property="FontFamily" Value="Georgia"/>
+                    <Setter Property="FontStyle" Value="Italic"/>
+                    <Setter Property="FontSize" Value="20"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,26,0,2"/>
+                </Style>
+                <Style TargetType="TextBlock" x:Key="CreditName">
+                    <Setter Property="Foreground" Value="#DDD4C3"/>
+                    <Setter Property="FontFamily" Value="Georgia"/>
+                    <Setter Property="FontSize" Value="30"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="THE MANSION" HorizontalAlignment="Center" Foreground="#C8A96A"
+                           FontFamily="Georgia" FontWeight="Bold" FontSize="56"/>
+                <TextBlock Text="People lived here. Something ended, but not everything moved on."
+                           HorizontalAlignment="Center" Foreground="#A89A84" FontFamily="Georgia"
+                           FontStyle="Italic" FontSize="20" Margin="0,10,0,20"/>
+
+                <TextBlock Style="{StaticResource CreditRole}" Text="Created, directed and produced by"/>
+                <TextBlock Style="{StaticResource CreditName}" Text="James McMahon"/>
+
+                <TextBlock Style="{StaticResource CreditRole}" Text="Head Writer"/>
+                <TextBlock Style="{StaticResource CreditName}" Text="Copilot"/>
+
+                <TextBlock Style="{StaticResource CreditRole}" Text="Art Director"/>
+                <TextBlock Style="{StaticResource CreditName}" Text="ChatGPT"/>
+
+                <TextBlock Style="{StaticResource CreditRole}" Text="Lead Programmer"/>
+                <TextBlock Style="{StaticResource CreditName}" Text="Claude (Anthropic)"/>
+
+                <TextBlock Style="{StaticResource CreditRole}" Text="Sound and title music chosen by"/>
+                <TextBlock Style="{StaticResource CreditName}" Text="James McMahon"/>
+
+                <TextBlock Text="Built with C# and WPF on .NET" HorizontalAlignment="Center"
+                           Foreground="#756A59" FontFamily="Georgia" FontSize="17" Margin="0,40,0,0"/>
+                <TextBlock Text="With thanks to the Sock, which remains damp." HorizontalAlignment="Center"
+                           Foreground="#756A59" FontFamily="Georgia" FontStyle="Italic" FontSize="17" Margin="0,6,0,0"/>
+                <TextBlock Text="Click or press Esc to return" HorizontalAlignment="Center"
+                           Foreground="#5E554A" FontFamily="Georgia" FontStyle="Italic" FontSize="15" Margin="0,30,0,0"/>
+            </StackPanel>
         </Grid>
 
         <!-- ========================================= -->

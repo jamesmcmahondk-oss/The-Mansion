@@ -44,6 +44,13 @@ namespace The_Mansion
                 return;
             }
 
+            if (e.Key == Key.Escape && CreditsScreen.Visibility == Visibility.Visible)
+            {
+                CreditsScreen.Visibility = Visibility.Collapsed;
+                e.Handled = true;
+                return;
+            }
+
             // Typing in a text box (player name, debug flags): keys are just letters.
             bool typing = Keyboard.FocusedElement is TextBox;
 
