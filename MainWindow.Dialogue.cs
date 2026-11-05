@@ -229,6 +229,7 @@ namespace The_Mansion
             {
                 choice.Effect(_player);
                 UpdatePlayerStats();
+                RefreshSceneBackground();   // e.g. a hat put on or taken off
             }
 
             // "Draw your weapon!" - end the conversation and fight.
@@ -245,6 +246,22 @@ namespace The_Mansion
             else
             {
                 ShowDialogueNode(choice.Next);
+            }
+        }
+
+        // .BackgroundWhen(...) can change mid-conversation.
+        private void RefreshSceneBackground()
+        {
+            if (_currentScene == null)
+            {
+                return;
+            }
+
+            string background = _currentScene.GetBackground(_player);
+            if (background != _currentBackground)
+            {
+                _currentBackground = background;
+                LoadSceneBackground(background);
             }
         }
 
