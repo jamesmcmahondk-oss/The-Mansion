@@ -20,72 +20,12 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 OUT_W, OUT_H = 600, 800
 OUT_DIR = "Assets/Characters/Portraits"
 
-PORTRAITS = {
-    "Quazimodo": dict(
-        source="Assets/Characters/Quazimodo.png",
-        crop=(140, 40, 660, 733),
-        glow=(0.38, 0.30),
-        title="QUAZIMODO",
-        subtitle="The Butler"),
-    # A picture that already has its own background (no transparency):
-    # "opaque" keeps that background and only re-lights it to match.
-    "Quazimodo_Beaten": dict(
-        source="Assets/Characters/Portraits/Sources/Quazimodo_beaten_source.jpg",
-        crop=(235, 105, 655, 665),
-        glow=(0.45, 0.28),
-        opaque=True,
-        title="QUAZIMODO",
-        subtitle="The Butler"),
-    # Already painted in the portrait style: just resize and frame it.
-    "Hautain_Beaten": dict(
-        source="Assets/Characters/Portraits/Sources/Hautain_beaten_source.png",
-        crop=(0, 0, 768, 1024),
-        glow=(0.62, 0.24),
-        opaque=True,
-        keep_look=True,
-        title="HAUTAIN",
-        subtitle="The Frog King"),
-    "Quazimodo_Bribed": dict(
-        source="Assets/Characters/Portraits/Sources/Quazimodo_bribed_source.png",
-        crop=(0, 0, 896, 1195),
-        glow=(0.45, 0.28),
-        opaque=True,
-        keep_look=True,
-        title="QUAZIMODO",
-        subtitle="The Butler"),
-    # Taken from the FrontGargoyle scene background (moonlit, so it keeps
-    # its own background and light).
-    "Gargoyle": dict(
-        source="Assets/Backgrounds/Mansion/FrontGargoyle.png",
-        crop=(700, 0, 1380, 907),
-        glow=(0.45, 0.30),
-        opaque=True,
-        keep_look=True,
-        title="THE GARGOYLE",
-        subtitle="Of the Front Gate"),
-    # Wearing the party hat - made by Tools/build_gargoyle_hat.py.
-    "Gargoyle_PartyHat": dict(
-        source="Assets/Characters/Portraits/Sources/Gargoyle_PartyHat_source.png",
-        crop=(0, 0, 600, 800),
-        glow=(0.45, 0.30),
-        opaque=True,
-        keep_look=True,
-        title="THE GARGOYLE",
-        subtitle="Of the Front Gate"),
-    "Hautain": dict(
-        source="Assets/Characters/Hautain.png",
-        crop=(20, 0, 860, 1120),
-        glow=(0.62, 0.24),
-        title="HAUTAIN",
-        subtitle="The Frog King"),
-    # Head, wings and the bottle (ANOTHER BAD IDEA).
-    "Ebria": dict(
-        source="Assets/Characters/Ebria.png",
-        crop=(60, 10, 840, 1050),
-        glow=(0.55, 0.26),
-        title="EBRIA",
-        subtitle="The Fairy"),
-}
+PORTRAITS = {}
+
+# The other portraits are finished framed pictures from ChatGPT, resized to
+# 600x800, and are NOT built here (so rerunning this can't overwrite them):
+#   Quazimodo, Gargoyle, Gargoyle_PartyHat, Hautain, Hautain_Beaten, Ebria,
+#   Quazimodo_Beaten, Quazimodo_Bribed, Quazimodo_PartyHat.
 
 FONT_PATHS = ["C:/Windows/Fonts/georgiab.ttf", "C:/Windows/Fonts/georgia.ttf",
               "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
