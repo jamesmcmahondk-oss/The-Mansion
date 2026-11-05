@@ -40,8 +40,6 @@
     <None Remove="Assets\Backgrounds\Mansion\statue_closeup_nosword.png" />
     <None Remove="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <None Remove="Assets\Items\Sources\*.png" />
-    <None Remove="Assets\Backgrounds\Mansion\right_closeup.png" />
-    <None Remove="Assets\Backgrounds\Mansion\right_open.png" />
     <None Remove="Assets\Characters\*.png" />
     <None Remove="Assets\Characters\Portraits\*.png" />
     <None Remove="Assets\Items\*.png" />
@@ -83,7 +81,7 @@
     <None Remove="Assets\UI\hud_overlay_cropped.png" />
     <None Remove="Assets\UI\item.png" />
     <None Remove="Assets\UI\item_glow.png" />
-    <None Remove="Assets\UI\Look.png" />
+    <None Remove="Assets\UI\look.png" />
     <None Remove="Assets\UI\look_glow.png" />
     <None Remove="Assets\UI\MainMenu.png" />
     <None Remove="Assets\UI\menu_frame.png" />
@@ -129,10 +127,9 @@
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
     <Resource Include="Assets\Items\Sources\paper.png" />
-    <Resource Include="Assets\Backgrounds\Mansion\right_closeup.png" />
-    <Resource Include="Assets\Backgrounds\Mansion\right_open.png" />
     <Resource Include="Assets\Characters\*.png" />
-    <Resource Include="Assets\Characters\Portraits\*.png" />
+    <!-- Only the framed portraits are used; the plain ones are by-products of Tools/build_portraits.py. -->
+    <Resource Include="Assets\Characters\Portraits\*_framed.png" />
     <Resource Include="Assets\Items\*.png" />
     <Resource Include="Assets\Cursors\cursor_act.cur" />
     <Resource Include="Assets\Cursors\cursor_arrow.cur" />
@@ -143,9 +140,8 @@
     <Resource Include="Assets\UI\act_glow.png" />
     <Resource Include="Assets\UI\item.png" />
     <Resource Include="Assets\UI\item_glow.png" />
-    <Resource Include="Assets\UI\Look.png" />
+    <Resource Include="Assets\UI\look.png" />
     <Resource Include="Assets\UI\look_glow.png" />
-    <Resource Include="Assets\UI\menu_frame.png" />
     <Resource Include="Assets\UI\hud_frame.png" />
     <Resource Include="Assets\UI\return_arrow.png" />
     <Resource Include="Assets\UI\talk.png" />

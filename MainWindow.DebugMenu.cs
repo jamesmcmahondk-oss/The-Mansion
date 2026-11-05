@@ -59,8 +59,8 @@ namespace The_Mansion
                     FontFamily = new FontFamily("Consolas"),
                     FontSize = 16,
                     Foreground = isCurrent ? Brushes.Lime : Brushes.White,
-                    Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22)),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44)),
+                    Background = Paint.Rgb(0x22, 0x22, 0x22),
+                    BorderBrush = Paint.Rgb(0x44, 0x44, 0x44),
                     Cursor = Cursors.Hand
                 };
 
@@ -83,8 +83,8 @@ namespace The_Mansion
                     FontFamily = new FontFamily("Consolas"),
                     FontSize = 16,
                     Foreground = Brushes.White,
-                    Background = new SolidColorBrush(Color.FromRgb(0x33, 0x18, 0x18)),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(0x55, 0x33, 0x33)),
+                    Background = Paint.Rgb(0x33, 0x18, 0x18),
+                    BorderBrush = Paint.Rgb(0x55, 0x33, 0x33),
                     Cursor = Cursors.Hand
                 };
 

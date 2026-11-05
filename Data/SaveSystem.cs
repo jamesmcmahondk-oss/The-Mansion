@@ -99,7 +99,13 @@ namespace The_Mansion.Data
             try
             {
                 Directory.CreateDirectory(SaveFolder);
-                File.WriteAllText(SlotPath(slot), JsonSerializer.Serialize(save, JsonOptions));
+
+                // Write a temporary file first and then swap it in, so a crash
+                // or power cut mid-save can't leave a half-written save behind.
+                string path = SlotPath(slot);
+                string temp = path + ".tmp";
+                File.WriteAllText(temp, JsonSerializer.Serialize(save, JsonOptions));
+                File.Move(temp, path, overwrite: true);
                 return null;
             }
             catch (Exception ex)

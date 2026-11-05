@@ -18,119 +18,47 @@ namespace The_Mansion
     // (Part of MainWindow - see MainWindow.xaml.cs.)
     public partial class MainWindow
     {
+        // The verb buttons' pictures: (normal, glowing) - the glow shows on
+        // hover and for the verb in use.
+        private static readonly Dictionary<string, (string Normal, string Glow)> VerbButtonImages = new()
+        {
+            ["LookBtn"] = ("Assets/UI/look.png", "Assets/UI/look_glow.png"),
+            ["TalkBtn"] = ("Assets/UI/talk.png", "Assets/UI/talk_glow.png"),
+            ["ActBtn"] = ("Assets/UI/act.png", "Assets/UI/act_glow.png"),
+            ["ItemBtn"] = ("Assets/UI/item.png", "Assets/UI/item_glow.png")
+        };
+
         private void MenuButton_MouseEnter(object sender, MouseEventArgs e)
         {
-
-            if (sender is not Image buttonImage)
+            if (sender is Image button && VerbButtonImages.TryGetValue(button.Name, out var images))
             {
-                return;
-            }
-
-            string imagePath = buttonImage.Source.ToString();
-            string buttonName = buttonImage.Name;
-
-            switch (buttonName)
-            {
-                case "LookBtn":
-                    {
-                         imagePath = "Assets/UI/look_glow.png";
-                        break;
-                    }
-
-                case "TalkBtn":
-                    {
-                         imagePath = "Assets/UI/talk_glow.png";
-                        break;
-                    }
-
-                case "ActBtn":
-                    {
-                         imagePath = "Assets/UI/act_glow.png";
-                        break;
-                    }
-
-                case "ItemBtn":
-                    {
-                         imagePath = "Assets/UI/item_glow.png";
-                        break;
-                    }
-            }
-            try
-            {
-                var imageUri = new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute
-                );
-
-                buttonImage.Source = new BitmapImage(imageUri);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load button image:\n\n" +
-                    $"{imagePath}\n\n" +
-                    $"{ex.Message}",
-                    "button image error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                SetButtonImage(button, images.Glow);
             }
 
             e.Handled = true;
         }
 
-        private void SetButtonImage(Image buttonImage, string imagePath)
+        private static void SetButtonImage(Image buttonImage, string imagePath)
         {
-            try
+            BitmapImage? picture = LoadImage(imagePath, "button picture");
+            if (picture != null)
             {
-                var imageUri = new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute
-                );
-
-                buttonImage.Source = new BitmapImage(imageUri);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load button image:\n\n" +
-                    $"{imagePath}\n\n" +
-                    $"{ex.Message}",
-                    "Button image error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                buttonImage.Source = picture;
             }
         }
+
         private void UpdateMenuButtonImages()
         {
-            SetButtonImage(
-                LookBtn,
-                _interactionMode == InteractionMode.Look
-                    ? "Assets/UI/look_glow.png"
-                    : "Assets/UI/look.png"
-            );
+            SetVerbButton(LookBtn, InteractionMode.Look);
+            SetVerbButton(TalkBtn, InteractionMode.Talk);
+            SetVerbButton(ActBtn, InteractionMode.Act);
+            SetVerbButton(ItemBtn, InteractionMode.Item);
+        }
 
-            SetButtonImage(
-                TalkBtn,
-                _interactionMode == InteractionMode.Talk
-                    ? "Assets/UI/talk_glow.png"
-                    : "Assets/UI/talk.png"
-            );
-
-            SetButtonImage(
-                ActBtn,
-                _interactionMode == InteractionMode.Act
-                    ? "Assets/UI/Act_glow.png"
-                    : "Assets/UI/Act.png"
-            );
-
-            SetButtonImage(
-                ItemBtn,
-                _interactionMode == InteractionMode.Item
-                    ? "Assets/UI/item_glow.png"
-                    : "Assets/UI/item.png"
-            );
+        private void SetVerbButton(Image button, InteractionMode mode)
+        {
+            var images = VerbButtonImages[button.Name];
+            SetButtonImage(button, _interactionMode == mode ? images.Glow : images.Normal);
         }
 
         private void MenuButton_MouseLeave(object sender, MouseEventArgs e)
@@ -413,9 +341,6 @@ namespace The_Mansion
 
             _hotspotsRevealed = true;
 
-            var outlineBrush = new SolidColorBrush(Color.FromArgb(0xE0, 0xC8, 0xA9, 0x6A));
-            var fillBrush = new SolidColorBrush(Color.FromArgb(0x30, 0xC8, 0xA9, 0x6A));
-
             foreach (Rectangle rectangle in SceneCanvas.Children.OfType<Rectangle>().ToList())
             {
                 if (rectangle.Tag is not Hotspot hotspot || hotspot.ScreenSpace)
@@ -427,10 +352,10 @@ namespace The_Mansion
                 {
                     Width = rectangle.Width,
                     Height = rectangle.Height,
-                    Stroke = outlineBrush,
+                    Stroke = RevealOutlineBrush,
                     StrokeThickness = 3,
                     StrokeDashArray = new DoubleCollection { 4, 2 },
-                    Fill = fillBrush,
+                    Fill = RevealFillBrush,
                     RadiusX = 10,
                     RadiusY = 10,
                     IsHitTestVisible = false,
@@ -443,7 +368,7 @@ namespace The_Mansion
 
                 var name = new Border
                 {
-                    Background = new SolidColorBrush(Color.FromArgb(0xB0, 0, 0, 0)),
+                    Background = RevealLabelBrush,
                     CornerRadius = new CornerRadius(4),
                     Padding = new Thickness(8, 2, 8, 3),
                     IsHitTestVisible = false,
@@ -451,8 +376,8 @@ namespace The_Mansion
                     Child = new TextBlock
                     {
                         Text = hotspot.Name,
-                        Foreground = outlineBrush,
-                        FontFamily = new FontFamily("Georgia"),
+                        Foreground = RevealOutlineBrush,
+                        FontFamily = Georgia,
                         FontWeight = FontWeights.Bold,
                         FontSize = 18
                     }
@@ -468,6 +393,11 @@ namespace The_Mansion
         }
 
         private const string RevealTag = "reveal";
+
+        private static readonly Brush RevealOutlineBrush = Paint.Argb(0xE0, 0xC8, 0xA9, 0x6A);
+        private static readonly Brush RevealFillBrush = Paint.Argb(0x30, 0xC8, 0xA9, 0x6A);
+        private static readonly Brush RevealLabelBrush = Paint.Argb(0xB0, 0, 0, 0);
+        private static readonly FontFamily Georgia = new("Georgia");
 
         private void HideRevealedHotspots()
         {

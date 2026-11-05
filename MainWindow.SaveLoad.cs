@@ -147,7 +147,7 @@ namespace The_Mansion
                       $"{save.SavedAt:d MMM yyyy, HH:mm}",
                 FontSize = 16,
                 FontWeight = FontWeights.Normal,
-                Foreground = new SolidColorBrush(Color.FromRgb(0xA8, 0x9A, 0x84)),
+                Foreground = Paint.Rgb(0xA8, 0x9A, 0x84),
                 Margin = new Thickness(0, 4, 0, 0)
             };
 
@@ -261,7 +261,9 @@ namespace The_Mansion
 
             _player = save.ToPlayer();
             _selectedItem = null;
+            CloseInventory();
             CloseJournal(goBack: false);
+            _unreadJournal.Clear();
 
             // Saves from before the journal: fill it in quietly.
             Journal.Update(_player);
@@ -296,12 +298,20 @@ namespace The_Mansion
             }
 
             EndFight();
+            CloseInventory();
+            _backstoryTimer?.Stop();
+            _replyShowing = false;
+            PictureViewer.Visibility = Visibility.Collapsed;
 
+            // A brand new hero: nothing from the last game carries over.
             _player = new Player();
             _rerollsRemaining = 3;
             _selectedItem = null;
             _fightSnapshot = null;
             _currentScene = null;
+            _unreadJournal.Clear();
+            _interactionMode = InteractionMode.Look;
+            UpdateMenuButtonImages();
 
             GameScreen.Visibility = Visibility.Collapsed;
             TrunkScreen.Visibility = Visibility.Collapsed;

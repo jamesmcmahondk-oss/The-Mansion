@@ -28,10 +28,17 @@ namespace The_Mansion
         private readonly List<DialogueChoice> _visibleChoices = new();
 
         private static readonly Brush ChoiceBrush =
-            new SolidColorBrush(Color.FromRgb(0xB9, 0xA9, 0x8D));
+            Paint.Rgb(0xB9, 0xA9, 0x8D);
 
         private static readonly Brush ChoiceHoverBrush =
-            new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+            Paint.Rgb(0xFF, 0xD9, 0x8A);
+
+        // The see-through layer over the scene during conversations and fights.
+        private static readonly Brush DimBrush = Paint.Argb(0x8C, 0, 0, 0);
+
+        // Character art is drawn 1536 pixels tall but shown at most ~1100 on
+        // screen, so it's decoded at this height to save memory.
+        private const int CharacterDecodeHeight = 1100;
 
         private bool IsInDialogue => _activeDialogue != null;
 
@@ -59,9 +66,7 @@ namespace The_Mansion
 
             // The dim layer also blocks clicks on hotspots while talking,
             // so it is always shown - just see-through when not dimming.
-            DialogueDim.Fill = dialogue.ShouldDimScene
-                ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
-                : Brushes.Transparent;
+            DialogueDim.Fill = dialogue.ShouldDimScene ? DimBrush : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
             HideHoverLabel();
             HideRevealedHotspots();
@@ -106,25 +111,7 @@ namespace The_Mansion
             }
 
             _shownCharacter = imagePath;
-            DialogueCharacter.Source = null;
-
-            if (!string.IsNullOrWhiteSpace(imagePath))
-            {
-                try
-                {
-                    DialogueCharacter.Source = new BitmapImage(new Uri(
-                        $"pack://application:,,,/{imagePath}",
-                        UriKind.Absolute));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        $"Could not load portrait:\n\n{imagePath}\n\n{ex.Message}",
-                        "Portrait error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            }
+            DialogueCharacter.Source = LoadImage(imagePath, "character picture", CharacterDecodeHeight);
 
             DialogueCharacter.Visibility =
                 DialogueCharacter.Source != null ? Visibility.Visible : Visibility.Collapsed;
@@ -207,7 +194,7 @@ namespace The_Mansion
                 {
                     Text = $"{i + 1}.  {_visibleChoices[i].Text}",
                     Foreground = ChoiceBrush,
-                    FontFamily = new FontFamily("Georgia"),
+                    FontFamily = Georgia,
                     FontSize = 16,
                     Margin = new Thickness(12, 0, 0, 4),
                     TextTrimming = TextTrimming.CharacterEllipsis,

@@ -115,9 +115,7 @@ namespace The_Mansion
             SetDialogueCharacter(enemy.Character);
             SetCloseUpPortrait(enemy.Portrait);
 
-            DialogueDim.Fill = enemy.ShouldDimScene
-                ? new SolidColorBrush(Color.FromArgb(0x8C, 0, 0, 0))
-                : Brushes.Transparent;
+            DialogueDim.Fill = enemy.ShouldDimScene ? DimBrush : Brushes.Transparent;
             DialogueDim.Visibility = Visibility.Visible;
             HideHoverLabel();
             HideRevealedHotspots();
@@ -234,21 +232,8 @@ namespace The_Mansion
 
         // ---- Dice --------------------------------------------------------
 
-        private static readonly BitmapImage[] DieFaces = LoadDieFaces();
-
-        private static BitmapImage[] LoadDieFaces()
-        {
-            var faces = new BitmapImage[7];
-            for (int n = 1; n <= 6; n++)
-            {
-                faces[n] = new BitmapImage(new Uri(
-                    $"pack://application:,,,/Assets/UI/Dice/die_{n}.png",
-                    UriKind.Absolute));
-            }
-            return faces;
-        }
-
-        private static void SetDieFace(Image die, int value) => die.Source = DieFaces[value];
+        private static void SetDieFace(Image die, int value) =>
+            die.Source = LoadImage($"Assets/UI/Dice/die_{value}.png", "die picture");
 
         private static void SetDieAngle(Image die, double angle)
         {
@@ -276,7 +261,7 @@ namespace The_Mansion
             int p1 = Dice.D6(), p2 = Dice.D6(), e1 = Dice.D6(), e2 = Dice.D6();
 
             Image[] dice = { PlayerDie1, PlayerDie2, EnemyDie1, EnemyDie2 };
-            var random = new Random();
+            Random random = Random.Shared;   // just for the tumbling look; the result is rolled above
             int ticks = 0;
             const int totalTicks = 9;    // ~70 ms each = ~0.65 s
 
@@ -633,23 +618,15 @@ namespace The_Mansion
                 return;
             }
 
-            try
+            BitmapImage? portrait = LoadImage(imagePath, "portrait");
+            if (portrait == null)
             {
-                DialoguePortrait.Source = new BitmapImage(new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute));
-                _shownCloseUp = imagePath;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load portrait:\n\n{imagePath}\n\n{ex.Message}",
-                    "Portrait error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
                 HideCloseUpPortrait();
                 return;
             }
+
+            DialoguePortrait.Source = portrait;
+            _shownCloseUp = imagePath;
 
             Rect spot = ImageToScreen(new Rect(PortraitSpotX, PortraitSpotY, 0, PortraitSpotHeight));
             DialoguePortrait.Margin = new Thickness(spot.X, spot.Y, 0, 0);

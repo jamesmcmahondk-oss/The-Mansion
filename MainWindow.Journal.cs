@@ -71,9 +71,9 @@ namespace The_Mansion
         }
 
         // Ink colours on the journal's paper.
-        private static readonly Brush JournalInk = new SolidColorBrush(Color.FromRgb(0x3A, 0x24, 0x12));
-        private static readonly Brush JournalFadedInk = new SolidColorBrush(Color.FromRgb(0x6B, 0x4E, 0x31));
-        private static readonly Brush JournalRedInk = new SolidColorBrush(Color.FromRgb(0x7A, 0x1E, 0x14));
+        private static readonly Brush JournalInk = Paint.Rgb(0x3A, 0x24, 0x12);
+        private static readonly Brush JournalFadedInk = Paint.Rgb(0x6B, 0x4E, 0x31);
+        private static readonly Brush JournalRedInk = Paint.Rgb(0x7A, 0x1E, 0x14);
 
         // Entries not read yet this session (marked on the contents page).
         private readonly HashSet<string> _unreadJournal = new(StringComparer.OrdinalIgnoreCase);
@@ -137,7 +137,7 @@ namespace The_Mansion
 
                 var line = new TextBlock
                 {
-                    FontFamily = new FontFamily("Georgia"),
+                    FontFamily = Georgia,
                     FontSize = 22,
                     TextWrapping = TextWrapping.Wrap,
                     Margin = new Thickness(8, 0, 8, 14),

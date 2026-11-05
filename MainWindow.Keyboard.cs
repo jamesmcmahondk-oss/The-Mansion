@@ -18,7 +18,7 @@ namespace The_Mansion
     // (Part of MainWindow - see MainWindow.xaml.cs.)
     public partial class MainWindow
     {
-        // Number keys 1-4 pick dialogue choices.
+        // Number keys 1-5 pick dialogue choices (up to 5 are shown).
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
 #if DEBUG
@@ -31,6 +31,18 @@ namespace The_Mansion
                 return;
             }
 #endif
+
+            // A picture being looked at (right-click in the inventory, the
+            // photograph...): Esc closes it, like a click does.
+            if (PictureViewer.Visibility == Visibility.Visible)
+            {
+                if (e.Key == Key.Escape)
+                {
+                    PictureViewer.Visibility = Visibility.Collapsed;
+                    e.Handled = true;
+                }
+                return;
+            }
 
             // Typing in a text box (player name, debug flags): keys are just letters.
             bool typing = Keyboard.FocusedElement is TextBox;
@@ -123,6 +135,7 @@ namespace The_Mansion
                 Key.D2 or Key.NumPad2 => 1,
                 Key.D3 or Key.NumPad3 => 2,
                 Key.D4 or Key.NumPad4 => 3,
+                Key.D5 or Key.NumPad5 => 4,
                 _ => -1
             };
 

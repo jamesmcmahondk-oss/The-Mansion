@@ -42,7 +42,30 @@ namespace The_Mansion
             {
                 FadeInScene();
                 Autosave();
+                PreloadNeighbours(scene);
             }
+        }
+
+        /*
+         * While the player looks around, quietly load the backgrounds of the
+         * places they can go next, so moving there doesn't stutter.
+         */
+        private void PreloadNeighbours(Scene scene)
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                foreach (Hotspot hotspot in scene.Hotspots)
+                {
+                    foreach (string name in new[] { hotspot.TargetScene, hotspot.CloseUpScene })
+                    {
+                        Scene? next = Scenes.GetScene(name);
+                        if (next != null)
+                        {
+                            ImageCache.Preload(next.GetBackground(_player));
+                        }
+                    }
+                }
+            }, DispatcherPriority.ApplicationIdle);
         }
 
         /*
@@ -76,25 +99,10 @@ namespace The_Mansion
 
         private void LoadSceneBackground(string imagePath)
         {
-            try
+            BitmapImage? background = LoadImage(imagePath, "scene picture");
+            if (background != null)
             {
-                var imageUri = new Uri(
-                    $"pack://application:,,,/{imagePath}",
-                    UriKind.Absolute
-                );
-
-                RoomBackground.Source = new BitmapImage(imageUri);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load scene image:\n\n" +
-                    $"{imagePath}\n\n" +
-                    $"{ex.Message}",
-                    "Scene image error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                RoomBackground.Source = background;
             }
         }
 
@@ -106,6 +114,15 @@ namespace The_Mansion
              */
             SceneCanvas.Children.Clear();
             _hotspotsRevealed = false;
+
+            // The hotspot under the mouse may be gone now (e.g. an item was
+            // taken), so don't leave its name floating there.
+            HideHoverLabel();
+
+            // The Return arrow only shows where it leads somewhere (.ReturnTo).
+            Return.Visibility = scene.Hotspots.Any(h => h.ScreenSpace)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
 
             _selectionRectangle = null;
             _isCreatingHotspot = false;
@@ -144,33 +161,25 @@ namespace The_Mansion
 
         private Image? CreateSpriteImage(SceneSprite sprite)
         {
-            try
+            BitmapImage? picture = LoadImage(sprite.Image, "sprite");
+            if (picture == null)
             {
-                var image = new Image
-                {
-                    Source = new BitmapImage(new Uri(
-                        $"pack://application:,,,/{sprite.Image}",
-                        UriKind.Absolute)),
-                    Stretch = Stretch.Uniform,
-                    IsHitTestVisible = false
-                };
-
-                Rect screen = ImageToScreen(new Rect(sprite.X, sprite.Y, 0, sprite.Height));
-                image.Height = screen.Height;
-                Canvas.SetLeft(image, screen.X);
-                Canvas.SetTop(image, screen.Y);
-                Panel.SetZIndex(image, 5);
-                return image;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Could not load sprite:\n\n{sprite.Image}\n\n{ex.Message}",
-                    "Sprite error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
                 return null;
             }
+
+            var image = new Image
+            {
+                Source = picture,
+                Stretch = Stretch.Uniform,
+                IsHitTestVisible = false
+            };
+
+            Rect screen = ImageToScreen(new Rect(sprite.X, sprite.Y, 0, sprite.Height));
+            image.Height = screen.Height;
+            Canvas.SetLeft(image, screen.X);
+            Canvas.SetTop(image, screen.Y);
+            Panel.SetZIndex(image, 5);
+            return image;
         }
 
         private Rectangle CreateHotspotRectangle(Hotspot hotspot)
@@ -264,12 +273,15 @@ namespace The_Mansion
              */
             if (hotspot.ScreenSpace)
             {
+                GoToScene(hotspot.TargetScene, hotspot.Name);
+
+                // The .ReturnTo text ("You step back out into the rain.") is
+                // shown after the move, so the new scene's description
+                // doesn't replace it straight away.
                 if (!string.IsNullOrWhiteSpace(hotspot.Description))
                 {
                     ShowDescription(hotspot.Description);
                 }
-
-                GoToScene(hotspot.TargetScene, hotspot.Name);
                 return;
             }
 
