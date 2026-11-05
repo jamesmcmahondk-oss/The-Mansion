@@ -20,18 +20,11 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 OUT_W, OUT_H = 600, 800
 OUT_DIR = "Assets/Characters/Portraits"
 
-PORTRAITS = {
-    "Quazimodo": dict(
-        source="Assets/Characters/Quazimodo.png",
-        crop=(140, 40, 660, 733),
-        glow=(0.38, 0.30),
-        title="QUAZIMODO",
-        subtitle="The Butler"),
-}
+PORTRAITS = {}
 
 # The other portraits are finished framed pictures from ChatGPT, resized to
 # 600x800, and are NOT built here (so rerunning this can't overwrite them):
-#   Gargoyle, Gargoyle_PartyHat, Hautain, Hautain_Beaten, Ebria,
+#   Quazimodo, Gargoyle, Gargoyle_PartyHat, Hautain, Hautain_Beaten, Ebria,
 #   Quazimodo_Beaten, Quazimodo_Bribed, Quazimodo_PartyHat.
 
 FONT_PATHS = ["C:/Windows/Fonts/georgiab.ttf", "C:/Windows/Fonts/georgia.ttf",
