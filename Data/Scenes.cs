@@ -790,27 +790,27 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/graveyard_entrance.png",
                      "The graveyard gates stand open. Mossy headstones lean beneath an ancient tree, and a stone cross rises over the hill.")
 
-            .Hotspot("Old Tree", 330, 192, 220, 300)
+            .Hotspot("Old Tree", 300, 192, 450, 348)
                 .OnAct("You'd rather not climb it in the rain. Or at all.")
                 .Describe("A huge, gnarled oak. Its roots have tipped several headstones over.")
 
-            .Hotspot("Lantern", 130, 230, 130, 150)
+            .Hotspot("Lantern", 115, 300, 160, 200)
                 .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern on the gatepost lights the way in. Someone keeps these burning.")
 
-            .Hotspot("Lantern", 1250, 420, 110, 140)
+            .Hotspot("Lantern", 1265, 445, 130, 170)
                 .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
                 .Describe("A lantern on the gatepost lights the way in. Someone keeps these burning.")
 
-            .Hotspot("Old Gravestone", 580, 410, 120, 200)
+            .Hotspot("Old Gravestone", 580, 525, 145, 230)
                 .Describe("The inscription has worn away to almost nothing. Almost.")
                 .CloseUp("GravestoneCloseup")
 
-            .Hotspot("Stone Cross", 1000, 260, 140, 250)
+            .Hotspot("Stone Cross", 1000, 290, 170, 300)
                 .Describe("A tall Celtic cross stands at the top of the steps, watching over the graves.")
                 .CloseUp("CrossCloseup")
 
-            .Hotspot("Graveyard Path", 870, 560, 220, 240)
+            .Hotspot("Graveyard Path", 1040, 620, 140, 140)
                 .Describe("Mossy steps lead up between the graves, deeper into the graveyard.")
 
             .ReturnTo("Well", "You leave the graveyard behind.");
@@ -924,21 +924,21 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/gravestone_closeup.png",
                      "An old headstone, smothered in ivy and lichen. Its inscription has almost worn away.")
 
-            .Hotspot("Moon", 1200, 192, 130, 110)
+            .Hotspot("Moon", 1205, 192, 140, 62)
                 .OnAct("Out of reach. Comfortably.")
                 .OnTalk("The moon has heard it all before.")
                 .Describe("The full moon hangs low over the graveyard.")
 
-            .Hotspot("Gravestone", 525, 200, 505, 630)
+            .Hotspot("Gravestone", 490, 192, 560, 640)
                 .OnTalk("You speak to the stone. Whoever lies here stopped listening long ago.")
                 .Describe("Ivy has crept up both sides of the stone, as if trying to hold it upright.")
 
-            .Hotspot("Carved Cross", 740, 250, 150, 220)
+            .Hotspot("Carved Cross", 725, 197, 165, 240)
                 .Describe("A small Celtic cross is carved at the top, the same knotwork as the great cross on the hill.")
 
             // Stats create shortcuts; items provide reliable solutions:
             // ACT is a Wits test (retry allowed), Charcoal + Paper always works.
-            .Hotspot("Inscription", 680, 480, 280, 240)
+            .Hotspot("Inscription", 600, 457, 360, 280)
                 .OnOtherItems("The {item} won't help you read the stone.")
                 .Describe("Most of the inscription has been worn smooth. A few shallow marks remain, but not enough to read.")
                 .OnAct(p => Gravestone.Read(p))

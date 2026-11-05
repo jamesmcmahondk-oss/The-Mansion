@@ -24,7 +24,8 @@ RIGHT_SHIFT = 10          # right side of the Mansion: pixels moved up
 SRC_DIR = "Assets/Backgrounds/Mansion/Sources"
 OUT_DIR = "Assets/Backgrounds/Mansion"
 
-# Courtyard, garden, statue, glasshouse and cross close-ups now come from
+# Courtyard, garden, statue, glasshouse, cross, graveyard entrance and
+# gravestone close-ups now come from
 # newer ChatGPT pictures (Nov 2026; statue and cross fitted by
 # Tools/fit_background.py) - their old entries are removed so rerunning this
 # doesn't put the old pictures back.
@@ -36,9 +37,7 @@ WIDE = [
     ("rear_yard_source.png",               "rear_yard.png",             110),
     ("kitchen_garden_source.png",          "kitchen_garden.png",        150),
     ("well_source.png",                    "well.png",                   60),
-    ("graveyard_entrance_source.png",      "graveyard_entrance.png",    110),
     # (well_closeup.png now comes from well_closeup_mirror.png - see the end)
-    ("gravestone_closeup_source.png",      "gravestone_closeup.png",     20),
 ]
 
 FITTED = [

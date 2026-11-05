@@ -227,14 +227,16 @@ namespace The_Mansion
             if (!_replyShowing ||
                 GameScreen.Visibility != Visibility.Visible ||
                 IsInDialogue || IsInFight || _inventoryOpen ||
-                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsCrossPuzzleOpen ||
+                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsCrossPuzzleOpen || IsJournalOpen ||
                 DebugMenu.Visibility == Visibility.Visible ||
                 GameOverScreen.Visibility == Visibility.Visible)
             {
                 return;
             }
 
-            bool onVerbButton = e.OriginalSource is DependencyObject source &&
+            // (OriginalSource can be a piece of text - a Run - which isn't a
+            // Visual, so IsAncestorOf can't be asked about it.)
+            bool onVerbButton = e.OriginalSource is Visual source &&
                                 MenuButtons.IsAncestorOf(source);
 
             DismissReply();
