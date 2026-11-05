@@ -1251,6 +1251,115 @@
         </Grid>
 
         <!-- ========================================= -->
+        <!-- CROSS PUZZLE: three stone spirals that      -->
+        <!-- turn (MainWindow.CrossPuzzle.cs).           -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="CrossPuzzleScreen"
+              Visibility="Collapsed"
+              Background="Black"
+              Panel.ZIndex="3620">
+
+            <Canvas Width="1920" Height="1080" ClipToBounds="True">
+
+                <!-- 1536x1024 picture at x1.25; sockets centred at
+                     (959,257), (693,653), (1221,651) on screen. -->
+                <Image Source="/Assets/UI/Puzzle/cross_puzzle.png"
+                       Width="1920" Height="1280"
+                       Canvas.Left="0" Canvas.Top="-100"
+                       Stretch="Fill"/>
+
+                <Image x:Name="SpiralUpperDisc"
+                       Tag="Upper"
+                       Source="/Assets/UI/Puzzle/spiral_disc.png"
+                       Width="375" Height="375"
+                       Canvas.Left="771" Canvas.Top="70"
+                       RenderTransformOrigin="0.5,0.5"
+                       Cursor="Hand"
+                       MouseLeftButtonDown="SpiralDisc_MouseLeftButtonDown"
+                       MouseRightButtonDown="SpiralDisc_MouseRightButtonDown">
+                    <Image.RenderTransform>
+                        <RotateTransform/>
+                    </Image.RenderTransform>
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="22" ShadowDepth="5" Opacity="0.85" Color="Black"/>
+                    </Image.Effect>
+                </Image>
+
+                <Image x:Name="SpiralLeftDisc"
+                       Tag="Left"
+                       Source="/Assets/UI/Puzzle/spiral_disc.png"
+                       Width="375" Height="375"
+                       Canvas.Left="506" Canvas.Top="466"
+                       RenderTransformOrigin="0.5,0.5"
+                       Cursor="Hand"
+                       MouseLeftButtonDown="SpiralDisc_MouseLeftButtonDown"
+                       MouseRightButtonDown="SpiralDisc_MouseRightButtonDown">
+                    <Image.RenderTransform>
+                        <RotateTransform/>
+                    </Image.RenderTransform>
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="22" ShadowDepth="5" Opacity="0.85" Color="Black"/>
+                    </Image.Effect>
+                </Image>
+
+                <Image x:Name="SpiralRightDisc"
+                       Tag="Right"
+                       Source="/Assets/UI/Puzzle/spiral_disc.png"
+                       Width="375" Height="375"
+                       Canvas.Left="1034" Canvas.Top="464"
+                       RenderTransformOrigin="0.5,0.5"
+                       Cursor="Hand"
+                       MouseLeftButtonDown="SpiralDisc_MouseLeftButtonDown"
+                       MouseRightButtonDown="SpiralDisc_MouseRightButtonDown">
+                    <Image.RenderTransform>
+                        <RotateTransform/>
+                    </Image.RenderTransform>
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="22" ShadowDepth="5" Opacity="0.85" Color="Black"/>
+                    </Image.Effect>
+                </Image>
+
+                <!-- Bottom: the clue and what just happened -->
+                <Border Canvas.Left="0" Canvas.Top="880" Width="1920" Height="200"
+                        Background="#C0000000"/>
+
+                <TextBlock x:Name="CrossPuzzleClueText"
+                           Canvas.Left="0" Canvas.Top="905" Width="1920"
+                           TextAlignment="Center"
+                           Foreground="#C8A96A"
+                           FontFamily="Georgia"
+                           FontWeight="Bold"
+                           FontSize="26"/>
+
+                <TextBlock x:Name="CrossPuzzleStatusText"
+                           Canvas.Left="0" Canvas.Top="955" Width="1920"
+                           TextAlignment="Center"
+                           Foreground="#DDD4C3"
+                           FontFamily="Georgia"
+                           FontSize="21"/>
+
+                <TextBlock Canvas.Left="0" Canvas.Top="1012" Width="1920"
+                           TextAlignment="Center"
+                           Foreground="#756A59"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="16"
+                           Text="Left-click turns a spiral, right-click turns it back  ·  Esc to step back"/>
+
+                <TextBlock x:Name="CrossPuzzleBackText"
+                           Canvas.Left="1700" Canvas.Top="30"
+                           Text="Step back  ✕"
+                           Foreground="#C8A96A"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="24"
+                           Cursor="Hand"
+                           MouseLeftButtonDown="CrossPuzzleBack_MouseLeftButtonDown"/>
+            </Canvas>
+        </Grid>
+
+        <!-- ========================================= -->
         <!-- JOURNAL (J, or JOURNAL in the game menu)  -->
         <!-- Entries come from Data/Journal.cs.        -->
         <!-- ========================================= -->

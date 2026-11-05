@@ -374,6 +374,12 @@ namespace The_Mansion
                 return;
             }
 
+            if (!string.IsNullOrWhiteSpace(hotspot.ActPuzzle))
+            {
+                OpenPuzzle(hotspot.ActPuzzle);
+                return;
+            }
+
             if (hotspot.ActResult != null)
             {
                 ShowReply(hotspot.ActResult(_player));

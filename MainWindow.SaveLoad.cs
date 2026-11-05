@@ -263,6 +263,7 @@ namespace The_Mansion
             _selectedItem = null;
             CloseInventory();
             CloseJournal(goBack: false);
+            CloseCrossPuzzle();
             _unreadJournal.Clear();
 
             // Saves from before the journal: fill it in quietly.
@@ -287,6 +288,7 @@ namespace The_Mansion
         private void ResetToTitle()
         {
             CloseJournal(goBack: false);
+            CloseCrossPuzzle();
             _gameOverShown = false;
             GameOverScreen.Visibility = Visibility.Collapsed;
             SaveLoadScreen.Visibility = Visibility.Collapsed;

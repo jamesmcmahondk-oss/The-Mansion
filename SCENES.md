@@ -403,9 +403,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 |---|---|---|---|---|
 | Moon | The full moon hangs over the graveyard. It looks closer than it should. | Out of reach. Comfortably. | The moon has heard it all before. | – |
 | Celtic Cross | Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another: one reaching up, one to the left, one to the right. | – | You read the knots aloud, as if they were words. They are not. You feel slightly foolish. | – |
-| Upper Spiral | A small stone spiral at the very centre of the cross, reaching upward. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | – |
-| Left Spiral | A small stone spiral at the centre of the cross, curling to the left. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | – |
-| Right Spiral | A small stone spiral at the centre of the cross, curling to the right. | (depends on a dice roll / the story - see Data/Scenes.cs) | – | – |
+| Spirals | At the very centre of the cross, three stone spirals are set into the stone, each in its own round socket. | – | – | – |
 | Plinth *(only when not CrossOpened)* | A mossy stepped plinth. A small knotwork panel is set into its face, as if something might be hidden behind it. | You press the carved panel. It doesn't budge - but the stone around it sounds hollow. | – | – |
 | Open Plinth *(only when CrossOpened and not FoundPhotograph)* | The knotwork panel in the plinth has slid aside. Something lies in the hollow behind it. | Inside the hollow lies a tiny, old photograph. As your fingers close around it, the rain stops. Not slows. Stops. You remember sunlight. You don't remember remembering sunlight. Then the rain resumes. (Memento: Worn Photograph)  [gives Worn Photograph]  [sets FoundPhotograph] | – | – |
 | Empty Plinth *(only when FoundPhotograph)* | The hollow in the plinth is empty now. | – | – | – |

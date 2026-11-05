@@ -885,21 +885,13 @@ namespace The_Mansion.Data
                 .Describe("Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another: " +
                           "one reaching up, one to the left, one to the right.")
                 .OnTalk("You read the knots aloud, as if they were words. They are not. You feel slightly foolish.")
+                .ActOpensPuzzle("Cross")
 
-            // THE GRAVEYARD SECRET: once the gravestone clue is known, the
-            // three spirals turn (ACT). Thrice for heaven (up), once for the
-            // heart (left), never for the hand that let go (right).
-            .Hotspot("Upper Spiral", 772, 334, 28, 25)
-                .Describe("A small stone spiral at the very centre of the cross, reaching upward.")
-                .OnAct(p => CrossSpirals.Turn(p, "Upper"))
-
-            .Hotspot("Left Spiral", 756, 358, 28, 25)
-                .Describe("A small stone spiral at the centre of the cross, curling to the left.")
-                .OnAct(p => CrossSpirals.Turn(p, "Left"))
-
-            .Hotspot("Right Spiral", 787, 358, 28, 25)
-                .Describe("A small stone spiral at the centre of the cross, curling to the right.")
-                .OnAct(p => CrossSpirals.Turn(p, "Right"))
+            // THE GRAVEYARD SECRET: ACT on the spirals (or the cross) opens the
+            // turning-spiral puzzle (Data/CrossPuzzle.cs, MainWindow.CrossPuzzle.cs).
+            .Hotspot("Spirals", 740, 315, 90, 75)
+                .Describe("At the very centre of the cross, three stone spirals are set into the stone, each in its own round socket.")
+                .ActOpensPuzzle("Cross")
 
             .Hotspot("Plinth", 544, 626, 468, 206)
                 .Describe("A mossy stepped plinth. A small knotwork panel is set into its face, as if something might be hidden behind it.")
@@ -1195,65 +1187,6 @@ namespace The_Mansion.Data
         // The three spirals on the great cross. Each turns a quarter at a
         // time (stored as story flags like "SpiralUpper2"); the plinth opens
         // when Upper = 3, Left = 1 and Right = 0.
-        private static class CrossSpirals
-        {
-            private static readonly string[] Directions = { "up", "right", "down", "left" };
-
-            private static int Get(Player p, string spiral)
-            {
-                for (int turns = 1; turns < 4; turns++)
-                {
-                    if (p.HasFlag($"Spiral{spiral}{turns}"))
-                    {
-                        return turns;
-                    }
-                }
-                return 0;
-            }
-
-            private static void Set(Player p, string spiral, int turns)
-            {
-                for (int t = 1; t < 4; t++)
-                {
-                    p.ClearFlag($"Spiral{spiral}{t}");
-                }
-                if (turns > 0)
-                {
-                    p.SetFlag($"Spiral{spiral}{turns}");
-                }
-            }
-
-            public static string Turn(Player p, string spiral)
-            {
-                if (p.HasFlag("CrossOpened"))
-                {
-                    return "The spirals won't move any more.";
-                }
-
-                if (!p.HasFlag("ReadGravestone"))
-                {
-                    return "You push the carving. Nothing.";
-                }
-
-                int turns = (Get(p, spiral) + 1) % 4;
-                Set(p, spiral, turns);
-
-                // Each spiral starts pointing its own way; report where its tail now points.
-                int start = spiral switch { "Upper" => 0, "Right" => 1, _ => 3 };
-                string direction = Directions[(start + turns) % 4];
-                string text = $"The {spiral.ToLowerInvariant()} spiral grinds a quarter turn beneath your fingers. Its tail now points {direction}.";
-
-                if (Get(p, "Upper") == 3 && Get(p, "Left") == 1 && Get(p, "Right") == 0)
-                {
-                    p.SetFlag("CrossOpened");
-                    text += " Somewhere below, stone slides against stone. The panel in the plinth has opened.";
-                }
-
-                return text;
-            }
-        }
-
-
         // =========================================================
         // LOOKUP (used by the game - no need to edit)
         // =========================================================

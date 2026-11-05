@@ -56,6 +56,17 @@ namespace The_Mansion
                 return;
             }
 
+            // Esc steps back from the cross puzzle.
+            if (IsCrossPuzzleOpen)
+            {
+                if (e.Key == Key.Escape)
+                {
+                    CloseCrossPuzzle();
+                    e.Handled = true;
+                }
+                return;
+            }
+
             // J opens/closes the journal (Esc closes it too).
             if (IsJournalOpen && ((e.Key == Key.J && !typing) || e.Key == Key.Escape))
             {

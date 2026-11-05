@@ -65,7 +65,10 @@ The first "gate". Every route works; each one leaves a mark the world remembers.
    inscription."*). Or **Charcoal + Paper** (use either while carrying both):
    a rubbing, always works. Reveals:
    **THRICE FOR HEAVEN · ONCE FOR THE HEART · NEVER FOR THE HAND THAT LET GO**
-2. **The cross** – three spirals at the centre (up, left, right). Before the
+2. **The cross** – three stone spirals at the centre (up, left, right), turned
+   on their own puzzle screen (ACT on the cross): the discs really rotate
+   (left-click on, right-click back), shudder if you don't know the clue yet,
+   and glow and lock when solved. Before the
    clue: *"You push the carving. Nothing."* After it, each turns a quarter on
    ACT and says where it points. Solution: **up ×3, left ×1, right ×0**.
 3. **The plinth opens** → **Worn Photograph** (Memento): the Mansion as it

@@ -46,6 +46,7 @@
     <None Remove="Assets\Characters\Portraits\*.png" />
     <None Remove="Assets\Items\*.png" />
     <None Remove="Assets\UI\Dice\*.png" />
+    <None Remove="Assets\UI\Puzzle\*.png" />
     <None Remove="Assets\UI\attack.png" />
     <None Remove="Assets\UI\attack_glow.png" />
     <None Remove="Assets\UI\flee.png" />
@@ -159,6 +160,7 @@
     <Resource Include="Assets\UI\flee_glow.png" />
     <Resource Include="Assets\UI\journal_book.png" />
     <Resource Include="Assets\UI\Dice\*.png" />
+    <Resource Include="Assets\UI\Puzzle\*.png" />
   </ItemGroup>
 
   <ItemGroup>
