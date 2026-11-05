@@ -1,20 +1,24 @@
 """
 Builds Assets/UI/hud_frame.png (exactly 1920x400) from Assets/UI/menu_frame.png.
 
-menu_frame.png is 1536x596. Squashing it straight into 1920x400 distorts
-every ornament (1.25x wider, 0.67x taller). Instead this script scales the
-art uniformly (x0.671) and makes up the extra width by widening only the
-plain parts:
+menu_frame.png is the 2012x782 frame art with transparent surroundings
+(made by Tools/cut_menu_frame.py). The game's HUD needs it 1920x400 with the
+two side pockets exactly where the verb buttons and the stats panel sit
+(MainWindow.xaml):
 
-  * the two side pockets get wider (so the menu buttons fit at their
-    natural proportions) by stretching the short bar section above them;
-  * the middle text panel gets wider by stretching its plain top/bottom
-    molding and filling the inside with more of the panel's own texture,
-    cross-faded so there are no visible seams.
+    left pocket  x 59-234,   right pocket x 1683-1859,   both y 128-373
 
-Skulls, gargoyles, pillars, scrolls and the centre gem keep their exact
-shape. Run from the repo root:  python Tools/build_hud_frame.py
-Requires Pillow and numpy.
+Squashing the art into that would distort every ornament. Instead:
+
+  * everything is scaled evenly (x SCALE), so gargoyles, skulls, pillars,
+    scrolls and the gem keep their shape;
+  * the extra width is made by inserting plain columns: inside each pocket
+    (between the gargoyle's claws and the scroll) and on the plain bar each
+    side of the gem, where the panel's own texture is cross-faded in;
+  * the extra height is made by stretching only the plain middle band
+    (pillar shafts, pockets, panel, hanging ivy).
+
+Run from the repo root:  python Tools/build_hud_frame.py   (Pillow + numpy)
 """
 import numpy as np
 from PIL import Image
@@ -23,33 +27,48 @@ SRC = "Assets/UI/menu_frame.png"
 DST = "Assets/UI/hud_frame.png"
 
 OUT_W, OUT_H = 1920, 400
+SCALE = 0.461                    # source pixels -> HUD pixels for the ornaments
+
 src = Image.open(SRC).convert("RGBA")
-SW, SH = src.size                      # 1536 x 596
-work_w = round(OUT_W * SH / OUT_H)     # width at source scale (2861)
-extra = work_w - SW
-
-POCKET_EXTRA = 76                      # source px added to each side pocket
-mid_extra = extra - 2 * POCKET_EXTRA
-MID_EXTRA_L = mid_extra // 2 + mid_extra % 2
-MID_EXTRA_R = mid_extra // 2
-
-# Rows of the middle panel: [0, TOP) top molding, [TOP, BOT) texture, [BOT, SH) bottom molding
-TOP, BOT = 210, 540
-# Texture areas inside the middle panel that are safe to sample from
-# (the gap between them is where the centre gem's pendant hangs down).
-TEX_CHUNKS = [(345, 735), (805, 1190)]
-BLEND = 48                             # cross-fade width at each seam
-
 a = np.asarray(src).astype(np.float32)
+SH, SW = a.shape[:2]             # 782 x 2012
+
+WORK_W = round(OUT_W / SCALE)    # width at source scale
+EXTRA = WORK_W - SW
+
+# Where to insert, and how many columns (source pixels). The pocket inserts
+# go in a step: above STEP_ROW right of the gargoyle's head, below it between
+# its claws and the scroll (no single column misses both).
+STEP_ROW = 170
+POCKET_L_AT_TOP, POCKET_L_AT = 290, 246
+POCKET_R_AT_TOP, POCKET_R_AT = SW - 290, SW - 246
+POCKET_L = 164
+MID_L_AT, MID_R_AT = 650, 1300           # plain bar each side of the gem
+MID_L = 913                              # keeps the gem centred
+MID_R_AND_POCKET_R = EXTRA - POCKET_L - MID_L
+POCKET_R = 169
+MID_R = MID_R_AND_POCKET_R - POCKET_R
+
+PLAIN_BAR = (1300, 1338)        # a plain stretch of the top/bottom bar
+SEAM_ROW = 240                  # pocket inserts: bar top from PLAIN_BAR above this,
+                                # the pocket's own columns below
+POCKET_OWN = {"L": (255, 300), "R": (SW - 300, SW - 255)}
+
+TOP, BOT = 266, 696             # rows of the middle panel's texture
+TEX_CHUNKS = [(440, 950), (1060, 1570)]   # texture away from the gem's pendant
+BLEND = 40
+
+# Vertical: rows [BAND0, BAND1) are stretched so the pockets end at y 373.
+BAND0, BAND1 = 330, 620
+POCKET_TOP_ROW, POCKET_BOTTOM_ROW = 266, 698
+TARGET_POCKET_BOTTOM = 373
 
 
-def keep(x0, x1):
-    return a[:, x0:x1]
-
-
-def stretch(x0, x1, new_w):
-    piece = src.crop((x0, 0, x1, SH)).resize((new_w, SH), Image.LANCZOS)
-    return np.asarray(piece).astype(np.float32)
+def stretch(block, new_w):
+    """Resize a block of columns (all rows) to new_w columns."""
+    h = block.shape[0]
+    img = Image.fromarray(np.clip(block, 0, 255).astype(np.uint8), "RGBA")
+    return np.asarray(img.resize((new_w, h), Image.LANCZOS)).astype(np.float32)
 
 
 def texture(new_w, chunks):
@@ -66,35 +85,68 @@ def texture(new_w, chunks):
     return tex[:, :new_w].copy()
 
 
-def plain_zone(x0, x1, new_w, chunks):
-    """Widen a plain section of the middle panel to new_w columns."""
-    out = stretch(x0, x1, new_w)                       # molding rows
-    tex = texture(new_w, chunks)
-    # Cross-fade into the real neighbouring columns at both ends.
-    left = a[TOP:BOT, x0:x0 + BLEND]
-    right = a[TOP:BOT, x1 - BLEND:x1]
+def blend_edges(block, left_cols, right_cols, rows):
+    """Cross-fade the block's ends into the real neighbouring columns."""
     w = np.linspace(1, 0, BLEND)[None, :, None]
-    tex[:, :BLEND] = left * w + tex[:, :BLEND] * (1 - w)
-    tex[:, -BLEND:] = right * w[:, ::-1] + tex[:, -BLEND:] * (1 - w[:, ::-1])
-    out[TOP:BOT] = tex
-    return out
+    r0, r1 = rows
+    block[r0:r1, :BLEND] = left_cols[r0:r1] * w + block[r0:r1, :BLEND] * (1 - w)
+    block[r0:r1, -BLEND:] = right_cols[r0:r1] * w[:, ::-1] + block[r0:r1, -BLEND:] * (1 - w[:, ::-1])
+    return block
 
 
-parts = [
-    keep(0, 180),                                   # left gargoyle + edge
-    stretch(180, 265, 85 + POCKET_EXTRA),           # bar over left pocket
-    keep(265, 420),                                 # left skull pillar + scroll
-    plain_zone(420, 590, 170 + MID_EXTRA_L, TEX_CHUNKS),
-    keep(590, 948),                                 # centre gem ornament
-    plain_zone(948, 1117, 169 + MID_EXTRA_R, TEX_CHUNKS[::-1]),
-    keep(1117, 1272),                               # right scroll + skull pillar
-    stretch(1272, 1350, 78 + POCKET_EXTRA),         # bar over right pocket
-    keep(1350, SW),                                 # right gargoyle + edge
-]
-wide = np.concatenate(parts, axis=1)
-assert wide.shape[1] == work_w, wide.shape
+def middle_insert(at, n, chunks):
+    block = stretch(a[:, PLAIN_BAR[0]:PLAIN_BAR[1]], n)
+    block[TOP:BOT] = texture(n, chunks)
+    return blend_edges(block, a[:, at - BLEND:at], a[:, at:at + BLEND], (TOP, BOT))
 
-img = Image.fromarray(np.clip(wide, 0, 255).astype(np.uint8), "RGBA")
-img = img.resize((OUT_W, OUT_H), Image.LANCZOS)
+
+def pocket_insert(at, n, side):
+    upper = stretch(a[:, PLAIN_BAR[0]:PLAIN_BAR[1]], n)
+    own = stretch(a[:, POCKET_OWN[side][0]:POCKET_OWN[side][1]], n)
+    block = own.copy()
+    block[:SEAM_ROW] = upper[:SEAM_ROW]
+    # Soften the join between the two sources.
+    for i in range(8):
+        t = (i + 1) / 9
+        r = SEAM_ROW + i
+        block[r] = upper[r] * (1 - t) + own[r] * t
+    return block
+
+
+pocket_l = pocket_insert(POCKET_L_AT, POCKET_L, "L")
+pocket_r = pocket_insert(POCKET_R_AT, POCKET_R, "R")
+mid_l = middle_insert(MID_L_AT, MID_L, TEX_CHUNKS)
+mid_r = middle_insert(MID_R_AT, MID_R, TEX_CHUNKS[::-1])
+
+
+def widen(rows, pocket_l_at, pocket_r_at):
+    """The given rows with all four inserts placed."""
+    r0, r1 = rows
+    inserts = [(pocket_l_at, pocket_l), (MID_L_AT, mid_l), (MID_R_AT, mid_r), (pocket_r_at, pocket_r)]
+    parts, x = [], 0
+    for at, block in inserts:
+        parts += [a[r0:r1, x:at], block[r0:r1]]
+        x = at
+    parts.append(a[r0:r1, x:])
+    return np.concatenate(parts, axis=1)
+
+
+wide = np.concatenate([
+    widen((0, STEP_ROW), POCKET_L_AT_TOP, POCKET_R_AT_TOP),
+    widen((STEP_ROW, SH), POCKET_L_AT, POCKET_R_AT),
+], axis=0)
+assert wide.shape[1] == WORK_W, (wide.shape, WORK_W)
+
+# Vertical: stretch only the plain band so the pockets end where the HUD
+# expects (the rows below the band keep the even scale).
+band_target = round(TARGET_POCKET_BOTTOM / SCALE
+                    - (POCKET_BOTTOM_ROW - BAND1) - BAND0)
+band = Image.fromarray(np.clip(wide[BAND0:BAND1], 0, 255).astype(np.uint8), "RGBA")
+band = np.asarray(band.resize((WORK_W, band_target), Image.LANCZOS)).astype(np.float32)
+tall = np.concatenate([wide[:BAND0], band, wide[BAND1:]], axis=0)
+
+img = Image.fromarray(np.clip(tall, 0, 255).astype(np.uint8), "RGBA")
+img = img.resize((OUT_W, round(tall.shape[0] * SCALE)), Image.LANCZOS)
+img = img.crop((0, 0, OUT_W, OUT_H))
 img.save(DST)
 print(f"wrote {DST} {img.size}")
