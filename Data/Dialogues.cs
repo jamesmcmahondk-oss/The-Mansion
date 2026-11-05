@@ -68,9 +68,12 @@ namespace The_Mansion.Data
                 // ITEMS
                 // =====================================================
 
+                // He wears it for the rest of this visit (the close-up shows
+                // it) until a choice leads to "hatRemove".
                 .OnItem(
                     "Party Hat",
-                    "hat")
+                    "hat",
+                    effect: p => p.SetFlag("GargoyleWearingHat"))
 
                 .OnOtherItems(
                     "The gargoyle examines the {item}. " +
@@ -1931,7 +1934,8 @@ namespace The_Mansion.Data
                         "hatOther")
                     .Choice(
                         "I'll take it off.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatSuits",
@@ -1945,7 +1949,8 @@ namespace The_Mansion.Data
                         "hatBoth")
                     .Choice(
                         "I'll remove it.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatBoth",
@@ -1958,7 +1963,8 @@ namespace The_Mansion.Data
                         "hatKeep")
                     .Choice(
                         "I'll take it off.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatBirthday",
@@ -1987,7 +1993,8 @@ namespace The_Mansion.Data
                         "hatLaugh")
                     .Choice(
                         "I'll remove it.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatLaugh",
@@ -2002,7 +2009,8 @@ namespace The_Mansion.Data
                         "hatKeep")
                     .Choice(
                         "I'll take it off.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatThanks",
@@ -2012,7 +2020,8 @@ namespace The_Mansion.Data
                         "Gargoyle_PartyHat_portrait_framed.png")
                     .Choice(
                         "I'll remove it.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
                     .Choice(
                         "What's wrong with it?",
                         "hatKeep")
@@ -2025,7 +2034,8 @@ namespace The_Mansion.Data
                         "Gargoyle_PartyHat_portrait_framed.png")
                     .Choice(
                         "Fair enough. I'll remove it.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
                     .Choice(
                         "Want to keep wearing it?",
                         "hatKeep")
@@ -2041,7 +2051,8 @@ namespace The_Mansion.Data
                         "hatScalp")
                     .Choice(
                         "Right. Sorry.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatScalp",
@@ -2051,7 +2062,8 @@ namespace The_Mansion.Data
                         "Gargoyle_PartyHat_portrait_framed.png")
                     .Choice(
                         "I'll take it off.",
-                        "hatRemove")
+                        "hatRemove",
+                        effect: p => p.ClearFlag("GargoyleWearingHat"))
 
                 .Line(
                     "hatRemove",

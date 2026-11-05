@@ -499,6 +499,7 @@ namespace The_Mansion
                 }
 
                 UpdatePlayerStats();
+                RefreshSceneBackground();
 
                 if (string.IsNullOrWhiteSpace(use.GoesTo))
                 {
