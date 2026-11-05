@@ -118,6 +118,7 @@ Don't explain these yet; each should pay off (or be noticed) later.
 | Where | Hook |
 |---|---|
 | Gargoyle | *"You don't cast rain properly."* – something is wrong with the player |
+| Mirélle (the fair witch) | Her story resolves when she **accepts she has grown old**. Portraits: `Mirelle_portrait_framed.png` (stern - before) and `Mirelle_Resolved_portrait_framed.png` (smiling - after). The mirror theme (Cracked Hand Mirror, covered mirror, her hand mirror) may lead here. |
 | The empty pillar | The right-hand gargoyle **left**. He is somewhere on the Mansion: perched on a balustrade high above the grounds, thinking (art: `Assets/Characters/Sources/Gargoyle_Other_full.png`). Finding him – and what he says about leaving – is a payoff for the front-gate gargoyle's story. Where and when: still to decide. |
 | Photograph | The rain stops when you take it; *"You said you'd come back."* |
 | Cellar doors | A single knock from underneath |
