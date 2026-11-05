@@ -53,6 +53,7 @@ Add any of these under a `.Hotspot(...)` line:
 | `.CloseUp("SceneName")` | LOOK on it → open that close-up scene |
 | `.GoesTo("SceneName")` | ACT on it → move on to that place (exits, paths, doors) |
 | `.OnTalk("text")` | TALK on it → this reply |
+| `.OnTalk(p => …)` | TALK on it → a reply that can change, e.g. a different line the second time |
 | `.TalkStarts("DialogueId")` | TALK on it → start a conversation |
 | `.OnAct("text")` | ACT on it → this reply |
 | `.OnAct("text", p => …)` | ACT on it → reply **and** do something |

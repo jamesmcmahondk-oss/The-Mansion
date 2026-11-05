@@ -343,6 +343,13 @@ namespace The_Mansion
                 return;
             }
 
+            if (hotspot.TalkResult != null)
+            {
+                ShowReply(hotspot.TalkResult(_player));
+                AfterStoryChange();
+                return;
+            }
+
             ShowReply(string.IsNullOrWhiteSpace(hotspot.TalkText)
                 ? Replies.NoTalk()
                 : hotspot.TalkText);

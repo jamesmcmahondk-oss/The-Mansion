@@ -69,10 +69,19 @@ namespace The_Mansion.Data
             .Hotspot("Coat of Arms", 1330, 610, 85, 115)
                 .Describe("A weathered coat of arms is set into the pillar. The carving has worn too smooth to read.")
 
-            // The right-hand gargoyle has left. (Joke to come - TALK below is a stand-in.)
+            // The right-hand gargoyle has left.
             .Hotspot("Empty Pillar", 1235, 240, 220, 200)
                 .Describe("The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it.")
-                .OnTalk("You address the empty pillar. The empty pillar has nothing to add.")
+                .OnTalk(p =>
+                {
+                    if (!p.HasFlag("TalkedToEmptyPillar"))
+                    {
+                        p.SetFlag("TalkedToEmptyPillar");
+                        return "You address the empty pillar. The empty pillar has nothing to add.";
+                    }
+
+                    return "You look at the empty pillar. It continues to make a surprisingly persuasive argument.";
+                })
                 .OnAct("It's well out of reach.")
 
             .Hotspot("Front Door", 870, 470, 135, 185)

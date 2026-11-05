@@ -101,7 +101,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Right Gate | A tall wrought-iron gate, standing open. | The gate is already open. It seems to prefer it that way. | – | – |
 | Lantern (2 places) | A lantern burns on the gate pillar. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
 | Coat of Arms | A weathered coat of arms is set into the pillar. The carving has worn too smooth to read. | – | – | – |
-| Empty Pillar | The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it. | It's well out of reach. | You address the empty pillar. The empty pillar has nothing to add. | – |
+| Empty Pillar | The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it. | It's well out of reach. | (changes - see Data/Scenes.cs) | – |
 | Front Door *(only when not FrontDoorOpen)* | The enormous wooden door looks like it has not opened in years. | → **FrontDoor** | – | – |
 | Front Door *(only when FrontDoorOpen)* | The front doors stand open. Candlelight spills down the steps. | → **FrontDoor** | – | – |
 | Gargoyle | → **FrontGargoyle** | – | – | – |

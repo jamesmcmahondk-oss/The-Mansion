@@ -114,6 +114,9 @@ def parse_hotspots(body):
             got = list(calls(chunk, verb))
             if got:
                 h[verb] = first_text(got[0])
+        talks = list(calls(chunk, "OnTalk"))
+        if talks and talks[0].strip().startswith("p =>"):
+            h["OnTalk"] = "(changes - see Data/Scenes.cs)"
         acts = list(calls(chunk, "OnAct"))
         if acts:
             a = acts[0]
