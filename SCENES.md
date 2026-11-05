@@ -430,7 +430,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 **Close-up** · `Assets/Backgrounds/Mansion/FrontGargoyle.png`
 
-> The sad garogyle watches you carefully with its stoneface.
+> The sad gargoyle watches you carefully with its stone face.
 
 - **Reached from:** FrontGate – LOOK on *Gargoyle*
 - **Return arrow →** FrontGate

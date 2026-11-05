@@ -53,25 +53,9 @@ PORTRAITS = {
         keep_look=True,
         title="QUAZIMODO",
         subtitle="The Butler"),
-    # Taken from the FrontGargoyle scene background (moonlit, so it keeps
-    # its own background and light).
-    "Gargoyle": dict(
-        source="Assets/Backgrounds/Mansion/FrontGargoyle.png",
-        crop=(700, 0, 1380, 907),
-        glow=(0.45, 0.30),
-        opaque=True,
-        keep_look=True,
-        title="THE GARGOYLE",
-        subtitle="Of the Front Gate"),
-    # Wearing the party hat - made by Tools/build_gargoyle_hat.py.
-    "Gargoyle_PartyHat": dict(
-        source="Assets/Characters/Portraits/Sources/Gargoyle_PartyHat_source.png",
-        crop=(0, 0, 600, 800),
-        glow=(0.45, 0.30),
-        opaque=True,
-        keep_look=True,
-        title="THE GARGOYLE",
-        subtitle="Of the Front Gate"),
+    # (The Gargoyle and Gargoyle_PartyHat portraits are finished framed
+    #  pictures from ChatGPT, resized to 600x800 - not built here, so a rerun
+    #  doesn't overwrite them.)
     "Hautain": dict(
         source="Assets/Characters/Hautain.png",
         crop=(20, 0, 860, 1120),

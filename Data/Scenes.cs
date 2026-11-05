@@ -263,29 +263,29 @@ namespace The_Mansion.Data
             .BackgroundWhen(p => p.HasFlag("TookStoneSword"),
                             "Assets/Backgrounds/Mansion/statue_closeup_nosword.png")
 
-            .Hotspot("Glasshouse", 200, 280, 400, 300)
+            .Hotspot("Glasshouse", 294, 291, 336, 386)
                 .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
 
-            .Hotspot("Glasshouse", 930, 280, 160, 300)
+            .Hotspot("Glasshouse", 901, 291, 131, 386)
                 .Describe("Through the mist, candles glow behind the glasshouse's tall panes.")
 
-            .Hotspot("Mansion", 1170, 192, 366, 420)
+            .Hotspot("Mansion", 1098, 192, 300, 509)
                 .Describe("The mansion's ivy-covered wall rises beside the statue, every window lit.")
                 .OnAct("The windows are well out of reach.")
 
-            .Hotspot("Statue", 600, 192, 330, 500)
+            .Hotspot("Statue", 630, 209, 271, 542)
                 .Describe("Ivy creeps up the ragged stone robe. Under the hood there is only darkness.")
                 .OnTalk("The statue says nothing. Statues usually don't. Usually.")
 
             // Listed after the statue so they win where they overlap.
-            .Hotspot("Hood", 690, 192, 130, 130)
+            .Hotspot("Hood", 704, 209, 115, 115)
                 .OnAct("You reach up into the hood. Stone, all the way back.")
                 .Describe("You peer into the hood. There is no face carved there at all - just shadow.")
 
             // THE FACELESS KNIGHT: the sword only comes free for someone who
             // isn't holding a weapon of their own (put it away by clicking
             // WEAPON in the stats panel).
-            .Hotspot("Stone Sword", 745, 270, 60, 425)
+            .Hotspot("Stone Sword", 747, 332, 54, 418)
                 .Describe("A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. " +
                           "Words are cut along the blade: HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN.")
                 .OnAct(p =>
@@ -305,7 +305,7 @@ namespace The_Mansion.Data
                 })
                 .OnlyWhen(p => !p.HasFlag("TookStoneSword"))
 
-            .Hotspot("Empty Hands", 720, 270, 110, 120)
+            .Hotspot("Empty Hands", 712, 348, 107, 107)
                 .Describe("The statue's stone hands are folded around nothing now. Under the hood, the darkness seems... satisfied.")
                 .OnlyWhen(p => p.HasFlag("TookStoneSword"))
 
@@ -875,12 +875,12 @@ namespace The_Mansion.Data
             .BackgroundWhen(p => p.HasFlag("CrossOpened"),
                             "Assets/Backgrounds/Mansion/cross_closeup_open.png")
 
-            .Hotspot("Moon", 1040, 192, 110, 110)
+            .Hotspot("Moon", 1078, 192, 117, 106)
                 .OnAct("Out of reach. Comfortably.")
                 .OnTalk("The moon has heard it all before.")
                 .Describe("The full moon hangs over the graveyard. It looks closer than it should.")
 
-            .Hotspot("Celtic Cross", 600, 192, 430, 420)
+            .Hotspot("Celtic Cross", 614, 196, 320, 430)
                 .OnOtherItems("You hold the {item} up to the cross. The spirals don't care.")
                 .Describe("Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another: " +
                           "one reaching up, one to the left, one to the right.")
@@ -889,24 +889,24 @@ namespace The_Mansion.Data
             // THE GRAVEYARD SECRET: once the gravestone clue is known, the
             // three spirals turn (ACT). Thrice for heaven (up), once for the
             // heart (left), never for the hand that let go (right).
-            .Hotspot("Upper Spiral", 782, 322, 32, 30)
+            .Hotspot("Upper Spiral", 772, 334, 28, 25)
                 .Describe("A small stone spiral at the very centre of the cross, reaching upward.")
                 .OnAct(p => CrossSpirals.Turn(p, "Upper"))
 
-            .Hotspot("Left Spiral", 762, 350, 32, 30)
+            .Hotspot("Left Spiral", 756, 358, 28, 25)
                 .Describe("A small stone spiral at the centre of the cross, curling to the left.")
                 .OnAct(p => CrossSpirals.Turn(p, "Left"))
 
-            .Hotspot("Right Spiral", 798, 350, 32, 30)
+            .Hotspot("Right Spiral", 787, 358, 28, 25)
                 .Describe("A small stone spiral at the centre of the cross, curling to the right.")
                 .OnAct(p => CrossSpirals.Turn(p, "Right"))
 
-            .Hotspot("Plinth", 530, 612, 520, 200)
+            .Hotspot("Plinth", 544, 626, 468, 206)
                 .Describe("A mossy stepped plinth. A small knotwork panel is set into its face, as if something might be hidden behind it.")
                 .OnAct("You press the carved panel. It doesn't budge - but the stone around it sounds hollow.")
                 .OnlyWhen(p => !p.HasFlag("CrossOpened"))
 
-            .Hotspot("Open Plinth", 530, 612, 520, 200)
+            .Hotspot("Open Plinth", 544, 626, 468, 206)
                 .Describe("The knotwork panel in the plinth has slid aside. Something lies in the hollow behind it.")
                 .OnAct("Inside the hollow lies a tiny, old photograph. As your fingers close around it, the rain stops. " +
                        "Not slows. Stops. You remember sunlight. You don't remember remembering sunlight. Then the rain resumes. " +
@@ -919,7 +919,7 @@ namespace The_Mansion.Data
                 .ShowsPicture("Assets/Items/Sources/worn_photograph.png")
                 .OnlyWhen(p => p.HasFlag("CrossOpened") && !p.HasFlag("FoundPhotograph"))
 
-            .Hotspot("Empty Plinth", 530, 612, 520, 200)
+            .Hotspot("Empty Plinth", 544, 626, 468, 206)
                 .Describe("The hollow in the plinth is empty now.")
                 .OnlyWhen(p => p.HasFlag("FoundPhotograph"))
 
@@ -966,9 +966,9 @@ namespace The_Mansion.Data
         public static Scene FrontGargoyle { get; } =
             NewScene("FrontGargoyle",
                      "Assets/Backgrounds/Mansion/FrontGargoyle.png",
-                     "The sad garogyle watches you carefully with its stoneface.")
+                     "The sad gargoyle watches you carefully with its stone face.")
 
-            .Hotspot("Gargoyle", 780, 200, 400, 440)
+            .Hotspot("Gargoyle", 420, 192, 760, 640)
                 .Describe("Its stone eyes seem to follow you. Perhaps it wants to talk.")
                 .TalkStarts("SadGargoyle")
 
