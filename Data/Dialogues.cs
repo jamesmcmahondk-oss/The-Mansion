@@ -171,17 +171,6 @@ namespace The_Mansion.Data
                         "menu")
 
                 // =====================================================
-                // RETURN VISITS
-                // =====================================================
-
-                .Line(
-                    "again",
-                    "\"You've returned.\" " +
-                    "The gargoyle looks toward the empty pillar. " +
-                    "\"Good. That makes one of you.\"")
-                    .SameChoicesAs("menu")
-
-                // =====================================================
                 // MAIN MENU
                 // =====================================================
 
@@ -204,6 +193,17 @@ namespace The_Mansion.Data
                     .Choice(
                         "That's all for now.",
                         "goodbye")
+
+                // =====================================================
+                // RETURN VISITS
+                // =====================================================
+
+                .Line(
+                    "again",
+                    "\"You've returned.\" " +
+                    "The gargoyle looks toward the empty pillar. " +
+                    "\"Good. That makes one of you.\"")
+                    .SameChoicesAs("menu")
 
                 // =====================================================
                 // ABOUT THE GARGOYLE
