@@ -36,15 +36,56 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/frontgate.png",
                      "You are standing before an old and creepy mansion.")
 
-            .Hotspot("Fountain", 615, 545, 270, 205)
+            // Once Quazimodo has let you in, the doors stand open in the
+            // distance too (frontgate_open.png: the same picture with the
+            // doorway patched in by Tools/patch_variant.py).
+            .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"),
+                            "Assets/Backgrounds/Mansion/frontgate_open.png")
+
+            .Hotspot("Fountain", 550, 400, 335, 345)
                 .Describe("An ancient stone fountain stands in the courtyard beyond the gates.")
                 .GoesTo("Courtyard")
 
-            .Hotspot("Front Door", 905, 505, 95, 140)
+            .Hotspot("Driveway", 470, 760, 640, 72)
+                .Describe("Wet cobbles lead through the gates towards the mansion.")
+                .GoesTo("Courtyard")
+
+            .Hotspot("Left Gate", 325, 380, 140, 420)
+                .Describe("A tall wrought-iron gate, standing open.")
+                .OnAct("The gate is already open. It seems to prefer it that way.")
+
+            .Hotspot("Right Gate", 1115, 420, 110, 412)
+                .Describe("A tall wrought-iron gate, standing open.")
+                .OnAct("The gate is already open. It seems to prefer it that way.")
+
+            .Hotspot("Lantern", 160, 430, 70, 130)
+                .Describe("A lantern burns on the gate pillar. Someone keeps these lit.")
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
+
+            .Hotspot("Lantern", 1335, 450, 70, 130)
+                .Describe("A lantern burns on the gate pillar. Someone keeps these lit.")
+                .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
+
+            .Hotspot("Coat of Arms", 1330, 610, 85, 115)
+                .Describe("A weathered coat of arms is set into the pillar. The carving has worn too smooth to read.")
+
+            // The right-hand gargoyle has left. (Joke to come - TALK below is a stand-in.)
+            .Hotspot("Empty Pillar", 1235, 240, 220, 200)
+                .Describe("The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it.")
+                .OnTalk("You address the empty pillar. The empty pillar has nothing to add.")
+                .OnAct("It's well out of reach.")
+
+            .Hotspot("Front Door", 870, 470, 135, 185)
                 .Describe("The enormous wooden door looks like it has not opened in years.")
                 .GoesTo("FrontDoor")
+                .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-            .Hotspot("Gargoyle", 135, 205, 205, 165)
+            .Hotspot("Front Door", 870, 470, 135, 185)
+                .Describe("The front doors stand open. Candlelight spills down the steps.")
+                .GoesTo("FrontDoor")
+                .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
+
+            .Hotspot("Gargoyle", 115, 195, 205, 160)
                 .Describe("A sulky and rather sad looking gargoyle sits here.")
                 .CloseUp("FrontGargoyle");
 

@@ -28,6 +28,8 @@ flowchart LR
     FrontDoor["FrontDoor"]
     EntranceHall["EntranceHall"]
     FrontGate -->|ACT Fountain| Courtyard
+    FrontGate -->|ACT Driveway| Courtyard
+    FrontGate -->|ACT Front Door| FrontDoor
     FrontGate -->|ACT Front Door| FrontDoor
     FrontGate -.->|LOOK Gargoyle| FrontGargoyle
     Courtyard -.->|LOOK Fountain| FountainCloseup
@@ -86,14 +88,22 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > You are standing before an old and creepy mansion.
 
+- **Picture changes** to `Assets/Backgrounds/Mansion/frontgate_open.png` when **FrontDoorOpen**
 - **Reached from:** Courtyard – Return arrow; FrontGargoyle – Return arrow
-- **Exits:** Courtyard (ACT *Fountain*); FrontDoor (ACT *Front Door*)
+- **Exits:** Courtyard (ACT *Fountain*); Courtyard (ACT *Driveway*); FrontDoor (ACT *Front Door*); FrontDoor (ACT *Front Door*)
 - **Close-ups:** FrontGargoyle (LOOK *Gargoyle*)
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
 | Fountain | An ancient stone fountain stands in the courtyard beyond the gates. | → **Courtyard** | – | – |
-| Front Door | The enormous wooden door looks like it has not opened in years. | → **FrontDoor** | – | – |
+| Driveway | Wet cobbles lead through the gates towards the mansion. | → **Courtyard** | – | – |
+| Left Gate | A tall wrought-iron gate, standing open. | The gate is already open. It seems to prefer it that way. | – | – |
+| Right Gate | A tall wrought-iron gate, standing open. | The gate is already open. It seems to prefer it that way. | – | – |
+| Lantern (2 places) | A lantern burns on the gate pillar. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
+| Coat of Arms | A weathered coat of arms is set into the pillar. The carving has worn too smooth to read. | – | – | – |
+| Empty Pillar | The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it. | It's well out of reach. | You address the empty pillar. The empty pillar has nothing to add. | – |
+| Front Door *(only when not FrontDoorOpen)* | The enormous wooden door looks like it has not opened in years. | → **FrontDoor** | – | – |
+| Front Door *(only when FrontDoorOpen)* | The front doors stand open. Candlelight spills down the steps. | → **FrontDoor** | – | – |
 | Gargoyle | → **FrontGargoyle** | – | – | – |
 
 ## FountainCloseup
@@ -120,7 +130,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 > Rain-slick cobblestones glitter in the lantern light. A tiered fountain splashes beside the steps up to the front door.
 
-- **Reached from:** FrontGate – ACT on *Fountain*; FountainCloseup – Return arrow; Garden – ACT on *Garden Path*; Garden – Return arrow; MansionRight – Return arrow; FrontDoor – Return arrow
+- **Reached from:** FrontGate – ACT on *Fountain*; FrontGate – ACT on *Driveway*; FountainCloseup – Return arrow; Garden – ACT on *Garden Path*; Garden – Return arrow; MansionRight – Return arrow; FrontDoor – Return arrow
 - **Exits:** FrontDoor (ACT *Front Door*); Garden (ACT *Garden Path*); MansionRight (ACT *Side Path*)
 - **Close-ups:** FountainCloseup (LOOK *Fountain*)
 - **Return arrow →** FrontGate
@@ -428,7 +438,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 > The heavy front door towers over you. A grotesque metal knocker hangs at its centre.
 
 - **Picture changes** to `Assets/Backgrounds/Mansion/Front_door_open.png` when **FrontDoorOpen**
-- **Reached from:** FrontGate – ACT on *Front Door*; Courtyard – ACT on *Front Door*; EntranceHall – Return arrow
+- **Reached from:** FrontGate – ACT on *Front Door*; FrontGate – ACT on *Front Door*; Courtyard – ACT on *Front Door*; EntranceHall – Return arrow
 - **Exits:** EntranceHall (ACT *Open Front Doors*)
 - **Return arrow →** Courtyard
 - **Characters:** Quazimodo (ACT *Front Doors*, conversation `QuazimodoFrontDoor`)
