@@ -18,12 +18,12 @@ namespace The_Mansion.Data
     {
         public static List<TrunkItem> Items { get; } = new()
         {
-            Add("Corkscrew",      380, 440, 205, 160),
-            Add("Lighter",        270, 565, 175, 140),
+            Add("Corkscrew",      375, 440, 210, 165),
+            Add("Lighter",        270, 570, 175, 140),
             Add("Ball of String", 630, 505, 160, 165),
-            Add("Party Hat",      850, 325, 245, 205),
-            Add("Loose Change",   850, 575, 175,  95),
-            Add("Empty Bottle",  1180, 395, 285, 310),
+            Add("Party Hat",      845, 325, 250, 205),
+            Add("Loose Change",   850, 575, 180,  95),
+            Add("Empty Bottle",  1180, 395, 290, 310),
 
             // Listed after the bottle so it wins where their boxes overlap.
             Add("Fork",          1050, 505, 210, 240,

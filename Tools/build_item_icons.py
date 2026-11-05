@@ -20,18 +20,18 @@ ICONS = {
     "gargoyle_blessing.png": ("Assets/Backgrounds/Mansion/FrontGargoyle.png",    (800, 260, 1140, 600)),
 
     # Car trunk (pre-game choice)
-    "corkscrew.png":         ("Assets/UI/trunk.png", (380, 440, 585, 600)),
-    "lighter.png":           ("Assets/UI/trunk.png", (270, 565, 445, 705)),
+    "corkscrew.png":         ("Assets/UI/trunk.png", (375, 440, 585, 605)),
+    "lighter.png":           ("Assets/UI/trunk.png", (270, 570, 445, 710)),
     "ball_of_string.png":    ("Assets/UI/trunk.png", (630, 505, 790, 670)),
-    "party_hat.png":         ("Assets/UI/trunk.png", (850, 325, 1095, 530)),
-    "loose_change.png":      ("Assets/UI/trunk.png", (850, 575, 1025, 670)),
+    "party_hat.png":         ("Assets/UI/trunk.png", (845, 325, 1095, 530)),
+    "loose_change.png":      ("Assets/UI/trunk.png", (850, 575, 1030, 670)),
     "fork.png":              ("Assets/UI/trunk.png", (1050, 505, 1260, 745)),
     # Item pictures (whole picture, squared to its centre)
     "worn_photograph.png":   ("Assets/Items/Sources/worn_photograph.png",     (230, 0, 1306, 1024)),
     "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (90, 60, 1190, 1160)),
     "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (180, 150, 1060, 1110)),
     "paper.png":             ("Assets/Items/Sources/paper.png",               (40, 20, 1220, 1240)),
-    "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1465, 705)),
+    "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1470, 705)),
 
     # Outside the Mansion
     "garden_shears.png":     ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (480, 490, 755, 595)),
@@ -39,7 +39,7 @@ ICONS = {
     "rope.png":              ("Assets/Backgrounds/Mansion/rear_yard.png",         (1168, 388, 1234, 496)),
     # Tall and thin: cut out exactly, laid diagonally (third value = degrees,
     # fourth = brightness - the statue is in deep shadow).
-    "stone_sword.png":       ("Assets/Backgrounds/Mansion/statue_closeup.png",    (822, 455, 866, 822), -45, 1.9),
+    "stone_sword.png":       ("Assets/Backgrounds/Mansion/Sources/statue_closeup_source.png", (748, 190, 800, 700), -45, 1.1),
 }
 
 
