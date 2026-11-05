@@ -32,7 +32,8 @@ namespace The_Mansion.Models
 
         // ---- Helpers for scene/dialogue code -------------------------
 
-        public bool Has(string itemName) => Inventory.Contains(itemName);
+        // Item names ignore upper/lower case, like scene names and flags.
+        public bool Has(string itemName) => Inventory.Contains(itemName, StringComparer.OrdinalIgnoreCase);
 
         // Adds the item (once - giving it again does nothing).
         public void Give(string itemName)
@@ -43,7 +44,20 @@ namespace The_Mansion.Models
             }
         }
 
-        public void Take(string itemName) => Inventory.Remove(itemName);
+        // Removes the item. If it was the weapon in hand, the hand is empty now.
+        public void Take(string itemName)
+        {
+            int index = Inventory.FindIndex(name => string.Equals(name, itemName, StringComparison.OrdinalIgnoreCase));
+            if (index >= 0)
+            {
+                Inventory.RemoveAt(index);
+            }
+
+            if (string.Equals(Weapon, itemName, StringComparison.OrdinalIgnoreCase) && !Has(itemName))
+            {
+                Weapon = "None";
+            }
+        }
 
         public bool HasFlag(string flag) => Flags.Contains(flag);
 

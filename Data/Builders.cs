@@ -57,12 +57,6 @@ namespace The_Mansion.Data
         }
 
         /// <summary>
-        /// Show a different background once something has happened, e.g.
-        /// .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"), "Assets/Backgrounds/Mansion/Front_door_open.png")
-        /// The new picture should be framed like the normal one so hotspots
-        /// still line up. Several can be added; the first true one wins.
-        /// </summary>
-        /// <summary>
         /// Puts a picture in the scene (transparent PNG) at X/Y with the given
         /// height, in background image pixels - e.g. a character sitting under
         /// a bench. Optional onlyWhen hides it while false. Pair it with a
@@ -83,6 +77,12 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// Show a different background once something has happened, e.g.
+        /// .BackgroundWhen(p => p.HasFlag("FrontDoorOpen"), "Assets/Backgrounds/Mansion/Front_door_open.png")
+        /// The new picture should be framed like the normal one so hotspots
+        /// still line up. Several can be added; the first true one wins.
+        /// </summary>
         public SceneBuilder BackgroundWhen(Func<Player, bool> condition, string backgroundImage)
         {
             _scene.AlternateBackgrounds.Add(new SceneBackground

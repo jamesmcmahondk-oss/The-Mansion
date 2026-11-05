@@ -26,16 +26,16 @@ namespace The_Mansion
         private Border? _selectedTrunkOutline;
 
         private static readonly Brush TrunkHoverBorder =
-            new SolidColorBrush(Color.FromArgb(0xAA, 0xFF, 0xD9, 0x8A));
+            Paint.Argb(0xAA, 0xFF, 0xD9, 0x8A);
 
         private static readonly Brush TrunkHoverFill =
-            new SolidColorBrush(Color.FromArgb(0x1A, 0xFF, 0xD9, 0x8A));
+            Paint.Argb(0x1A, 0xFF, 0xD9, 0x8A);
 
         private static readonly Brush TrunkSelectedBorder =
-            new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+            Paint.Rgb(0xFF, 0xD9, 0x8A);
 
         private static readonly Brush TrunkSelectedFill =
-            new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xD9, 0x8A));
+            Paint.Argb(0x33, 0xFF, 0xD9, 0x8A);
 
         // trunk.png pixels -> screen (must match the trunk Image in MainWindow.xaml).
         private static Rect TrunkToScreen(double x, double y, double width, double height)

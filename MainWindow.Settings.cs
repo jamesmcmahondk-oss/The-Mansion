@@ -137,8 +137,8 @@ namespace The_Mansion
 
                 if (current)
                 {
-                    button.BorderBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
-                    button.Background = new SolidColorBrush(Color.FromRgb(0x4A, 0x24, 0x18));
+                    button.BorderBrush = Paint.Rgb(0xFF, 0xD9, 0x8A);
+                    button.Background = Paint.Rgb(0x4A, 0x24, 0x18);
                 }
 
                 button.Click += (_, _) =>
@@ -178,11 +178,6 @@ namespace The_Mansion
         {
             HideGameMenu();
             ShowSettings(back: ShowGameMenu);
-        }
-
-        private void Return_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
         }
     }
 }

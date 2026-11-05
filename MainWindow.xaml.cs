@@ -19,8 +19,6 @@ namespace The_Mansion
     {
         private Player _player = new Player();
 
-        private Random _random = new Random();
-
         private int _rerollsRemaining = 3;
         private DispatcherTimer? _backstoryTimer;
 
@@ -35,8 +33,8 @@ namespace The_Mansion
             Act,
             Item
         }
-        private InteractionMode _interactionMode =
-    InteractionMode.Look;
+
+        private InteractionMode _interactionMode = InteractionMode.Look;
         private Scene? _currentScene;
 
         /*
@@ -54,7 +52,7 @@ namespace The_Mansion
         private Point _dragStartPoint;
 
         private Rectangle? _selectionRectangle;
-// private Cursor _normalCursor;
+
         // Cursors are built into the game (Resource files in Assets/Cursors),
         // so they work wherever the game is installed.
         private Cursor _actCursor = LoadCursor("cursor_act.cur");
@@ -92,6 +90,33 @@ namespace The_Mansion
          */
         private const double DragThreshold = 5.0;
 
+        /*
+         * A picture from inside the game, via ImageCache (each picture is read
+         * once and reused). If it's missing, says so and returns null.
+         * decodeHeight > 0 decodes big art at that height to save memory.
+         */
+        private static BitmapImage? LoadImage(string path, string what, int decodeHeight = 0)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                return ImageCache.Get(path, decodeHeight);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Could not load {what}:\n\n{path}\n\n{ex.Message}",
+                    $"Missing {what}",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return null;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -124,8 +149,6 @@ namespace The_Mansion
             UpdateDebugVisibility();
             this.Cursor = LoadCursor("cursor_arrow.cur");
             ShowScene(Scenes.FrontGate);
-
-
         }
 
         /*
@@ -183,20 +206,7 @@ namespace The_Mansion
                 screenRect.Height / SceneImageScale);
         }
 
-        private void ShowScreen(UIElement screen)
-        {
-            TitleScreen.Visibility = Visibility.Collapsed;
-            GameScreen.Visibility = Visibility.Collapsed;
-// LoadGameScreen.Visibility = Visibility.Collapsed;
-  //          SettingsScreen.Visibility = Visibility.Collapsed;
-    //        CreditsScreen.Visibility = Visibility.Collapsed;
-
-            screen.Visibility = Visibility.Visible;
-        }
-
-        private void BackstoryTimer_Tick(
-    object? sender,
-    EventArgs e)
+        private void BackstoryTimer_Tick(object? sender, EventArgs e)
         {
             if (_backstoryCharacterIndex >=
                 _backstoryFullText.Length)
@@ -210,9 +220,8 @@ namespace The_Mansion
 
             _backstoryCharacterIndex++;
         }
-        private void Backstory_MouseLeftButtonDown(
-    object sender,
-    MouseButtonEventArgs e)
+
+        private void Backstory_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (_backstoryTimer != null &&
                 _backstoryTimer.IsEnabled)
@@ -230,6 +239,7 @@ namespace The_Mansion
 
             ShowPlayerRollScreen();
         }
+
         private void EnterGame()
         {
             BackstoryScreen.Visibility =
@@ -249,18 +259,16 @@ namespace The_Mansion
                 InteractionMode.Look;
 
             UpdateMenuButtonImages();
-
-            if (_lookCursor != null)
-            {
-                SceneCanvas.Cursor =
-                    _lookCursor;
-            }
+            SceneCanvas.Cursor = _lookCursor;
         }
         /*
          * Refreshes the stats panel in the HUD's right pocket.
          * Call this whenever the player's health, stats, weapon
          * or status effect change.
          */
+        private static readonly Brush StatusActiveBrush = Paint.Rgb(0xC8, 0xA9, 0x6A);
+        private static readonly Brush StatusNoneBrush = Paint.Rgb(0x88, 0x79, 0x66);
+
         private void UpdatePlayerStats()
         {
             int health = Math.Max(0, _player.Health);
@@ -280,9 +288,7 @@ namespace The_Mansion
                              _player.StatusEffect != "None";
 
             StatStatusText.Text = hasStatus ? _player.StatusEffect : "None";
-            StatStatusText.Foreground = hasStatus
-                ? new SolidColorBrush(Color.FromRgb(0xC8, 0xA9, 0x6A))
-                : new SolidColorBrush(Color.FromRgb(0x88, 0x79, 0x66));
+            StatStatusText.Foreground = hasStatus ? StatusActiveBrush : StatusNoneBrush;
 
             // Anything worth writing down?
             CheckJournal();
@@ -346,22 +352,15 @@ namespace The_Mansion
                 return;
             }
 
-            try
+            BitmapImage? picture = LoadImage(imagePath, "picture");
+            if (picture != null)
             {
-                PictureViewerImage.Source = new BitmapImage(new Uri(
-                    $"pack://application:,,,/{imagePath}", UriKind.Absolute));
+                PictureViewerImage.Source = picture;
                 PictureViewer.Visibility = Visibility.Visible;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Could not load picture:\n\n{imagePath}\n\n{ex.Message}",
-                    "Picture error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void AcceptRollButton_Click(
-      object sender,
-      RoutedEventArgs e)
+        private void AcceptRollButton_Click(object sender, RoutedEventArgs e)
         {
             string playerName =
                 PlayerNameTextBox.Text.Trim();
@@ -384,20 +383,18 @@ namespace The_Mansion
             // Pick a starting item from the car trunk, then the game begins.
             ShowTrunkScreen();
         }
+
         private void RollPlayer()
         {
-            _player.MaxHealth = _random.Next(70, 101);
-
+            _player.MaxHealth = Random.Shared.Next(70, 101);
             _player.Health = _player.MaxHealth;
-
-            _player.Strength = _random.Next(6, 19);
-
-            _player.Luck = _random.Next(3, 19);
-
-            _player.Wits = _random.Next(5, 19);
+            _player.Strength = Random.Shared.Next(6, 19);
+            _player.Luck = Random.Shared.Next(3, 19);
+            _player.Wits = Random.Shared.Next(5, 19);
 
             UpdateRollScreen();
         }
+
         private void UpdateRollScreen()
         {
             RollHealthText.Text =
@@ -418,6 +415,7 @@ namespace The_Mansion
             RollCommentText.Text =
                 GetRollComment();
         }
+
         private void ShowPlayerRollScreen()
         {
             BackstoryScreen.Visibility =
@@ -432,6 +430,7 @@ namespace The_Mansion
 
             RollPlayer();
         }
+
         private string GetRollComment()
         {
             int total =
@@ -484,16 +483,12 @@ namespace The_Mansion
             return
                 "Thoroughly average. Perhaps the monsters will underestimate you.";
         }
-        private void RerollButton_Click(
-    object sender,
-    RoutedEventArgs e)
+
+        private void RerollButton_Click(object sender, RoutedEventArgs e)
         {
+            // (The button is disabled once the rerolls are used up.)
             if (_rerollsRemaining <= 0)
             {
-                ShowDescription(
-                    "Fate has grown tired of your indecision."
-                );
-
                 return;
             }
 
@@ -534,6 +529,7 @@ namespace The_Mansion
 
             _backstoryCharacterIndex = 0;
 
+            _backstoryTimer?.Stop();
             _backstoryTimer = new DispatcherTimer();
 
             _backstoryTimer.Interval =
@@ -543,16 +539,8 @@ namespace The_Mansion
 
             _backstoryTimer.Start();
         }
-       
-        private void ReturnToTitleScreen()
-        {
-            GameScreen.Visibility = Visibility.Collapsed;
 
-            TitleScreen.Visibility = Visibility.Visible;
-        }
-        private void TitleButton_MouseDown(
-    object sender,
-    MouseButtonEventArgs e)
+        private void TitleButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is not Rectangle button)
             {
@@ -576,12 +564,6 @@ namespace The_Mansion
                 case "SettingsBtn":
                     {
                         ShowSettings(back: () => { });   // title stays behind
-                        break;
-                    }
-
-                case "CreditsBtn":
-                    {
-                    //    ShowCredits();
                         break;
                     }
 

@@ -28,10 +28,12 @@ namespace The_Mansion
         private string? _selectedItem;
 
         private static readonly Brush SlotBorderBrush =
-            new SolidColorBrush(Color.FromRgb(0x80, 0x6B, 0x4A));
+            Paint.Rgb(0x80, 0x6B, 0x4A);
+
+        private static readonly Brush SlotBackgroundBrush = Paint.Argb(0x99, 0, 0, 0);
 
         private static readonly Brush SlotHoverBrush =
-            new SolidColorBrush(Color.FromRgb(0xFF, 0xD9, 0x8A));
+            Paint.Rgb(0xFF, 0xD9, 0x8A);
 
         /*
          * Up to 10 items fit in the row. With more, the row shows 9 at a
@@ -126,7 +128,7 @@ namespace The_Mansion
                 Width = 44,
                 Height = 116,
                 Margin = new Thickness(0, 0, step < 0 ? 12 : 0, 0),
-                Background = new SolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)),
+                Background = SlotBackgroundBrush,
                 BorderBrush = SlotBorderBrush,
                 BorderThickness = new Thickness(2),
                 CornerRadius = new CornerRadius(6),
@@ -240,9 +242,7 @@ namespace The_Mansion
             {
                 try
                 {
-                    icon = new BitmapImage(new Uri(
-                        $"pack://application:,,,/{item.Icon}",
-                        UriKind.Absolute));
+                    icon = ImageCache.Get(item.Icon);
                 }
                 catch
                 {
@@ -265,7 +265,7 @@ namespace The_Mansion
                 {
                     Text = GetInitials(item.Name),
                     Foreground = SlotHoverBrush,
-                    FontFamily = new FontFamily("Georgia"),
+                    FontFamily = Georgia,
                     FontSize = 34,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center
@@ -277,7 +277,7 @@ namespace The_Mansion
                 Width = 116,
                 Height = 116,
                 Margin = new Thickness(0, 0, 12, 0),
-                Background = new SolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)),
+                Background = SlotBackgroundBrush,
                 BorderBrush = SlotBorderBrush,
                 BorderThickness = new Thickness(2),
                 CornerRadius = new CornerRadius(6),
@@ -399,7 +399,7 @@ namespace The_Mansion
 
             if (use.RemoveItem)
             {
-                _player.Inventory.Remove(itemName);
+                _player.Take(itemName);
                 _selectedItem = null;
             }
 

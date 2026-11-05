@@ -78,6 +78,7 @@ namespace The_Mansion.Data
                     CheckDialogue($"{h} .TalkStarts", hotspot.DialogueId);
                     CheckDialogue($"{h} .ActStarts", hotspot.ActDialogueId);
                     CheckFight($"{h} .ActStartsFight", hotspot.ActFightId);
+                    CheckImage($"{h} .ShowsPicture", hotspot.ActPicture);
 
                     foreach (var use in hotspot.ItemUses)
                     {
@@ -97,8 +98,23 @@ namespace The_Mansion.Data
                 CheckImage($"{d} .Portrait", dialogue.Portrait);
                 CheckImage($"{d} .Character", dialogue.Character);
 
+                // A line that a choice or an item leads to must exist.
+                void CheckLine(string where, string? lineId)
+                {
+                    if (!string.IsNullOrWhiteSpace(lineId) && !dialogue.Nodes.ContainsKey(lineId))
+                        Problem(where, $"leads to line '{lineId}', which doesn't exist");
+                }
+
+                if (dialogue.ChooseStartNode == null)
+                    CheckLine($"{d} start", dialogue.StartNode);
+
                 foreach (var use in dialogue.ItemUses)
+                {
                     CheckItem($"{d} .OnItem", use.Key);
+
+                    foreach (DialogueItemUse reaction in use.Value)
+                        CheckLine($"{d} .OnItem(\"{use.Key}\")", reaction.GoesTo);
+                }
 
                 foreach (var (lineId, node) in dialogue.Nodes)
                 {
@@ -106,7 +122,10 @@ namespace The_Mansion.Data
                     CheckImage($"{d}, line '{lineId}' character:", node.Character);
 
                     foreach (DialogueChoice choice in node.Choices)
+                    {
                         CheckFight($"{d}, line '{lineId}' startsFight:", choice.StartsFight);
+                        CheckLine($"{d}, line '{lineId}', choice \"{choice.Text}\"", choice.Next);
+                    }
                 }
             }
 
@@ -127,6 +146,13 @@ namespace The_Mansion.Data
 
             foreach (TrunkItem trunkItem in Trunk.Items)
                 CheckItem("Data/Trunk.cs", trunkItem.ItemName);
+
+            // ---- Journal: ids are what saves remember, so they must be unique.
+            foreach (var group in Journal.All.GroupBy(entry => entry.Id, StringComparer.OrdinalIgnoreCase))
+            {
+                if (group.Count() > 1)
+                    Problem("Data/Journal.cs", $"the id '{group.Key}' is used by {group.Count()} entries");
+            }
 
             return problems;
         }
@@ -159,7 +185,9 @@ namespace The_Mansion.Data
         {
             try
             {
-                return Application.GetResourceStream(new Uri($"pack://application:,,,/{path}", UriKind.Absolute)) != null;
+                var resource = Application.GetResourceStream(new Uri($"pack://application:,,,/{path}", UriKind.Absolute));
+                resource?.Stream.Dispose();
+                return resource != null;
             }
             catch (IOException)
             {

@@ -7,10 +7,9 @@ namespace The_Mansion.Models
      */
     public static class Dice
     {
-        private static readonly Random Random = new();
-
-        // One six-sided die: 1-6.
-        public static int D6() => Random.Next(1, 7);
+        // One six-sided die: 1-6. (Random.Shared: the one random source
+        // used everywhere in the game.)
+        public static int D6() => Random.Shared.Next(1, 7);
 
         // Several dice added together, e.g. Roll(3) = 3d6 (3-18).
         public static int Roll(int count)

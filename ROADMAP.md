@@ -89,4 +89,12 @@ they're done; add new ones at the bottom of the right section.
       language instead of C# for writing them.
 - [ ] Constants for scene / item / flag names (`SceneIds`, `Flags`) so typos
       can't happen and renaming a scene doesn't break saves.
-- [ ] Cache and preload pictures for smoother scene changes.
+- [x] Cache and preload pictures for smoother scene changes (ImageCache.cs:
+      every picture is loaded once and reused; the scenes next door are
+      loaded ahead of time; character art is decoded at screen size).
+- [x] Code review fix pass: Return-arrow text now shows, arrow hidden where
+      it leads nowhere, key 5 for a fifth choice, stuck hover name, weapon
+      cleared when its item is gone, clean new game after quitting, Esc closes
+      pictures, crash-safe saves, one random source, frozen colours, the data
+      check also checks conversation links, dead code removed, unused
+      pictures out of the build.
