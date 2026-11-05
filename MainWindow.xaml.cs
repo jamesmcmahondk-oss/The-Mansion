@@ -139,6 +139,10 @@ namespace The_Mansion
             // Window size comes from Settings (resolution / fullscreen).
             SourceInitialized += (_, _) => ApplyDisplaySettings();
             ApplySoundSettings();
+
+            // The title song plays over the title screen, the backstory, the
+            // character roll and the trunk; the first scene's rain replaces it.
+            Sound.Ambience("Title_music");
             Loaded += (_, _) =>
             {
                 if (!_settings.Fullscreen)
