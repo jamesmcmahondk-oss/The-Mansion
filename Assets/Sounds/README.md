@@ -18,6 +18,13 @@ game when it is built; a missing file is simply silent. Keep effects short
 | `journal_entry` | a new journal entry is written (soft chime) |
 | `rain_loop` | outdoors, looping |
 | `hall_ambience` | inside the Entrance Hall, looping (clock, candles) |
+| `Title_music` | title screen, backstory, character roll and trunk (loops) |
 
 Licences: use only sounds you may use in a game (e.g. CC0 from freesound.org
 or Kenney.nl) and note where each came from in `CREDITS.md`.
+
+## Levels
+
+Put originals in `Assets/SoundSources`, then run `python Tools/normalize_sounds.py`
+(needs ffmpeg). It writes levelled copies here: effects all equally loud,
+background loops quieter, the title music in between, nothing clipping.
