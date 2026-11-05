@@ -161,7 +161,8 @@
                            TextAlignment="Center"/>
 
 
-                    <TextBlock Text="Click to continue..."
+                    <TextBlock x:Name="BackstoryContinueText"
+                           Text="Click to continue..."
                            HorizontalAlignment="Center"
                            Foreground="#887966"
                            FontFamily="Georgia"
