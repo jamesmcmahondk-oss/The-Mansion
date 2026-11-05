@@ -78,6 +78,13 @@ PORTRAITS = {
         glow=(0.62, 0.24),
         title="HAUTAIN",
         subtitle="The Frog King"),
+    # Head, wings and the bottle (ANOTHER BAD IDEA).
+    "Ebria": dict(
+        source="Assets/Characters/Ebria.png",
+        crop=(60, 10, 840, 1050),
+        glow=(0.55, 0.26),
+        title="EBRIA",
+        subtitle="Of the Bench"),
 }
 
 FONT_PATHS = ["C:/Windows/Fonts/georgiab.ttf", "C:/Windows/Fonts/georgia.ttf",
