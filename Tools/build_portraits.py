@@ -84,7 +84,7 @@ PORTRAITS = {
         crop=(60, 10, 840, 1050),
         glow=(0.55, 0.26),
         title="EBRIA",
-        subtitle="Of the Bench"),
+        subtitle="The Fairy"),
 }
 
 FONT_PATHS = ["C:/Windows/Fonts/georgiab.ttf", "C:/Windows/Fonts/georgia.ttf",
