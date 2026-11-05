@@ -138,6 +138,7 @@ namespace The_Mansion
             // (with its title bar) is then centred on screen.
             // Window size comes from Settings (resolution / fullscreen).
             SourceInitialized += (_, _) => ApplyDisplaySettings();
+            ApplySoundSettings();
             Loaded += (_, _) =>
             {
                 if (!_settings.Fullscreen)
@@ -234,6 +235,12 @@ namespace The_Mansion
                 _backstoryCharacterIndex =
                     _backstoryFullText.Length;
 
+                return;
+            }
+
+            if (_backstoryPage < _backstoryPages.Length - 1)
+            {
+                ShowBackstoryPage(_backstoryPage + 1);
                 return;
             }
 
@@ -510,84 +517,68 @@ namespace The_Mansion
 
             BackstoryScreen.Visibility = Visibility.Visible;
 
-            _backstoryFullText =
-                "There was a time when the Mansion was full of ordinary things.\n\n" +
+            // The backstory is shown a page at a time (it doesn't fit on one
+            // screen): each page types itself out, a click shows the rest of
+            // the page, the next click turns the page.
+            _backstoryPages = new[]
+            {
+                // Page 1
+                string.Join("\n\n",
+                    "There was a time when the Mansion was full of ordinary things.",
+                    "Smoke rose from its chimneys. Servants crossed the yard behind the kitchens. Vegetables grew in neat rows beneath the garden wall, and candles burned late into the evening inside the Glasshouse.",
+                    "People lived here.",
+                    "Then, at some point, they didn't."),
 
-                "Smoke rose from its chimneys.\n\n" +
+                // Page 2
+                string.Join("\n\n",
+                    "Nobody remembers exactly when the Mansion was abandoned.",
+                    "There was no fire. No terrible accident. No final carriage seen fleeing through the gates.",
+                    "The gardens simply stopped being tended. The deliveries stopped coming. The gates rusted shut.",
+                    "And eventually, people stopped asking why."),
 
-                "Servants crossed the yard behind the kitchens.\n\n" +
+                // Page 3
+                string.Join("\n\n",
+                    "Years passed.",
+                    "Ivy climbed the walls. Paths vanished beneath weeds and autumn leaves. The surrounding countryside learned to ignore the old house on the hill.",
+                    "But one thing remained difficult to ignore.",
+                    "The lights never went out.",
+                    "Even now, on certain nights, warm light appears behind darkened windows. Candles still flicker beyond the rain-streaked glass of the old Glasshouse.",
+                    "Nobody goes there to light them. At least, nobody admits to it."),
 
-                "Vegetables grew in neat rows beneath the garden wall, " +
-                "and candles burned late into the evening inside the Glasshouse.\n\n" +
+                // Page 4
+                string.Join("\n\n",
+                    "And tonight, beneath a cold autumn moon, you are standing before the gates.",
+                    "Rain falls quietly through the trees. Beyond the iron bars, the Mansion waits.",
+                    "You don't remember the journey here. You don't remember deciding to come.",
+                    "You try to remember where you were before this.",
+                    "Nothing comes."),
 
-                "People lived here.\n\n" +
+                // Page 5
+                string.Join("\n\n",
+                    "Then a light appears in an upstairs window.",
+                    "Something about the sight troubles you.",
+                    "Not because it is frightening.",
+                    "Because it is familiar.",
+                    "You've seen that window before. You're certain of it.",
+                    "You just can't remember when.")
+            };
 
-                "Then, at some point, they didn't.\n\n" +
+            ShowBackstoryPage(0);
+        }
 
-                "Nobody remembers exactly when the Mansion was abandoned.\n\n" +
+        private string[] _backstoryPages = Array.Empty<string>();
+        private int _backstoryPage;
 
-                "There was no fire.\n\n" +
-
-                "No terrible accident.\n\n" +
-
-                "No final carriage seen fleeing through the gates.\n\n" +
-
-                "The gardens simply stopped being tended.\n\n" +
-
-                "The deliveries stopped coming.\n\n" +
-
-                "The gates rusted shut.\n\n" +
-
-                "And eventually, people stopped asking why.\n\n" +
-
-                "Years passed.\n\n" +
-
-                "Ivy climbed the walls. Paths vanished beneath weeds and autumn leaves. " +
-                "The surrounding countryside learned to ignore the old house on the hill.\n\n" +
-
-                "But one thing remained difficult to ignore.\n\n" +
-
-                "The lights never went out.\n\n" +
-
-                "Even now, on certain nights, warm light appears behind darkened windows.\n\n" +
-
-                "Candles still flicker beyond the rain-streaked glass of the old Glasshouse.\n\n" +
-
-                "Nobody goes there to light them.\n\n" +
-
-                "At least, nobody admits to it.\n\n" +
-
-                "And tonight, beneath a cold autumn moon, you are standing before the gates.\n\n" +
-
-                "Rain falls quietly through the trees.\n\n" +
-
-                "Beyond the iron bars, the Mansion waits.\n\n" +
-
-                "You don't remember the journey here.\n\n" +
-
-                "You don't remember deciding to come.\n\n" +
-
-                "You try to remember where you were before this.\n\n" +
-
-                "Nothing comes.\n\n" +
-
-                "Then a light appears in an upstairs window.\n\n" +
-
-                "Something about the sight troubles you.\n\n" +
-
-                "Not because it is frightening.\n\n" +
-
-                "Because it is familiar.\n\n" +
-
-                "You've seen that window before.\n\n" +
-
-                "You're certain of it.\n\n" +
-
-                "You just can't remember when.";
-
+        private void ShowBackstoryPage(int page)
+        {
+            _backstoryPage = page;
+            _backstoryFullText = _backstoryPages[page];
             BackstoryText.Text = "";
-
             _backstoryCharacterIndex = 0;
+
+            BackstoryContinueText.Text = page < _backstoryPages.Length - 1
+                ? $"Click to continue...   ({page + 1}/{_backstoryPages.Length})"
+                : "Click to begin...";
 
             _backstoryTimer?.Stop();
             _backstoryTimer = new DispatcherTimer

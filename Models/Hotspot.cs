@@ -51,6 +51,13 @@ namespace The_Mansion.Models
         // Fight started when the player uses ACT on this hotspot (Data/Enemies.cs).
         public string ActFightId { get; set; } = "";
 
+        // Puzzle screen opened when the player uses ACT on this hotspot
+        // (e.g. "Cross" - see MainWindow.CrossPuzzle.cs).
+        public string ActPuzzle { get; set; } = "";
+
+        // Sound played when the player uses ACT on it (Assets/Sounds).
+        public string ActSound { get; set; } = "";
+
         // What happens when the player uses an item on this hotspot,
         // keyed by item name. Items not listed get a "nothing happens" reply.
         // Several reactions per item are allowed (see ItemUse.Condition).

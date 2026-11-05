@@ -21,6 +21,10 @@ namespace The_Mansion.Data
         // Fill the whole monitor instead (black bars if it isn't 16:9).
         public bool Fullscreen { get; set; }
 
+        // Sound effects and background (rain, ambience) volume, 0-100.
+        public int EffectsVolume { get; set; } = 80;
+        public int MusicVolume { get; set; } = 60;
+
         // The sizes offered in the Settings screen. All 16:9 so the game
         // never stretches.
         public static readonly (int Width, int Height)[] Resolutions =

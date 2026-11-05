@@ -227,7 +227,7 @@ namespace The_Mansion
             if (!_replyShowing ||
                 GameScreen.Visibility != Visibility.Visible ||
                 IsInDialogue || IsInFight || _inventoryOpen ||
-                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen ||
+                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsCrossPuzzleOpen ||
                 DebugMenu.Visibility == Visibility.Visible ||
                 GameOverScreen.Visibility == Visibility.Visible)
             {
@@ -284,7 +284,8 @@ namespace The_Mansion
             !IsGameMenuOpen &&
             !IsSaveLoadOpen &&
             !IsSettingsOpen &&
-            !IsJournalOpen;
+            !IsJournalOpen &&
+            !IsCrossPuzzleOpen;
 
         /*
          * The name of the thing under the cursor floats just below-right of
@@ -443,6 +444,7 @@ namespace The_Mansion
                     bool hasAction =
                         !string.IsNullOrWhiteSpace(hotspot.ActDialogueId) ||
                         !string.IsNullOrWhiteSpace(hotspot.ActFightId) ||
+                        !string.IsNullOrWhiteSpace(hotspot.ActPuzzle) ||
                         !string.IsNullOrWhiteSpace(hotspot.ActText) ||
                         hotspot.ActEffect != null ||
                         hotspot.ActResult != null;
