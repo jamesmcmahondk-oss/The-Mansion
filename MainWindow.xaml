@@ -1419,7 +1419,7 @@
 
                 <TextBlock Text="Built with C# and WPF on .NET" HorizontalAlignment="Center"
                            Foreground="#756A59" FontFamily="Georgia" FontSize="17" Margin="0,40,0,0"/>
-                <TextBlock Text="With thanks to the Sock, which remains damp." HorizontalAlignment="Center"
+                <TextBlock Text="With thanks to the Sock, which still refuses to dry completely." HorizontalAlignment="Center"
                            Foreground="#756A59" FontFamily="Georgia" FontStyle="Italic" FontSize="17" Margin="0,6,0,0"/>
                 <TextBlock Text="Click or press Esc to return" HorizontalAlignment="Center"
                            Foreground="#5E554A" FontFamily="Georgia" FontStyle="Italic" FontSize="15" Margin="0,30,0,0"/>
