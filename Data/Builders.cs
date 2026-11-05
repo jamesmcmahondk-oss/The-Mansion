@@ -167,6 +167,17 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// TALK on it runs this and shows the text it returns - for replies
+        /// that change, e.g. a different line the second time:
+        /// .OnTalk(p => p.HasFlag("X") ? "Again?" : "Hello.")
+        /// </summary>
+        public HotspotBuilder OnTalk(Func<Player, string> talk)
+        {
+            _hotspot.TalkResult = talk;
+            return this;
+        }
+
         /// <summary>TALK on it starts a conversation from Data/Dialogues.cs.</summary>
         public HotspotBuilder TalkStarts(string dialogueId)
         {

@@ -101,7 +101,7 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 | Right Gate | A tall wrought-iron gate, standing open. | The gate is already open. It seems to prefer it that way. | – | – |
 | Lantern (2 places) | A lantern burns on the gate pillar. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
 | Coat of Arms | A weathered coat of arms is set into the pillar. The carving has worn too smooth to read. | – | – | – |
-| Empty Pillar | The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it. | It's well out of reach. | You address the empty pillar. The empty pillar has nothing to add. | – |
+| Empty Pillar | The top of the right-hand gate pillar is empty. The moss up there has a gargoyle-shaped gap in it. | It's well out of reach. | (changes - see Data/Scenes.cs) | – |
 | Front Door *(only when not FrontDoorOpen)* | The enormous wooden door looks like it has not opened in years. | → **FrontDoor** | – | – |
 | Front Door *(only when FrontDoorOpen)* | The front doors stand open. Candlelight spills down the steps. | → **FrontDoor** | – | – |
 | Gargoyle | → **FrontGargoyle** | – | – | – |
@@ -445,9 +445,12 @@ Rounded boxes are close-ups. Dotted arrows = LOOK, solid = ACT.
 
 | Object | LOOK | ACT | TALK | Items |
 |---|---|---|---|---|
-| Front Doors *(only when not FrontDoorOpen)* | Heavy wooden front doors. They appear to be locked. | conversation `QuazimodoFrontDoor` | The door does not answer. This is unsurprising. | – |
-| Open Front Doors *(only when FrontDoorOpen)* | The enormous front doors stand open. Beyond them waits the dark entrance hall. | → **EntranceHall** | – | – |
-| Door Knocker *(only when not FrontDoorOpen)* | The grotesque iron door knocker is freezing cold. | You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion. | – | **Gold Coins**: You rap the knocker with a gold coin. <br>**Royal Gold Coin**: You rap the knocker with the King's coin.  |
+| Front Doors *(only when not FrontDoorOpen)* | Heavy carved wooden doors under a pointed arch, with a window of stone tracery above. They appear to be locked. | conversation `QuazimodoFrontDoor` | The door does not answer. This is unsurprising. | – |
+| Open Front Doors *(only when FrontDoorOpen)* | The front doors stand open. Beyond them, candlelight, a chequered floor and a grand staircase. | → **EntranceHall** | – | – |
+| Door Knocker *(only when not FrontDoorOpen)* (2 places) | A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold. | You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion. | – | **Gold Coins**: You rap the knocker with a gold coin. Nothing. Manners, not money, the gargoyle said.<br>**Royal Gold Coin**: You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said. |
+| Window | Stone tracery above the doors, glowing with candlelight from inside. | Far out of reach. | – | – |
+| Lantern (2 places) | An iron lantern beside the door. Someone keeps these lit. | The glass is hot. Whoever lit it wants it to stay lit. | – | – |
+| Urn (2 places) | A stone urn overflowing with ivy and small red flowers, wet with rain. | You'd rather not dig through someone's flowerpot. | – | – |
 
 ## EntranceHall
 
