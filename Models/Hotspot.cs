@@ -26,6 +26,13 @@ namespace The_Mansion.Models
         // Text shown when the hotspot is clicked/examined
         public string Description { get; set; } = "";
 
+        // Optional: LOOK runs this and shows what it returns (text that
+        // changes with the story). Description is used when it is null.
+        public Func<Player, string>? LookResult { get; set; }
+
+        // Story flag set when the player LOOKs at it (e.g. a clue read).
+        public string LookFlag { get; set; } = "";
+
         // Scene to load when this hotspot is activated.
         // Leave empty if clicking it should not change scene.
         public string TargetScene { get; set; } = "";

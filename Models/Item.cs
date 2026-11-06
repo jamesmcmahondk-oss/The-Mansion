@@ -43,6 +43,10 @@ namespace The_Mansion.Models
         // react to it ({target} is filled in). Otherwise a general
         // "You can't use the X on the Y." variant is used.
         public string MisuseText { get; set; } = "";
+
+        // Optional: right-clicking it in the inventory reads it - starts this
+        // "conversation" from Data/Dialogues.cs (pages as choices).
+        public string ReadsDialogue { get; set; } = "";
     }
 
     /*

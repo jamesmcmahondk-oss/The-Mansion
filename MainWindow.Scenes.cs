@@ -34,7 +34,7 @@ namespace The_Mansion
             _currentBackground = scene.GetBackground(_player);
             LoadSceneBackground(_currentBackground);
 
-            DescriptionText.Text = scene.Description;
+            DescriptionText.Text = scene.GetDescription(_player);
 
             CreateSceneElements(scene);
 
@@ -350,6 +350,17 @@ namespace The_Mansion
          */
         private void LookAt(Hotspot hotspot)
         {
+            // Text that changes with the story (it can set flags too).
+            if (hotspot.LookResult != null)
+            {
+                ShowReply(hotspot.LookResult(_player));
+                SetLookFlag(hotspot);
+                AfterStoryChange();
+                return;
+            }
+
+            SetLookFlag(hotspot);
+
             if (!string.IsNullOrWhiteSpace(hotspot.CloseUpScene))
             {
                 GoToScene(hotspot.CloseUpScene, hotspot.Name);
@@ -359,6 +370,15 @@ namespace The_Mansion
             ShowReply(string.IsNullOrWhiteSpace(hotspot.Description)
                 ? Replies.Nothing()
                 : hotspot.Description);
+        }
+
+        private void SetLookFlag(Hotspot hotspot)
+        {
+            if (!string.IsNullOrWhiteSpace(hotspot.LookFlag) && !_player.HasFlag(hotspot.LookFlag))
+            {
+                _player.SetFlag(hotspot.LookFlag);
+                UpdatePlayerStats();    // writes the journal entry
+            }
         }
 
         /*

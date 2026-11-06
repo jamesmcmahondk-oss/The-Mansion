@@ -35,7 +35,8 @@ namespace The_Mansion.Data
             bool usedUpInFight = false,
             bool memento = false,
             string picture = "",
-            string misuse = "")
+            string misuse = "",
+            string reads = "")
         {
             var item = new Item
             {
@@ -47,7 +48,8 @@ namespace The_Mansion.Data
                 UsedUpInFight = usedUpInFight,
                 IsMemento = memento,
                 Picture = picture,
-                MisuseText = misuse
+                MisuseText = misuse,
+                ReadsDialogue = reads
             };
 
             ItemLookup[name] = item;
@@ -111,6 +113,15 @@ namespace The_Mansion.Data
                     memento: true,
                     picture: "Assets/Items/Sources/worn_photograph.png",
                     misuse: "You hold the photograph up beside the {target}. It doesn't help you remember anything.");
+
+        // From the hidden compartment behind the empty frame in the Portrait
+        // Gallery. Right-click reads it (Dialogues.PortraitLedger).
+        public static Item PortraitLedger { get; } =
+            NewItem("Portrait Ledger",
+                    "A handwritten record of portraits commissioned for the Mansion. Several pages have been removed. " +
+                    "Several names have been crossed out. One appears to have been written repeatedly. (Right-click to read it.)",
+                    reads: "PortraitLedger",
+                    misuse: "You leaf through the ledger beside the {target}. It isn't listed.");
 
         // For a rubbing of the gravestone (use either one on the inscription
         // while carrying both). Charcoal: the tool shed. Paper: still to be decided.

@@ -206,7 +206,7 @@ namespace The_Mansion
             }
             else if (_currentScene != null)
             {
-                ShowDescription(_currentScene.Description);
+                ShowDescription(_currentScene.GetDescription(_player));
             }
         }
 
@@ -495,7 +495,7 @@ namespace The_Mansion
             }
             else if (_currentScene != null)
             {
-                ShowDescription(_currentScene.Description);
+                ShowDescription(_currentScene.GetDescription(_player));
             }
         }
     }

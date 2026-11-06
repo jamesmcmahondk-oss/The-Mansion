@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
@@ -35,6 +35,11 @@ namespace The_Mansion.Data
 
             // Optional: where it was found / where the puzzle is.
             public string Where { get; init; } = "";
+
+            // Optional: text that grows as more is found out (else Text).
+            public Func<Player, string>? TextWhen { get; init; }
+
+            public string TextFor(Player p) => TextWhen?.Invoke(p) ?? Text;
         }
 
         public const string People = "People";
@@ -49,12 +54,13 @@ namespace The_Mansion.Data
             new(StringComparer.OrdinalIgnoreCase);
 
         private static JournalEntry Entry(string id, string title, string text, Func<Player, bool> when,
-                                          string category = People, string picture = "", string where = "")
+                                          string category = People, string picture = "", string where = "",
+                                          Func<Player, string>? textWhen = null)
         {
             var entry = new JournalEntry
             {
                 Id = id, Title = title, Text = text, When = when,
-                Category = category, Picture = picture, Where = where
+                Category = category, Picture = picture, Where = where, TextWhen = textWhen
             };
             AllEntries.Add(entry);
             EntryLookup[id] = entry;
@@ -128,6 +134,15 @@ namespace The_Mansion.Data
                   p => p.HasFlag("StoleCoins"),
                   category: Puzzles, where: "The courtyard fountain");
 
+        public static JournalEntry HoodedStatue { get; } =
+            Entry("HoodedStatue", "The hooded statue",
+                  "A hooded stone figure in the garden, its hands resting on a great stone sword. " +
+                  "There is no face under the hood - only shadow. Words are cut along the blade: " +
+                  "HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN.",
+                  p => p.HasFlag("ReadStoneSword") || p.HasFlag("TookStoneSword"),
+                  category: Puzzles, picture: "Assets/Backgrounds/Mansion/statue_closeup.png",
+                  where: "The garden - the hooded statue on its plinth");
+
         public static JournalEntry FacelessKnight { get; } =
             Entry("FacelessKnight", "The Faceless Knight",
                   "The hooded statue in the garden held a stone sword. Words are cut along the blade: " +
@@ -145,9 +160,21 @@ namespace The_Mansion.Data
 
         public static JournalEntry RoseBush { get; } =
             Entry("RoseBush", "The roses",
-                  "The roses by the bench have thorns. I have conducted this experiment.",
-                  p => p.HasFlag("PrickedByRoseBush"),
-                  category: Puzzles, where: "Right side of the Mansion - the rose bush");
+                  "",
+                  p => p.HasFlag("SawRoseBush") || p.HasFlag("PrickedByRoseBush") || p.HasFlag("GotRedRose"),
+                  category: Puzzles, where: "Right side of the Mansion - the rose bush",
+                  textWhen: p =>
+                  {
+                      string text = "A great tangle of blood-red roses by the stone bench, impossibly in bloom this late in the year.";
+                      if (p.HasFlag("PrickedByRoseBush"))
+                      {
+                          text += " They have thorns. I have conducted this experiment.";
+                      }
+                      text += p.HasFlag("GotRedRose")
+                          ? "\n\nI cut one perfect dark-red rose with the garden shears."
+                          : "\n\nBare hands won't do it. Something sharp to cut one with, perhaps.";
+                      return text;
+                  });
 
         public static JournalEntry KitchenDoor { get; } =
             Entry("KitchenDoor", "The kitchen door",
@@ -164,16 +191,73 @@ namespace The_Mansion.Data
 
         public static JournalEntry WellMirror { get; } =
             Entry("WellMirror", "The mirror in the well",
-                  "I fished a small silver-backed hand mirror from the bottom of the well. The glass is clouded and cracked.",
-                  p => p.HasFlag("GotWellMirror"),
-                  category: Puzzles, where: "The old well, past the right side of the Mansion");
+                  "",
+                  p => p.HasFlag("SawWellGlint") || p.HasFlag("GotWellMirror"),
+                  category: Puzzles, where: "The old well, past the right side of the Mansion",
+                  textWhen: p => p.HasFlag("GotWellMirror")
+                      ? "Something silver glinted at the bottom of the well. I fished it up: a small silver-backed hand mirror. The glass is clouded and cracked straight across."
+                      : "Far down at the bottom of the well, something small and silver catches the light. It's far too deep to reach. " +
+                        "The rusty bucket might scrape it up with enough luck - or I need something to fish with.");
 
-        public static JournalEntry Gravestone { get; } =
-            Entry("Gravestone", "The gravestone",
-                  "The inscription on the old gravestone by the graveyard gate reads: " +
-                  "THRICE FOR HEAVEN · ONCE FOR THE HEART · NEVER FOR THE HAND THAT LET GO",
-                  p => p.HasFlag("ReadGravestone"),
-                  category: Puzzles, where: "The graveyard - the old gravestone by the gate");
+        // The Graveyard Secret. The gravestone holds the key, so its words
+        // are written here, on the cross's page, once they've been read.
+        public static JournalEntry StoneCross { get; } =
+            Entry("StoneCross", "The stone cross",
+                  "",
+                  p => p.HasFlag("SawCrossSpirals") || p.HasFlag("ReadGravestone"),
+                  category: Puzzles, picture: "Assets/Backgrounds/Mansion/cross_closeup.png",
+                  where: "The graveyard - the great cross at the top of the steps",
+                  textWhen: p =>
+                  {
+                      string text = p.HasFlag("SawCrossSpirals")
+                          ? "At the centre of the great stone cross, three stone spirals are set in round sockets: " +
+                            "one reaching up, one to the left, one to the right. Each one turns, a quarter at a time. " +
+                            "The plinth below sounds hollow."
+                          : "A great Celtic cross stands over the graveyard, every inch of it carved with endless knots.";
+
+                      text += p.HasFlag("ReadGravestone")
+                          ? "\n\nThe old gravestone by the gate bears a small carving of the same cross. Its inscription reads: " +
+                            "THRICE FOR HEAVEN · ONCE FOR THE HEART · NEVER FOR THE HAND THAT LET GO"
+                          : "\n\nThere must be a way to set them right. The rain has worn the old gravestone by the gate - perhaps it says something.";
+
+                      if (p.HasFlag("CrossOpened"))
+                      {
+                          text += "\n\nThe spirals turned, locked, and the panel in the plinth swung open.";
+                      }
+                      return text;
+                  });
+
+        // The Portrait Gallery's empty frame (a door) and the ledger behind it.
+        public static JournalEntry EmptyFrame { get; } =
+            Entry("EmptyFrame", "The empty frame",
+                  "",
+                  p => p.HasFlag("ExaminedEmptyFrame"),
+                  category: Puzzles, where: "The Portrait Gallery, beside the fireplace",
+                  textWhen: p =>
+                  {
+                      string text = "A huge ornate frame in the Portrait Gallery surrounds nothing but wallpaper. " +
+                                    "It is considerably deeper than it needs to be.";
+                      if (p.HasFlag("ExaminedThreeAges"))
+                      {
+                          text += "\n\nThree portraits of the same woman hang nearby: the same eyes, the same posture, different years.";
+                      }
+                      if (p.HasFlag("DiscoveredPortraitFrameMechanism"))
+                      {
+                          text += "\n\nThree small brass medallions are set into the frame's lower edge, matching the frames of the three age portraits.";
+                      }
+                      if (p.HasFlag("SolvedPortraitGalleryPuzzle"))
+                      {
+                          text += "\n\nPressed in the order she was painted, the medallions released the frame. It was a door. " +
+                                  (p.HasFlag("GotPortraitLedger")
+                                      ? "Behind it was a ledger of portrait commissions."
+                                      : "Behind it, a ledger rests in a shallow compartment.");
+                      }
+                      if (p.HasFlag("LearnedGargoyleName"))
+                      {
+                          text += "\n\nThe ledger names the gate guardians: Dúnán the Patient, and Cairn the Steadfast.";
+                      }
+                      return text;
+                  });
 
         public static JournalEntry Photograph { get; } =
             Entry("Photograph", "The photograph",

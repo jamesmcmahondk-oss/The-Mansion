@@ -229,7 +229,7 @@ namespace The_Mansion
 
             if (_selectedItem == null && _currentScene != null)
             {
-                ShowDescription(_currentScene.Description);
+                ShowDescription(_currentScene.GetDescription(_player));
             }
         }
 
@@ -307,6 +307,15 @@ namespace The_Mansion
             slot.MouseRightButtonDown += (_, args) =>
             {
                 args.Handled = true;
+
+                // Something to read (e.g. the Portrait Ledger): open its pages.
+                if (!string.IsNullOrWhiteSpace(item.ReadsDialogue) && !IsInDialogue && !IsInFight)
+                {
+                    CloseInventory();
+                    StartDialogue(item.ReadsDialogue);
+                    return;
+                }
+
                 ShowPicture(string.IsNullOrWhiteSpace(item.Picture) ? item.Icon : item.Picture);
             };
 

@@ -59,7 +59,9 @@ namespace The_Mansion.Data
                         ? "start"
                         : !p.HasFlag("GargoyleNoticedRain")
                             ? "rain"
-                            : "again")
+                            : p.HasFlag("LearnedGargoyleName") && !p.HasFlag("ToldGargoyleName")
+                                ? "foundNameStart"
+                                : "again")
 
                 .Portrait(
                     "Assets/Characters/Portraits/Gargoyle_portrait_framed.png")
@@ -200,6 +202,59 @@ namespace The_Mansion.Data
                 // =====================================================
                 // RETURN VISITS
                 // =====================================================
+
+                // =====================================================
+                // THE NAME (read in the Portrait Ledger: Cairn the Steadfast).
+                // Not a resolution - the gargoyle stays on the pillar.
+                // =====================================================
+
+                .Line(
+                    "foundNameStart",
+                    "\"You've returned.\" " +
+                    "The gargoyle looks toward the empty pillar, and then, for once, at you.")
+                    .Choice(
+                        "I found your name.",
+                        "foundName")
+                    .Choice(
+                        "Something else.",
+                        "menu")
+
+                .Line(
+                    "foundName",
+                    "The gargoyle goes very still. Rain runs off the stone brow. " +
+                    "For a long time the gargoyle says nothing at all.")
+                    .Choice(
+                        "\"Cairn the Steadfast.\"",
+                        "nameRead",
+                        effect: p => p.SetFlag("ToldGargoyleName"))
+                    .Choice(
+                        "Perhaps another time.",
+                        "menu")
+
+                .Line(
+                    "nameRead",
+                    "Another long silence. Then, very quietly: " +
+                    "\"Dúnán remembered.\"")
+                    .Choice(
+                        "It was written in a ledger in the Portrait Gallery.",
+                        "notWhatIMeant")
+
+                .Line(
+                    "notWhatIMeant",
+                    "\"That is not what I meant.\" " +
+                    "The gargoyle turns back to the rain. After a while, under its breath, testing whether it still fits: \"Cairn.\"")
+                    .Choice(
+                        "It suits you.",
+                        "nameSuits")
+                    .Choice(
+                        "I'll leave you with it.",
+                        "goodbye")
+
+                .Line(
+                    "nameSuits",
+                    "\"It is a name for something that stays put.\" " +
+                    "A pause. \"I am no longer certain that is a compliment.\"")
+                    .SameChoicesAs("menu")
 
                 .Line(
                     "again",
@@ -5234,6 +5289,177 @@ namespace The_Mansion.Data
                 "She nods approvingly. " +
                 "\"Self-awareness. Rare around here.\"")
                 .Choice("Sorry.", "menu");
+
+        // =========================================================
+        // THE PORTRAIT LEDGER
+        // Read by right-clicking the Portrait Ledger in the inventory
+        // (from the hidden compartment in the Portrait Gallery). Pages are
+        // choices. Foreshadowing, not answers.
+        // =========================================================
+
+        public static Dialogue PortraitLedger { get; } =
+            NewDialogue("PortraitLedger", "Portrait Ledger")
+
+                .Line(
+                    "cover",
+                    "PORTRAIT COMMISSIONS. A handwritten record of portraits commissioned for the Mansion. " +
+                    "Several pages have been removed. Several names have been crossed out. One appears to have been written repeatedly.")
+                    .Choice(
+                        "(Turn to the repeated name.)",
+                        "mirelle1798")
+                    .Choice(
+                        "(Turn to the Gate Guardians.)",
+                        "gate",
+                        effect: p =>
+                        {
+                            p.SetFlag("ReadGateGuardianLedgerEntry");
+                            p.SetFlag("LearnedGargoyleName");
+                        })
+                    .Choice(
+                        "(Turn to the Family Portrait.)",
+                        "family",
+                        effect: p => p.SetFlag("ReadFamilyPortraitLedgerEntry"))
+                    .Choice(
+                        "(Turn to the later pages.)",
+                        "vesper")
+                    .Choice(
+                        "(Close the ledger.)")
+
+                .Line(
+                    "contents",
+                    "You turn back to the front of the ledger. PORTRAIT COMMISSIONS.")
+                    .SameChoicesAs("cover")
+
+                // ---- Mirélle ----
+
+                .Line(
+                    "mirelle1798",
+                    "1798. Portrait of Mirélle. Rejected by subject.")
+                    .Choice(
+                        "(Turn the page.)",
+                        "mirelle1821")
+
+                .Line(
+                    "mirelle1821",
+                    "1821. Portrait of Mirélle. Rejected by subject.")
+                    .Choice(
+                        "(Turn the page.)",
+                        "mirelle1854")
+
+                .Line(
+                    "mirelle1854",
+                    "1854. Portrait of Mirélle. Rejected by subject. Replacement requested. Reason not supplied.")
+                    .Choice(
+                        "(Think about it.)",
+                        "mirelleThought",
+                        onlyIf: p => p.HasFlag("MetMirelle"))
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents",
+                        effect: p => ReadMirellePages(p))
+
+                .Line(
+                    "mirelleThought",
+                    "Mirélle did not reject one portrait. Mirélle rejected every version that admitted time had passed.")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents",
+                        effect: p => ReadMirellePages(p))
+
+                // ---- The gate gargoyles ----
+
+                .Line(
+                    "gate",
+                    "Gate Guardians. Commissioned as a pair. Dúnán the Patient. Cairn the Steadfast.")
+                    .Choice(
+                        "(Read the second name again.)",
+                        "cairn")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                .Line(
+                    "cairn",
+                    "Cairn the Steadfast. The ink is as clear as the day it was written. Nobody has needed to say it in a long time.")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                // ---- The family portrait ----
+
+                .Line(
+                    "family",
+                    "Family Portrait. Main entrance steps. Subjects: a list of names in a careful hand. " +
+                    "The final line has been blurred by water. Only the pressure marks remain.")
+                    .Choice(
+                        "(Think of the photograph.)",
+                        "familyThought",
+                        onlyIf: p => p.HasFlag("ComparedPhotographToPortrait"))
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                .Line(
+                    "familyThought",
+                    "The missing name occupies the same place in the list as the absence in the picture.")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                // ---- Lady Vesper and Pip ----
+
+                .Line(
+                    "vesper",
+                    "Portrait of Lady Vesper. Subject requested alterations to the hands. Artist refused.")
+                    .Choice(
+                        "(Think about it.)",
+                        "vesperThought",
+                        onlyIf: p => p.HasFlag("MetVesper"))
+                    .Choice(
+                        "(Turn the page.)",
+                        "pip")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                .Line(
+                    "vesperThought",
+                    "You understand the disagreement.")
+                    .Choice(
+                        "(Turn the page.)",
+                        "pip")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                .Line(
+                    "pip",
+                    "Informal study. Phillip Jackson and bear. Not commissioned. Preserved by request.")
+                    .Choice(
+                        "(Think about it.)",
+                        "pipThought",
+                        onlyIf: p => p.HasFlag("MetPip"))
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents")
+
+                .Line(
+                    "pipThought",
+                    "The bear looks much the same.")
+                    .Choice(
+                        "(Back to the front.)",
+                        "contents");
+
+        // Reading all three of Mirélle's pages (with her three portraits seen
+        // and Mirélle met) unlocks "I saw your portraits." with her later.
+        private static void ReadMirellePages(Player p)
+        {
+            p.SetFlag("ReadMirelleLedgerEntries");
+            if (p.HasFlag("MetMirelle") && p.HasFlag("ExaminedThreeAges"))
+            {
+                p.SetFlag("UnderstandsMirellePortraits");
+            }
+        }
 
         // =========================================================
         // LOOKUP (used by the game - no need to edit)
