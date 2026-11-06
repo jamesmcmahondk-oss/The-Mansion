@@ -79,6 +79,7 @@ namespace The_Mansion
         // Entries not read yet this session (marked on the contents page).
         private readonly HashSet<string> _unreadJournal = new(StringComparer.OrdinalIgnoreCase);
         private string _journalSelected = "";
+        private string _journalTab = Journal.People;
 
         private void ShowJournal(Action? back)
         {
@@ -97,16 +98,12 @@ namespace The_Mansion
                 entries.FirstOrDefault(entry => _unreadJournal.Contains(entry.Id)) ??
                 entries.FirstOrDefault();
 
-            _journalSelected = first?.Id ?? "";
+            if (first != null)
+            {
+                _journalTab = first.Category;
+            }
 
-            JournalSubtitleText.Text = entries.Count == 0
-                ? "Nothing written yet."
-                : $"{entries.Count} {(entries.Count == 1 ? "entry" : "entries")}, newest first";
-
-            BuildJournalContents(entries);
-            ShowJournalEntry(first);
-
-            JournalScroll.ScrollToTop();
+            ShowJournalTab(_journalTab, first);
             Sound.Play("journal_open");
             JournalScreen.Visibility = Visibility.Visible;
         }
@@ -125,6 +122,76 @@ namespace The_Mansion
             }
 
             return entries;
+        }
+
+        // Switches the left page to one tab (People / Puzzles / Mementos) and
+        // shows the given entry, or that tab's newest one.
+        private void ShowJournalTab(string tab, Journal.JournalEntry? show = null)
+        {
+            _journalTab = tab;
+            List<Journal.JournalEntry> entries = JournalEntriesNewestFirst()
+                .Where(entry => entry.Category == tab).ToList();
+
+            show ??= entries.FirstOrDefault(entry => _unreadJournal.Contains(entry.Id)) ??
+                     entries.FirstOrDefault();
+            _journalSelected = show?.Id ?? "";
+
+            JournalSubtitleText.Text = entries.Count == 0
+                ? "Nothing written here yet."
+                : $"{entries.Count} {(entries.Count == 1 ? "entry" : "entries")}, newest first";
+
+            ShowJournalEntry(show);
+            BuildJournalTabs();
+            BuildJournalContents(entries);
+            JournalScroll.ScrollToTop();
+        }
+
+        private void BuildJournalTabs()
+        {
+            JournalTabs.Children.Clear();
+            List<Journal.JournalEntry> all = JournalEntriesNewestFirst();
+
+            foreach (string tab in Journal.Categories)
+            {
+                bool current = tab == _journalTab;
+                int count = all.Count(entry => entry.Category == tab);
+                bool unread = all.Any(entry => entry.Category == tab && _unreadJournal.Contains(entry.Id));
+
+                var label = new TextBlock
+                {
+                    FontFamily = Georgia,
+                    FontSize = 21,
+                    Margin = new Thickness(0, 0, 26, 0),
+                    Foreground = current ? JournalRedInk : JournalFadedInk,
+                    FontWeight = current ? FontWeights.Bold : FontWeights.Normal,
+                    Cursor = Cursors.Hand,
+                    Background = Brushes.Transparent
+                };
+
+                label.Inlines.Add(new System.Windows.Documents.Run($"{tab} ({count})"));
+                if (unread)
+                {
+                    label.Inlines.Add(new System.Windows.Documents.Run(" *")
+                    {
+                        Foreground = JournalRedInk,
+                        FontWeight = FontWeights.Bold
+                    });
+                }
+
+                label.MouseEnter += (_, _) => label.TextDecorations = TextDecorations.Underline;
+                label.MouseLeave += (_, _) => label.TextDecorations = null;
+                label.MouseLeftButtonDown += (_, args) =>
+                {
+                    args.Handled = true;
+                    if (tab != _journalTab)
+                    {
+                        Sound.Play("journal_open");
+                        ShowJournalTab(tab);
+                    }
+                };
+
+                JournalTabs.Children.Add(label);
+            }
         }
 
         // The left page: one line per entry. The chosen one is in red ink,
@@ -166,8 +233,7 @@ namespace The_Mansion
                 {
                     args.Handled = true;
                     _journalSelected = entry.Id;
-                    ShowJournalEntry(entry);
-                    BuildJournalContents(JournalEntriesNewestFirst());
+                    ShowJournalTab(_journalTab, entry);
                 };
 
                 JournalEntriesPanel.Children.Add(line);
@@ -183,16 +249,35 @@ namespace The_Mansion
                 JournalEntryText.Text = "What you discover will be written here.";
                 JournalEntryText.Foreground = JournalFadedInk;
                 JournalEntryText.FontStyle = FontStyles.Italic;
+                PlaceJournalPicture(null);
                 return;
             }
 
             _unreadJournal.Remove(entry.Id);
 
             JournalEntryTitle.Text = entry.Title;
-            JournalEntryText.Text = entry.Text;
+            JournalEntryText.Text = string.IsNullOrWhiteSpace(entry.Where)
+                ? entry.Text
+                : $"Where: {entry.Where}\n\n{entry.Text}";
+            PlaceJournalPicture(string.IsNullOrWhiteSpace(entry.Picture)
+                ? null
+                : LoadImage(entry.Picture, "journal picture"));
             JournalEntryText.Foreground = JournalInk;
             JournalEntryText.FontStyle = FontStyles.Normal;
             JournalEntryScroll.ScrollToTop();
+        }
+
+        // With a picture, the title and text move down below it.
+        private void PlaceJournalPicture(ImageSource? picture)
+        {
+            JournalEntryPicture.Source = picture;
+            JournalEntryPicture.Visibility = picture != null ? Visibility.Visible : Visibility.Collapsed;
+
+            double titleTop = picture != null ? 395 : 110;
+            double textTop = picture != null ? 450 : 200;
+            Canvas.SetTop(JournalEntryTitle, titleTop);
+            Canvas.SetTop(JournalEntryScroll, textTop);
+            JournalEntryScroll.Height = 790 - textTop;
         }
 
         // Clicking the dark area around the book closes it.
