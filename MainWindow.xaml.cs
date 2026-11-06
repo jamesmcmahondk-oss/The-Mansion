@@ -59,6 +59,7 @@ namespace The_Mansion
         private Cursor _lookCursor = LoadCursor("cursor_look.cur");
         private Cursor _talkCursor = LoadCursor("cursor_talk.cur");
         private Cursor _itemCursor = LoadCursor("cursor_item.cur");
+        private Cursor _walkCursor = LoadCursor("cursor_walk.cur");
 
         /*
          * Loads a cursor from Assets/Cursors inside the game.

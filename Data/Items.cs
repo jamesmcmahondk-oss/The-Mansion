@@ -76,6 +76,16 @@ namespace The_Mansion.Data
         // OUTSIDE THE MANSION (see PUZZLES.md)
         // =========================================================
 
+        // The player starts with it (and holding it) - which is why the
+        // Faceless Knight's stone fingers tighten until it's put away.
+        public static Item PocketKnife { get; } =
+            NewItem("Pocket Knife",
+                    "A small folding knife with a worn red handle. You've had it for as long as you can remember - which, admittedly, isn't long. (Weapon. Right-click to look at it.)",
+                    "Assets/Items/pocket_knife.png",
+                    weaponBonus: 0,
+                    picture: "Assets/Items/Sources/pocket_knife.png",
+                    misuse: "You'd rather not ruin your knife on the {target}.");
+
         // The Faceless Knight's sword (statue close-up).
         public static Item StoneSword { get; } =
             NewItem("Stone Sword",

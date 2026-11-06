@@ -77,6 +77,10 @@ don't repeat. Give **important objects** their own lines for the wrong verb
 (`.OnTalk("The bench says nothing. Benches rarely do.")`) – it makes the world
 feel alive.
 
+**Paths:** a hotspot with only `.GoesTo` (and `.Describe`) is a *path*: it shows
+the walk cursor and every verb walks there - no talking to paths. Give it
+any other verb (`.OnTalk`, `.OnAct`, `.CloseUp`...) and it's an object again.
+
 If a hotspot has both `.OnAct` and `.GoesTo`, ACT does the `.OnAct`. The Return
 arrow works with every verb.
 
@@ -266,20 +270,21 @@ NewItem("Empty Bottle", "...", "Assets/Items/empty_bottle.png",
 
 **Testing:** F1 → *Start a fight* lists every enemy.
 
-## 8. Luck and Wits tests
+## 8. Wits, Luck and Strength requirements
 
-For traps, chance events and puzzles (not fights). Roll 3d6 – equal to or
-under the stat succeeds (10 = 50%, 12 = 74%, 7 = 16%):
+No dice outside fights: a task needs a **fixed** stat. Either the hero has
+it or not, and the game says so - hovering shows *"needs Wits 12 (yours: 9)"*,
+and the reply names the requirement. Always leave another way (an item).
 
 ```csharp
-.OnAct("You reach into the dark hole...", p =>
-{
-    if (p.TestLuck()) p.Give("Silver Key");
-    else p.Health -= 10;          // something bites! (0 Health = game over)
-})
-
-effect: p => { if (p.TestWits()) p.SetFlag("SolvedRiddle"); }
+.Hotspot("Inscription", 600, 457, 360, 280)
+    .NeedsStat("Wits", 12)                         // shown on hover
+    .OnAct(p => p.Meets("Wits", 12)
+        ? "[Wits 12] You trace the marks... THRICE FOR HEAVEN..."
+        : $"[Wits 12 needed - yours is {p.Wits}] There must be another way.")
 ```
+
+`p.Meets("Wits" | "Luck" | "Strength", n)` and `p.Stat("Luck")` are the helpers.
 
 ## 9. Saving
 

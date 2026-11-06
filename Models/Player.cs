@@ -27,6 +27,10 @@ namespace The_Mansion.Models
         // Use them to change what scenes, hotspots and characters do.
         public HashSet<string> Flags { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
+        // Conversation lines already heard, as "DialogueId:lineId" - choices
+        // leading to them are shown dimmed, so new topics stand out.
+        public HashSet<string> SeenLines { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
         // Journal entries found so far (ids from Data/Journal.cs), oldest first.
         public List<string> Journal { get; set; } = new();
 
@@ -65,22 +69,19 @@ namespace The_Mansion.Models
 
         public void ClearFlag(string flag) => Flags.Remove(flag);
 
-        // ---- Luck and Wits tests (for scenes and puzzles) -------------
-        // Roll 3d6: equal to or under the stat succeeds.
-        // Luck/Wits 10 = 50%, 12 = 74%, 7 = 16%.
+        // ---- Stat requirements (for scenes and puzzles) ----------------
+        // No dice: a task needs a fixed Wits / Luck / Strength. Either the
+        // hero has it or not - and the game says so (see .NeedsStat).
 
-        // The dice total of the last test (if you want to show it).
-        public int LastTestRoll { get; private set; }
-
-        public bool TestLuck() => Test(Luck);
-
-        public bool TestWits() => Test(Wits);
-
-        private bool Test(int stat)
+        public int Stat(string stat) => stat switch
         {
-            LastTestRoll = Dice.Roll(3);
-            return LastTestRoll <= stat;
-        }
+            "Wits" => Wits,
+            "Luck" => Luck,
+            "Strength" => Strength,
+            _ => 0
+        };
+
+        public bool Meets(string stat, int needed) => Stat(stat) >= needed;
 
     }
 }

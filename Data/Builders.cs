@@ -185,6 +185,18 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// The ACT needs this stat, e.g. .NeedsStat("Wits", 12): hovering shows
+        /// "needs Wits 12 (yours: 9)". Check it in the OnAct with p.Meets(...)
+        /// and give a clear reply either way - and always leave another way.
+        /// </summary>
+        public HotspotBuilder NeedsStat(string stat, int needed)
+        {
+            _hotspot.StatName = stat;
+            _hotspot.StatNeeded = needed;
+            return this;
+        }
+
         /// <summary>ACT on it opens a puzzle screen, e.g. .ActOpensPuzzle("Cross").</summary>
         public HotspotBuilder ActOpensPuzzle(string puzzle)
         {
@@ -213,7 +225,7 @@ namespace The_Mansion.Data
         /// <summary>
         /// ACT on it runs this and shows the text it returns - for replies
         /// that depend on what happens, e.g.
-        /// .OnAct(p => p.TestLuck() ? "Got it!" : "It slips away.")
+        /// .OnAct(p => p.Meets("Luck", 11) ? "Got it!" : "It slips away.")
         /// </summary>
         public HotspotBuilder OnAct(Func<Player, string> action)
         {

@@ -58,6 +58,11 @@ namespace The_Mansion.Models
         // Sound played when the player uses ACT on it (Assets/Sounds).
         public string ActSound { get; set; } = "";
 
+        // A stat the ACT needs (.NeedsStat("Wits", 12)) - shown when hovering
+        // so the player knows before trying. The ACT itself checks it.
+        public string StatName { get; set; } = "";
+        public int StatNeeded { get; set; }
+
         // What happens when the player uses an item on this hotspot,
         // keyed by item name. Items not listed get a "nothing happens" reply.
         // Several reactions per item are allowed (see ItemUse.Condition).
@@ -90,5 +95,19 @@ namespace The_Mansion.Models
         // Optional: the hotspot only exists while this returns true,
         // e.g. p => !p.HasFlag("TookKey"). Checked whenever the scene refreshes.
         public Func<Player, bool>? VisibleWhen { get; set; }
+
+        // A path: it only leads somewhere (.GoesTo) and does nothing else.
+        // Paths get the walk cursor, and every verb simply walks there.
+        public bool IsPath =>
+            !string.IsNullOrWhiteSpace(TargetScene) &&
+            string.IsNullOrWhiteSpace(CloseUpScene) &&
+            string.IsNullOrWhiteSpace(DialogueId) &&
+            string.IsNullOrWhiteSpace(ActDialogueId) &&
+            string.IsNullOrWhiteSpace(ActFightId) &&
+            string.IsNullOrWhiteSpace(ActPuzzle) &&
+            string.IsNullOrWhiteSpace(ActText) &&
+            ActEffect == null && ActResult == null &&
+            string.IsNullOrWhiteSpace(TalkText) && TalkResult == null &&
+            ItemUses.Count == 0 && string.IsNullOrWhiteSpace(OtherItemsText);
     }
 }

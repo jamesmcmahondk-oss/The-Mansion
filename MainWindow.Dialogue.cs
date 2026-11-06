@@ -23,6 +23,12 @@ namespace The_Mansion
         // =========================================================
 
         private Dialogue? _activeDialogue;
+        private string _activeDialogueId = "";
+
+        // Choices that only lead back to lines already heard are dimmed.
+        private static readonly Brush ChoiceSeenBrush = Paint.Rgb(0x7A, 0x6F, 0x5F);
+
+        private string LineKey(string lineId) => $"{_activeDialogueId}:{lineId}";
 
         // Choices currently on screen, in the order they are numbered.
         private readonly List<DialogueChoice> _visibleChoices = new();
@@ -59,6 +65,7 @@ namespace The_Mansion
             }
 
             _activeDialogue = dialogue;
+            _activeDialogueId = dialogueId;
 
             PlaceDialogueCharacter(dialogue);
             SetDialogueCharacter(dialogue.Character);
@@ -136,6 +143,7 @@ namespace The_Mansion
             }
 
             _currentLineId = nodeId;
+            _player.SeenLines.Add(LineKey(nodeId));
             DisplayDialogueNode(node);
         }
 
@@ -190,10 +198,16 @@ namespace The_Mansion
             {
                 int index = i;
 
+                // Already talked about: dimmed (and italic), so what's new stands out.
+                string? next = _visibleChoices[i].Next;
+                bool heard = !string.IsNullOrWhiteSpace(next) && _player.SeenLines.Contains(LineKey(next));
+                Brush normal = heard ? ChoiceSeenBrush : ChoiceBrush;
+
                 var choiceText = new TextBlock
                 {
                     Text = $"{i + 1}.  {_visibleChoices[i].Text}",
-                    Foreground = ChoiceBrush,
+                    Foreground = normal,
+                    FontStyle = heard ? FontStyles.Italic : FontStyles.Normal,
                     FontFamily = Georgia,
                     FontSize = 16,
                     Margin = new Thickness(12, 0, 0, 4),
@@ -203,7 +217,7 @@ namespace The_Mansion
                 };
 
                 choiceText.MouseEnter += (_, _) => choiceText.Foreground = ChoiceHoverBrush;
-                choiceText.MouseLeave += (_, _) => choiceText.Foreground = ChoiceBrush;
+                choiceText.MouseLeave += (_, _) => choiceText.Foreground = normal;
                 choiceText.MouseLeftButtonDown += (_, args) =>
                 {
                     args.Handled = true;
