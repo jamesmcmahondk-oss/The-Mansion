@@ -1391,21 +1391,21 @@ namespace The_Mansion.Data
                 .OnAct("The brass is hot.")
 
             .Hotspot("Left Medallion", 251, 457, 252, 252)
-                .Describe(p => "A woman's profile, no longer young: wavy hair, faint lines at the eyes, the mouth set firm." +
+                .Describe(p => "A woman's profile under a wide-brimmed hat crowned with roses and a little skull: no longer young, faint lines at the eyes, the mouth set firm." +
                                (p.HasFlag("MetMirelle") ? " Mirélle, somewhere in the middle of her life." : ""))
                 .OnAct(p => Gallery.Press(p, "Left"))
                 .Sound("puzzle_click")
                 .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
 
             .Hotspot("Centre Medallion", 644, 452, 252, 252)
-                .Describe(p => "The same woman, young. Dark hair loose over her shoulders, the chin lifted." +
+                .Describe(p => "The same woman under the same hat, young. Long wavy hair loose over her shoulders, the chin lifted." +
                                (p.HasFlag("MetMirelle") ? " Mirélle, before anyone had painted her." : ""))
                 .OnAct(p => Gallery.Press(p, "Centre"))
                 .Sound("puzzle_click")
                 .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
 
             .Hotspot("Right Medallion", 1039, 454, 252, 252)
-                .Describe(p => "The same woman, old. Grey hair pinned up, deep lines - and exactly the same proud chin." +
+                .Describe(p => "The same woman under the same hat, old. Silver hair, deep lines - and exactly the same proud chin." +
                                (p.HasFlag("MetMirelle") ? " Still, unmistakably, Mirélle." : ""))
                 .OnAct(p => Gallery.Press(p, "Right"))
                 .Sound("puzzle_click")
