@@ -35,6 +35,12 @@ namespace The_Mansion
         // ACT on a hotspot with .ActOpensPuzzle(...).
         private void OpenPuzzle(string puzzle)
         {
+            if (puzzle == "Frame")
+            {
+                OpenFramePuzzle();
+                return;
+            }
+
             if (puzzle != "Cross")
             {
                 ShowReply(Replies.NoAct());

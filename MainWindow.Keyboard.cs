@@ -63,12 +63,13 @@ namespace The_Mansion
                 return;
             }
 
-            // Esc steps back from the cross puzzle.
-            if (IsCrossPuzzleOpen)
+            // Esc steps back from a puzzle screen.
+            if (IsCrossPuzzleOpen || IsFramePuzzleOpen)
             {
                 if (e.Key == Key.Escape)
                 {
                     CloseCrossPuzzle();
+                    CloseFramePuzzle();
                     e.Handled = true;
                 }
                 return;

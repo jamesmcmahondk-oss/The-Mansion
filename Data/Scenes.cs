@@ -1152,7 +1152,7 @@ namespace The_Mansion.Data
         // A person can change without ceasing to be the same person.
         // THE MISSING PORTRAIT: the empty frame is a door. Its three brass
         // medallions match the three age portraits and are pressed in the
-        // order the portraits were painted (Gallery helper below). Behind it:
+        // order the portraits were painted (Data/FramePuzzle.cs). Behind it:
         // the Portrait Ledger (read it with right-click: Dialogues.PortraitLedger).
         public static Scene PortraitGallery { get; } =
             NewScene("PortraitGallery",
@@ -1328,12 +1328,11 @@ namespace The_Mansion.Data
                 .OnOtherItems("You try the {item} against the frame. The frame is unmoved.")
                 .OnlyWhen(p => !p.HasFlag("SolvedPortraitGalleryPuzzle"))
 
-            // 4. THE CONTROLS - a close-up of the three medallions (FrameCloseup).
-            // Listed after the frame so it wins.
+            // 4. THE CONTROLS - ACT opens the medallion puzzle screen
+            // (Data/FramePuzzle.cs, MainWindow.FramePuzzle.cs). Listed after the frame so it wins.
             .Hotspot("Medallions", 495, 508, 72, 40)
-                .Describe("Three small brass medallions are set into the lower edge of the frame.")
-                .CloseUp("FrameCloseup")
-                .GoesTo("FrameCloseup")
+                .Describe("Three small brass medallions are set into the lower edge of the frame, each engraved with a woman's profile. They look as if they would press in.")
+                .ActOpensPuzzle("Frame")
                 .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
 
             // 5. THE HIDDEN COMPARTMENT, once solved (the frame swung open).
@@ -1445,53 +1444,6 @@ namespace The_Mansion.Data
 
             .ReturnTo("PortraitGallery", "You step back from the portrait. Her eyes do not follow you. You check.");
 
-        // THE MISSING PORTRAIT, up close: the three brass medallions on the
-        // empty frame, each engraved with the same woman's profile at a
-        // different age (left: middle age, centre: young, right: old - as the
-        // portraits hang). Pressed youngest to oldest (Gallery.Press); a
-        // pressed medallion stays down (the sprites). Solving it returns to
-        // the gallery with the frame open.
-        public static Scene FrameCloseup { get; } =
-            NewScene("FrameCloseup",
-                     "Assets/Backgrounds/Mansion/frame_closeup.png",
-                     "The lower edge of the empty frame. Three brass medallions are set into the gilt, each engraved with a woman's profile.")
-
-            .Sprite("Assets/Backgrounds/Mansion/frame_medallion_centre_pressed.png", 644, 452, 252,
-                    p => p.HasFlag("PortraitSequenceStep1") || p.HasFlag("PortraitSequenceStep2"))
-            .Sprite("Assets/Backgrounds/Mansion/frame_medallion_left_pressed.png", 251, 457, 252,
-                    p => p.HasFlag("PortraitSequenceStep2"))
-
-            .Hotspot("Wallpaper", 200, 192, 1150, 260)
-                .Describe("Inside the frame there is only wallpaper - brighter than the rest of the wall, as if something hung here for a very long time.")
-                .OnAct("You press the wallpaper. It is a wall.")
-
-            .Hotspot("Candles", 1440, 192, 96, 160)
-                .Describe("Candles burn in a brass sconce beside the frame. Someone keeps these lit.")
-                .OnAct("The brass is hot.")
-
-            .Hotspot("Left Medallion", 251, 457, 252, 252)
-                .Describe(p => "A woman's profile under a wide-brimmed hat crowned with roses and a little skull: no longer young, faint lines at the eyes, the mouth set firm." +
-                               (p.HasFlag("MetMirelle") ? " Mirélle, somewhere in the middle of her life." : ""))
-                .OnAct(p => Gallery.Press(p, "Left"))
-                .Sound("puzzle_click")
-                .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
-
-            .Hotspot("Centre Medallion", 644, 452, 252, 252)
-                .Describe(p => "The same woman under the same hat, young. Long wavy hair loose over her shoulders, the chin lifted." +
-                               (p.HasFlag("MetMirelle") ? " Mirélle, before anyone had painted her." : ""))
-                .OnAct(p => Gallery.Press(p, "Centre"))
-                .Sound("puzzle_click")
-                .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
-
-            .Hotspot("Right Medallion", 1039, 454, 252, 252)
-                .Describe(p => "The same woman under the same hat, old. Silver hair, deep lines - and exactly the same proud chin." +
-                               (p.HasFlag("MetMirelle") ? " Still, unmistakably, Mirélle." : ""))
-                .OnAct(p => Gallery.Press(p, "Right"))
-                .Sound("puzzle_click")
-                .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
-
-            .ReturnTo("PortraitGallery", "You step back from the frame.");
-
         // =========================================================
         // PUZZLE HELPERS (used by the scenes above)
         // =========================================================
@@ -1500,9 +1452,6 @@ namespace The_Mansion.Data
         private static class Gallery
         {
             public const int WitsNeeded = 12;
-
-            // The portraits were painted 1798, 1821, 1854 - hung centre, left, right.
-            private static readonly string[] Order = { "Centre", "Left", "Right" };
 
             public static int MementoCount(Player p) =>
                 p.Inventory.Count(name => Items.GetItem(name).IsMemento);
@@ -1534,7 +1483,7 @@ namespace The_Mansion.Data
 
                 if (p.HasFlag("DiscoveredPortraitFrameMechanism"))
                 {
-                    return "Three small brass portrait medallions are set into the lower edge of the frame. They press in, like buttons. A closer look would help.";
+                    return "Three small brass portrait medallions are set into the lower edge of the frame. They press in, like buttons.";
                 }
 
                 if (p.Meets("Wits", WitsNeeded))
@@ -1551,48 +1500,6 @@ namespace The_Mansion.Data
                 }
 
                 return "You run a finger along the inner edge. The frame is considerably deeper than it needs to be.";
-            }
-
-            private static int Step(Player p) =>
-                p.HasFlag("PortraitSequenceStep2") ? 2 : p.HasFlag("PortraitSequenceStep1") ? 1 : 0;
-
-            private static void ResetSequence(Player p)
-            {
-                p.ClearFlag("PortraitSequenceStep1");
-                p.ClearFlag("PortraitSequenceStep2");
-            }
-
-            // The three medallions, pressed in the order the portraits were painted.
-            public static string Press(Player p, string medallion)
-            {
-                int step = Step(p);
-
-                if (Order[step] != medallion)
-                {
-                    ResetSequence(p);
-                    int wrong = p.HasFlag("PortraitWrong2") ? 3 : p.HasFlag("PortraitWrong1") ? 2 : 1;
-                    if (wrong <= 2)
-                    {
-                        p.SetFlag($"PortraitWrong{wrong}");    // counts up to three
-                    }
-
-                    string text = "Click. ... The three controls return to their original positions.";
-                    if (wrong >= 3)
-                    {
-                        text += " The portraits are not three members of a family. They are one life, viewed at different times.";
-                    }
-                    return text;
-                }
-
-                if (step == 2)
-                {
-                    ResetSequence(p);
-                    p.SetFlag("SolvedPortraitGalleryPuzzle");
-                    return "Click. ... Something releases inside the wall. The empty frame swings slowly open.";
-                }
-
-                p.SetFlag($"PortraitSequenceStep{step + 1}");
-                return step == 0 ? "Click." : "Click. The second control remains depressed.";
             }
 
             // Met her, looked at her three portraits, read her pages in the ledger.
