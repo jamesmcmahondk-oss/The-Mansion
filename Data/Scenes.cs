@@ -1373,32 +1373,32 @@ namespace The_Mansion.Data
                     : "Three portraits hang in matching frames. The same eyes. The same posture. Different years. The brass nameplates have been removed.";
             })
 
-            .Hotspot("Left Portrait", 189, 201, 359, 540)
+            .Hotspot("Left Portrait", 299, 214, 291, 438)
                 .Describe("The woman in middle age. The first grey in the gold, faint lines at the eyes - and the same guarded look as the others.")
                 .OnAct("The frame is fixed to the wall.")
                 .OnTalk(p => p.HasFlag("MetMirelle") ? "You decide not to tell this one she looks well. Not out loud." : "She doesn't answer.")
 
-            .Hotspot("Centre Portrait", 581, 201, 361, 540)
+            .Hotspot("Centre Portrait", 616, 214, 293, 438)
                 .Describe("The same woman, young - the youngest of the three. Golden hair, no grey at all, the chin lifted.")
                 .OnAct("The frame is fixed to the wall.")
                 .OnTalk("She doesn't answer. She looks as if she never would have.")
 
-            .Hotspot("Right Portrait", 974, 201, 361, 540)
+            .Hotspot("Right Portrait", 935, 214, 293, 438)
                 .Describe("The same woman, old. Silver hair, deep lines, and exactly the same proud chin. Nothing about her has been diminished. Only changed.")
                 .OnAct("The frame is fixed to the wall.")
                 .OnTalk("She doesn't answer. Her expression suggests she has heard better questions.")
 
-            .Hotspot("Left Date", 289, 773, 159, 41)
+            .Hotspot("Left Date", 380, 678, 129, 33)
                 .Describe("A small brass plate under the left portrait: 1821. Empty screw holes either side, where a nameplate used to be.")
                 .OnAct("The plate is screwed firmly to the wall.")
-            .Hotspot("Centre Date", 684, 773, 157, 41)
+            .Hotspot("Centre Date", 700, 678, 127, 33)
                 .Describe("A small brass plate under the centre portrait: 1798. Empty screw holes either side, where a nameplate used to be.")
                 .OnAct("The plate is screwed firmly to the wall.")
-            .Hotspot("Right Date", 1077, 773, 156, 41)
+            .Hotspot("Right Date", 1018, 678, 126, 33)
                 .Describe("A small brass plate under the right portrait: 1854. Empty screw holes either side, where a nameplate used to be.")
                 .OnAct("The plate is screwed firmly to the wall.")
 
-            .Hotspot("Candles", 1360, 237, 110, 345)
+            .Hotspot("Candles", 1247, 243, 89, 280)
                 .Describe("Candles burn in a brass sconce. Someone keeps these lit.")
                 .OnAct("The brass is hot.")
 
@@ -1413,7 +1413,7 @@ namespace The_Mansion.Data
                 ? "An exquisitely dressed figure regards the room from a carved gilt frame. The painter devoted an unusual amount of attention to the hands. Oh. That's why."
                 : "An exquisitely dressed figure regards the room from a carved gilt frame. The painter devoted an unusual amount of attention to the hands.")
 
-            .Hotspot("Portrait", 547, 199, 444, 598)
+            .Hotspot("Portrait", 568, 199, 399, 538)
                 .Describe("A seated woman in red and black, rubies at her throat, looking down at you with complete composure. She seems to have already decided what you're worth.")
                 .OnAct(p => p.HasFlag("MetVesper")
                     ? "You keep your own hands well away from the frame."
@@ -1421,23 +1421,19 @@ namespace The_Mansion.Data
                 .OnTalk("You say good evening to the portrait. It feels like the polite thing to do. It also feels like a mistake.")
 
             // Listed after the portrait so they win.
-            .Hotspot("Face", 686, 302, 128, 116)
+            .Hotspot("Face", 694, 292, 115, 104)
                 .Describe(p => p.HasFlag("MetVesper")
                     ? "Her lips are closed. You now know exactly why the painter preferred them that way."
                     : "Dark red lips, closed. Something about the line of her mouth suggests a smile would be a mistake. For someone.")
                 .OnAct("You'd rather not touch her face. Even the painted one.")
 
-            .Hotspot("Hands", 647, 585, 167, 135)
+            .Hotspot("Hands", 659, 548, 150, 121)
                 .Describe("Her hands rest in her lap: long, pale, perfect fingers and a ruby ring. They are the most carefully painted thing in the room. Possibly in the house.")
                 .OnAct(p => p.HasFlag("MetVesper")
                     ? "You put your own hands in your pockets."
                     : "You're not certain why that bothers you.")
 
-            .Hotspot("Nameplate", 706, 805, 107, 27)
-                .Describe("An empty brass bracket under the frame. Whoever she is, someone decided she needed no introduction.")
-                .OnAct("Two little screws, and nothing between them.")
-
-            .Hotspot("Candles", 358, 302, 135, 276)
+            .Hotspot("Candles", 399, 292, 121, 249)
                 .Describe("Candles burn in a brass sconce beside the portrait. The light makes her skin look paler, not warmer.")
                 .OnAct("The brass is hot.")
 
