@@ -45,7 +45,7 @@
     <None Remove="Assets\Characters\*.png" />
     <None Remove="Assets\Characters\Portraits\*.png" />
     <None Remove="Assets\Items\*.png" />
-    <None Remove="Assets\UI\Dice\*.png" />
+    <None Remove="Assets\UI\Dice\**\*.png" />
     <None Remove="Assets\UI\Puzzle\*.png" />
     <None Remove="Assets\UI\attack.png" />
     <None Remove="Assets\UI\attack_glow.png" />
@@ -66,6 +66,7 @@
     <None Remove="Assets\Cursors\cursor_item.cur" />
     <None Remove="Assets\Cursors\cursor_look.cur" />
     <None Remove="Assets\Cursors\cursor_talk.cur" />
+    <None Remove="Assets\Cursors\cursor_walk.cur" />
     <None Remove="Assets\HauntAOE.ttf" />
     <None Remove="Assets\UI\act.png" />
     <None Remove="Assets\UI\act_glow.png" />
@@ -133,6 +134,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
     <Resource Include="Assets\Items\Sources\paper.png" />
+    <Resource Include="Assets\Items\Sources\pocket_knife.png" />
     <Resource Include="Assets\Characters\*.png" />
     <!-- Only the framed portraits are used; the plain ones are by-products of Tools/build_portraits.py. -->
     <Resource Include="Assets\Characters\Portraits\*_framed.png" />
@@ -142,6 +144,7 @@
     <Resource Include="Assets\Cursors\cursor_item.cur" />
     <Resource Include="Assets\Cursors\cursor_look.cur" />
     <Resource Include="Assets\Cursors\cursor_talk.cur" />
+    <Resource Include="Assets\Cursors\cursor_walk.cur" />
     <Resource Include="Assets\UI\act.png" />
     <Resource Include="Assets\UI\act_glow.png" />
     <Resource Include="Assets\UI\item.png" />
@@ -161,7 +164,7 @@
     <Resource Include="Assets\UI\flee_glow.png" />
     <Resource Include="Assets\UI\journal_book.png" />
     <Resource Include="Assets\UI\roll_frame.png" />
-    <Resource Include="Assets\UI\Dice\*.png" />
+    <Resource Include="Assets\UI\Dice\**\*.png" />
     <Resource Include="Assets\UI\Puzzle\*.png" />
   </ItemGroup>
 

@@ -158,6 +158,12 @@ namespace The_Mansion
                 return;
             }
 
+            // Every hero arrives with a small pocket knife in hand (which
+            // matters to the Faceless Knight). The trunk item comes on top -
+            // the Fork, for one, replaces it as the weapon.
+            _player.Give("Pocket Knife");
+            _player.Weapon = "Pocket Knife";
+
             _player.Give(_selectedTrunkItem.ItemName);
             _selectedTrunkItem.OnTake?.Invoke(_player);
 

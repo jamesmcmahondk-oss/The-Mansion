@@ -232,8 +232,14 @@ namespace The_Mansion
 
         // ---- Dice --------------------------------------------------------
 
-        private static void SetDieFace(Image die, int value) =>
-            die.Source = LoadImage($"Assets/UI/Dice/die_{value}.png", "die picture");
+        private void SetDieFace(Image die, int value) =>
+            die.Source = LoadImage(DiePath(_settings.DiceSet, value), "die picture");
+
+        // The picture of one face of a dice set (Settings > Dice).
+        private static string DiePath(string diceSet, int value) =>
+            string.IsNullOrWhiteSpace(diceSet)
+                ? $"Assets/UI/Dice/die_{value}.png"
+                : $"Assets/UI/Dice/{diceSet}/die_{value}.png";
 
         private static void SetDieAngle(Image die, double angle)
         {

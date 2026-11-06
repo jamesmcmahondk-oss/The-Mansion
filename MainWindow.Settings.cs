@@ -144,8 +144,64 @@ namespace The_Mansion
             }
         }
 
+        // One button per dice set, showing its six and its name.
+        private void BuildDiceSetList()
+        {
+            DiceSetList.Children.Clear();
+
+            foreach (var (folder, name) in GameSettings.DiceSets)
+            {
+                bool current = folder == _settings.DiceSet;
+
+                var face = new Image
+                {
+                    Source = LoadImage(DiePath(folder, 6), "die picture"),
+                    Width = 56,
+                    Height = 56
+                };
+
+                var label = new TextBlock
+                {
+                    Text = name,
+                    FontFamily = Georgia,
+                    FontSize = 13,
+                    Foreground = current ? Paint.Rgb(0xFF, 0xD9, 0x8A) : Paint.Rgb(0xB9, 0xA9, 0x8D),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    TextWrapping = TextWrapping.Wrap,
+                    Width = 96,
+                    Margin = new Thickness(0, 4, 0, 0)
+                };
+
+                var button = new Border
+                {
+                    Child = new StackPanel { Children = { face, label } },
+                    Padding = new Thickness(4, 8, 4, 6),
+                    Margin = new Thickness(4, 0, 4, 0),
+                    CornerRadius = new CornerRadius(6),
+                    BorderThickness = new Thickness(2),
+                    BorderBrush = current ? Paint.Rgb(0xFF, 0xD9, 0x8A) : Paint.Argb(0, 0, 0, 0),
+                    Background = current ? Paint.Rgb(0x4A, 0x24, 0x18) : Paint.Argb(0x60, 0, 0, 0),
+                    Cursor = Cursors.Hand
+                };
+
+                button.MouseLeftButtonDown += (_, args) =>
+                {
+                    args.Handled = true;
+                    _settings.DiceSet = folder;
+                    _settings.Save();
+                    Sound.Play("dice_roll");
+                    BuildDiceSetList();
+                };
+
+                DiceSetList.Children.Add(button);
+            }
+        }
+
         private void BuildSettingsScreen()
         {
+            BuildDiceSetList();
+
             _buildingSettings = true;
             EffectsVolumeSlider.Value = _settings.EffectsVolume;
             MusicVolumeSlider.Value = _settings.MusicVolume;

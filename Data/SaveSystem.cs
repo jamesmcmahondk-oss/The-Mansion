@@ -27,6 +27,7 @@ namespace The_Mansion.Data
         public List<string> Inventory { get; set; } = new();
         public List<string> Flags { get; set; } = new();
         public List<string> Journal { get; set; } = new();
+        public List<string> SeenLines { get; set; } = new();
 
         public static SaveGame From(Player player, string sceneName) => new()
         {
@@ -42,7 +43,8 @@ namespace The_Mansion.Data
             StatusEffect = player.StatusEffect,
             Inventory = new List<string>(player.Inventory),
             Flags = new List<string>(player.Flags),
-            Journal = new List<string>(player.Journal)
+            Journal = new List<string>(player.Journal),
+            SeenLines = new List<string>(player.SeenLines)
         };
 
         public Player ToPlayer()
@@ -58,7 +60,8 @@ namespace The_Mansion.Data
                 Weapon = Weapon,
                 StatusEffect = StatusEffect,
                 Inventory = new List<string>(Inventory),
-                Journal = new List<string>(Journal)
+                Journal = new List<string>(Journal),
+                SeenLines = new HashSet<string>(SeenLines ?? new List<string>(), StringComparer.OrdinalIgnoreCase)
             };
 
             foreach (string flag in Flags)

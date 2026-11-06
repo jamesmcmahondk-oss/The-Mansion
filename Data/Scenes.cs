@@ -841,15 +841,17 @@ namespace The_Mansion.Data
                         return "You lower the bucket into the dark. It comes back up with nothing but cold water.";
                     }
 
-                    if (p.TestLuck())
+                    if (p.Meets("Luck", WellLuck))
                     {
                         p.Give("Cracked Hand Mirror");
                         p.SetFlag("GotWellMirror");
-                        return "You lower the bucket and scrape it along the bottom... When it comes back up, a small silver hand mirror is lying in it. The glass is cracked straight across.";
+                        return $"[Luck {WellLuck}] You lower the bucket and scrape it along the bottom... When it comes back up, a small silver hand mirror is lying in it. The glass is cracked straight across.";
                     }
 
-                    return "The bucket thuds against the bottom and swings straight past the glint. Maybe try again?";
+                    return $"[Luck {WellLuck} needed - yours is {p.Luck}] The bucket thuds against the bottom and swings straight past the glint, every time. " +
+                           "Luck isn't going to do this for you. Something to fish with might.";
                 })
+                .NeedsStat("Luck", WellLuck)
 
             .Hotspot("Something Glinting", 772, 702, 66, 54)
                 .Describe("At the very bottom of the well, something small and silver catches the light.")
@@ -942,6 +944,7 @@ namespace The_Mansion.Data
                 .OnOtherItems("The {item} won't help you read the stone.")
                 .Describe("Most of the inscription has been worn smooth. A few shallow marks remain, but not enough to read.")
                 .OnAct(p => Gravestone.Read(p))
+                .NeedsStat("Wits", Gravestone.WitsNeeded)
                 .OnItem("Charcoal", Gravestone.KnownText, onlyIf: p => p.HasFlag("ReadGravestone"))
                 .OnItem("Charcoal", Gravestone.RubbingText,
                         effect: p => p.SetFlag("ReadGravestone"),
@@ -1162,6 +1165,9 @@ namespace The_Mansion.Data
         // The gravestone inscription - the clue to the cross.
         private static class Gravestone
         {
+            // Wits needed to read it by touch (otherwise: a charcoal rubbing).
+            public const int WitsNeeded = 12;
+
             public const string Clue = "THRICE FOR HEAVEN · ONCE FOR THE HEART · NEVER FOR THE HAND THAT LET GO";
 
             public const string RubbingText =
@@ -1177,13 +1183,13 @@ namespace The_Mansion.Data
                     return KnownText;
                 }
 
-                if (p.TestWits())
+                if (p.Meets("Wits", WitsNeeded))
                 {
                     p.SetFlag("ReadGravestone");
-                    return "You trace the surviving marks with your fingers. Enough remains to reconstruct the pattern: " + Clue;
+                    return $"[Wits {WitsNeeded}] You trace the surviving marks with your fingers. Enough remains to reconstruct the pattern: " + Clue;
                 }
 
-                return "You stare at the weathered markings until they start looking like letters simply because you want them to. " +
+                return $"[Wits {WitsNeeded} needed - yours is {p.Wits}] You stare at the weathered markings until they start looking like letters simply because you want them to. " +
                        "There must be another way to recover the inscription.";
             }
         }
@@ -1191,6 +1197,9 @@ namespace The_Mansion.Data
         // The three spirals on the great cross. Each turns a quarter at a
         // time (stored as story flags like "SpiralUpper2"); the plinth opens
         // when Upper = 3, Left = 1 and Right = 0.
+        // Luck needed to catch the mirror with the bucket (otherwise: string).
+        private const int WellLuck = 11;
+
         // =========================================================
         // LOOKUP (used by the game - no need to edit)
         // =========================================================

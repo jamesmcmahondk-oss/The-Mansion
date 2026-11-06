@@ -434,6 +434,11 @@ namespace The_Mansion
                 return "Go back";
             }
 
+            if (hotspot.IsPath)
+            {
+                return $"Go to {hotspot.Name}";
+            }
+
             switch (_interactionMode)
             {
                 case InteractionMode.Look:
@@ -451,9 +456,21 @@ namespace The_Mansion
                         hotspot.ActEffect != null ||
                         hotspot.ActResult != null;
 
-                    return !hasAction && !string.IsNullOrWhiteSpace(hotspot.TargetScene)
-                        ? $"Move to {hotspot.Name}"
-                        : $"Use {hotspot.Name}";
+                    if (!hasAction && !string.IsNullOrWhiteSpace(hotspot.TargetScene))
+                    {
+                        return $"Move to {hotspot.Name}";
+                    }
+
+                    // A task that needs a stat says so before you try.
+                    if (!string.IsNullOrWhiteSpace(hotspot.StatName))
+                    {
+                        int yours = _player.Stat(hotspot.StatName);
+                        return yours >= hotspot.StatNeeded
+                            ? $"Use {hotspot.Name}  ·  needs {hotspot.StatName} {hotspot.StatNeeded} (yours: {yours} ✓)"
+                            : $"Use {hotspot.Name}  ·  needs {hotspot.StatName} {hotspot.StatNeeded} (yours: {yours})";
+                    }
+
+                    return $"Use {hotspot.Name}";
 
                 default:
                     return _selectedItem != null

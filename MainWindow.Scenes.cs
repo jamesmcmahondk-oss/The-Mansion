@@ -240,6 +240,12 @@ namespace The_Mansion
                 rectangle.ToolTip = null;
             }
 
+            // Paths (and the Return arrow) show the walk cursor.
+            if (hotspot.IsPath || hotspot.ScreenSpace)
+            {
+                rectangle.Cursor = _walkCursor;
+            }
+
             Canvas.SetLeft(rectangle, screenRect.X);
             Canvas.SetTop(rectangle, screenRect.Y);
 
@@ -295,6 +301,17 @@ namespace The_Mansion
                 {
                     ShowDescription(hotspot.Description);
                 }
+                return;
+            }
+
+            // A path: whatever the verb, just walk there.
+            if (hotspot.IsPath)
+            {
+                if (!string.IsNullOrWhiteSpace(hotspot.ActSound))
+                {
+                    Sound.Play(hotspot.ActSound);
+                }
+                GoToScene(hotspot.TargetScene, hotspot.Name);
                 return;
             }
 
