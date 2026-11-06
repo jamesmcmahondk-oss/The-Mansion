@@ -180,20 +180,23 @@ namespace The_Mansion.Data
 
         public static Item Lighter { get; } =
             NewItem("Lighter",
-                    "A battered petrol lighter. It still sparks - just. Light in a dark place is never wasted.",
+                    "A battered petrol lighter. It still sparks - just. Light in a dark place is never wasted. (Right-click to look at it.)",
                     "Assets/Items/lighter.png",
+                    picture: "Assets/Items/Sources/lighter.png",
                     misuse: "The lighter sparks. The {target} is far too wet to care.");
 
         public static Item BallOfString { get; } =
             NewItem("Ball of String",
-                    "A tangle of rough twine. Good for tying, climbing, or pretending you have a plan.",
+                    "A tangle of rough twine. Good for tying, climbing, or pretending you have a plan. (Right-click to look at it.)",
                     "Assets/Items/ball_of_string.png",
+                    picture: "Assets/Items/Sources/ball_of_string.png",
                     misuse: "You tie the string to the {target}, consider your plan, and untie it again.");
 
         public static Item PartyHat { get; } =
             NewItem("Party Hat",
-                    "A polka-dot party hat trimmed with red tinsel. Nobody can stay angry at someone wearing a party hat. Probably.",
+                    "A polka-dot party hat trimmed with red tinsel. Nobody can stay angry at someone wearing a party hat. Probably. (Right-click to look at it.)",
                     "Assets/Items/party_hat.png",
+                    picture: "Assets/Items/Sources/party_hat.png",
                     misuse: "The {target} is not in a party mood.");
 
         public static Item LooseChange { get; } =

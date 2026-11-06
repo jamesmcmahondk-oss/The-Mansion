@@ -154,6 +154,9 @@
     <Resource Include="Assets\Items\Sources\garden_shears.png" />
     <Resource Include="Assets\Items\Sources\gold_coins.png" />
     <Resource Include="Assets\Items\Sources\fork.png" />
+    <Resource Include="Assets\Items\Sources\lighter.png" />
+    <Resource Include="Assets\Items\Sources\party_hat.png" />
+    <Resource Include="Assets\Items\Sources\ball_of_string.png" />
     <Resource Include="Assets\Characters\*.png" />
     <!-- Only the framed portraits are used; the plain ones are by-products of Tools/build_portraits.py. -->
     <Resource Include="Assets\Characters\Portraits\*_framed.png" />

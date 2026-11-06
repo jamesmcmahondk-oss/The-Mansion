@@ -21,9 +21,9 @@ ICONS = {
 
     # Car trunk (pre-game choice)
     "corkscrew.png":         ("Assets/Items/Sources/corkscrew.png",           (205, 60, 1335, 930)),
-    "lighter.png":           ("Assets/UI/trunk.png", (270, 570, 445, 710)),
-    "ball_of_string.png":    ("Assets/UI/trunk.png", (630, 505, 790, 670)),
-    "party_hat.png":         ("Assets/UI/trunk.png", (845, 325, 1095, 530)),
+    "lighter.png":           ("Assets/Items/Sources/lighter.png",             (240, 75, 1260, 895)),
+    "ball_of_string.png":    ("Assets/Items/Sources/ball_of_string.png",      (280, 40, 1240, 945)),
+    "party_hat.png":         ("Assets/Items/Sources/party_hat.png",           (240, 40, 1365, 965)),
     "loose_change.png":      ("Assets/Items/Sources/loose_change.png",        (180, 160, 1320, 830)),
     "fork.png":              ("Assets/Items/Sources/fork.png",                (280, 20, 1190, 980)),
     # Item pictures (whole picture, squared to its centre)
