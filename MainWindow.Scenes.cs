@@ -350,6 +350,12 @@ namespace The_Mansion
          */
         private void LookAt(Hotspot hotspot)
         {
+            if (!string.IsNullOrWhiteSpace(hotspot.LookFlag) && !_player.HasFlag(hotspot.LookFlag))
+            {
+                _player.SetFlag(hotspot.LookFlag);
+                UpdatePlayerStats();    // writes the journal entry
+            }
+
             if (!string.IsNullOrWhiteSpace(hotspot.CloseUpScene))
             {
                 GoToScene(hotspot.CloseUpScene, hotspot.Name);

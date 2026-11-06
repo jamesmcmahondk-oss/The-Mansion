@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using The_Mansion.Models;
 
@@ -127,6 +127,15 @@ namespace The_Mansion.Data
                   "I took a handful of gold coins from the fountain. They belong to the Crown, apparently.",
                   p => p.HasFlag("StoleCoins"),
                   category: Puzzles, where: "The courtyard fountain");
+
+        public static JournalEntry HoodedStatue { get; } =
+            Entry("HoodedStatue", "The hooded statue",
+                  "A hooded stone figure in the garden, its hands resting on a great stone sword. " +
+                  "There is no face under the hood - only shadow. Words are cut along the blade: " +
+                  "HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN.",
+                  p => p.HasFlag("ReadStoneSword") || p.HasFlag("TookStoneSword"),
+                  category: Puzzles, picture: "Assets/Backgrounds/Mansion/statue_closeup.png",
+                  where: "The garden - the hooded statue on its plinth");
 
         public static JournalEntry FacelessKnight { get; } =
             Entry("FacelessKnight", "The Faceless Knight",

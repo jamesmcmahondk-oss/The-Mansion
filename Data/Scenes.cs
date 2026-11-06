@@ -288,6 +288,7 @@ namespace The_Mansion.Data
             .Hotspot("Stone Sword", 747, 332, 54, 418)
                 .Describe("A great stone sword, its point resting on the plinth. The hilt is worn smooth, as if many hands have gripped it. " +
                           "Words are cut along the blade: HE WHO WOULD TAKE THE BLADE MUST FIRST SURRENDER HIS OWN.")
+                .LookSetsFlag("ReadStoneSword")
                 .OnAct(p =>
                 {
                     bool armed = !string.IsNullOrWhiteSpace(p.Weapon) && p.Weapon != "None";

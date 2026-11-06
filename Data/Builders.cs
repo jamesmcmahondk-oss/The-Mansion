@@ -146,6 +146,13 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>LOOK on it sets a story flag (e.g. "you have read the clue", for the journal).</summary>
+        public HotspotBuilder LookSetsFlag(string flag)
+        {
+            _hotspot.LookFlag = flag;
+            return this;
+        }
+
         /// <summary>ACT on it moves the player on to another place (a new scene).</summary>
         public HotspotBuilder GoesTo(string sceneName)
         {
