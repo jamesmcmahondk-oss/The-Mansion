@@ -162,7 +162,7 @@ Don't explain these yet; each should pay off (or be noticed) later.
 * **The missing portrait.** The empty frame is a door. Wits 12 finds its three brass medallions at once; otherwise
   LOOK at the frame, the Three Ages and the architectural sketch, then ACT on the frame. The medallions match the
   age portraits (hung 1821 / 1798 / 1854, left to right - ACT on them shows the dates) and are pressed in the order
-  they were painted: **centre, left, right**. Wrong presses reset; after three, a hint. Reward: the **Portrait Ledger**.
+  they were painted: **centre, left, right** - in the close-up (FrameCloseup) each medallion shows her profile at that age, so her face gives the order too. Wrong presses reset; after three, a hint. Reward: the **Portrait Ledger**.
 * **The ledger** (right-click to read): Mirélle rejected every portrait (1798, 1821, 1854); the gate guardians,
   **Dúnán the Patient** and **Cairn the Steadfast** (sets `LearnedGargoyleName` - the front gargoyle then has
   "I found your name."); the family portrait's water-damaged last name; Lady Vesper's hands; Phillip Jackson and bear.

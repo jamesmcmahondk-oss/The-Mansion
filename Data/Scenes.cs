@@ -1329,19 +1329,12 @@ namespace The_Mansion.Data
                 .OnOtherItems("You try the {item} against the frame. The frame is unmoved.")
                 .OnlyWhen(p => !p.HasFlag("SolvedPortraitGalleryPuzzle"))
 
-            // 4. THE CONTROLS - one under each corner of the frame, matching the
-            // age portraits hung left, centre and right. Listed after the frame.
-            .Hotspot("Left Medallion", 500, 515, 21, 26)
-                .Describe("A small brass medallion in the frame's lower edge. Its border matches the frame of the left age portrait.")
-                .OnAct(p => Gallery.Press(p, "Left"))
-                .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
-            .Hotspot("Centre Medallion", 521, 515, 19, 26)
-                .Describe("A small brass medallion in the frame's lower edge. Its border matches the frame of the centre age portrait.")
-                .OnAct(p => Gallery.Press(p, "Centre"))
-                .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
-            .Hotspot("Right Medallion", 540, 515, 21, 26)
-                .Describe("A small brass medallion in the frame's lower edge. Its border matches the frame of the right age portrait.")
-                .OnAct(p => Gallery.Press(p, "Right"))
+            // 4. THE CONTROLS - a close-up of the three medallions (FrameCloseup).
+            // Listed after the frame so it wins.
+            .Hotspot("Medallions", 495, 508, 72, 40)
+                .Describe("Three small brass medallions are set into the lower edge of the frame.")
+                .CloseUp("FrameCloseup")
+                .GoesTo("FrameCloseup")
                 .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
 
             // 5. THE HIDDEN COMPARTMENT, once solved (the frame swung open).
@@ -1372,6 +1365,53 @@ namespace The_Mansion.Data
 
             // 14. Back down to the Entrance Hall (the doorway is behind you).
             .ReturnTo("EntranceHall", "A tall doorway leads back toward the Entrance Hall. You go back down the stairs.");
+
+        // THE MISSING PORTRAIT, up close: the three brass medallions on the
+        // empty frame, each engraved with the same woman's profile at a
+        // different age (left: middle age, centre: young, right: old - as the
+        // portraits hang). Pressed youngest to oldest (Gallery.Press); a
+        // pressed medallion stays down (the sprites). Solving it returns to
+        // the gallery with the frame open.
+        public static Scene FrameCloseup { get; } =
+            NewScene("FrameCloseup",
+                     "Assets/Backgrounds/Mansion/frame_closeup.png",
+                     "The lower edge of the empty frame. Three brass medallions are set into the gilt, each engraved with a woman's profile.")
+
+            .Sprite("Assets/Backgrounds/Mansion/frame_medallion_centre_pressed.png", 644, 452, 252,
+                    p => p.HasFlag("PortraitSequenceStep1") || p.HasFlag("PortraitSequenceStep2"))
+            .Sprite("Assets/Backgrounds/Mansion/frame_medallion_left_pressed.png", 251, 457, 252,
+                    p => p.HasFlag("PortraitSequenceStep2"))
+
+            .Hotspot("Wallpaper", 200, 192, 1150, 260)
+                .Describe("Inside the frame there is only wallpaper - brighter than the rest of the wall, as if something hung here for a very long time.")
+                .OnAct("You press the wallpaper. It is a wall.")
+
+            .Hotspot("Candles", 1440, 192, 96, 160)
+                .Describe("Candles burn in a brass sconce beside the frame. Someone keeps these lit.")
+                .OnAct("The brass is hot.")
+
+            .Hotspot("Left Medallion", 251, 457, 252, 252)
+                .Describe(p => "A woman's profile, no longer young: wavy hair, faint lines at the eyes, the mouth set firm." +
+                               (p.HasFlag("MetMirelle") ? " Mirélle, somewhere in the middle of her life." : ""))
+                .OnAct(p => Gallery.Press(p, "Left"))
+                .Sound("puzzle_click")
+                .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
+
+            .Hotspot("Centre Medallion", 644, 452, 252, 252)
+                .Describe(p => "The same woman, young. Dark hair loose over her shoulders, the chin lifted." +
+                               (p.HasFlag("MetMirelle") ? " Mirélle, before anyone had painted her." : ""))
+                .OnAct(p => Gallery.Press(p, "Centre"))
+                .Sound("puzzle_click")
+                .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
+
+            .Hotspot("Right Medallion", 1039, 454, 252, 252)
+                .Describe(p => "The same woman, old. Grey hair pinned up, deep lines - and exactly the same proud chin." +
+                               (p.HasFlag("MetMirelle") ? " Still, unmistakably, Mirélle." : ""))
+                .OnAct(p => Gallery.Press(p, "Right"))
+                .Sound("puzzle_click")
+                .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
+
+            .ReturnTo("PortraitGallery", "You step back from the frame.");
 
         // =========================================================
         // PUZZLE HELPERS (used by the scenes above)
@@ -1415,7 +1455,7 @@ namespace The_Mansion.Data
 
                 if (p.HasFlag("DiscoveredPortraitFrameMechanism"))
                 {
-                    return "Three small brass portrait medallions are set into the lower edge of the frame. They press in, like buttons.";
+                    return "Three small brass portrait medallions are set into the lower edge of the frame. They press in, like buttons. A closer look would help.";
                 }
 
                 if (p.Meets("Wits", WitsNeeded))

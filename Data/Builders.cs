@@ -261,6 +261,17 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>
+        /// After the ACT, go to the scene this returns ("" to stay), e.g.
+        /// .ThenGoesTo(p => p.HasFlag("Solved") ? "PortraitGallery" : "")
+        /// The ACT's reply is shown in the new scene.
+        /// </summary>
+        public HotspotBuilder ThenGoesTo(Func<Player, string> sceneName)
+        {
+            _hotspot.ThenGoTo = sceneName;
+            return this;
+        }
+
         /// <summary>Show this picture full-size after the ACT (click to close).</summary>
         public HotspotBuilder ShowsPicture(string imagePath)
         {

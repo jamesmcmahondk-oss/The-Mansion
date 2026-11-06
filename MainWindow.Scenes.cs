@@ -437,7 +437,18 @@ namespace The_Mansion
 
             if (hotspot.ActResult != null)
             {
-                ShowReply(hotspot.ActResult(_player));
+                string reply = hotspot.ActResult(_player);
+                string next = hotspot.ThenGoTo?.Invoke(_player) ?? "";
+
+                if (!string.IsNullOrWhiteSpace(next))
+                {
+                    UpdatePlayerStats();
+                    GoToScene(next, hotspot.Name);
+                    ShowReply(reply);       // shown in the new scene
+                    return;
+                }
+
+                ShowReply(reply);
                 AfterStoryChange();
                 return;
             }
