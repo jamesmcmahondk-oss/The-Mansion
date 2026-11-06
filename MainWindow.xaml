@@ -1251,6 +1251,109 @@
         </Grid>
 
         <!-- ========================================= -->
+        <!-- FRAME PUZZLE: the three brass medallions   -->
+        <!-- on the empty frame (MainWindow.FramePuzzle.cs). -->
+        <!-- ========================================= -->
+
+        <Grid x:Name="FramePuzzleScreen"
+              Visibility="Collapsed"
+              Background="Black"
+              Panel.ZIndex="3620">
+
+            <Canvas Width="1920" Height="1080" ClipToBounds="True">
+
+                <!-- 1536x1024 picture at x1.25; medallions centred at
+                     (471,629), (963,623), (1456,625) on screen. -->
+                <Image Source="/Assets/UI/Puzzle/frame_puzzle.png"
+                       Width="1920" Height="1280"
+                       Canvas.Left="0" Canvas.Top="-100"
+                       Stretch="Fill"/>
+
+                <Image x:Name="MedallionLeftPressed"
+                       Source="/Assets/UI/Puzzle/medallion_left_pressed.png"
+                       Width="315" Height="315"
+                       Canvas.Left="314" Canvas.Top="471"
+                       Visibility="Collapsed"
+                       IsHitTestVisible="False"/>
+
+                <Ellipse x:Name="MedallionLeftButton"
+                         Tag="Left"
+                         Width="315" Height="315"
+                         Canvas.Left="314" Canvas.Top="471"
+                         Fill="Transparent"
+                         Cursor="Hand"
+                         MouseLeftButtonDown="Medallion_MouseLeftButtonDown"/>
+
+                <Image x:Name="MedallionCentrePressed"
+                       Source="/Assets/UI/Puzzle/medallion_centre_pressed.png"
+                       Width="315" Height="315"
+                       Canvas.Left="805" Canvas.Top="465"
+                       Visibility="Collapsed"
+                       IsHitTestVisible="False"/>
+
+                <Ellipse x:Name="MedallionCentreButton"
+                         Tag="Centre"
+                         Width="315" Height="315"
+                         Canvas.Left="805" Canvas.Top="465"
+                         Fill="Transparent"
+                         Cursor="Hand"
+                         MouseLeftButtonDown="Medallion_MouseLeftButtonDown"/>
+
+                <Image x:Name="MedallionRightPressed"
+                       Source="/Assets/UI/Puzzle/medallion_right_pressed.png"
+                       Width="315" Height="315"
+                       Canvas.Left="1299" Canvas.Top="468"
+                       Visibility="Collapsed"
+                       IsHitTestVisible="False"/>
+
+                <Ellipse x:Name="MedallionRightButton"
+                         Tag="Right"
+                         Width="315" Height="315"
+                         Canvas.Left="1299" Canvas.Top="468"
+                         Fill="Transparent"
+                         Cursor="Hand"
+                         MouseLeftButtonDown="Medallion_MouseLeftButtonDown"/>
+
+                <!-- Bottom: the clue and what just happened -->
+                <Border Canvas.Left="0" Canvas.Top="880" Width="1920" Height="200"
+                        Background="#C0000000"/>
+
+                <TextBlock x:Name="FramePuzzleClueText"
+                           Canvas.Left="0" Canvas.Top="905" Width="1920"
+                           TextAlignment="Center"
+                           Foreground="#C8A96A"
+                           FontFamily="Georgia"
+                           FontWeight="Bold"
+                           FontSize="26"/>
+
+                <TextBlock x:Name="FramePuzzleStatusText"
+                           Canvas.Left="160" Canvas.Top="950" Width="1600"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           Foreground="#DDD4C3"
+                           FontFamily="Georgia"
+                           FontSize="21"/>
+
+                <TextBlock Canvas.Left="0" Canvas.Top="1030" Width="1920"
+                           TextAlignment="Center"
+                           Foreground="#756A59"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="16"
+                           Text="Click a medallion to press it  ·  Esc to step back"/>
+
+                <TextBlock Canvas.Left="1700" Canvas.Top="30"
+                           Text="Step back  ✕"
+                           Foreground="#C8A96A"
+                           FontFamily="Georgia"
+                           FontStyle="Italic"
+                           FontSize="24"
+                           Cursor="Hand"
+                           MouseLeftButtonDown="FramePuzzleBack_MouseLeftButtonDown"/>
+            </Canvas>
+        </Grid>
+
+        <!-- ========================================= -->
         <!-- CREDITS (title screen)                    -->
         <!-- ========================================= -->
 

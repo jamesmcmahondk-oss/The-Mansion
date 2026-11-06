@@ -227,7 +227,7 @@ namespace The_Mansion
             if (!_replyShowing ||
                 GameScreen.Visibility != Visibility.Visible ||
                 IsInDialogue || IsInFight || _inventoryOpen ||
-                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsCrossPuzzleOpen || IsJournalOpen ||
+                IsGameMenuOpen || IsSaveLoadOpen || IsSettingsOpen || IsCrossPuzzleOpen || IsFramePuzzleOpen || IsJournalOpen ||
                 DebugMenu.Visibility == Visibility.Visible ||
                 GameOverScreen.Visibility == Visibility.Visible)
             {
@@ -287,7 +287,8 @@ namespace The_Mansion
             !IsSaveLoadOpen &&
             !IsSettingsOpen &&
             !IsJournalOpen &&
-            !IsCrossPuzzleOpen;
+            !IsCrossPuzzleOpen &&
+            !IsFramePuzzleOpen;
 
         /*
          * The name of the thing under the cursor floats just below-right of
