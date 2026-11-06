@@ -206,203 +206,85 @@
                IsHitTestVisible="False"/>
 
 
-            <!-- Character generation panel -->
+            <!--
+                Character generation panel: the painted frame (Assets/UI/roll_frame.png,
+                926x1120, from the mockup) with live text laid on top. Positions are
+                frame pixels; the Viewbox scales the whole panel to fit the screen.
+            -->
+            <Viewbox Height="1040" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Canvas Width="926" Height="1120">
+                    <Canvas.Resources>
+                        <!-- The REROLL / ACCEPT buttons are painted on the frame:
+                             these are invisible click areas that glow on hover. -->
+                        <Style x:Key="PaintedButton" TargetType="Button">
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="Glow" Background="Transparent" CornerRadius="22"/>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Glow" Property="Background" Value="#30FFD98A"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="Glow" Property="Background" Value="#50FFD98A"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter TargetName="Glow" Property="Background" Value="#AA000000"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Canvas.Resources>
 
-            <Border Width="700"
-            Padding="40"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Background="#E6100C0C"
-            BorderBrush="#806B4A"
-            BorderThickness="2">
+                    <Image Source="/Assets/UI/roll_frame.png" Width="926" Height="1120"/>
 
-                <StackPanel>
-                    <TextBlock Text="YOUR UNFORTUNATE HERO"
-   HorizontalAlignment="Center"
-   Foreground="#D5B77A"
-   FontFamily="Georgia"
-   FontWeight="Bold"
-   FontSize="35"
-   Margin="0,0,0,35"/>
-
-                    <TextBlock Text="NAME"
-           Foreground="#B9A98D"
-           FontFamily="Georgia"
-           FontSize="22"
-           HorizontalAlignment="Center"/>
-
+                    <!-- NAME (the box is painted; the text box is see-through) -->
                     <TextBox x:Name="PlayerNameTextBox"
-         Width="300"
-         Height="40"
-         Margin="0,8,0,30"
-         FontSize="30"
-         MaxLength="20"
-         TextAlignment="Center"
-         HorizontalAlignment="Center"
-         Background="Black"
-        Foreground="#D5B77A"/>
+                             Canvas.Left="272" Canvas.Top="243" Width="385" Height="46"
+                             FontSize="28" FontFamily="Georgia" MaxLength="20"
+                             TextAlignment="Center" VerticalContentAlignment="Center"
+                             Background="Transparent" BorderThickness="0"
+                             Foreground="#D5B77A" CaretBrush="#D5B77A"/>
+
                     <TextBlock x:Name="RollCommentText1"
-   Text=""
-   MinHeight="75"
-   Margin="0,35,0,25"
-   TextWrapping="Wrap"
-   TextAlignment="Center"
-   Foreground="#A89A84"
-   FontFamily="Georgia"
-   FontStyle="Italic"
-   FontSize="19"/>
+                               Canvas.Left="60" Canvas.Top="300" Width="806" TextAlignment="Center"
+                               Foreground="#D95C52" FontFamily="Georgia" FontStyle="Italic" FontSize="19"/>
 
-
-                    <!-- HEALTH -->
-
-                    <Grid Margin="0,8">
-
-                        <Grid.ColumnDefinitions>
-
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="180"/>
-
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="HEALTH"
-                           Foreground="#B9A98D"
-                           FontFamily="Georgia"
-                           FontSize="24"/>
-
-                        <TextBlock x:Name="RollHealthText"
-                           Grid.Column="1"
-                           Text="--"
-                           HorizontalAlignment="Right"
-                           Foreground="#D95C52"
-                           FontFamily="Consolas"
-                           FontSize="25"/>
-
-                    </Grid>
-
-
-                    <!-- STRENGTH -->
-
-                    <Grid Margin="0,8">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="180"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="STRENGTH"
-                           Foreground="#B9A98D"
-                           FontFamily="Georgia"
-                           FontSize="24"/>
-
-                        <TextBlock x:Name="RollStrengthText"
-                           Grid.Column="1"
-                           Text="--"
-                           HorizontalAlignment="Right"
-                           Foreground="#DDD4C3"
-                           FontFamily="Consolas"
-                           FontSize="25"/>
-
-                    </Grid>
-
-
-                    <!-- LUCK -->
-
-                    <Grid Margin="0,8">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="180"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="LUCK"
-                           Foreground="#B9A98D"
-                           FontFamily="Georgia"
-                           FontSize="24"/>
-
-                        <TextBlock x:Name="RollLuckText"
-                           Grid.Column="1"
-                           Text="--"
-                           HorizontalAlignment="Right"
-                           Foreground="#DDD4C3"
-                           FontFamily="Consolas"
-                           FontSize="25"/>
-
-                    </Grid>
-
-
-                    <!-- WITS -->
-
-                    <Grid Margin="0,8">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="180"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="WITS"
-                           Foreground="#B9A98D"
-                           FontFamily="Georgia"
-                           FontSize="24"/>
-
-                        <TextBlock x:Name="RollWitsText"
-                           Grid.Column="1"
-                           Text="--"
-                           HorizontalAlignment="Right"
-                           Foreground="#DDD4C3"
-                           FontFamily="Consolas"
-                           FontSize="25"/>
-
-                    </Grid>
-
-
-                    <!-- COMMENT -->
+                    <TextBlock Canvas.Left="71" Canvas.Top="512" Text="HEALTH" Foreground="#D9C9A8" FontFamily="Georgia" FontSize="27"/>
+                    <TextBlock x:Name="RollHealthText" Canvas.Left="564" Canvas.Top="512" Width="300" TextAlignment="Right" Text="--"
+                               Foreground="#D95C52" FontFamily="Consolas" FontSize="28"/>
+                    <TextBlock Canvas.Left="71" Canvas.Top="569" Text="STRENGTH" Foreground="#D9C9A8" FontFamily="Georgia" FontSize="27"/>
+                    <TextBlock x:Name="RollStrengthText" Canvas.Left="564" Canvas.Top="569" Width="300" TextAlignment="Right" Text="--"
+                               Foreground="#EDE4D3" FontFamily="Consolas" FontSize="28"/>
+                    <TextBlock Canvas.Left="71" Canvas.Top="627" Text="LUCK" Foreground="#D9C9A8" FontFamily="Georgia" FontSize="27"/>
+                    <TextBlock x:Name="RollLuckText" Canvas.Left="564" Canvas.Top="627" Width="300" TextAlignment="Right" Text="--"
+                               Foreground="#EDE4D3" FontFamily="Consolas" FontSize="28"/>
+                    <TextBlock Canvas.Left="71" Canvas.Top="684" Text="WITS" Foreground="#D9C9A8" FontFamily="Georgia" FontSize="27"/>
+                    <TextBlock x:Name="RollWitsText" Canvas.Left="564" Canvas.Top="684" Width="300" TextAlignment="Right" Text="--"
+                               Foreground="#EDE4D3" FontFamily="Consolas" FontSize="28"/>
 
                     <TextBlock x:Name="RollCommentText"
-                       Text=""
-                       MinHeight="75"
-                       Margin="0,35,0,25"
-                       TextWrapping="Wrap"
-                       TextAlignment="Center"
-                       Foreground="#A89A84"
-                       FontFamily="Georgia"
-                       FontStyle="Italic"
-                       FontSize="19"/>
-
-
-                    <!-- REROLLS -->
+                               Canvas.Left="70" Canvas.Top="762" Width="786" TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Foreground="#CFC3AE" FontFamily="Georgia" FontStyle="Italic" FontSize="23"/>
 
                     <TextBlock x:Name="RerollsText"
-                       Text="Rerolls remaining: 3"
-                       HorizontalAlignment="Center"
-                       Foreground="#756A59"
-                       FontFamily="Georgia"
-                       FontSize="16"
-                       Margin="0,0,0,20"/>
+                               Canvas.Left="60" Canvas.Top="897" Width="806" TextAlignment="Center"
+                               Text="Rerolls remaining: 3"
+                               Foreground="#B9A98D" FontFamily="Georgia" FontSize="20"/>
 
+                    <Button x:Name="RerollButton" Style="{StaticResource PaintedButton}"
+                            Canvas.Left="100" Canvas.Top="955" Width="334" Height="100"
+                            Click="RerollButton_Click"/>
 
-                    <!-- BUTTONS -->
-
-                    <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-
-                        <Button x:Name="RerollButton"
-                        Content="REROLL"
-                        Width="180"
-                        Height="50"
-                        Margin="10"
-                        Click="RerollButton_Click"/>
-
-                        <Button Content="ACCEPT"
-                        Width="180"
-                        Height="50"
-                        Margin="10"
-                        Click="AcceptRollButton_Click"/>
-
-                    </StackPanel>
-
-                </StackPanel>
-
-            </Border>
+                    <Button Style="{StaticResource PaintedButton}"
+                            Canvas.Left="480" Canvas.Top="955" Width="344" Height="100"
+                            Click="AcceptRollButton_Click"/>
+                </Canvas>
+            </Viewbox>
 
         </Grid>
         <!-- ========================================= -->
