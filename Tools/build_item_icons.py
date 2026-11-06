@@ -20,7 +20,7 @@ ICONS = {
     "gargoyle_blessing.png": ("Assets/Backgrounds/Mansion/FrontGargoyle.png",    (800, 260, 1140, 600)),
 
     # Car trunk (pre-game choice)
-    "corkscrew.png":         ("Assets/UI/trunk.png", (375, 440, 585, 605)),
+    "corkscrew.png":         ("Assets/Items/Sources/corkscrew.png",           (205, 60, 1335, 930)),
     "lighter.png":           ("Assets/UI/trunk.png", (270, 570, 445, 710)),
     "ball_of_string.png":    ("Assets/UI/trunk.png", (630, 505, 790, 670)),
     "party_hat.png":         ("Assets/UI/trunk.png", (845, 325, 1095, 530)),
@@ -29,15 +29,16 @@ ICONS = {
     # Item pictures (whole picture, squared to its centre)
     "worn_photograph.png":   ("Assets/Items/Sources/worn_photograph.png",     (230, 0, 1306, 1024)),
     "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (90, 60, 1190, 1160)),
-    "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (180, 150, 1060, 1110)),
+    "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (300, 30, 1160, 990)),
     # The player's own pocket knife (starting weapon), laid diagonally.
     "pocket_knife.png":      ("Assets/Items/Sources/pocket_knife.png",        (30, 135, 1965, 515), 35),
     "paper.png":             ("Assets/Items/Sources/paper.png",               (40, 20, 1220, 1240)),
-    "empty_bottle.png":      ("Assets/UI/trunk.png", (1180, 395, 1470, 705)),
+    "empty_bottle.png":      ("Assets/Items/Sources/empty_bottle.png",        (280, 40, 1250, 990)),
+    "portrait_ledger.png":   ("Assets/Items/Sources/portrait_ledger.png",     (495, 120, 1365, 900)),
 
     # Outside the Mansion
     "garden_shears.png":     ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (480, 490, 755, 595)),
-    "charcoal.png":          ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (865, 495, 1050, 590)),
+    "charcoal.png":          ("Assets/Items/Sources/charcoal.png",            (200, 250, 1360, 820)),
     "rope.png":              ("Assets/Backgrounds/Mansion/rear_yard.png",         (1168, 388, 1234, 496)),
     # Tall and thin: cut out exactly, laid diagonally (third value = degrees,
     # fourth = brightness - the statue is in deep shadow).

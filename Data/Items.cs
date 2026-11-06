@@ -99,8 +99,9 @@ namespace The_Mansion.Data
         // From the bottom of the well. Not Ebria's - but she won't look at it.
         public static Item CrackedHandMirror { get; } =
             NewItem("Cracked Hand Mirror",
-                    "A small silver-backed hand mirror, fished from the bottom of the well. The glass is clouded and cracked.",
+                    "A small silver-backed hand mirror, fished from the bottom of the well. The glass is clouded and cracked. (Right-click to look at it.)",
                     "Assets/Items/cracked_hand_mirror.png",
+                    picture: "Assets/Items/Sources/cracked_hand_mirror.png",
                     misuse: "You angle the mirror at the {target}. The crack runs straight through the reflection.");
 
         // The first Memento: from the hidden compartment in the cross plinth.
@@ -120,6 +121,7 @@ namespace The_Mansion.Data
             NewItem("Portrait Ledger",
                     "A handwritten record of portraits commissioned for the Mansion. Several pages have been removed. " +
                     "Several names have been crossed out. One appears to have been written repeatedly. (Right-click to read it.)",
+                    "Assets/Items/portrait_ledger.png",
                     reads: "PortraitLedger",
                     misuse: "You leaf through the ledger beside the {target}. It isn't listed.");
 
@@ -127,8 +129,9 @@ namespace The_Mansion.Data
         // while carrying both). Charcoal: the tool shed. Paper: still to be decided.
         public static Item Charcoal { get; } =
             NewItem("Charcoal",
-                    "A stick of charcoal. It leaves black smudges on everything, mostly you.",
+                    "A stick of charcoal. It leaves black smudges on everything, mostly you. (Right-click to look at it.)",
                     "Assets/Items/charcoal.png",
+                    picture: "Assets/Items/Sources/charcoal.png",
                     misuse: "You'd only make a mess of the {target}. And of yourself.");
 
         public static Item Paper { get; } =
@@ -164,8 +167,9 @@ namespace The_Mansion.Data
 
         public static Item Corkscrew { get; } =
             NewItem("Corkscrew",
-                    "A wooden-handled corkscrew. Opens bottles. Possibly other things, if you're creative.",
+                    "A wooden-handled corkscrew. Opens bottles. Possibly other things, if you're creative. (Right-click to look at it.)",
                     "Assets/Items/corkscrew.png",
+                    picture: "Assets/Items/Sources/corkscrew.png",
                     misuse: "There's no cork in the {target}.");
 
         public static Item Lighter { get; } =
@@ -201,8 +205,9 @@ namespace The_Mansion.Data
 
         public static Item EmptyBottle { get; } =
             NewItem("Empty Bottle",
-                    "An empty glass bottle. It could hold something. Or be thrown at something.",
+                    "An empty glass bottle. It could hold something. Or be thrown at something. (Right-click to look at it.)",
                     "Assets/Items/empty_bottle.png",
+                    picture: "Assets/Items/Sources/empty_bottle.png",
                     inFight: (p, fight) =>
                     {
                         fight.HurtEnemy(10);
