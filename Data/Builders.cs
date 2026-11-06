@@ -637,6 +637,13 @@ namespace The_Mansion.Data
             return this;
         }
 
+        /// <summary>Full-body picture shown in the scene once the enemy is defeated (same placement as .Character).</summary>
+        public EnemyBuilder BeatenCharacter(string imagePath)
+        {
+            _enemy.BeatenCharacter = imagePath;
+            return this;
+        }
+
         /// <summary>
         /// Full-body picture shown in the scene during the fight, e.g.
         /// "Assets/Characters/Hautain_Attack.png". Place it with .StandAt(...).
