@@ -320,6 +320,23 @@ public static JournalEntry Gravestone { get; } =
 Write entries in the player's voice, quote the game's own words, and don't
 explain more than the player knows. The id is saved – don't rename it later.
 
+The journal has three tabs. An entry goes under **People** unless it says otherwise:
+
+```csharp
+// People: the portrait shown above the text.
+Entry("Hautain", "Hautain", "…", p => p.HasFlag("MetHautain"),
+      picture: Portraits + "Hautain_portrait_framed.png")
+
+// Puzzles: a clue, and where it was found ("Where: …" is written first).
+Entry("Gravestone", "The gravestone", "…", p => p.HasFlag("ReadGravestone"),
+      category: Puzzles, where: "The graveyard")
+
+// Mementos: a picture of the keepsake and where it was found.
+Entry("Photograph", "The photograph", "…", p => p.HasFlag("FoundPhotograph"),
+      category: Mementos, picture: "Assets/Items/Sources/worn_photograph.png",
+      where: "The graveyard - hidden in the plinth of the stone cross")
+```
+
 ---
 
 ## Recipes

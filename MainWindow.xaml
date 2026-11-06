@@ -1358,19 +1358,30 @@
                            FontStyle="Italic"
                            FontSize="17"/>
 
-                <Rectangle Canvas.Left="198" Canvas.Top="200"
+                <!-- Tabs: People / Puzzles / Mementos, built by ShowJournal(). -->
+                <StackPanel x:Name="JournalTabs"
+                            Canvas.Left="198" Canvas.Top="203"
+                            Orientation="Horizontal"/>
+
+                <Rectangle Canvas.Left="198" Canvas.Top="245"
                            Width="470" Height="1.5"
                            Fill="#7A5A38" Opacity="0.6"/>
 
                 <!-- Entry titles, built by ShowJournal(); the wheel scrolls. -->
                 <ScrollViewer x:Name="JournalScroll"
-                              Canvas.Left="190" Canvas.Top="215"
-                              Width="490" Height="580"
+                              Canvas.Left="190" Canvas.Top="258"
+                              Width="490" Height="537"
                               VerticalScrollBarVisibility="Hidden">
                     <StackPanel x:Name="JournalEntriesPanel"/>
                 </ScrollViewer>
 
-                <!-- RIGHT PAGE: the chosen entry -->
+                <!-- RIGHT PAGE: the chosen entry (a portrait or memento picture on top) -->
+                <Image x:Name="JournalEntryPicture"
+                       Canvas.Left="785" Canvas.Top="100"
+                       Width="510" Height="280"
+                       Stretch="Uniform"
+                       Visibility="Collapsed"/>
+
                 <TextBlock x:Name="JournalEntryTitle"
                            Canvas.Left="785" Canvas.Top="110"
                            Width="500"
