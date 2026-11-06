@@ -32,7 +32,7 @@ ICONS = {
     "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (300, 30, 1160, 990)),
     # The player's own pocket knife (starting weapon), laid diagonally.
     "pocket_knife.png":      ("Assets/Items/Sources/pocket_knife.png",        (30, 135, 1965, 515), 35),
-    "paper.png":             ("Assets/Items/Sources/paper.png",               (40, 20, 1220, 1240)),
+    "paper.png":             ("Assets/Items/Sources/paper.png",               (270, 15, 1240, 995)),
     "empty_bottle.png":      ("Assets/Items/Sources/empty_bottle.png",        (280, 40, 1250, 990)),
     "portrait_ledger.png":   ("Assets/Items/Sources/portrait_ledger.png",     (495, 120, 1365, 900)),
 
