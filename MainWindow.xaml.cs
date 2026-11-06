@@ -593,6 +593,12 @@ namespace The_Mansion
             _backstoryTimer.Tick += BackstoryTimer_Tick;
             _backstoryTimer.Start();
         }
+        private void CreditsScreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            CreditsScreen.Visibility = Visibility.Collapsed;
+            e.Handled = true;
+        }
+
         private void TitleButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is not Rectangle button)
@@ -617,6 +623,12 @@ namespace The_Mansion
                 case "SettingsBtn":
                     {
                         ShowSettings(back: () => { });   // title stays behind
+                        break;
+                    }
+
+                case "CreditsBtn":
+                    {
+                        CreditsScreen.Visibility = Visibility.Visible;
                         break;
                     }
 
