@@ -134,6 +134,9 @@
     <Resource Include="Assets\Backgrounds\Mansion\cross_closeup_open.png" />
     <Resource Include="Assets\Backgrounds\Mansion\portrait_gallery.png" />
     <Resource Include="Assets\Backgrounds\Mansion\portrait_gallery_open.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\frame_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\frame_medallion_left_pressed.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\frame_medallion_centre_pressed.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
     <Resource Include="Assets\Items\Sources\paper.png" />
     <Resource Include="Assets\Items\Sources\pocket_knife.png" />

@@ -26,6 +26,10 @@ namespace The_Mansion.Models
         // Text shown when the hotspot is clicked/examined
         public string Description { get; set; } = "";
 
+        // Optional: after the ACT, move to the scene this returns ("" stays),
+        // e.g. back to the room once a close-up puzzle is solved.
+        public Func<Player, string>? ThenGoTo { get; set; }
+
         // Optional: LOOK runs this and shows what it returns (text that
         // changes with the story). Description is used when it is null.
         public Func<Player, string>? LookResult { get; set; }
