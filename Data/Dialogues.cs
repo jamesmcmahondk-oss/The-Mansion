@@ -1658,7 +1658,7 @@ namespace The_Mansion.Data
                         "noticed",
                         onlyIf: p =>
                             p.Wits >= 12 &&
-                            !p.Has("Gargoyle's Blessing"))
+                            !p.HasFlag("GargoyleThankedYou"))
                     .Choice(
                         "Then what's keeping you here?",
                         "whatKeepsHere")
@@ -1903,65 +1903,27 @@ namespace The_Mansion.Data
                         "blessingOffer")
 
                 // =====================================================
-                // BLESSING
+                // THANKS (noticed what others overlook)
                 // =====================================================
 
                 .Line(
                     "blessingOffer",
                     "\"You noticed what most people overlook. " +
-                    "Allow me to return the courtesy. A little luck.\"")
+                    "I find that I am grateful, which is inconvenient. I had planned to be sullen all evening.\"")
                     .Choice(
-                        "Thank you. I'll accept.",
-                        "blessing",
-                        onlyIf: p => !p.Has("Gargoyle's Blessing"),
-                        effect: p =>
-                        {
-                            if (!p.Has("Gargoyle's Blessing"))
-                            {
-                                p.Luck += 1;
-                                p.Give("Gargoyle's Blessing");
-                            }
-                        })
+                        "You're welcome.",
+                        "menu",
+                        effect: p => p.SetFlag("GargoyleThankedYou"))
                     .Choice(
-                        "Keep it. You may need it.",
-                        "declineBlessing")
+                        "Sullen suits you.",
+                        "sullen",
+                        effect: p => p.SetFlag("GargoyleThankedYou"))
 
                 .Line(
-                    "blessing",
-                    "The gargoyle touches one stone finger to your forehead. " +
-                    "\"There. Try not to spend it all on something foolish.\" " +
-                    "(Gargoyle's Blessing received. Luck +1.)")
+                    "sullen",
+                    "\"Thank you. I have been practising for some time.\"")
                     .Choice(
-                        "I'll try.",
-                        "menu")
-                    .Choice(
-                        "No promises.",
-                        "blessingFoolish")
-
-                .Line(
-                    "blessingFoolish",
-                    "\"An honest answer. I shall lower my expectations accordingly.\"")
-                    .Choice(
-                        "Probably wise.",
-                        "menu")
-
-                .Line(
-                    "declineBlessing",
-                    "\"Perhaps I might need it. Ask again if you change your mind. " +
-                    "I am unlikely to have gone shopping.\"")
-                    .Choice(
-                        "Unlike the other gargoyle.",
-                        "shoppingOther")
-                    .Choice(
-                        "I'll remember.",
-                        "menu")
-
-                .Line(
-                    "shoppingOther",
-                    "\"If the other gargoyle returns with shopping, " +
-                    "I shall consider the entire departure forgiven.\"")
-                    .Choice(
-                        "A generous policy.",
+                        "It shows.",
                         "menu")
 
                 // =====================================================

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -59,7 +59,8 @@ namespace The_Mansion.Data
                 Wits = Wits,
                 Weapon = Weapon,
                 StatusEffect = StatusEffect,
-                Inventory = new List<string>(Inventory),
+                // Items removed from the game since the save was made are dropped.
+                Inventory = Inventory.Where(Items.Exists).ToList(),
                 Journal = new List<string>(Journal),
                 SeenLines = new HashSet<string>(SeenLines ?? new List<string>(), StringComparer.OrdinalIgnoreCase)
             };

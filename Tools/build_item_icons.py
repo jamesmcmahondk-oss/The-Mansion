@@ -17,7 +17,6 @@ OUT_DIR = "Assets/Items"
 ICONS = {
     "gold_coins.png":        ("Assets/Items/Sources/gold_coins.png",          (140, 110, 1420, 860)),
     "royal_gold_coin.png":   ("Assets/Items/Sources/royal_gold_coin.png",     (350, 165, 1180, 950)),
-    "gargoyle_blessing.png": ("Assets/Backgrounds/Mansion/FrontGargoyle.png",    (800, 260, 1140, 600)),
 
     # Car trunk (pre-game choice)
     "corkscrew.png":         ("Assets/Items/Sources/corkscrew.png",           (205, 60, 1335, 930)),

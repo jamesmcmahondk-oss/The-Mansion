@@ -54,8 +54,8 @@ The first "gate". Every route works; each one leaves a mark the world remembers.
 - **King Hautain** (fountain): grab his gold (`StoleCoins` – the Royal grudge
   stays even if you pay Quazimodo with it), recognise his sovereignty for a
   **Royal Gold Coin**, or fight him.
-- **The Gargoyle**: notice what others overlook → **Gargoyle's Blessing**
-  (Luck +1). Second visit: *"You don't cast rain properly."*
+- **The Gargoyle**: notice what others overlook → a thank-you, no reward.
+  Second visit: *"You don't cast rain properly."*
 - **Ebria**: the **Corkscrew** from the trunk – *"Now I have to like you a
   little."* A small relationship beat, no reward.
 

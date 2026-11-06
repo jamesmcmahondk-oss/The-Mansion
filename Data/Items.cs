@@ -70,11 +70,6 @@ namespace The_Mansion.Data
                     picture: "Assets/Items/Sources/royal_gold_coin.png",
                     misuse: "The {target} doesn't recognise the King's coin. Or the King.");
 
-        public static Item GargoyleBlessing { get; } =
-            NewItem("Gargoyle's Blessing",
-                    "Not something you can hold, exactly. You just feel a little luckier. (Luck +1)",
-                    "Assets/Items/gargoyle_blessing.png");
-
 
         // =========================================================
         // OUTSIDE THE MANSION (see PUZZLES.md)
