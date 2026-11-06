@@ -64,6 +64,10 @@ namespace The_Mansion.Data
                 .BeatenPortrait(
                     "Assets/Characters/Portraits/Quazimodo_Beaten_portrait_framed.png")
 
+                // On the threshold, knife raised (same canvas as his dialogue pictures).
+                .Character("Assets/Characters/Quazimodo_Attack.png")
+                .StandAt(586, 330, 474)
+
                 .Intro(
                     "Quazimodo slowly steps through the doorway and closes "
                     + "the heavy door behind him. "

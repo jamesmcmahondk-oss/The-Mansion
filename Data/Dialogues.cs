@@ -3573,6 +3573,12 @@ namespace The_Mansion.Data
             NewDialogue("QuazimodoFrontDoor", "Quazimodo")
                 .MetFlag("MetQuazimodo")
                 .Portrait("Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
+                // Peering through the gap in the front door (over the door in
+                // the FrontDoor picture). Lines swap in standing poses on the
+                // same canvas: bribed, beaten, attacking, party hat.
+                .Character("Assets/Characters/Quazimodo_Door.png")
+                .StandAt(586, 330, 474)
+                .DimScene(false)
 
                 .StartAt(p =>
                     p.HasFlag("DefeatedQuazimodo")
@@ -4140,7 +4146,8 @@ namespace The_Mansion.Data
                     "Quazimodo takes the Royal Gold Coin between two long fingers. "
                     + "He turns it toward the dim light and studies the tiny crowned frog upon it. "
                     + "\"Royal currency.\"",
-                    portrait: "Assets/Characters/Portraits/Quazimodo_Bribed_portrait_framed.png")
+                    portrait: "Assets/Characters/Portraits/Quazimodo_Bribed_portrait_framed.png",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "King Hautain gave it to me.",
@@ -4160,7 +4167,8 @@ namespace The_Mansion.Data
                     "\"Then either you possess exceptional manners or His Majesty has suffered "
                     + "a sudden decline in judgement.\" "
                     + "Quazimodo slips the coin into his coat. "
-                    + "\"Both possibilities qualify you for entry.\"")
+                    + "\"Both possibilities qualify you for entry.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "Thank you.",
@@ -4185,7 +4193,8 @@ namespace The_Mansion.Data
                     "The coin disappears into Quazimodo's coat. "
                     + "The door swings inward. "
                     + "\"Your gratitude has been received. "
-                    + "The Mansion is prepared to tolerate your presence.\"")
+                    + "The Mansion is prepared to tolerate your presence.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "That's comforting.")
@@ -4206,7 +4215,8 @@ namespace The_Mansion.Data
                     + "\"A generous expression of gratitude.\" "
                     + "He studies the water dripping from them. "
                     + "\"And a recently submerged one.\"",
-                    portrait: "Assets/Characters/Portraits/Quazimodo_Bribed_portrait_framed.png")
+                    portrait: "Assets/Characters/Portraits/Quazimodo_Bribed_portrait_framed.png",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "They came from the fountain.",
@@ -4224,7 +4234,8 @@ namespace The_Mansion.Data
                     "fountainCoins",
                     "\"Then I assume King Hautain approved the transfer.\" "
                     + "Quazimodo looks at you for a long moment. "
-                    + "\"No? I thought not.\"")
+                    + "\"No? I thought not.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "Are you going to return them?",
@@ -4240,7 +4251,8 @@ namespace The_Mansion.Data
 
                 .Line(
                     "coinOrigin",
-                    "\"Only if the former owner is armed, royal, or amphibious.\"")
+                    "\"Only if the former owner is armed, royal, or amphibious.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "Possibly all three.",
@@ -4275,7 +4287,8 @@ namespace The_Mansion.Data
                     "Quazimodo steps back and pulls the door open. "
                     + "\"You may enter.\" "
                     + "He glances toward the fountain. "
-                    + "\"If a small monarch asks, we have never met.\"")
+                    + "\"If a small monarch asks, we have never met.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "Understood.")
@@ -4294,7 +4307,8 @@ namespace The_Mansion.Data
                     "looseChange",
                     "Quazimodo counts the loose change methodically. "
                     + "Several coins appear to have spent years beneath a seat cushion. "
-                    + "\"An eclectic currency.\"")
+                    + "\"An eclectic currency.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "It's everything I had.",
@@ -4312,7 +4326,8 @@ namespace The_Mansion.Data
                     "allTheChange",
                     "\"Then the gesture exceeds the amount.\" "
                     + "Quazimodo pockets the coins. "
-                    + "\"An uncommon financial principle.\"")
+                    + "\"An uncommon financial principle.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "May I come inside now?",
@@ -4332,7 +4347,8 @@ namespace The_Mansion.Data
                     "Quazimodo deposits the change somewhere deep within his coat. "
                     + "The sound of coins continues for longer than seems physically reasonable. "
                     + "He opens the door. "
-                    + "\"Payment is adequate. Barely.\"")
+                    + "\"Payment is adequate. Barely.\"",
+                    character: "Assets/Characters/Quazimodo_Bribed.png")
 
                     .Choice(
                         "Barely is enough.")
@@ -4589,7 +4605,8 @@ namespace The_Mansion.Data
                     + "Quazimodo steps into the gap, revealing considerably more height "
                     + "and considerably less concern than expected. "
                     + "\"You may attempt it.\"",
-                    portrait: "Assets/Characters/Portraits/Quazimodo_portrait_framed.png")
+                    portrait: "Assets/Characters/Portraits/Quazimodo_portrait_framed.png",
+                    character: "Assets/Characters/Quazimodo_Attack.png")
 
                     .Choice(
                         "Move aside.",
@@ -4617,7 +4634,8 @@ namespace The_Mansion.Data
                     "\"No.\" "
                     + "Quazimodo rolls one shoulder. Something in it clicks several times. "
                     + "\"You may now decide whether the conversation has ended "
-                    + "or merely become physical.\"")
+                    + "or merely become physical.\"",
+                    character: "Assets/Characters/Quazimodo_Attack.png")
 
                     .Choice(
                         "(Attack Quazimodo)",
@@ -4674,7 +4692,8 @@ namespace The_Mansion.Data
                     "Quazimodo leans heavily against the partly opened door. "
                     + "His coat is torn, but his professional disapproval remains immaculate. "
                     + "\"You have established that you can enter the Mansion.\"",
-                    portrait: "Assets/Characters/Portraits/Quazimodo_Beaten_portrait_framed.png")
+                    portrait: "Assets/Characters/Portraits/Quazimodo_Beaten_portrait_framed.png",
+                    character: "Assets/Characters/Quazimodo_Beaten.png")
 
                     .Choice(
                         "Then let me in.",
@@ -4706,7 +4725,8 @@ namespace The_Mansion.Data
                     "defeatedApology",
                     "\"Your regret is noted.\" "
                     + "Quazimodo straightens his bow tie. "
-                    + "\"It would have been more useful before the furniture became involved.\"")
+                    + "\"It would have been more useful before the furniture became involved.\"",
+                    character: "Assets/Characters/Quazimodo_Beaten.png")
 
                     .Choice(
                         "May I still enter?",
@@ -4724,7 +4744,8 @@ namespace The_Mansion.Data
 
                 .Line(
                     "blameQuazimodo",
-                    "\"You could have said please with greater conviction.\"")
+                    "\"You could have said please with greater conviction.\"",
+                    character: "Assets/Characters/Quazimodo_Beaten.png")
 
                     .Choice(
                         "Fair point.",
@@ -4750,7 +4771,8 @@ namespace The_Mansion.Data
                     "defeatedConcern",
                     "\"I have endured worse visitors.\" "
                     + "Quazimodo looks into the Mansion. "
-                    + "\"Most were already inside.\"")
+                    + "\"Most were already inside.\"",
+                    character: "Assets/Characters/Quazimodo_Beaten.png")
 
                     .Choice(
                         "May I enter?",
@@ -4771,7 +4793,8 @@ namespace The_Mansion.Data
                     "Quazimodo steps away from the threshold. "
                     + "\"Enter, then.\" "
                     + "His gaze follows you toward the darkness. "
-                    + "\"You have opened the door. That does not mean the house has welcomed you.\"")
+                    + "\"You have opened the door. That does not mean the house has welcomed you.\"",
+                    character: "Assets/Characters/Quazimodo_Beaten.png")
 
                     .Choice(
                         "I'll take my chances.")
