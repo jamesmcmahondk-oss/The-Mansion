@@ -24,6 +24,10 @@ namespace The_Mansion.Models
         public string Portrait { get; set; } = "";
         public string BeatenPortrait { get; set; } = "";
 
+        // Optional full-body picture shown in the scene once beaten
+        // (same canvas and placement as Character).
+        public string BeatenCharacter { get; set; } = "";
+
         // Full-body picture in the scene and its placement (as in dialogues).
         public string Character { get; set; } = "";
         public double CharacterX { get; set; }

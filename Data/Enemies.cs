@@ -37,6 +37,7 @@ namespace The_Mansion.Data
                 .Portrait("Assets/Characters/Portraits/Hautain_portrait_framed.png")
                 .BeatenPortrait("Assets/Characters/Portraits/Hautain_Beaten_portrait_framed.png")
                 .Character("Assets/Characters/Hautain_Attack.png")
+                .BeatenCharacter("Assets/Characters/Hautain_Beaten.png")
                 .StandAt(495, 205, 285)
                 .Intro("King Hautain leaps from his lily pad, sceptre raised! \"For the CROWN!\"")
                 .OnWin("King Hautain flops into the water with a mighty splash and paddles away into the reeds, croaking oaths of revenge.",
@@ -66,7 +67,8 @@ namespace The_Mansion.Data
 
                 // On the threshold, knife raised (same canvas as his dialogue pictures).
                 .Character("Assets/Characters/Quazimodo_Attack.png")
-                .StandAt(619, 282, 389)
+                .BeatenCharacter("Assets/Characters/Quazimodo_Beaten.png")
+                .StandAt(619, 305, 389)
 
                 .Intro(
                     "Quazimodo slowly steps through the doorway and closes "

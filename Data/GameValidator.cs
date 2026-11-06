@@ -136,6 +136,7 @@ namespace The_Mansion.Data
                 CheckImage($"{e} .Portrait", enemy.Portrait);
                 CheckImage($"{e} .BeatenPortrait", enemy.BeatenPortrait);
                 CheckImage($"{e} .Character", enemy.Character);
+                CheckImage($"{e} .BeatenCharacter", enemy.BeatenCharacter);
             }
 
             foreach (Item item in Items.All)

@@ -490,7 +490,16 @@ namespace The_Mansion
 
             _fightOver = true;
             FightButtons.Visibility = Visibility.Collapsed;
-            DialogueCharacter.Visibility = Visibility.Collapsed;
+
+            // The beaten figure stays in the scene, if there is one.
+            if (!string.IsNullOrWhiteSpace(_fight.Enemy.BeatenCharacter))
+            {
+                SetDialogueCharacter(_fight.Enemy.BeatenCharacter);
+            }
+            else
+            {
+                DialogueCharacter.Visibility = Visibility.Collapsed;
+            }
 
             // Show the beaten close-up, if there is one.
             if (!string.IsNullOrWhiteSpace(_fight.Enemy.BeatenPortrait))
