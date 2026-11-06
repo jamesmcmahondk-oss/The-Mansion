@@ -25,6 +25,19 @@ namespace The_Mansion.Data
         public int EffectsVolume { get; set; } = 80;
         public int MusicVolume { get; set; } = 60;
 
+        // Which dice the fights use: a folder in Assets/UI/Dice
+        // ("" = the original dice in Assets/UI/Dice itself).
+        public string DiceSet { get; set; } = "bone";
+
+        public static readonly (string Folder, string Name)[] DiceSets =
+        {
+            ("bone", "Bone & Blood"),
+            ("bronze", "Aged Bronze"),
+            ("crimson", "Crimson Glass"),
+            ("moonlit", "Moonlit Stone"),
+            ("", "Old Bones (original)")
+        };
+
         // The sizes offered in the Settings screen. All 16:9 so the game
         // never stretches.
         public static readonly (int Width, int Height)[] Resolutions =
