@@ -404,6 +404,7 @@ namespace The_Mansion.Data
                 .OnTalk("You compliment the roses. The thorns remain unpersuaded.")
                 .OnOtherItems("The rose bush is unimpressed by the {item}.")
                 .Describe("A great tangle of blood-red roses, impossibly in bloom this late in the year.")
+                .LookSetsFlag("SawRoseBush")
                 .OnlyWhen(p => !p.HasFlag("GotRedRose"))
                 .OnAct(p => Roses.Touch(p))
                 .OnItem("Garden Shears", "Snip. Much better. You cut one perfect dark-red rose.",
@@ -856,6 +857,7 @@ namespace The_Mansion.Data
 
             .Hotspot("Something Glinting", 772, 702, 66, 54)
                 .Describe("At the very bottom of the well, something small and silver catches the light.")
+                .LookSetsFlag("SawWellGlint")
                 .OnAct("It's far too deep to reach. You'd need something long - or something to fish with.")
                 .OnItem("Ball of String",
                         "You tie a loop in the end of the string and lower it down... after a few patient tries the loop catches a handle. You reel up a small silver hand mirror. The glass is cracked straight across.",
@@ -889,12 +891,14 @@ namespace The_Mansion.Data
                 .Describe("Knots weave in and out of each other without beginning or end. At the centre, three spirals chase one another: " +
                           "one reaching up, one to the left, one to the right.")
                 .OnTalk("You read the knots aloud, as if they were words. They are not. You feel slightly foolish.")
+                .LookSetsFlag("SawCrossSpirals")
                 .ActOpensPuzzle("Cross")
 
             // THE GRAVEYARD SECRET: ACT on the spirals (or the cross) opens the
             // turning-spiral puzzle (Data/CrossPuzzle.cs, MainWindow.CrossPuzzle.cs).
             .Hotspot("Spirals", 740, 315, 90, 75)
                 .Describe("At the very centre of the cross, three stone spirals are set into the stone, each in its own round socket.")
+                .LookSetsFlag("SawCrossSpirals")
                 .ActOpensPuzzle("Cross")
 
             .Hotspot("Plinth", 544, 626, 468, 206)

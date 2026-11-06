@@ -257,8 +257,8 @@ namespace The_Mansion
 
             JournalEntryTitle.Text = entry.Title;
             JournalEntryText.Text = string.IsNullOrWhiteSpace(entry.Where)
-                ? entry.Text
-                : $"Where: {entry.Where}\n\n{entry.Text}";
+                ? entry.TextFor(_player)
+                : $"Where: {entry.Where}\n\n{entry.TextFor(_player)}";
             PlaceJournalPicture(string.IsNullOrWhiteSpace(entry.Picture)
                 ? null
                 : LoadImage(entry.Picture, "journal picture"));

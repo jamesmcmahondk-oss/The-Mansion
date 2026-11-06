@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,6 +45,12 @@ namespace The_Mansion
             {
                 ShowReply("The spirals are locked in place now. The panel in the plinth stands open.");
                 return;
+            }
+
+            if (!_player.HasFlag("SawCrossSpirals"))
+            {
+                _player.SetFlag("SawCrossSpirals");
+                UpdatePlayerStats();    // the cross's journal entry
             }
 
             _replyShowing = false;
