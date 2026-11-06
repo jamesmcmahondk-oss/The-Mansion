@@ -16,7 +16,7 @@ OUT_DIR = "Assets/Items"
 
 ICONS = {
     "gold_coins.png":        ("Assets/Backgrounds/Mansion/fountain_closeup.png", (600, 640, 880, 840)),
-    "royal_gold_coin.png":   ("Assets/Backgrounds/Mansion/fountain_closeup.png", (670, 750, 726, 802)),
+    "royal_gold_coin.png":   ("Assets/Items/Sources/royal_gold_coin.png",     (350, 165, 1180, 950)),
     "gargoyle_blessing.png": ("Assets/Backgrounds/Mansion/FrontGargoyle.png",    (800, 260, 1140, 600)),
 
     # Car trunk (pre-game choice)
@@ -24,11 +24,11 @@ ICONS = {
     "lighter.png":           ("Assets/UI/trunk.png", (270, 570, 445, 710)),
     "ball_of_string.png":    ("Assets/UI/trunk.png", (630, 505, 790, 670)),
     "party_hat.png":         ("Assets/UI/trunk.png", (845, 325, 1095, 530)),
-    "loose_change.png":      ("Assets/UI/trunk.png", (850, 575, 1030, 670)),
+    "loose_change.png":      ("Assets/Items/Sources/loose_change.png",        (180, 160, 1320, 830)),
     "fork.png":              ("Assets/UI/trunk.png", (1050, 505, 1260, 745)),
     # Item pictures (whole picture, squared to its centre)
     "worn_photograph.png":   ("Assets/Items/Sources/worn_photograph.png",     (230, 0, 1306, 1024)),
-    "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (90, 60, 1190, 1160)),
+    "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (340, 60, 1190, 970)),
     "cracked_hand_mirror.png": ("Assets/Items/Sources/cracked_hand_mirror.png", (300, 30, 1160, 990)),
     # The player's own pocket knife (starting weapon), laid diagonally.
     "pocket_knife.png":      ("Assets/Items/Sources/pocket_knife.png",        (30, 135, 1965, 515), 35),
@@ -39,10 +39,10 @@ ICONS = {
     # Outside the Mansion
     "garden_shears.png":     ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (480, 490, 755, 595)),
     "charcoal.png":          ("Assets/Items/Sources/charcoal.png",            (200, 250, 1360, 820)),
-    "rope.png":              ("Assets/Backgrounds/Mansion/rear_yard.png",         (1168, 388, 1234, 496)),
+    "rope.png":              ("Assets/Items/Sources/rope.png",                (255, 80, 1255, 900)),
     # Tall and thin: cut out exactly, laid diagonally (third value = degrees,
     # fourth = brightness - the statue is in deep shadow).
-    "stone_sword.png":       ("Assets/Backgrounds/Mansion/Sources/statue_closeup_source.png", (748, 190, 800, 700), -45, 1.1),
+    "stone_sword.png":       ("Assets/Items/Sources/stone_sword.png",         (140, 30, 1470, 990)),
 }
 
 

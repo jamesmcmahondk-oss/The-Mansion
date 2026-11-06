@@ -142,10 +142,15 @@
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
     <Resource Include="Assets\Items\Sources\paper.png" />
     <Resource Include="Assets\Items\Sources\pocket_knife.png" />
+    <Resource Include="Assets\Items\Sources\loose_change.png" />
+    <Resource Include="Assets\Items\Sources\rope.png" />
+    <Resource Include="Assets\Items\Sources\royal_gold_coin.png" />
+    <Resource Include="Assets\Items\Sources\stone_sword.png" />
     <Resource Include="Assets\Items\Sources\charcoal.png" />
     <Resource Include="Assets\Items\Sources\corkscrew.png" />
     <Resource Include="Assets\Items\Sources\empty_bottle.png" />
     <Resource Include="Assets\Items\Sources\cracked_hand_mirror.png" />
+    <Resource Include="Assets\Items\Sources\red_rose.png" />
     <Resource Include="Assets\Characters\*.png" />
     <!-- Only the framed portraits are used; the plain ones are by-products of Tools/build_portraits.py. -->
     <Resource Include="Assets\Characters\Portraits\*_framed.png" />

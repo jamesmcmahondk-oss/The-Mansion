@@ -64,8 +64,9 @@ namespace The_Mansion.Data
 
         public static Item RoyalGoldCoin { get; } =
             NewItem("Royal Gold Coin",
-                    "A single gold coin, graciously granted by King Hautain to a loyal subject.",
+                    "A single gold coin, graciously granted by King Hautain to a loyal subject. (Right-click to look at it.)",
                     "Assets/Items/royal_gold_coin.png",
+                    picture: "Assets/Items/Sources/royal_gold_coin.png",
                     misuse: "The {target} doesn't recognise the King's coin. Or the King.");
 
         public static Item GargoyleBlessing { get; } =
@@ -91,8 +92,9 @@ namespace The_Mansion.Data
         // The Faceless Knight's sword (statue close-up).
         public static Item StoneSword { get; } =
             NewItem("Stone Sword",
-                    "The hooded statue's sword. It looks like solid stone and weighs almost nothing. (Weapon: +2 in fights.)",
+                    "The hooded statue's sword. It looks like solid stone and weighs almost nothing. (Weapon: +2 in fights.) (Right-click to look at it.)",
                     "Assets/Items/stone_sword.png",
+                    picture: "Assets/Items/Sources/stone_sword.png",
                     weaponBonus: 2,
                     misuse: "You'd rather not chip the stone sword on the {target}.");
 
@@ -151,14 +153,16 @@ namespace The_Mansion.Data
         // From the tool shed wall (rear yard). Use still to be decided.
         public static Item Rope { get; } =
             NewItem("Rope",
-                    "A coil of old rope. Damp, but stronger than it looks.",
+                    "A coil of old rope. Damp, but stronger than it looks. (Right-click to look at it.)",
                     "Assets/Items/rope.png",
+                    picture: "Assets/Items/Sources/rope.png",
                     misuse: "You can't think of a useful way to tie the rope to the {target}.");
 
         public static Item RedRose { get; } =
             NewItem("Red Rose",
-                    "One perfect dark-red rose. It smells of summer, which is wrong this late in the year.",
+                    "One perfect dark-red rose. It smells of summer, which is wrong this late in the year. (Right-click to look at it.)",
                     "Assets/Items/red_rose.png",
+                    picture: "Assets/Items/Sources/red_rose.png",
                     misuse: "The {target} doesn't seem like the place for the rose.");
 
         // =========================================================
@@ -192,8 +196,9 @@ namespace The_Mansion.Data
 
         public static Item LooseChange { get; } =
             NewItem("Loose Change",
-                    "A few coins from the cup holder. Not much, but money talks - even in haunted mansions.",
+                    "A few coins from the cup holder. Not much, but money talks - even in haunted mansions. (Right-click to look at it.)",
                     "Assets/Items/loose_change.png",
+                    picture: "Assets/Items/Sources/loose_change.png",
                     misuse: "The {target} can't be bought. Not with that much, anyway.");
 
         public static Item Fork { get; } =
