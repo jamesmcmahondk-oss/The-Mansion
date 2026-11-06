@@ -3577,7 +3577,7 @@ namespace The_Mansion.Data
                 // the FrontDoor picture). Lines swap in standing poses on the
                 // same canvas: bribed, beaten, attacking, party hat.
                 .Character("Assets/Characters/Quazimodo_Door.png")
-                .StandAt(640, 320, 389)
+                .StandAt(619, 282, 458)
                 .DimScene(false)
 
                 .StartAt(p =>

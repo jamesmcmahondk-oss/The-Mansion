@@ -68,7 +68,7 @@ namespace The_Mansion.Data
                 // On the threshold, knife raised (same canvas as his dialogue pictures).
                 .Character("Assets/Characters/Quazimodo_Attack.png")
                 .BeatenCharacter("Assets/Characters/Quazimodo_Beaten.png")
-                .StandAt(640, 320, 389)
+                .StandAt(619, 282, 458)
 
                 .Intro(
                     "Quazimodo slowly steps through the doorway and closes "
