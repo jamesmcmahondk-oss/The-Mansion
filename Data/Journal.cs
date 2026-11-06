@@ -227,6 +227,38 @@ namespace The_Mansion.Data
                       return text;
                   });
 
+        // The Portrait Gallery's empty frame (a door) and the ledger behind it.
+        public static JournalEntry EmptyFrame { get; } =
+            Entry("EmptyFrame", "The empty frame",
+                  "",
+                  p => p.HasFlag("ExaminedEmptyFrame"),
+                  category: Puzzles, where: "The Portrait Gallery, beside the fireplace",
+                  textWhen: p =>
+                  {
+                      string text = "A huge ornate frame in the Portrait Gallery surrounds nothing but wallpaper. " +
+                                    "It is considerably deeper than it needs to be.";
+                      if (p.HasFlag("ExaminedThreeAges"))
+                      {
+                          text += "\n\nThree portraits of the same woman hang nearby: the same eyes, the same posture, different years.";
+                      }
+                      if (p.HasFlag("DiscoveredPortraitFrameMechanism"))
+                      {
+                          text += "\n\nThree small brass medallions are set into the frame's lower edge, matching the frames of the three age portraits.";
+                      }
+                      if (p.HasFlag("SolvedPortraitGalleryPuzzle"))
+                      {
+                          text += "\n\nPressed in the order she was painted, the medallions released the frame. It was a door. " +
+                                  (p.HasFlag("GotPortraitLedger")
+                                      ? "Behind it was a ledger of portrait commissions."
+                                      : "Behind it, a ledger rests in a shallow compartment.");
+                      }
+                      if (p.HasFlag("LearnedGargoyleName"))
+                      {
+                          text += "\n\nThe ledger names the gate guardians: Dúnán the Patient, and Cairn the Steadfast.";
+                      }
+                      return text;
+                  });
+
         public static JournalEntry Photograph { get; } =
             Entry("Photograph", "The photograph",
                   "Hidden in the plinth of the stone cross: a tiny, old photograph of the Mansion as it once was. " +

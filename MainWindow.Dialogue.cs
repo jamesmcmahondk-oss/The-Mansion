@@ -313,7 +313,7 @@ namespace The_Mansion
 
             if (_currentScene != null)
             {
-                ShowDescription(_currentScene.Description);
+                ShowDescription(_currentScene.GetDescription(_player));
             }
         }
     }

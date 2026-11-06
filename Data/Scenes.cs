@@ -1068,13 +1068,14 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/entrance_hall.png",
                      "The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.")
 
+            // Up to the first floor: the Portrait Gallery.
             .Hotspot("Staircase", 440, 360, 420, 450)
                 .Describe("A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark.")
-                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
+                .GoesTo("PortraitGallery")
 
             .Hotspot("Landing", 760, 290, 390, 220)
                 .Describe("The stairs turn at a landing and climb on along the right-hand wall, into shadow.")
-                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
+                .GoesTo("PortraitGallery")
 
             .Hotspot("Window", 560, 192, 195, 280)
                 .Describe("A tall window above the stairs, framed by heavy red curtains. Rain streams down the glass.")
@@ -1137,8 +1138,353 @@ namespace The_Mansion.Data
             .ReturnTo("FrontDoor", "You step back out into the rain.");
 
         // =========================================================
+        // FIRST FLOOR
+        // =========================================================
+
+        // The Portrait Gallery, up the stairs from the Entrance Hall.
+        // A person can change without ceasing to be the same person.
+        // THE MISSING PORTRAIT: the empty frame is a door. Its three brass
+        // medallions match the three age portraits and are pressed in the
+        // order the portraits were painted (Gallery helper below). Behind it:
+        // the Portrait Ledger (read it with right-click: Dialogues.PortraitLedger).
+        public static Scene PortraitGallery { get; } =
+            NewScene("PortraitGallery",
+                     "Assets/Backgrounds/Mansion/portrait_gallery.png",
+                     "")
+            .DescribeScene(p =>
+                "The Portrait Gallery stretches along one side of the Mansion. " +
+                "Cold moonlight enters through tall Gothic windows, while candles and the fireplace fill the opposite wall with warm gold. " +
+                "Portraits crowd the red wallpaper in frames of every size. Some have names. Some have lost them. " +
+                (p.HasFlag("SolvedPortraitGalleryPuzzle")
+                    ? "One ornate frame now stands open, exposing a narrow compartment inside the wall."
+                    : "One very large frame contains nothing at all."))
+
+            // Stays open for good once solved.
+            .BackgroundWhen(p => p.HasFlag("SolvedPortraitGalleryPuzzle"),
+                            "Assets/Backgrounds/Mansion/portrait_gallery_open.png")
+
+            // Listed first: the specific paintings below win where they overlap.
+            .Hotspot("Other Portraits", 590, 192, 520, 360)
+                .Describe(p =>
+                {
+                    if (p.HasFlag("LookedAtOtherPortraits"))
+                    {
+                        return "Different people. Different years. The same carefully arranged importance.";
+                    }
+                    p.SetFlag("LookedAtOtherPortraits");
+                    return "Generations of unfamiliar faces look back from expensive frames. " +
+                           "Some still have names beneath them. Others have only empty brackets.";
+                })
+                .OnAct("You inspect several frames. None appears eager to become an inventory item.")
+                .OnTalk("Nobody answers. The portraits are only portraits.")
+
+            .Hotspot("Other Portraits", 1350, 585, 90, 140)
+                .Describe(p => p.HasFlag("LookedAtOtherPortraits")
+                    ? "Different people. Different years. The same carefully arranged importance."
+                    : "Generations of unfamiliar faces look back from expensive frames. " +
+                      "Some still have names beneath them. Others have only empty brackets.")
+                .LookSetsFlag("LookedAtOtherPortraits")
+                .OnAct("You inspect several frames. None appears eager to become an inventory item.")
+
+            // 1. THE FAMILY PORTRAIT - on the Mansion steps, around a space no one occupies.
+            .Hotspot("Family Portrait", 1115, 192, 405, 395)
+                .Describe(p =>
+                    "A formal family portrait painted on the Mansion steps. You've stood exactly where they are standing. " +
+                    "Judging by the expressions, sitting for the portrait was considered compulsory. " +
+                    "Something about the arrangement feels unbalanced. Several figures appear positioned around a space that no one occupies.")
+                .LookSetsFlag("ExaminedFamilyPortrait")
+                .OnAct("The frame is fixed firmly to the wall. Whatever bothers you is in the painting, not behind it.")
+                .OnTalk("Nobody in the portrait answers. Nobody in the portrait ever looks as if they might.")
+                .OnItem("Worn Photograph",
+                        "The photograph and portrait disagree about many details. They agree about the absence.",
+                        onlyIf: p => p.HasFlag("ComparedPhotographToPortrait"))
+                .OnItem("Worn Photograph",
+                        "You hold the photograph beside the painting. Different clothes. Different arrangement. Perhaps a different year. " +
+                        "Your eyes keep returning to the same place in both. The place where someone should be.",
+                        effect: p => p.SetFlag("ComparedPhotographToPortrait"))
+                .OnOtherItems("You hold the {item} up to the portrait. Nobody in it is interested.")
+
+            // 2. THREE AGES - Mirélle, painted decades apart (hung out of order:
+            // 1821, 1798, 1854). Part of the empty-frame puzzle.
+            .Hotspot("Three Ages", 790, 315, 200, 195)
+                .Describe(p =>
+                {
+                    p.SetFlag("ExaminedThreeAges");
+                    Gallery.CheckMirelleUnderstanding(p);
+                    return p.HasFlag("MetMirelle")
+                        ? "You know that face. All three of them. Mirélle was painted at three different ages. The expression changed less than the face."
+                        : "Three portraits hang in matching frames. The same eyes. The same posture. Different years. The brass nameplates have been removed.";
+                })
+                .OnAct("The three frames are fixed to the wall. Small engraved dates remain beneath them: " +
+                       "1821 under the left, 1798 under the centre, 1854 under the right.",
+                       p => p.SetFlag("ExaminedThreeAges"))
+                .OnTalk("The same woman looks back three times. None of her answers.")
+
+            // The old painting of the gates - both gargoyles still on their pillars.
+            .Hotspot("Gate Painting", 685, 385, 78, 195)
+                .Describe(p =>
+                {
+                    string text = "An old painting of the Mansion gates. Two stone gargoyles watch from the pillars.";
+                    if (p.HasFlag("MetDunan"))
+                    {
+                        return text + " Dúnán looks considerably less patient in this painting.";
+                    }
+                    if (p.HasFlag("MetGargoyle"))
+                    {
+                        return text + " So the missing gargoyle wasn't a joke. Well. Not entirely.";
+                    }
+                    return text;
+                })
+                .OnAct("The painting is fixed to the wall. Both gargoyles stay where they are. In the painting, at least.")
+
+            // Lady Vesper - never labelled.
+            .Hotspot("Red Portrait", 608, 280, 80, 295)
+                .Describe(p => p.HasFlag("MetVesper")
+                    ? "An exquisitely dressed figure regards the room from a carved gilt frame. " +
+                      "The painter devoted an unusual amount of attention to the hands. Oh. That's why."
+                    : "An exquisitely dressed figure regards the room from a carved gilt frame. " +
+                      "The painter devoted an unusual amount of attention to the hands.")
+                .OnAct(p => p.HasFlag("MetVesper")
+                    ? "You keep your own hands well away from the frame."
+                    : "You're not certain why that bothers you.")
+
+            // Pip - just Pip.
+            .Hotspot("Pencil Sketch", 788, 558, 45, 80)
+                .Describe(p =>
+                {
+                    if (!p.HasFlag("MetPip"))
+                    {
+                        return "A quick pencil sketch of someone holding a stuffed bear, behind cheap glass. " +
+                               "Compared with everything else in the room, it seems strangely ordinary.";
+                    }
+                    return p.HasFlag("AskedPipAboutBear")
+                        ? "That's Pip. The bear hasn't changed much either. Apparently Bear was very reasonably priced."
+                        : "That's Pip. The bear hasn't changed much either.";
+                })
+                .OnAct("The sketch hangs on a single nail. You leave it exactly where somebody put it.")
+
+            // 10. STUDIES - eyes, hands, flowers, fragments of buildings.
+            .Hotspot("Studies", 836, 543, 78, 85)
+                .Describe(p => Gallery.Studies(p))
+                .OnAct("The smaller frames are fixed securely to the wall.")
+            .Hotspot("Studies", 928, 548, 74, 125)
+                .Describe(p => Gallery.Studies(p))
+                .OnAct("The smaller frames are fixed securely to the wall.")
+            .Hotspot("Studies", 1013, 593, 70, 70)
+                .Describe(p => Gallery.Studies(p))
+                .OnAct("The smaller frames are fixed securely to the wall.")
+            .Hotspot("Studies", 1188, 583, 160, 150)
+                .Describe(p => Gallery.Studies(p))
+                .OnAct("The smaller frames are fixed securely to the wall.")
+            .Hotspot("Studies", 1438, 598, 95, 150)
+                .Describe(p => Gallery.Studies(p))
+                .OnAct("The smaller frames are fixed securely to the wall.")
+
+            // 9. ARCHITECTURAL SKETCH - a clue towards the empty frame.
+            .Hotspot("Architectural Sketch", 1092, 588, 75, 105)
+                .Describe("An old architectural study of the Mansion. Several windows do not appear to match the building outside. " +
+                          "You may be remembering it incorrectly.")
+                .LookSetsFlag("ExaminedGallerySketch")
+                .OnAct("The study is fixed securely to the wall.")
+
+            // 13. GOTHIC WINDOWS
+            .Hotspot("Gothic Windows", 15, 192, 75, 425)
+                .Describe("Tall Gothic windows overlook the dark grounds. Rain traces silver paths down the glass.")
+                .OnAct("The windows are latched. Cold air still finds a way through.")
+            .Hotspot("Gothic Windows", 180, 240, 40, 360)
+                .Describe("Tall Gothic windows overlook the dark grounds. Rain traces silver paths down the glass.")
+                .OnAct("The windows are latched. Cold air still finds a way through.")
+
+            // 7. THE TALL MIRROR - a slow instrument, never a jumpscare.
+            .Hotspot("Tall Mirror", 85, 225, 115, 530)
+                .Describe(p => Gallery.MirrorLook(p))
+                .OnAct(p => Gallery.MementoCount(p) >= 1
+                    ? "You adjust your posture. The reflection does the same. That ought to be more reassuring than it is."
+                    : "You adjust your posture. The reflection does the same. Reassuring.")
+                .OnTalk("You say hello to your reflection. It says hello back, at exactly the same time. Fair enough.")
+                .OnItem("Cracked Hand Mirror", "You hold the little mirror up to the big one. A crack runs through one of the reflections. Only one.")
+                .OnOtherItems("The reflection holds up a {item} as well. Neither of you knows why.")
+
+            // 8. FIREPLACE
+            .Hotspot("Fireplace", 320, 300, 165, 310)
+                .Describe("The fireplace burns brightly beneath the Mansion crest. Someone has tended it recently.")
+                .OnAct(p => Gallery.MementoCount(p) >= 1
+                    ? "You hold your hands toward the fire. For a moment, you remember doing this somewhere else. " +
+                      "The memory disappears before the room appears."
+                    : "Warm. Actually warm.")
+                .OnOtherItems("You'd rather not feed the {item} to the fire.")
+
+            // 15. FAR DOOR - the rest of the first floor isn't built yet.
+            .Hotspot("Far Door", 228, 405, 90, 195)
+                .Describe("A dark wooden door stands at the far end of the gallery.")
+                .OnAct("The door opens onto a corridor that has not yet been explored.")    // not built yet: first floor corridor
+
+            // 3. THE EMPTY FRAME - really a shallow door.
+            .Hotspot("Empty Frame", 480, 350, 100, 200)
+                .Describe("An elaborate frame surrounding nothing but wallpaper. " +
+                          "Judging by the cleaner rectangle inside it, something once covered this space.")
+                .LookSetsFlag("ExaminedEmptyFrame")
+                .OnAct(p => Gallery.TouchFrame(p))
+                .NeedsStat("Wits", Gallery.WitsNeeded)
+                .OnOtherItems("You try the {item} against the frame. The frame is unmoved.")
+                .OnlyWhen(p => !p.HasFlag("SolvedPortraitGalleryPuzzle"))
+
+            // 4. THE CONTROLS - one under each corner of the frame, matching the
+            // age portraits hung left, centre and right. Listed after the frame.
+            .Hotspot("Left Medallion", 500, 515, 21, 26)
+                .Describe("A small brass medallion in the frame's lower edge. Its border matches the frame of the left age portrait.")
+                .OnAct(p => Gallery.Press(p, "Left"))
+                .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
+            .Hotspot("Centre Medallion", 521, 515, 19, 26)
+                .Describe("A small brass medallion in the frame's lower edge. Its border matches the frame of the centre age portrait.")
+                .OnAct(p => Gallery.Press(p, "Centre"))
+                .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
+            .Hotspot("Right Medallion", 540, 515, 21, 26)
+                .Describe("A small brass medallion in the frame's lower edge. Its border matches the frame of the right age portrait.")
+                .OnAct(p => Gallery.Press(p, "Right"))
+                .OnlyWhen(p => p.HasFlag("DiscoveredPortraitFrameMechanism") && !p.HasFlag("SolvedPortraitGalleryPuzzle"))
+
+            // 5. THE HIDDEN COMPARTMENT, once solved (the frame swung open).
+            .Hotspot("Open Frame", 466, 330, 50, 240)
+                .Describe("The ornate frame has swung open on hidden hinges, like a door.")
+                .OnAct("It stays open. Whatever it was guarding, it no longer seems to mind.")
+                .OnlyWhen(p => p.HasFlag("SolvedPortraitGalleryPuzzle"))
+            .Hotspot("Hidden Compartment", 515, 362, 67, 195)
+                .Describe(p => p.HasFlag("GotPortraitLedger")
+                    ? "A shallow compartment has been built into the wall behind the frame. The hidden recess is empty."
+                    : "A shallow compartment has been built into the wall behind the frame. It contains a single leather-bound ledger.")
+                .OnAct(p => p.HasFlag("GotPortraitLedger")
+                    ? "The hidden recess is empty."
+                    : "The compartment is too shallow to conceal anything else.")
+                .OnlyWhen(p => p.HasFlag("SolvedPortraitGalleryPuzzle"))
+
+            // 6. THE PORTRAIT LEDGER - listed after the compartment so it wins.
+            .Hotspot("Portrait Ledger", 522, 455, 50, 42)
+                .Describe("A heavy leather-bound volume rests inside the compartment. Its cover bears the Mansion's crest and the words: PORTRAIT COMMISSIONS")
+                .OnAct("You lift the ledger from the compartment. Dust has settled everywhere except along the edge of the cover. " +
+                       "(Right-click it in your inventory to read it.)",
+                       p =>
+                       {
+                           p.Give("Portrait Ledger");
+                           p.SetFlag("GotPortraitLedger");
+                       })
+                .OnlyWhen(p => p.HasFlag("SolvedPortraitGalleryPuzzle") && !p.HasFlag("GotPortraitLedger"))
+
+            // 14. Back down to the Entrance Hall (the doorway is behind you).
+            .ReturnTo("EntranceHall", "A tall doorway leads back toward the Entrance Hall. You go back down the stairs.");
+
+        // =========================================================
         // PUZZLE HELPERS (used by the scenes above)
         // =========================================================
+
+        // The Portrait Gallery (see PortraitGallery above).
+        private static class Gallery
+        {
+            public const int WitsNeeded = 12;
+
+            // The portraits were painted 1798, 1821, 1854 - hung centre, left, right.
+            private static readonly string[] Order = { "Centre", "Left", "Right" };
+
+            public static int MementoCount(Player p) =>
+                p.Inventory.Count(name => Items.GetItem(name).IsMemento);
+
+            public static string MirrorLook(Player p)
+            {
+                int mementos = MementoCount(p);
+                if (mementos >= 2)
+                {
+                    return "An enormous silver-backed mirror. The face is familiar. The life behind it is not.";
+                }
+                if (mementos == 1)
+                {
+                    return "An enormous silver-backed mirror. For a moment, you expect not to recognise the reflection. " +
+                           "You do. Somehow that is worse.";
+                }
+                return "An enormous silver-backed mirror. Your reflection looks back at you. Nothing unusual.";
+            }
+
+            public static string Studies(Player p) =>
+                "Eyes. Hands. Flowers. Fragments of buildings. Whoever assembled this collection had a generous definition of portrait." +
+                (p.HasFlag("MetVesper") ? " The painted fingers suddenly seem much less exaggerated." : "");
+
+            // ACT on the empty frame: Wits finds the mechanism at once; looking
+            // around (the frame, the three ages, the sketch) finds it too.
+            public static string TouchFrame(Player p)
+            {
+                p.SetFlag("ExaminedEmptyFrame");
+
+                if (p.HasFlag("DiscoveredPortraitFrameMechanism"))
+                {
+                    return "Three small brass portrait medallions are set into the lower edge of the frame. They press in, like buttons.";
+                }
+
+                if (p.Meets("Wits", WitsNeeded))
+                {
+                    p.SetFlag("DiscoveredPortraitFrameMechanism");
+                    return $"[Wits {WitsNeeded}] One corner sits slightly proud of the wall. " +
+                           "Three small brass portrait medallions are set into the lower edge of the frame.";
+                }
+
+                if (p.HasFlag("ExaminedThreeAges") && p.HasFlag("ExaminedGallerySketch"))
+                {
+                    p.SetFlag("DiscoveredPortraitFrameMechanism");
+                    return "Returning to the empty frame, you notice that its three lower ornaments match the frames around the age portraits.";
+                }
+
+                return "You run a finger along the inner edge. The frame is considerably deeper than it needs to be.";
+            }
+
+            private static int Step(Player p) =>
+                p.HasFlag("PortraitSequenceStep2") ? 2 : p.HasFlag("PortraitSequenceStep1") ? 1 : 0;
+
+            private static void ResetSequence(Player p)
+            {
+                p.ClearFlag("PortraitSequenceStep1");
+                p.ClearFlag("PortraitSequenceStep2");
+            }
+
+            // The three medallions, pressed in the order the portraits were painted.
+            public static string Press(Player p, string medallion)
+            {
+                int step = Step(p);
+
+                if (Order[step] != medallion)
+                {
+                    ResetSequence(p);
+                    int wrong = p.HasFlag("PortraitWrong2") ? 3 : p.HasFlag("PortraitWrong1") ? 2 : 1;
+                    if (wrong <= 2)
+                    {
+                        p.SetFlag($"PortraitWrong{wrong}");    // counts up to three
+                    }
+
+                    string text = "Click. ... The three controls return to their original positions.";
+                    if (wrong >= 3)
+                    {
+                        text += " The portraits are not three members of a family. They are one life, viewed at different times.";
+                    }
+                    return text;
+                }
+
+                if (step == 2)
+                {
+                    ResetSequence(p);
+                    p.SetFlag("SolvedPortraitGalleryPuzzle");
+                    return "Click. ... Something releases inside the wall. The empty frame swings slowly open.";
+                }
+
+                p.SetFlag($"PortraitSequenceStep{step + 1}");
+                return step == 0 ? "Click." : "Click. The second control remains depressed.";
+            }
+
+            // Met her, looked at her three portraits, read her pages in the ledger.
+            public static void CheckMirelleUnderstanding(Player p)
+            {
+                if (p.HasFlag("MetMirelle") && p.HasFlag("ExaminedThreeAges") && p.HasFlag("ReadMirelleLedgerEntries"))
+                {
+                    p.SetFlag("UnderstandsMirellePortraits");
+                }
+            }
+        }
 
         // The rose bushes: the thorns hurt once, then you know better.
         private static class Roses

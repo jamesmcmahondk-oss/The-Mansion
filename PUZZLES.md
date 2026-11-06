@@ -156,3 +156,16 @@ Don't explain these yet; each should pay off (or be noticed) later.
 | Graveyard | Multi-scene puzzle |
 | Rear yard | Shortcuts (doors opened later from inside) |
 | Kitchen Garden | The world loops; small unexplained details |
+
+## The Portrait Gallery (first floor, up the Entrance Hall stairs)
+
+* **The missing portrait.** The empty frame is a door. Wits 12 finds its three brass medallions at once; otherwise
+  LOOK at the frame, the Three Ages and the architectural sketch, then ACT on the frame. The medallions match the
+  age portraits (hung 1821 / 1798 / 1854, left to right - ACT on them shows the dates) and are pressed in the order
+  they were painted: **centre, left, right**. Wrong presses reset; after three, a hint. Reward: the **Portrait Ledger**.
+* **The ledger** (right-click to read): Mirélle rejected every portrait (1798, 1821, 1854); the gate guardians,
+  **Dúnán the Patient** and **Cairn the Steadfast** (sets `LearnedGargoyleName` - the front gargoyle then has
+  "I found your name."); the family portrait's water-damaged last name; Lady Vesper's hands; Phillip Jackson and bear.
+* **Hooks for later characters** (flags read by the gallery, not set anywhere yet): `MetMirelle`, `MetVesper`,
+  `MetDunan`, `AskedPipAboutBear`. `UnderstandsMirellePortraits` (met her + Three Ages + her ledger pages) is for
+  Mirélle's "I saw your portraits." - "Then you have seen three expensive failures."

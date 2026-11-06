@@ -341,6 +341,21 @@ Entry("Photograph", "The photograph", "…", p => p.HasFlag("FoundPhotograph"),
 
 ## Recipes
 
+### Text that changes with the story
+```csharp
+.Hotspot("Pencil Sketch", 788, 558, 45, 80)
+    .Describe(p => p.HasFlag("MetPip") ? "That's Pip." : "A quick pencil sketch.")   // LOOK; may set flags
+    .LookSetsFlag("ExaminedGallerySketch")                                         // LOOK sets a flag
+
+NewScene("PortraitGallery", "Assets/Backgrounds/Mansion/portrait_gallery.png", "")
+    .DescribeScene(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "...open..." : "...empty frame...")
+```
+
+### Something to read
+An item with `reads: "DialogueId"` (Data/Items.cs) opens that "conversation" on
+right-click in the inventory - pages as choices, e.g. the Portrait Ledger
+(`Dialogues.PortraitLedger`).
+
 ### Change the background after something happens
 Quazimodo's conversation sets the `FrontDoorOpen` flag, so the Front Door scene
 switches to the open-door picture – straight away, and every visit after:

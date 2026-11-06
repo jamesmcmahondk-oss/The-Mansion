@@ -15,6 +15,11 @@ namespace The_Mansion.Models
 
         public string Description { get; set; } = "";
 
+        // Optional: a description that changes with the story (else Description).
+        public Func<Player, string>? DescriptionWhen { get; set; }
+
+        public string GetDescription(Player player) => DescriptionWhen?.Invoke(player) ?? Description;
+
         public List<Hotspot> Hotspots { get; set; }
             = new();
 

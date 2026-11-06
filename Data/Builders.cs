@@ -95,6 +95,16 @@ namespace The_Mansion.Data
         }
 
         /// <summary>
+        /// The scene's description, when it changes with the story, e.g.
+        /// .DescribeScene(p => p.HasFlag("X") ? "The door stands open." : "The door is shut.")
+        /// </summary>
+        public SceneBuilder DescribeScene(Func<Player, string> description)
+        {
+            _scene.DescriptionWhen = description;
+            return this;
+        }
+
+        /// <summary>
         /// Makes the Return arrow (top left) go back to another scene.
         /// </summary>
         public SceneBuilder ReturnTo(string sceneName, string text = "")
@@ -143,6 +153,17 @@ namespace The_Mansion.Data
         public HotspotBuilder Describe(string text)
         {
             _hotspot.Description = text;
+            return this;
+        }
+
+        /// <summary>
+        /// LOOK text that changes with the story, e.g.
+        /// .Describe(p => p.HasFlag("MetPip") ? "That's Pip." : "A pencil sketch.")
+        /// It may also set flags (it runs each time the player LOOKs).
+        /// </summary>
+        public HotspotBuilder Describe(Func<Player, string> look)
+        {
+            _hotspot.LookResult = look;
             return this;
         }
 
