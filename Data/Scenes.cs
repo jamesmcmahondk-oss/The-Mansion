@@ -979,7 +979,7 @@ namespace The_Mansion.Data
         public static Scene FrontDoor { get; } =
       NewScene(
           "FrontDoor",
-          "Assets/Backgrounds/Mansion/Front_door.png",
+          "Assets/Backgrounds/Mansion/Front_door.png",    // fitted above the HUD (source: Sources/Front_door_full.png)
           "The heavy front door towers over you. "
           + "A grotesque metal knocker hangs at its centre.")
 
@@ -998,20 +998,20 @@ namespace The_Mansion.Data
           // closed picture by Tools/patch_variant.py, so nothing else moves)
           // =====================================================
 
-          .Hotspot("Front Doors", 585, 335, 380, 470)
+          .Hotspot("Front Doors", 618, 286, 312, 386)
               .Describe("Heavy carved wooden doors under a pointed arch, with a window of stone tracery above. They appear to be locked.")
               .OnTalk("The door does not answer. This is unsurprising.")
               .ActStarts("QuazimodoFrontDoor")
               .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-          .Hotspot("Open Front Doors", 585, 335, 380, 470)
+          .Hotspot("Open Front Doors", 618, 286, 312, 386)
               .Sound("door_creak")
               .Describe("The front doors stand open. Beyond them, candlelight, a chequered floor and a grand staircase.")
               .GoesTo("EntranceHall")
               .OnlyWhen(p => p.HasFlag("FrontDoorOpen"))
 
           // Listed after the doors so they win where they overlap.
-          .Hotspot("Door Knocker", 668, 515, 75, 100)
+          .Hotspot("Door Knocker", 686, 434, 62, 82)
               .Sound("door_knock")
               .Describe("A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold.")
               .OnAct("You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
@@ -1019,7 +1019,7 @@ namespace The_Mansion.Data
               .OnItem("Royal Gold Coin", "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said.")
               .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-          .Hotspot("Door Knocker", 800, 515, 75, 100)
+          .Hotspot("Door Knocker", 794, 434, 62, 82)
               .Sound("door_knock")
               .Describe("A grotesque iron knocker: a snarling face with a heavy ring through its jaws. It is freezing cold.")
               .OnAct("You rap the iron knocker against the door. The sound echoes somewhere deep inside the Mansion.")
@@ -1027,23 +1027,23 @@ namespace The_Mansion.Data
               .OnItem("Royal Gold Coin", "You rap the knocker with the King's coin. Nothing. Manners, not money, the gargoyle said.")
               .OnlyWhen(p => !p.HasFlag("FrontDoorOpen"))
 
-          .Hotspot("Window", 500, 192, 510, 115)
+          .Hotspot("Window", 548, 192, 418, 71)
               .Describe("Stone tracery above the doors, glowing with candlelight from inside.")
               .OnAct("Far out of reach.")
 
-          .Hotspot("Lantern", 350, 192, 110, 300)
+          .Hotspot("Lantern", 425, 192, 90, 223)
               .Describe("An iron lantern beside the door. Someone keeps these lit.")
               .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
 
-          .Hotspot("Lantern", 1090, 192, 110, 300)
+          .Hotspot("Lantern", 1032, 192, 90, 223)
               .Describe("An iron lantern beside the door. Someone keeps these lit.")
               .OnAct("The glass is hot. Whoever lit it wants it to stay lit.")
 
-          .Hotspot("Urn", 195, 500, 200, 260)
+          .Hotspot("Urn", 298, 421, 164, 213)
               .Describe("A stone urn overflowing with ivy and small red flowers, wet with rain.")
               .OnAct("You'd rather not dig through someone's flowerpot.")
 
-          .Hotspot("Urn", 1150, 500, 200, 260)
+          .Hotspot("Urn", 1082, 421, 164, 213)
               .Describe("A stone urn overflowing with ivy and small red flowers, wet with rain.")
               .OnAct("You'd rather not dig through someone's flowerpot.")
 
