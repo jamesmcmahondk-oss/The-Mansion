@@ -38,7 +38,7 @@ outside – someone keeps them lit.
 ```mermaid
 flowchart TD
     FD[Front Door] --> HALL[Entrance Hall]
-    HALL -->|left door| LIB([Library: Pip])
+    HALL -->|left door| GAL([Portrait Gallery])
     HALL -->|right door| DINE([Dining room]) --> KIT([Kitchen: Magnus & Severin])
     KIT -.draw the bolt.-> REAR[Rear yard]
     HALL -->|grand staircase| UP([Upstairs – blocked at first])
@@ -57,7 +57,7 @@ flowchart TD
 | **Family Portrait** | The family that lived here. The paint has flaked away from one face – the same place the photograph decayed. | Use the **Worn Photograph** on it: a memory (journal entry). *Who* is still deliberately undecided. |
 | **Coat Stand** | Crooked. Hautain's "coat-rack" joke pays off: TALK – *"Good evening, Quazimodo."* It is a coat stand. | |
 | **Sola** (on the stairs) | A black cat *(colour: suggestion)*, watching you. | TALK: she leaves. She is back on the stairs next time. |
-| **Left door / Right door** | Library / dining room. | Move on. |
+| **Left door / Right door** | Portrait Gallery (not locked) / dining room. | Move on. |
 | **Small door under the stairs** | Cellar. | Locked from below? Ties to the knock. *(later – no key)* |
 
 ### How Quazimodo greets you (suggestion – from how you got in)

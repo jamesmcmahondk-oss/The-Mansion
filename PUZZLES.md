@@ -157,7 +157,7 @@ Don't explain these yet; each should pay off (or be noticed) later.
 | Rear yard | Shortcuts (doors opened later from inside) |
 | Kitchen Garden | The world loops; small unexplained details |
 
-## The Portrait Gallery (first floor, up the Entrance Hall stairs)
+## The Portrait Gallery (through the Entrance Hall's left door)
 
 * **The missing portrait.** The empty frame is a door. Wits 12 finds its three brass medallions at once; otherwise
   LOOK at the frame, the Three Ages and the architectural sketch, then ACT on the frame. The medallions match the

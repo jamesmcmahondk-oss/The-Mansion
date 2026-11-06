@@ -1068,14 +1068,13 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/entrance_hall.png",
                      "The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.")
 
-            // Up to the first floor: the Portrait Gallery.
             .Hotspot("Staircase", 440, 360, 420, 450)
                 .Describe("A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark.")
-                .GoesTo("PortraitGallery")
+                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
 
             .Hotspot("Landing", 760, 290, 390, 220)
                 .Describe("The stairs turn at a landing and climb on along the right-hand wall, into shadow.")
-                .GoesTo("PortraitGallery")
+                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
 
             .Hotspot("Window", 560, 192, 195, 280)
                 .Describe("A tall window above the stairs, framed by heavy red curtains. Rain streams down the glass.")
@@ -1093,9 +1092,11 @@ namespace The_Mansion.Data
                 .OnItem("Worn Photograph",
                         "You hold the photograph up beside the portrait. Your eyes keep going to the same place in both: the face that isn't there.")
 
+            // To the Portrait Gallery - not locked.
             .Hotspot("Left Door", 135, 300, 100, 520)
                 .Describe("A tall panelled door on the left side of the hall.")
-                .OnAct("The handle turns, but the door doesn't open. Not yet.")    // not built yet: library
+                .GoesTo("PortraitGallery")
+                .Sound("door_creak")
 
             .Hotspot("Right Door", 1385, 240, 140, 592)
                 .Describe("A tall panelled door on the right side of the hall.")
@@ -1141,7 +1142,7 @@ namespace The_Mansion.Data
         // FIRST FLOOR
         // =========================================================
 
-        // The Portrait Gallery, up the stairs from the Entrance Hall.
+        // The Portrait Gallery, through the left door of the Entrance Hall.
         // A person can change without ceasing to be the same person.
         // THE MISSING PORTRAIT: the empty frame is a door. Its three brass
         // medallions match the three age portraits and are pressed in the
@@ -1207,14 +1208,9 @@ namespace The_Mansion.Data
             // 2. THREE AGES - Mirélle, painted decades apart (hung out of order:
             // 1821, 1798, 1854). Part of the empty-frame puzzle.
             .Hotspot("Three Ages", 790, 315, 200, 195)
-                .Describe(p =>
-                {
-                    p.SetFlag("ExaminedThreeAges");
-                    Gallery.CheckMirelleUnderstanding(p);
-                    return p.HasFlag("MetMirelle")
-                        ? "You know that face. All three of them. Mirélle was painted at three different ages. The expression changed less than the face."
-                        : "Three portraits hang in matching frames. The same eyes. The same posture. Different years. The brass nameplates have been removed.";
-                })
+                .Describe("Three portraits hang in matching frames.")
+                .LookSetsFlag("ExaminedThreeAges")
+                .CloseUp("ThreeAgesCloseup")
                 .OnAct("The three frames are fixed to the wall. Small engraved dates remain beneath them: " +
                        "1821 under the left, 1798 under the centre, 1854 under the right.",
                        p => p.SetFlag("ExaminedThreeAges"))
@@ -1239,11 +1235,8 @@ namespace The_Mansion.Data
 
             // Lady Vesper - never labelled.
             .Hotspot("Red Portrait", 608, 280, 80, 295)
-                .Describe(p => p.HasFlag("MetVesper")
-                    ? "An exquisitely dressed figure regards the room from a carved gilt frame. " +
-                      "The painter devoted an unusual amount of attention to the hands. Oh. That's why."
-                    : "An exquisitely dressed figure regards the room from a carved gilt frame. " +
-                      "The painter devoted an unusual amount of attention to the hands.")
+                .Describe("An exquisitely dressed figure regards the room from a carved gilt frame.")
+                .CloseUp("VesperPortraitCloseup")
                 .OnAct(p => p.HasFlag("MetVesper")
                     ? "You keep your own hands well away from the frame."
                     : "You're not certain why that bothers you.")
@@ -1364,7 +1357,91 @@ namespace The_Mansion.Data
                 .OnlyWhen(p => p.HasFlag("SolvedPortraitGalleryPuzzle") && !p.HasFlag("GotPortraitLedger"))
 
             // 14. Back down to the Entrance Hall (the doorway is behind you).
-            .ReturnTo("EntranceHall", "A tall doorway leads back toward the Entrance Hall. You go back down the stairs.");
+            .ReturnTo("EntranceHall", "A tall doorway leads back toward the Entrance Hall.");
+
+        // The three portraits of Mirélle, up close (LOOK on Three Ages).
+        // Hung out of order: 1821, 1798, 1854 - the puzzle's clue.
+        public static Scene ThreeAgesCloseup { get; } =
+            NewScene("ThreeAgesCloseup",
+                     "Assets/Backgrounds/Mansion/three_ages_closeup.png",
+                     "")
+            .DescribeScene(p =>
+            {
+                Gallery.CheckMirelleUnderstanding(p);
+                return p.HasFlag("MetMirelle")
+                    ? "You know that face. All three of them. Mirélle was painted at three different ages. The expression changed less than the face."
+                    : "Three portraits hang in matching frames. The same eyes. The same posture. Different years. The brass nameplates have been removed.";
+            })
+
+            .Hotspot("Left Portrait", 189, 201, 359, 540)
+                .Describe("The woman in middle age. The first grey in the gold, faint lines at the eyes - and the same guarded look as the others.")
+                .OnAct("The frame is fixed to the wall.")
+                .OnTalk(p => p.HasFlag("MetMirelle") ? "You decide not to tell this one she looks well. Not out loud." : "She doesn't answer.")
+
+            .Hotspot("Centre Portrait", 581, 201, 361, 540)
+                .Describe("The same woman, young - the youngest of the three. Golden hair, no grey at all, the chin lifted.")
+                .OnAct("The frame is fixed to the wall.")
+                .OnTalk("She doesn't answer. She looks as if she never would have.")
+
+            .Hotspot("Right Portrait", 974, 201, 361, 540)
+                .Describe("The same woman, old. Silver hair, deep lines, and exactly the same proud chin. Nothing about her has been diminished. Only changed.")
+                .OnAct("The frame is fixed to the wall.")
+                .OnTalk("She doesn't answer. Her expression suggests she has heard better questions.")
+
+            .Hotspot("Left Date", 289, 773, 159, 41)
+                .Describe("A small brass plate under the left portrait: 1821. Empty screw holes either side, where a nameplate used to be.")
+                .OnAct("The plate is screwed firmly to the wall.")
+            .Hotspot("Centre Date", 684, 773, 157, 41)
+                .Describe("A small brass plate under the centre portrait: 1798. Empty screw holes either side, where a nameplate used to be.")
+                .OnAct("The plate is screwed firmly to the wall.")
+            .Hotspot("Right Date", 1077, 773, 156, 41)
+                .Describe("A small brass plate under the right portrait: 1854. Empty screw holes either side, where a nameplate used to be.")
+                .OnAct("The plate is screwed firmly to the wall.")
+
+            .Hotspot("Candles", 1360, 237, 110, 345)
+                .Describe("Candles burn in a brass sconce. Someone keeps these lit.")
+                .OnAct("The brass is hot.")
+
+            .ReturnTo("PortraitGallery", "You step back from the three portraits.");
+
+        // Lady Vesper's portrait, up close (LOOK on the Red Portrait). Never labelled.
+        public static Scene VesperPortraitCloseup { get; } =
+            NewScene("VesperPortraitCloseup",
+                     "Assets/Backgrounds/Mansion/vesper_portrait_closeup.png",
+                     "")
+            .DescribeScene(p => p.HasFlag("MetVesper")
+                ? "An exquisitely dressed figure regards the room from a carved gilt frame. The painter devoted an unusual amount of attention to the hands. Oh. That's why."
+                : "An exquisitely dressed figure regards the room from a carved gilt frame. The painter devoted an unusual amount of attention to the hands.")
+
+            .Hotspot("Portrait", 547, 199, 444, 598)
+                .Describe("A seated woman in red and black, rubies at her throat, looking down at you with complete composure. She seems to have already decided what you're worth.")
+                .OnAct(p => p.HasFlag("MetVesper")
+                    ? "You keep your own hands well away from the frame."
+                    : "You're not certain why that bothers you.")
+                .OnTalk("You say good evening to the portrait. It feels like the polite thing to do. It also feels like a mistake.")
+
+            // Listed after the portrait so they win.
+            .Hotspot("Face", 686, 302, 128, 116)
+                .Describe(p => p.HasFlag("MetVesper")
+                    ? "Her lips are closed. You now know exactly why the painter preferred them that way."
+                    : "Dark red lips, closed. Something about the line of her mouth suggests a smile would be a mistake. For someone.")
+                .OnAct("You'd rather not touch her face. Even the painted one.")
+
+            .Hotspot("Hands", 647, 585, 167, 135)
+                .Describe("Her hands rest in her lap: long, pale, perfect fingers and a ruby ring. They are the most carefully painted thing in the room. Possibly in the house.")
+                .OnAct(p => p.HasFlag("MetVesper")
+                    ? "You put your own hands in your pockets."
+                    : "You're not certain why that bothers you.")
+
+            .Hotspot("Nameplate", 706, 805, 107, 27)
+                .Describe("An empty brass bracket under the frame. Whoever she is, someone decided she needed no introduction.")
+                .OnAct("Two little screws, and nothing between them.")
+
+            .Hotspot("Candles", 358, 302, 135, 276)
+                .Describe("Candles burn in a brass sconce beside the portrait. The light makes her skin look paler, not warmer.")
+                .OnAct("The brass is hot.")
+
+            .ReturnTo("PortraitGallery", "You step back from the portrait. Her eyes do not follow you. You check.");
 
         // THE MISSING PORTRAIT, up close: the three brass medallions on the
         // empty frame, each engraved with the same woman's profile at a
@@ -1391,21 +1468,21 @@ namespace The_Mansion.Data
                 .OnAct("The brass is hot.")
 
             .Hotspot("Left Medallion", 251, 457, 252, 252)
-                .Describe(p => "A woman's profile, no longer young: wavy hair, faint lines at the eyes, the mouth set firm." +
+                .Describe(p => "A woman's profile under a wide-brimmed hat crowned with roses and a little skull: no longer young, faint lines at the eyes, the mouth set firm." +
                                (p.HasFlag("MetMirelle") ? " Mirélle, somewhere in the middle of her life." : ""))
                 .OnAct(p => Gallery.Press(p, "Left"))
                 .Sound("puzzle_click")
                 .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
 
             .Hotspot("Centre Medallion", 644, 452, 252, 252)
-                .Describe(p => "The same woman, young. Dark hair loose over her shoulders, the chin lifted." +
+                .Describe(p => "The same woman under the same hat, young. Long wavy hair loose over her shoulders, the chin lifted." +
                                (p.HasFlag("MetMirelle") ? " Mirélle, before anyone had painted her." : ""))
                 .OnAct(p => Gallery.Press(p, "Centre"))
                 .Sound("puzzle_click")
                 .ThenGoesTo(p => p.HasFlag("SolvedPortraitGalleryPuzzle") ? "PortraitGallery" : "")
 
             .Hotspot("Right Medallion", 1039, 454, 252, 252)
-                .Describe(p => "The same woman, old. Grey hair pinned up, deep lines - and exactly the same proud chin." +
+                .Describe(p => "The same woman under the same hat, old. Silver hair, deep lines - and exactly the same proud chin." +
                                (p.HasFlag("MetMirelle") ? " Still, unmistakably, Mirélle." : ""))
                 .OnAct(p => Gallery.Press(p, "Right"))
                 .Sound("puzzle_click")
