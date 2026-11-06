@@ -2227,7 +2227,7 @@ namespace The_Mansion.Data
                     + "You stand before Hautain the First, Keeper of the Deep Basin, "
                     + "Lord of the Seven Lily Pads, Defender of the Western Drain, "
                     + "and Sovereign of all waters contained within this fountain!\"",
-                    character: "Assets/Characters/Hautain_Attack.png")
+                    character: "Assets/Characters/Hautain_Point.png")
 
                     .Choice(
                         "King? You're a frog on a lily pad.",
@@ -3497,7 +3497,8 @@ namespace The_Mansion.Data
                     + "but his crown remains perfectly straight. "
                     + "\"Congratulations. You have defeated a frog. "
                     + "I hope history gives you the statue you deserve.\"",
-                    portrait: "Assets/Characters/Portraits/Hautain_Beaten_portrait_framed.png")
+                    portrait: "Assets/Characters/Portraits/Hautain_Beaten_portrait_framed.png",
+                    character: "Assets/Characters/Hautain_Beaten.png")
 
                     .Choice(
                         "Are you all right?",
