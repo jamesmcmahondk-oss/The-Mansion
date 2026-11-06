@@ -58,8 +58,9 @@ namespace The_Mansion.Data
 
         public static Item GoldCoins { get; } =
             NewItem("Gold Coins",
-                    "A dripping handful of gold coins from the fountain. They belong to the Crown, apparently.",
+                    "A dripping handful of gold coins from the fountain. They belong to the Crown, apparently. (Right-click to look at it.)",
                     "Assets/Items/gold_coins.png",
+                    picture: "Assets/Items/Sources/gold_coins.png",
                     misuse: "The {target} shows no interest in money.");
 
         public static Item RoyalGoldCoin { get; } =
@@ -146,8 +147,9 @@ namespace The_Mansion.Data
         // Found in the tool shed (rear yard). Cuts a rose safely.
         public static Item GardenShears { get; } =
             NewItem("Garden Shears",
-                    "Rusty garden shears. They still cut - mostly.",
+                    "Rusty garden shears. They still cut - mostly. (Right-click to look at it.)",
                     "Assets/Items/garden_shears.png",
+                    picture: "Assets/Items/Sources/garden_shears.png",
                     misuse: "There's nothing on the {target} that needs cutting.");
 
         // From the tool shed wall (rear yard). Use still to be decided.
@@ -203,8 +205,9 @@ namespace The_Mansion.Data
 
         public static Item Fork { get; } =
             NewItem("Fork",
-                    "A silver fork. Technically a weapon. (Taking it makes it your weapon: +1 in fights.)",
+                    "A silver fork. Technically a weapon. (Taking it makes it your weapon: +1 in fights.) (Right-click to look at it.)",
                     "Assets/Items/fork.png",
+                    picture: "Assets/Items/Sources/fork.png",
                     weaponBonus: 1,
                     misuse: "You prod the {target} with the fork. Nothing comes of it.");
 

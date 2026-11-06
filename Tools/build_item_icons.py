@@ -15,7 +15,7 @@ SIZE = 128
 OUT_DIR = "Assets/Items"
 
 ICONS = {
-    "gold_coins.png":        ("Assets/Backgrounds/Mansion/fountain_closeup.png", (600, 640, 880, 840)),
+    "gold_coins.png":        ("Assets/Items/Sources/gold_coins.png",          (140, 110, 1420, 860)),
     "royal_gold_coin.png":   ("Assets/Items/Sources/royal_gold_coin.png",     (350, 165, 1180, 950)),
     "gargoyle_blessing.png": ("Assets/Backgrounds/Mansion/FrontGargoyle.png",    (800, 260, 1140, 600)),
 
@@ -25,7 +25,7 @@ ICONS = {
     "ball_of_string.png":    ("Assets/UI/trunk.png", (630, 505, 790, 670)),
     "party_hat.png":         ("Assets/UI/trunk.png", (845, 325, 1095, 530)),
     "loose_change.png":      ("Assets/Items/Sources/loose_change.png",        (180, 160, 1320, 830)),
-    "fork.png":              ("Assets/UI/trunk.png", (1050, 505, 1260, 745)),
+    "fork.png":              ("Assets/Items/Sources/fork.png",                (280, 20, 1190, 980)),
     # Item pictures (whole picture, squared to its centre)
     "worn_photograph.png":   ("Assets/Items/Sources/worn_photograph.png",     (230, 0, 1306, 1024)),
     "red_rose.png":          ("Assets/Items/Sources/red_rose.png",            (340, 60, 1190, 970)),
@@ -37,7 +37,7 @@ ICONS = {
     "portrait_ledger.png":   ("Assets/Items/Sources/portrait_ledger.png",     (495, 120, 1365, 900)),
 
     # Outside the Mansion
-    "garden_shears.png":     ("Assets/Backgrounds/Mansion/tool_shed_closeup.png", (480, 490, 755, 595)),
+    "garden_shears.png":     ("Assets/Items/Sources/garden_shears.png",       (90, 280, 1440, 730)),
     "charcoal.png":          ("Assets/Items/Sources/charcoal.png",            (200, 250, 1360, 820)),
     "rope.png":              ("Assets/Items/Sources/rope.png",                (255, 80, 1255, 900)),
     # Tall and thin: cut out exactly, laid diagonally (third value = degrees,
