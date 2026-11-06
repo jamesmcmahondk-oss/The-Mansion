@@ -1068,14 +1068,13 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/entrance_hall.png",
                      "The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.")
 
-            // Up to the first floor: the Portrait Gallery.
             .Hotspot("Staircase", 440, 360, 420, 450)
                 .Describe("A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark.")
-                .GoesTo("PortraitGallery")
+                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
 
             .Hotspot("Landing", 760, 290, 390, 220)
                 .Describe("The stairs turn at a landing and climb on along the right-hand wall, into shadow.")
-                .GoesTo("PortraitGallery")
+                .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
 
             .Hotspot("Window", 560, 192, 195, 280)
                 .Describe("A tall window above the stairs, framed by heavy red curtains. Rain streams down the glass.")
@@ -1093,9 +1092,11 @@ namespace The_Mansion.Data
                 .OnItem("Worn Photograph",
                         "You hold the photograph up beside the portrait. Your eyes keep going to the same place in both: the face that isn't there.")
 
+            // To the Portrait Gallery - not locked.
             .Hotspot("Left Door", 135, 300, 100, 520)
                 .Describe("A tall panelled door on the left side of the hall.")
-                .OnAct("The handle turns, but the door doesn't open. Not yet.")    // not built yet: library
+                .GoesTo("PortraitGallery")
+                .Sound("door_creak")
 
             .Hotspot("Right Door", 1385, 240, 140, 592)
                 .Describe("A tall panelled door on the right side of the hall.")
@@ -1141,7 +1142,7 @@ namespace The_Mansion.Data
         // FIRST FLOOR
         // =========================================================
 
-        // The Portrait Gallery, up the stairs from the Entrance Hall.
+        // The Portrait Gallery, through the left door of the Entrance Hall.
         // A person can change without ceasing to be the same person.
         // THE MISSING PORTRAIT: the empty frame is a door. Its three brass
         // medallions match the three age portraits and are pressed in the
@@ -1356,7 +1357,7 @@ namespace The_Mansion.Data
                 .OnlyWhen(p => p.HasFlag("SolvedPortraitGalleryPuzzle") && !p.HasFlag("GotPortraitLedger"))
 
             // 14. Back down to the Entrance Hall (the doorway is behind you).
-            .ReturnTo("EntranceHall", "A tall doorway leads back toward the Entrance Hall. You go back down the stairs.");
+            .ReturnTo("EntranceHall", "A tall doorway leads back toward the Entrance Hall.");
 
         // The three portraits of Mirélle, up close (LOOK on Three Ages).
         // Hung out of order: 1821, 1798, 1854 - the puzzle's clue.
