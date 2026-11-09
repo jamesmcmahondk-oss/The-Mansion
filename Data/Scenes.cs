@@ -1457,9 +1457,9 @@ namespace The_Mansion.Data
 
             // Mirélle by the fire. Once you carry the ledger, one hand is
             // behind her back (where the token is). Hidden while she talks.
-            .Sprite("Assets/Characters/Mirelle_Fire.png", 622, 332, 296,
+            .Sprite("Assets/Characters/Mirelle_Fire.png", 622, 338, 296,
                     p => !(p.HasFlag("GotPortraitLedger") && !p.HasFlag("GotBrassToken")), hideInDialogue: true)
-            .Sprite("Assets/Characters/Mirelle_HandBehind.png", 622, 332, 296,
+            .Sprite("Assets/Characters/Mirelle_HandBehind.png", 622, 338, 296,
                     p => p.HasFlag("GotPortraitLedger") && !p.HasFlag("GotBrassToken"), hideInDialogue: true)
             .Sprite("Assets/Backgrounds/Mansion/mirelle_tea_table.png", 560, 470, 240, inFront: true)
 
@@ -1508,7 +1508,7 @@ namespace The_Mansion.Data
                 .OnAct("You consider sitting down. Nobody has invited you to. You remain standing.")
 
             // Listed after the fireplace so she wins there.
-            .Hotspot("Mirélle", 640, 335, 165, 290)
+            .Hotspot("Mirélle", 640, 341, 165, 290)
                 .Describe(p => p.HasFlag("MetMirelle")
                     ? "Mirélle stands beside the mantel, exactly where she always stands, beneath the empty space on the wall."
                     : "A woman in layers of plum lace and a wide hat crowned with roses and a little skull stands by the fire. She knows you're here.")
