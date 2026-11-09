@@ -159,6 +159,8 @@ Don't explain these yet; each should pay off (or be noticed) later.
 
 ## The Portrait Gallery (through the Entrance Hall's left door)
 
+*What happens next - the ledger, Mirélle, the Brass House Token and the East Corridor - is in MIRELLE.md.*
+
 * **The missing portrait.** The empty frame is a door. Wits 12 finds its three brass medallions at once; otherwise
   LOOK at the frame, the Three Ages and the architectural sketch, then ACT on the frame. The medallions match the
   age portraits (hung 1821 / 1798 / 1854, left to right - ACT on them shows the dates) and are pressed in the order

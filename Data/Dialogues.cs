@@ -5277,6 +5277,311 @@ namespace The_Mansion.Data
                 .Choice("Sorry.", "menu");
 
         // =========================================================
+        // MIRÉLLE (her parlour, beyond the Portrait Gallery)
+        // The ledger -> token scene is MIRELLE.md. Never explain her.
+        // =========================================================
+
+        public static Dialogue Mirelle { get; } =
+            NewDialogue("Mirelle", "Mirélle")
+                .MetFlag("MetMirelle")
+                .Portrait("Assets/Characters/Portraits/Mirelle_portrait_framed.png")
+                .Character("Assets/Characters/Mirelle_Facing.png")
+                .StandAt(607, 268, 300)
+                .DimScene(false)
+                .StartAt(p => p.HasFlag("MetMirelle") ? "again" : "start")
+
+                // Offering the ledger with ITEM starts the same scene.
+                .OnItem("Portrait Ledger", "ledger1", onlyIf: p => !p.HasFlag("GotBrassToken"))
+                .OnItem("Portrait Ledger", "ledgerAgain")
+                .OnItem("Red Rose", "rose")
+                .OnItem("Cracked Hand Mirror", "handMirror")
+                .OnOtherItems("Mirélle regards the {item}. \"No.\"")
+
+                // ---- First meeting: she does not turn round ----
+                .Line(
+                    "start",
+                    "Mirélle stands by the fire with her back half turned. She does not look round. \"You took your time.\"",
+                    character: "Assets/Characters/Mirelle_Fire.png")
+                    .Choice(
+                        "Were you expecting me?",
+                        "expecting")
+                .Line(
+                    "expecting",
+                    "She turns, at last. \"No.\"",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .Choice(
+                        "Who are you?",
+                        "who")
+                    .Choice(
+                        "I'll leave you to it.",
+                        "bye")
+                .Line(
+                    "who",
+                    "\"Mirélle.\" She says it the way other people close a door. \"This is my parlour. You are standing on the rug.\"")
+                    .Choice(
+                        "Sorry.",
+                        "menu")
+                // ---- Menu (at most 5 shown) ----
+                .Line(
+                    "menu",
+                    "\"Well?\"",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .Choice(
+                        "I found the Portrait Ledger.",
+                        "ledger1",
+                        onlyIf: p => p.Has("Portrait Ledger") && !p.HasFlag("GotBrassToken"))
+                    .Choice(
+                        "Expecting company?",
+                        "cups")
+                    .Choice(
+                        "What used to hang above the fireplace?",
+                        "hooks")
+                    .Choice(
+                        "I saw your portraits.",
+                        "sawPortraits",
+                        onlyIf: p => p.HasFlag("UnderstandsMirellePortraits"))
+                    .Choice(
+                        "Do you know the three portraits in the gallery?",
+                        "threeAges",
+                        onlyIf: p => p.HasFlag("ExaminedThreeAges") && !p.HasFlag("UnderstandsMirellePortraits"))
+                    .Choice(
+                        "Goodbye.",
+                        "bye")
+                .Line(
+                    "again",
+                    "\"You again.\" Mirélle does not turn from the fire. Then, eventually, she does.",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .SameChoicesAs("menu")
+
+                .Line(
+                    "cups",
+                    "Mirélle glances at the second cup and away again. \"Clearly not.\"",
+                    character: "Assets/Characters/Mirelle_Tea.png")
+                    .Choice(
+                        "Of course.",
+                        "menu")
+                .Line(
+                    "hooks",
+                    "She does not look up at the hooks. \"Nothing worth keeping.\"")
+                    .Choice(
+                        "It must have been large.",
+                        "hooksLarge")
+                    .Choice(
+                        "I see.",
+                        "menu")
+                .Line(
+                    "hooksLarge",
+                    "\"Most mistakes are.\"")
+                    .Choice(
+                        "...",
+                        "menu")
+                .Line(
+                    "threeAges",
+                    "\"Yes.\"")
+                    .Choice(
+                        "Same person.",
+                        "allegedly")
+                .Line(
+                    "allegedly",
+                    "\"Allegedly.\"")
+                    .Choice(
+                        "...",
+                        "menu")
+                .Line(
+                    "sawPortraits",
+                    "\"Then you have seen three expensive failures.\"")
+                    .Choice(
+                        "Why did they fail?",
+                        "sawWhy")
+                    .Choice(
+                        "I see.",
+                        "menu")
+                .Line(
+                    "sawWhy",
+                    "\"The painters lacked delicacy.\" She turns a ring on her finger. \"And the subject lacked patience. With them.\"")
+                    .Choice(
+                        "Only with them?",
+                        "menu")
+                .Line(
+                    "bye",
+                    "\"Close the door behind you. The draught ages the roses.\"",
+                    character: "Assets/Characters/Mirelle_Fire.png")
+                    .Choice(
+                        "(Leave.)")
+
+                // ---- The ledger (MIRELLE.md) ----
+                .Line(
+                    "ledger1",
+                    "Mirélle pauses. Exactly one breath too long. \"Did you.\"",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .Choice(
+                        "I read it.",
+                        "ledger2")
+                .Line(
+                    "ledger2",
+                    "\"Naturally. People who find ledgers always read them. It is the only thing ledgers are good for.\"")
+                    .Choice(
+                        "Your name is in it.",
+                        "ledger3")
+                .Line(
+                    "ledger3",
+                    "\"Allegedly.\"")
+                    .Choice(
+                        "Several times.",
+                        "ledger4")
+                .Line(
+                    "ledger4",
+                    "Mirélle holds out a gloved hand. \"Give it to me. It is mine more than it is anyone else's.\"")
+                    .Choice(
+                        "Here.",
+                        "give1",
+                        effect: p => GiveMirelleLedger(p))
+                    .Choice(
+                        "No. I'm keeping it.",
+                        "keep1")
+                    .Choice(
+                        "Why did you reject all the portraits?",
+                        "why1")
+                .Line(
+                    "give1",
+                    "Mirélle closes her fingers around the ledger but doesn't open it. She doesn't need to. \"Thank you.\" A pause. \"That was... unexpectedly decent.\"")
+                    .Choice(
+                        "(Wait.)",
+                        "give2")
+                .Line(
+                    "give2",
+                    "She produces a small, tarnished brass disc and holds it between two fingers. \"Take this.\"",
+                    character: "Assets/Characters/Mirelle_Token.png")
+                    .Choice(
+                        "What is it?",
+                        "give3",
+                        effect: p => GiveBrassToken(p))
+                .Line(
+                    "give3",
+                    "\"Something I no longer require.\"",
+                    character: "Assets/Characters/Mirelle_Token.png")
+                    .Choice(
+                        "That's not an answer.",
+                        "give4")
+                .Line(
+                    "give4",
+                    "\"Door on the right of the entrance hall.\"")
+                    .Choice(
+                        "What's through it?",
+                        "give5")
+                .Line(
+                    "give5",
+                    "\"Somewhere else.\" (Brass House Token received.)",
+                    character: "Assets/Characters/Mirelle_Fire.png")
+                    .Choice(
+                        "(Leave her to the fire.)")
+                .Line(
+                    "keep1",
+                    "Her extended hand remains perfectly still for a moment. Then she withdraws it. \"Of course you are.\"",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .Choice(
+                        "There might be something important in it.",
+                        "keep2")
+                .Line(
+                    "keep2",
+                    "\"Then keep it. Read it in bed. Underline the dates.\"")
+                    .Choice(
+                        "(Wait.)",
+                        "keep3",
+                        effect: p => GiveBrassToken(p))
+                .Line(
+                    "keep3",
+                    "She drops a small brass disc into your palm as though disposing of something unpleasant. \"Here.\"",
+                    character: "Assets/Characters/Mirelle_Token.png")
+                    .Choice(
+                        "What's this?",
+                        "keep4")
+                .Line(
+                    "keep4",
+                    "\"The door on the right of the entrance hall.\"",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .Choice(
+                        "You're giving me this anyway?",
+                        "keep5")
+                .Line(
+                    "keep5",
+                    "\"Yes.\"")
+                    .Choice(
+                        "Why?",
+                        "keep6")
+                .Line(
+                    "keep6",
+                    "\"Because apparently your curiosity requires more room.\"")
+                    .Choice(
+                        "What's through there?",
+                        "keep7")
+                .Line(
+                    "keep7",
+                    "\"Go and be curious somewhere I am not.\" (Brass House Token received.)",
+                    character: "Assets/Characters/Mirelle_Fire.png")
+                    .Choice(
+                        "(Leave.)")
+                .Line(
+                    "why1",
+                    "\"The painters lacked delicacy.\"",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .Choice(
+                        "All of them?",
+                        "why2")
+                .Line(
+                    "why2",
+                    "\"Remarkable, isn't it?\"")
+                    .Choice(
+                        "The ledger covers fifty-six years.",
+                        "why3")
+                .Line(
+                    "why3",
+                    "Her gaze shifts away. \"And yet every one of them made precisely the same mistake.\"",
+                    character: "Assets/Characters/Mirelle_Fire.png")
+                    .Choice(
+                        "What mistake?",
+                        "why4")
+                .Line(
+                    "why4",
+                    "A pause. \"They painted a stranger and put my name beneath her.\" She looks back at the ledger. \"I became tired of correcting them.\" The gloved hand is still held out.",
+                    character: "Assets/Characters/Mirelle_Facing.png")
+                    .SameChoicesAs("ledger4")
+                .Line(
+                    "ledgerAgain",
+                    "\"You have shown me that already. Once was sufficient.\"")
+                    .Choice(
+                        "...",
+                        "menu")
+                .Line(
+                    "rose",
+                    "Mirélle looks at the rose, then at the ones on her table. \"Mine are fresher.\" They are.")
+                    .Choice(
+                        "...",
+                        "menu")
+                .Line(
+                    "handMirror",
+                    "Mirélle's eyes go to the crack, and stay there a moment too long. \"Put that away.\"")
+                    .Choice(
+                        "(Put it away.)",
+                        "menu");
+
+        // Handing the ledger back costs the player nothing: what it said is
+        // in the journal ("Portrait Records") and the gargoyle's name stays known.
+        private static void GiveMirelleLedger(Player p)
+        {
+            p.SetFlag("GaveMirelleLedger");
+            p.SetFlag("ReadMirelleLedgerEntries");
+            p.SetFlag("LearnedGargoyleName");
+            p.Take("Portrait Ledger");
+        }
+
+        private static void GiveBrassToken(Player p)
+        {
+            p.Give("Brass House Token");
+            p.SetFlag("GotBrassToken");
+        }
+
+        // =========================================================
         // THE PORTRAIT LEDGER
         // Read by right-clicking the Portrait Ledger in the inventory
         // (from the hidden compartment in the Portrait Gallery). Pages are

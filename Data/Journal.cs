@@ -118,6 +118,13 @@ namespace The_Mansion.Data
                   p => p.HasFlag("ShowedEbriaMirror"),
                   picture: Portraits + "Ebria_portrait_framed.png");
 
+        public static JournalEntry Mirelle { get; } =
+            Entry("Mirelle", "Mirélle",
+                  "A woman in plum lace and a hat crowned with roses keeps a small, immaculate parlour beyond the Portrait Gallery. " +
+                  "\"You took your time,\" she said. She was not expecting me. There are no portraits in her parlour, and no clocks.",
+                  p => p.HasFlag("MetMirelle"),
+                  picture: Portraits + "Mirelle_portrait_framed.png");
+
         // =========================================================
         // CLUES AND PLACES
         // =========================================================
@@ -258,6 +265,31 @@ namespace The_Mansion.Data
                       }
                       return text;
                   });
+
+        // Written when the ledger goes back to Mirélle, so nothing is lost.
+        public static JournalEntry PortraitRecords { get; } =
+            Entry("PortraitRecords", "Portrait Records",
+                  "Copied from the Portrait Ledger before I gave it back to Mirélle:\n\n" +
+                  "1798. Portrait of Mirélle. Rejected by subject.\n1821. Portrait of Mirélle. Rejected by subject.\n" +
+                  "1854. Portrait of Mirélle. Rejected by subject. Replacement requested. Reason not supplied.\n\n" +
+                  "Gate Guardians. Commissioned as a pair. Dúnán the Patient. Cairn the Steadfast.",
+                  p => p.HasFlag("GaveMirelleLedger"),
+                  category: Puzzles, where: "The Portrait Ledger, now Mirélle's again");
+
+        public static JournalEntry BrassToken { get; } =
+            Entry("BrassToken", "The brass token",
+                  "",
+                  p => p.HasFlag("GotBrassToken"),
+                  category: Puzzles, picture: "Assets/Items/Sources/brass_house_token.png",
+                  where: "Mirélle's Parlour",
+                  textWhen: p =>
+                      (p.HasFlag("GaveMirelleLedger")
+                          ? "I gave Mirélle the Portrait Ledger. She gave me a small brass token in return - \"something I no longer require.\" "
+                          : "I kept the Portrait Ledger. Mirélle gave me a small brass token anyway, to send my curiosity somewhere she isn't. ") +
+                      "It is engraved with a sunburst, and it is for the door on the right of the entrance hall." +
+                      (p.HasFlag("RightDoorUnlocked")
+                          ? "\n\nIt fitted the slot in the door's brass plate exactly. The door is unlocked."
+                          : ""));
 
         public static JournalEntry Photograph { get; } =
             Entry("Photograph", "The photograph",

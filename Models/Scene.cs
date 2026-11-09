@@ -61,6 +61,10 @@ namespace The_Mansion.Models
 
         // Optional: only shown while this is true.
         public Func<Player, bool>? VisibleWhen { get; set; }
+
+        // Hidden while a conversation shows its own picture of the
+        // character (e.g. Mirélle by the fire, replaced by her talking poses).
+        public bool HideInDialogue { get; set; }
     }
 
     public class SceneBackground
