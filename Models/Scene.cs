@@ -65,6 +65,10 @@ namespace The_Mansion.Models
         // Hidden while a conversation shows its own picture of the
         // character (e.g. Mirélle by the fire, replaced by her talking poses).
         public bool HideInDialogue { get; set; }
+
+        // Drawn in front of characters - the scene's own sprites and the
+        // conversation's character picture (e.g. a table she stands behind).
+        public bool InFront { get; set; }
     }
 
     public class SceneBackground

@@ -540,6 +540,14 @@
                        IsHitTestVisible="False"
                        Panel.ZIndex="21"/>
 
+                <!-- Scene pictures in front of characters (.Sprite(..., inFront: true)),
+                     e.g. a table a character stands behind - also while talking. -->
+                <Canvas x:Name="SceneFrontCanvas"
+                        Height="800"
+                        VerticalAlignment="Top"
+                        IsHitTestVisible="False"
+                        Panel.ZIndex="21"/>
+
             </Grid>
 
 

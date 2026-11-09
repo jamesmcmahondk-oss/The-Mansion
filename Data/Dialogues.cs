@@ -5286,7 +5286,7 @@ namespace The_Mansion.Data
                 .MetFlag("MetMirelle")
                 .Portrait("Assets/Characters/Portraits/Mirelle_portrait_framed.png")
                 .Character("Assets/Characters/Mirelle_Facing.png")
-                .StandAt(607, 268, 300)
+                .StandAt(622, 338, 296)
                 .DimScene(false)
                 .StartAt(p => p.HasFlag("MetMirelle") ? "again" : "start")
 

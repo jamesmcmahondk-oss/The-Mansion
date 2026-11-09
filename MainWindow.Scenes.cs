@@ -126,6 +126,7 @@ namespace The_Mansion
              * and debug selection rectangle.
              */
             SceneCanvas.Children.Clear();
+            SceneFrontCanvas.Children.Clear();
             _hotspotsRevealed = false;
 
             // The hotspot under the mouse may be gone now (e.g. an item was
@@ -152,7 +153,7 @@ namespace The_Mansion
                 Image? spriteImage = CreateSpriteImage(sprite);
                 if (spriteImage != null)
                 {
-                    SceneCanvas.Children.Add(spriteImage);
+                    (sprite.InFront ? SceneFrontCanvas : SceneCanvas).Children.Add(spriteImage);
                 }
             }
 
