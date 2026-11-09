@@ -1449,7 +1449,7 @@ namespace The_Mansion.Data
         // =========================================================
         public static Scene MirelleParlour { get; } =
             NewScene("MirelleParlour",
-                     "Assets/Backgrounds/Mansion/mirelle_parlour.png",    // fitted above the HUD (source: Sources/mirelle_parlour_full.png)
+                     "Assets/Backgrounds/Mansion/mirelle_parlour.png",    // composed for the visible band - used full-size
                      "")
             .DescribeScene(p => p.HasFlag("MetMirelle")
                 ? "Mirélle's parlour. The fire burns, the roses are fresh, and nothing has moved an inch since you were last here."
@@ -1457,32 +1457,33 @@ namespace The_Mansion.Data
 
             // Mirélle by the fire. Once you carry the ledger, one hand is
             // behind her back (where the token is). Hidden while she talks.
-            .Sprite("Assets/Characters/Mirelle_Fire.png", 607, 268, 300,
+            .Sprite("Assets/Characters/Mirelle_Fire.png", 582, 332, 296,
                     p => !(p.HasFlag("GotPortraitLedger") && !p.HasFlag("GotBrassToken")), hideInDialogue: true)
-            .Sprite("Assets/Characters/Mirelle_HandBehind.png", 607, 268, 300,
+            .Sprite("Assets/Characters/Mirelle_HandBehind.png", 582, 332, 296,
                     p => p.HasFlag("GotPortraitLedger") && !p.HasFlag("GotBrassToken"), hideInDialogue: true)
+            .Sprite("Assets/Backgrounds/Mansion/mirelle_tea_table.png", 560, 470, 240, inFront: true)
 
-            .Hotspot("Window", 385, 200, 115, 255)
+            .Hotspot("Window", 330, 265, 135, 300)
                 .Describe("A tall Gothic window onto the overgrown side garden. Rain runs down the glass. The roses outside are not as fresh as the ones in here.")
                 .OnAct("The window is latched. Mirélle watches you try it, and says nothing.")
 
-            .Hotspot("Empty Space", 790, 235, 200, 165)
+            .Hotspot("Empty Space", 790, 300, 240, 155)
                 .Describe(p => p.HasFlag("GotPortraitLedger")
                     ? "A darker rectangle above the fireplace, two brass hooks, nothing on them. Judging by the size of the missing frame, Mirélle once had pride of place above the fireplace. Apparently Mirélle disagreed."
                     : "Two brass hooks protrude from the wall above the fireplace. Whatever once hung there was large, heavy, and apparently unwelcome.")
                 .OnAct("The hooks are well out of reach. Mirélle is not.")
 
-            .Hotspot("Fireplace", 775, 400, 225, 160)
+            .Hotspot("Fireplace", 765, 460, 250, 155)
                 .Describe("A healthy fire burns with surprising confidence for a house containing nobody willing to admit to maintaining it.")
                 .OnAct("You hold your hands to the fire. Warm. Actually warm.")
                 .OnOtherItems("You'd rather not feed the {item} to Mirélle's fire. She'd notice.")
 
-            .Hotspot("Cabinet", 1045, 235, 150, 300)
+            .Hotspot("Cabinet", 1070, 320, 155, 320)
                 .Describe("A glass-fronted cabinet of small keepsakes: a fan, a cameo, a pair of gloves, a snuffbox, spectacles, a pressed flower. " +
                           "Each one belongs to a different decade. Rather a lot of decades.")
                 .OnAct("The cabinet is locked. Naturally.")
 
-            .Hotspot("Mirror", 1200, 200, 100, 290)
+            .Hotspot("Mirror", 1250, 260, 95, 280)
                 .Describe(p =>
                 {
                     if (p.HasFlag("LookedInParlourMirror"))
@@ -1494,31 +1495,32 @@ namespace The_Mansion.Data
                 })
                 .OnAct("You straighten your collar in the mirror. Behind you, Mirélle does not comment. Loudly.")
 
-            .Hotspot("Chaise Longue", 1075, 500, 265, 260)
+            .Hotspot("Chaise Longue", 1060, 545, 440, 215)
                 .Describe("A chaise longue in deep red velvet, plumped and perfect. Nobody has ever lounged on it. Possibly nobody ever will.")
                 .OnAct("You briefly consider stealing an entire chaise longue. \"Do,\" says Mirélle. You reconsider.")
 
-            .Hotspot("Writing Desk", 200, 580, 300, 180)
+            .Hotspot("Writing Desk", 60, 650, 400, 110)
                 .Describe("A writing desk, extremely neat. Paper squared to the edges, the pen parallel to the inkwell, sealed letters with red wax.")
                 .OnAct("You reach for the letters. \"No,\" says Mirélle, without turning round. \"I hadn't touched anything.\" \"I know.\"")
 
-            .Hotspot("Armchair", 400, 460, 115, 140)
+            .Hotspot("Armchair", 370, 520, 135, 150)
                 .Describe("An upholstered armchair by the tea table, faced just so.")
                 .OnAct("You consider sitting down. Nobody has invited you to. You remain standing.")
 
-            .Hotspot("Tea Table", 530, 420, 110, 195)
-                .Describe("A tea table laid for two: a porcelain pot, two cups, and roses that look as if they were cut this morning. In this weather.")
-                .OnAct("You glance at the second cup. \"Expecting company?\" \"Clearly not,\" says Mirélle.")
-
-            // Listed last so she wins over the fireplace and the table.
-            .Hotspot("Mirélle", 640, 270, 160, 295)
+            // Listed after the fireplace so she wins there.
+            .Hotspot("Mirélle", 600, 335, 165, 290)
                 .Describe(p => p.HasFlag("MetMirelle")
                     ? "Mirélle stands beside the mantel, exactly where she always stands, beneath the empty space on the wall."
                     : "A woman in layers of plum lace and a wide hat crowned with roses and a little skull stands by the fire. She knows you're here.")
                 .TalkStarts("Mirelle")
                 .OnAct("You'd sooner put your hand in the fire.")
 
-            .ReturnTo("PortraitGallery", "You leave Mirélle to her fire and go back into the gallery.");
+                        // The tea table stands in front of her - drawn over her, even while she talks.
+            .Hotspot("Tea Table", 560, 490, 156, 150)
+                .Describe("A tea table laid for two: a porcelain pot, two cups, and roses that look as if they were cut this morning. In this weather.")
+                .OnAct("You glance at the second cup. \"Expecting company?\" \"Clearly not,\" says Mirélle.")
+
+.ReturnTo("PortraitGallery", "You leave Mirélle to her fire and go back into the gallery.");
 
         // The Entrance Hall's right door, up close: locked, with a round brass
         // plate and a slot for a token instead of a keyhole. The Brass House
