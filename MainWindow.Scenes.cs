@@ -184,7 +184,8 @@ namespace The_Mansion
             {
                 Source = picture,
                 Stretch = Stretch.Uniform,
-                IsHitTestVisible = false
+                IsHitTestVisible = false,
+                Tag = sprite
             };
 
             Rect screen = ImageToScreen(new Rect(sprite.X, sprite.Y, 0, sprite.Height));

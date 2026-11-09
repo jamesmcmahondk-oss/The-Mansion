@@ -69,6 +69,19 @@ namespace The_Mansion
 
             PlaceDialogueCharacter(dialogue);
             SetDialogueCharacter(dialogue.Character);
+
+            // The talking picture replaces the one standing in the scene
+            // (they come back when the scene is refreshed at the end).
+            if (!string.IsNullOrWhiteSpace(dialogue.Character))
+            {
+                foreach (UIElement child in SceneCanvas.Children)
+                {
+                    if (child is Image { Tag: SceneSprite { HideInDialogue: true } })
+                    {
+                        child.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
             SetCloseUpPortrait(dialogue.Portrait);
 
             // The dim layer also blocks clicks on hotspots while talking,

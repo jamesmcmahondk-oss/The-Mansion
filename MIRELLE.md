@@ -1,7 +1,9 @@
 # Mirélle, the Portrait Ledger and the Brass House Token
 
-Canonical sequence (agreed design - not built yet: Mirélle's Parlour, her
-conversation, the East Corridor and the Old Portrait Studio still need art).
+Canonical sequence. BUILT: Mirélle's Parlour (MirelleParlour, through the
+gallery's Far Door), her conversation (Dialogues.Mirelle - the scene below),
+the token and the locked right door. Still to build: the East Corridor and
+the Old Portrait Studio.
 
 ```
 Portrait Gallery puzzle (medallions)

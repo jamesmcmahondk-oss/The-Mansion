@@ -113,8 +113,8 @@ namespace The_Mansion.Data
                     picture: "Assets/Items/Sources/worn_photograph.png",
                     misuse: "You hold the photograph up beside the {target}. It doesn't help you remember anything.");
 
-        // From Mirélle, after the Portrait Ledger (see MIRELLE.md - not given
-        // anywhere yet). Opens the Entrance Hall's right door.
+        // From Mirélle, after the Portrait Ledger (Dialogues.Mirelle, see
+        // MIRELLE.md). Opens the Entrance Hall's right door.
         public static Item BrassHouseToken { get; } =
             NewItem("Brass House Token",
                     "A small, tarnished brass disc, engraved with a sunburst, with a hole near the edge as if it once hung on a chain. " +

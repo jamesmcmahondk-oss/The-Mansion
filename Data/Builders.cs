@@ -63,7 +63,7 @@ namespace The_Mansion.Data
         /// .Hotspot(...) in the same place to make it clickable.
         /// </summary>
         public SceneBuilder Sprite(string image, double x, double y, double height,
-                                   Func<Player, bool>? onlyWhen = null)
+                                   Func<Player, bool>? onlyWhen = null, bool hideInDialogue = false)
         {
             _scene.Sprites.Add(new SceneSprite
             {
@@ -71,7 +71,8 @@ namespace The_Mansion.Data
                 X = x,
                 Y = y,
                 Height = height,
-                VisibleWhen = onlyWhen
+                VisibleWhen = onlyWhen,
+                HideInDialogue = hideInDialogue
             });
 
             return this;
@@ -357,8 +358,8 @@ namespace The_Mansion.Data
             => _scene.BackgroundWhen(condition, backgroundImage);
 
         public SceneBuilder Sprite(string image, double x, double y, double height,
-                                   Func<Player, bool>? onlyWhen = null)
-            => _scene.Sprite(image, x, y, height, onlyWhen);
+                                   Func<Player, bool>? onlyWhen = null, bool hideInDialogue = false)
+            => _scene.Sprite(image, x, y, height, onlyWhen, hideInDialogue);
 
         public static implicit operator Scene(HotspotBuilder builder) => builder._scene.Build();
     }

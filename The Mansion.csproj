@@ -135,6 +135,7 @@
     <Resource Include="Assets\Backgrounds\Mansion\portrait_gallery.png" />
     <Resource Include="Assets\Backgrounds\Mansion\portrait_gallery_open.png" />
     <Resource Include="Assets\Backgrounds\Mansion\right_door_closeup.png" />
+    <Resource Include="Assets\Backgrounds\Mansion\mirelle_parlour.png" />
     <Resource Include="Assets\Backgrounds\Mansion\three_ages_closeup.png" />
     <Resource Include="Assets\Backgrounds\Mansion\vesper_portrait_closeup.png" />
     <Resource Include="Assets\Items\Sources\worn_photograph.png" />
