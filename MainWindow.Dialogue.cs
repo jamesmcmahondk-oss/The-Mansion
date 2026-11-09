@@ -122,16 +122,23 @@ namespace The_Mansion
 
         private string _shownCharacter = "";
 
+        // A character standing in the scene (.StandAt) is decoded at their
+        // height in background pixels, so the game enlarges them by the same
+        // x1.25 as the background - same softness, part of the same picture.
+        // (Set by PlaceCharacter; the default right-hand spot uses CharacterDecodeHeight.)
+        private int _characterDecodeHeight = CharacterDecodeHeight;
+
         private void SetDialogueCharacter(string imagePath)
         {
-            if (imagePath == _shownCharacter &&
+            string key = $"{imagePath}@{_characterDecodeHeight}";
+            if (key == _shownCharacter &&
                 DialogueCharacter.Source != null)
             {
                 return; // already showing it
             }
 
-            _shownCharacter = imagePath;
-            DialogueCharacter.Source = LoadImage(imagePath, "character picture", CharacterDecodeHeight);
+            _shownCharacter = key;
+            DialogueCharacter.Source = LoadImage(imagePath, "character picture", _characterDecodeHeight);
 
             DialogueCharacter.Visibility =
                 DialogueCharacter.Source != null ? Visibility.Visible : Visibility.Collapsed;

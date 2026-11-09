@@ -661,6 +661,8 @@ namespace The_Mansion
 
         private void PlaceCharacter(double x, double y, double height)
         {
+            _characterDecodeHeight = height > 0 ? (int)Math.Round(height) : CharacterDecodeHeight;
+
             if (height > 0)
             {
                 Rect screen = ImageToScreen(new Rect(x, y, 0, height));
