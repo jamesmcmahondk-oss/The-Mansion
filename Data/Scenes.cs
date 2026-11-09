@@ -1461,7 +1461,7 @@ namespace The_Mansion.Data
                     p => !(p.HasFlag("GotPortraitLedger") && !p.HasFlag("GotBrassToken")), hideInDialogue: true)
             .Sprite("Assets/Characters/Mirelle_HandBehind.png", 622, 338, 296,
                     p => p.HasFlag("GotPortraitLedger") && !p.HasFlag("GotBrassToken"), hideInDialogue: true)
-            .Sprite("Assets/Backgrounds/Mansion/mirelle_tea_table.png", 560, 470, 240, inFront: true)
+            .Sprite("Assets/Backgrounds/Mansion/mirelle_tea_table.png", 530, 470, 240, inFront: true)
 
             .Hotspot("Window", 330, 265, 135, 300)
                 .Describe("A tall Gothic window onto the overgrown side garden. Rain runs down the glass. The roses outside are not as fresh as the ones in here.")
@@ -1516,7 +1516,7 @@ namespace The_Mansion.Data
                 .OnAct("You'd sooner put your hand in the fire.")
 
                         // The tea table stands in front of her - drawn over her, even while she talks.
-            .Hotspot("Tea Table", 560, 490, 156, 150)
+            .Hotspot("Tea Table", 530, 490, 156, 150)
                 .Describe("A tea table laid for two: a porcelain pot, two cups, and roses that look as if they were cut this morning. In this weather.")
                 .OnAct("You glance at the second cup. \"Expecting company?\" \"Clearly not,\" says Mirélle.")
 
