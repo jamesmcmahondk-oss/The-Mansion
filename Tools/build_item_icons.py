@@ -33,6 +33,7 @@ ICONS = {
     "pocket_knife.png":      ("Assets/Items/Sources/pocket_knife.png",        (30, 135, 1965, 515), 35),
     "paper.png":             ("Assets/Items/Sources/paper.png",               (270, 15, 1240, 995)),
     "empty_bottle.png":      ("Assets/Items/Sources/empty_bottle.png",        (280, 40, 1250, 990)),
+    "brass_house_token.png": ("Assets/Items/Sources/brass_house_token.png",   (395, 140, 1160, 840)),
     "portrait_ledger.png":   ("Assets/Items/Sources/portrait_ledger.png",     (495, 120, 1365, 900)),
 
     # Outside the Mansion

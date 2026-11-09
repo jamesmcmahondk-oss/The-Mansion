@@ -85,7 +85,8 @@ Alternative short form, if the corridor needs a beat: "What's through there?" -
   the journal gets **"Portrait Records"** (Puzzles) - Mirélle's dates and
   the gate guardians' names (Dúnán the Patient, Cairn the Steadfast) - and
   LearnedGargoyleName is already set by then if they read that page.
-* New item: **Brass House Token** (icon + right-click picture). Used on the
+* BUILT: the Brass House Token item and the locked right door (RightDoorCloseup,
+  flag RightDoorUnlocked) - Mirélle just needs to give it. Originally planned: used on the
   brass plate of the Entrance Hall's right door (close-up: locked door with a
   round token slot instead of a keyhole; open version with the token seated).
 * Journal: "The brass token" (Puzzles) - where it came from, which door it fits.

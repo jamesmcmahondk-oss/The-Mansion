@@ -1068,23 +1068,23 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/entrance_hall.png",    // fitted above the HUD (source: Sources/entrance_hall_full.png)
                      "The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.")
 
-            .Hotspot("Staircase", 545, 440, 280, 320)
+            .Hotspot("Staircase", 510, 410, 310, 315)
                 .Describe("A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark.")
                 .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
 
-            .Hotspot("Landing", 820, 300, 270, 200)
+            .Hotspot("Landing", 820, 300, 210, 190)
                 .Describe("The stairs turn at a landing and climb on along the right-hand wall, into shadow.")
                 .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
 
-            .Hotspot("Window", 600, 200, 150, 245)
+            .Hotspot("Window", 605, 200, 145, 250)
                 .Describe("A tall window above the stairs, framed by heavy red curtains. Rain streams down the glass.")
                 .OnAct("The window is far above the stairs, and it doesn't look as if it opens.")
 
-            .Hotspot("Chandelier", 660, 192, 250, 110)
+            .Hotspot("Chandelier", 655, 192, 230, 150)
                 .Describe("A great brass chandelier, every candle lit. Fine silver threads are strung between its arms, glinting.")
                 .OnAct("Far out of reach.")
 
-            .Hotspot("Family Portrait", 370, 235, 140, 330)
+            .Hotspot("Family Portrait", 400, 255, 125, 295)
                 .Describe("A family portrait in a heavy gilt frame: a family in their best clothes, posed with great care. " +
                           "The arrangement leaves a space beside them, as if the painter expected one more.")
                 .OnAct("The frame is fixed firmly to the wall.")
@@ -1093,44 +1093,49 @@ namespace The_Mansion.Data
                         "You hold the photograph up beside the portrait. Your eyes keep going to the same place in both: the space where someone should be.")
 
             // To the Portrait Gallery - not locked.
-            .Hotspot("Left Door", 255, 340, 105, 420)
+            .Hotspot("Left Door", 305, 300, 95, 435)
                 .Describe("A tall panelled door on the left side of the hall.")
                 .GoesTo("PortraitGallery")
                 .Sound("door_creak")
 
-            .Hotspot("Right Door", 1240, 330, 125, 430)
-                .Describe("A tall panelled door on the right side of the hall.")
-                .OnAct("The handle turns, but the door doesn't open. Not yet.")    // not built yet: dining room
+            // Locked: a slot for a brass token instead of a keyhole (RightDoorCloseup).
+            .Hotspot("Right Door", 1180, 305, 145, 450)
+                .Describe("A tall Gothic door on the right side of the hall, a round brass plate set beneath its handle.")
+                .GoesTo("RightDoorCloseup")
 
-            .Hotspot("Low Door", 862, 505, 90, 180)
+            .Hotspot("Low Door", 850, 510, 70, 140)
                 .Describe("A small, low door, tucked in under the stairs.")
                 .OnAct("It doesn't open.")    // not built yet: cellar (no key - see PUZZLES.md)
 
-            .Hotspot("Grandfather Clock", 1015, 400, 75, 300)
+            .Hotspot("Grandfather Clock", 970, 410, 75, 280)
                 .Describe("A tall grandfather clock. Its hands have stopped at a quarter past something.")
                 .OnAct("You nudge the pendulum. It swings once, then stops again.")
                 .OnTalk("The clock has nothing to say. It has stopped saying anything at all.")
 
             // Never explained (like the reflection in the rain barrel).
-            .Hotspot("Covered Mirror", 1090, 385, 135, 375)
+            .Hotspot("Covered Mirror", 1040, 405, 135, 330)
                 .Describe("A tall mirror, covered completely by a grey dust sheet.")
                 .OnAct("You take hold of a corner of the sheet... and decide to leave it where it is.")
 
-            .Hotspot("Candles", 1165, 315, 55, 85)
+            .Hotspot("Candles", 230, 320, 65, 80)
                 .Describe("Candles burn in a brass sconce. Someone keeps these lit.")
                 .OnAct("The brass is hot. Whoever lit them wants them to stay lit.")
 
-            .Hotspot("Candles", 975, 285, 50, 45)
+            .Hotspot("Candles", 1100, 335, 50, 65)
+                .Describe("Candles burn in a brass sconce. Someone keeps these lit.")
+                .OnAct("The brass is hot. Whoever lit them wants them to stay lit.")
+
+            .Hotspot("Candles", 940, 315, 40, 40)
                 .Describe("Candles burn in a brass sconce on the landing. Someone keeps these lit.")
                 .OnAct("Out of reach from down here.")
 
-            .Hotspot("Coat Stand", 195, 395, 60, 365)
+            .Hotspot("Coat Stand", 210, 410, 95, 350)
                 .Describe("A crooked coat stand. An old coat hangs from it, still damp.")
                 .OnAct("You leave the coat where it is. It isn't yours.")
                 .OnTalk("\"Good evening, Quazimodo.\" It is a coat stand.")
 
             // Sola, the cat (see Docs/characters.md). Listed last so she wins over the stairs.
-            .Hotspot("Sola", 585, 585, 105, 140)
+            .Hotspot("Sola", 595, 575, 100, 125)
                 .Describe("A long-haired grey cat sits on the stairs, a medallion marked \"S\" on her collar. " +
                           "She regards the hall as if it has been arranged correctly, and you as if you have not.")
                 .LookSetsFlag("MetSola")
@@ -1443,6 +1448,62 @@ namespace The_Mansion.Data
                 .OnAct("The brass is hot.")
 
             .ReturnTo("PortraitGallery", "You step back from the portrait. Her eyes do not follow you. You check.");
+
+        // The Entrance Hall's right door, up close: locked, with a round brass
+        // plate and a slot for a token instead of a keyhole. The Brass House
+        // Token (from Mirélle - MIRELLE.md) opens it. Beyond: the East
+        // Corridor, not built yet.
+        public static Scene RightDoorCloseup { get; } =
+            NewScene("RightDoorCloseup",
+                     "Assets/Backgrounds/Mansion/right_door_closeup.png",    // fitted above the HUD (source: Sources/right_door_closeup_full.png)
+                     "")
+            .DescribeScene(p => p.HasFlag("RightDoorUnlocked")
+                ? "The tall Gothic door. A brass token sits in the slot beneath the handle."
+                : "A tall Gothic door with carved tracery. Where a keyhole should be there is a round brass plate, engraved with a sunburst.")
+
+            .Hotspot("Covered Mirror", 300, 252, 370, 505)
+                .Describe("A tall mirror under a dust sheet. Up close, the sheet hangs perfectly still. Rather too still.")
+                .OnAct("You take hold of a corner of the sheet... and decide to leave it where it is.")
+
+            .Hotspot("Candles", 440, 192, 95, 50)
+                .Describe("Candles burn in a brass sconce above the mirror.")
+                .OnAct("The brass is hot.")
+
+            .Hotspot("Door", 776, 275, 240, 485)
+                .Describe(p => p.HasFlag("RightDoorUnlocked")
+                    ? "The door is unlocked now."
+                    : "Dark polished wood, carved with Gothic tracery. There is no keyhole.")
+                .OnAct(p => p.HasFlag("RightDoorUnlocked")
+                    ? "The door swings inwards onto a dark corridor. Not yet."     // not built yet: East Corridor
+                    : "You turn the handle. It turns. The door doesn't.")
+                .OnTalk("You knock. Somewhere beyond, something that might be an echo knocks back. Probably an echo.")
+
+            // Listed after the door so they win.
+            .Hotspot("Handle", 786, 495, 70, 52)
+                .Describe("A brass handle, polished bright by years of hands.")
+                .OnAct(p => p.HasFlag("RightDoorUnlocked")
+                    ? "The door swings inwards onto a dark corridor. Not yet."     // not built yet: East Corridor
+                    : "You turn the handle. It turns. The door doesn't.")
+
+            .Hotspot("Brass Plate", 785, 553, 75, 75)
+                .Describe(p => p.HasFlag("RightDoorUnlocked")
+                    ? "The brass token sits snugly in the slot, its sunburst lined up with the one on the plate."
+                    : "A round brass plate engraved with a sunburst. At its centre, a narrow slot - too wide for a coin, too narrow for a key. " +
+                      "It looks made for one particular token.")
+                .OnAct(p => p.HasFlag("RightDoorUnlocked")
+                    ? "The token won't come out again. It seems to have found where it belongs."
+                    : "You press the plate. Nothing. You peer into the slot. Darkness, and the faint smell of old brass.")
+                .OnItem("Brass House Token",
+                        "The token slides into the slot. Its sunburst lines up with the one on the plate. Click. " +
+                        "Somewhere inside the door, a bolt draws back.",
+                        effect: p => p.SetFlag("RightDoorUnlocked"),
+                        removeItem: true)
+                .OnItem("Royal Gold Coin", "Too thick, and covered in frogs. The slot isn't interested.")
+                .OnItem("Gold Coins", "You try a coin. It rattles in the slot and drops back out into your hand.")
+                .OnItem("Loose Change", "You try a coin. It rattles in the slot and drops back out into your hand.")
+                .OnOtherItems("The {item} doesn't fit the slot.")
+
+            .ReturnTo("EntranceHall", "You step back from the door.");
 
         // =========================================================
         // PUZZLE HELPERS (used by the scenes above)
