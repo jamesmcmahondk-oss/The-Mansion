@@ -1068,6 +1068,8 @@ namespace The_Mansion.Data
                      "Assets/Backgrounds/Mansion/entrance_hall.png",    // composed for the visible band - used full-size
                      "The great hall of the Mansion. Every candle is lit, and the house is very quiet. The rain sounds far away now.")
 
+            .Sprite("Assets/Characters/Sola_Sitting.png", 515, 582, 125)
+
             .Hotspot("Staircase", 400, 400, 320, 345)
                 .Describe("A grand staircase, carpeted in faded red, climbs to a landing and turns up into the dark.")
                 .OnAct("You put a hand on the banister and look up into the dark. Not yet.")    // not built yet: upstairs
@@ -1134,8 +1136,20 @@ namespace The_Mansion.Data
                 .OnAct("You leave the coat where it is. It isn't yours.")
                 .OnTalk("\"Good evening, Quazimodo.\" It is a coat stand.")
 
-            // Sola, the cat (Docs/characters.md): not in this picture - she
-            // comes back as a sprite once her picture arrives.
+            // Sola, the cat (Docs/characters.md), sitting on the stairs - a
+            // sprite cut from her sheet (Assets/Characters/Sources/Sola_sheet.png).
+            // Listed last so she wins over the staircase.
+            .Hotspot("Sola", 515, 582, 89, 125)
+                .Describe("A long-haired grey cat sits on the stairs, a medallion marked \"S\" on her collar. " +
+                          "She regards the hall as if it has been arranged correctly, and you as if you have not.")
+                .LookSetsFlag("MetSola")
+                .OnTalk(p =>
+                {
+                    p.SetFlag("MetSola");
+                    return "You say hello. Sola considers this, and looks away. The medallion on her collar catches the light: S.";
+                })
+                .OnAct("You reach towards the cat. She shifts exactly far enough to stay out of reach.")
+                .OnOtherItems("Sola looks at the {item}, then at you, with deep disappointment.")
 
 .ReturnTo("FrontDoor", "You step back out into the rain.");
 
