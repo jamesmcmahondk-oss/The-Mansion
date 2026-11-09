@@ -175,7 +175,9 @@ namespace The_Mansion
 
         private Image? CreateSpriteImage(SceneSprite sprite)
         {
-            BitmapImage? picture = LoadImage(sprite.Image, "sprite");
+            // Decoded at its size in background pixels, so it is enlarged
+            // (x1.25) and softened exactly like the background around it.
+            BitmapImage? picture = LoadImage(sprite.Image, "sprite", (int)Math.Round(sprite.Height));
             if (picture == null)
             {
                 return null;
